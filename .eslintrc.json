@@ -1,3 +1,47 @@
 {
-  "extends": ["next/core-web-vitals", "eslint:recommended"]
+  "extends": [
+    "next/core-web-vitals", 
+    "eslint-config-next", 
+    "eslint:recommended"
+  ],
+  "rules": {
+    "arrow-body-style": ["error", "as-needed"],
+    "camelcase": "error",
+    "max-depth": ["error",  2],
+    "max-lines": ["error", { 
+      "max": 300, 
+      "skipBlankLines": false, 
+      "skipComments": true }],
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-magic-numbers": "error",
+    "no-multi-assign": "error",
+    "no-nested-ternary": "error",
+    "no-plusplus": "error",
+    "no-return-await": "error",
+    "no-throw-literal": "error",
+    "no-useless-concat": "error",
+    "no-useless-constructor": "error",
+    "prefer-const": "error",
+    "sort-imports": "error",
+    "sort-keys": "error",
+    "yoda": "warn",
+    "spaced-comment": ["error", "always"],
+    "require-await": "error",
+    "array-bracket-spacing": ["error", "never"],
+    "arrow-parens": ["error", "as-needed"],
+    "arrow-spacing": ["error", { "before": true, "after": true }],
+    "block-spacing": "error",
+    "brace-style": "error",
+    "comma-dangle": ["error", "never"],
+    "comma-spacing": "error",
+    "eol-last": ["error", "never"],
+    "key-spacing": "error",
+    "keyword-spacing": "error",
+    "quotes": ["error", "single"],
+    "semi": "error",
+    "no-multi-spaces": "error",
+    "no-trailing-spaces": "error",
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
+    "no-unused-vars": "warn"
+  }
 }
