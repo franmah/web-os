@@ -11,7 +11,10 @@
   .windowIcon {
     height: 100%;
     width: 50px;
-    margin-right: 8px;
+    margin-right: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:hover {
       background-color: #465961;
@@ -22,7 +25,10 @@
   .shortcuts {
     flex: 1;
     display: flex;
-    color:white;
+
+    .shortcutItem {
+      cursor: pointer;
+    }
   }
 
   .datetime {

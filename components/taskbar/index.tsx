@@ -1,10 +1,9 @@
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
+import { FcApproval, FcApprove, FcAreaChart, FcBiotech, FcBookmark, FcCamera, FcClapperboard, FcGlobe } from 'react-icons/fc';
 import { Component } from 'react';
-import { FcBookmark } from 'react-icons/fc';
-import { RiWindowsLine} from 'react-icons/ri';
-import { DragDropContext, Draggable, Droppable, resetServerContext } from 'react-beautiful-dnd';
+import Image from 'next/image';
 import TaskbarShortcut from './shortcut';
 import styles from './taskbar.module.scss';
-
 
 class Taskbar extends Component {
   NUM_FAKE_ICONS = 10;
@@ -13,6 +12,16 @@ class Taskbar extends Component {
 
   state = {
     date: '',
+    shortcutIems: [
+        (<FcAreaChart size={28} key={0}/>),
+        (<FcBookmark size={28} key={1}/>),
+        (<FcApproval size={28} key={2}/>),
+        (<FcApprove size={28} key={3}/>),
+        (<FcBiotech size={28} key={4}/>),
+        (<FcCamera size={28} key={5}/>),
+        (<FcClapperboard size={28} key={6}/>),
+        (<FcGlobe size={28} key={7}/>)
+    ],
     time: ''
   };
 
@@ -20,15 +29,24 @@ class Taskbar extends Component {
     this.updateDateTime();
   }
 
+  handleReorderShortcutItemsOnDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+
+    const items = Array.from(this.state.shortcutIems);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    this.setState({ shortcutIems: items });
+  }
+
   render() {
     return (
       <div className={styles.main}>
-        <div>
-          <RiWindowsLine size={30} className={styles.windowIcon} />
+        <div className={styles.windowIcon}>
+          <Image src='/taskbar/windows-logo.png' alt='menu' height={24} width={24}/>
         </div>
 
           {/* User icons */}
-          <DragDropContext>
+          <DragDropContext onDragEnd={this.handleReorderShortcutItemsOnDragEnd}>
             <Droppable droppableId="taskbarShortcutItems" direction="horizontal">
               {
                 (provided: any) => (
@@ -38,7 +56,6 @@ class Taskbar extends Component {
                   </div>
                 )
               }
-
             </Droppable>
           </DragDropContext>
 
@@ -76,25 +93,21 @@ class Taskbar extends Component {
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
   }
 
-  getFakeIconList = () => {
-    const icons = [];
-    for (let i = 0; i < this.NUM_FAKE_ICONS; i+= 1) {
-      icons.push(
-        <Draggable key={i} draggableId={String(i)} index={i}>
-          {
-            (provided: any) => (
-              <TaskbarShortcut>
-                <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
-                  <FcBookmark size={30}/>
-                </div>
-              </TaskbarShortcut>
-            )
-          }
-        </Draggable>
-      );
-    }
-    return icons;
-  };
+  getFakeIconList = () => this.state.shortcutIems.map((item: any, i) => (
+      <Draggable key={i} draggableId={String(i)} index={i}>
+        {
+          (provided: any) => (
+            <TaskbarShortcut>
+              <div className={styles.shortcutItem} ref={provided.innerRef}
+                {...provided.draggableProps} {...provided.dragHandleProps}
+              >
+                {item}
+              </div>
+            </TaskbarShortcut>
+          )
+        }
+      </Draggable>
+    ));
 }
 
 export default Taskbar;
