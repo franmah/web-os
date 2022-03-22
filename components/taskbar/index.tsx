@@ -1,8 +1,10 @@
 import { Component } from 'react';
 import { FcBookmark } from 'react-icons/fc';
 import { RiWindowsLine} from 'react-icons/ri';
+import { DragDropContext, Draggable, Droppable, resetServerContext } from 'react-beautiful-dnd';
 import TaskbarShortcut from './shortcut';
 import styles from './taskbar.module.scss';
+
 
 class Taskbar extends Component {
   NUM_FAKE_ICONS = 10;
@@ -26,7 +28,19 @@ class Taskbar extends Component {
         </div>
 
           {/* User icons */}
-          <div className={styles.shortcuts}>{ this.getFakeIconList() }</div>
+          <DragDropContext>
+            <Droppable droppableId="taskbarShortcutItems" direction="horizontal">
+              {
+                (provided: any) => (
+                  <div className={styles.shortcuts} ref={provided.innerRef} {...provided.droppableProps}>
+                    { this.getFakeIconList() }
+                    {provided.placeholder}
+                  </div>
+                )
+              }
+
+            </Droppable>
+          </DragDropContext>
 
           {/* Time section */}
           <div className={styles.datetime}>
@@ -66,9 +80,17 @@ class Taskbar extends Component {
     const icons = [];
     for (let i = 0; i < this.NUM_FAKE_ICONS; i+= 1) {
       icons.push(
-        <TaskbarShortcut key={i} draggable={true}>
-          <FcBookmark size={30}/>
-        </TaskbarShortcut>
+        <Draggable key={i} draggableId={String(i)} index={i}>
+          {
+            (provided: any) => (
+              <TaskbarShortcut>
+                <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
+                  <FcBookmark size={30}/>
+                </div>
+              </TaskbarShortcut>
+            )
+          }
+        </Draggable>
       );
     }
     return icons;
