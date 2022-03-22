@@ -13,7 +13,7 @@
       "skipBlankLines": false, 
       "skipComments": true }],
     "no-console": ["warn", { "allow": ["warn", "error"] }],
-    "no-magic-numbers": "error",
+    "no-magic-numbers": ["warn", { "ignore": [1] }],
     "no-multi-assign": "error",
     "no-nested-ternary": "error",
     "no-plusplus": "error",
@@ -42,6 +42,7 @@
     "no-multi-spaces": "error",
     "no-trailing-spaces": "error",
     "no-multiple-empty-lines": ["error", { "max": 1 }],
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "no-undef": "off"
   }
 }

@@ -1,0 +1,39 @@
+
+.main {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background-color: #1d2f3e;
+  display: flex;
+
+  .windowIcon {
+    height: 100%;
+    width: 50px;
+    margin-right: 8px;
+
+    &:hover {
+      background-color: #465961;
+      cursor: pointer;
+    }
+  }
+
+  .shortcuts {
+    flex: 1;
+    display: flex;
+  }
+
+  .datetime {
+    flex: initial;
+    font-size: 12px;
+    text-align: center;
+    color: white;
+    padding: 2px 8px;
+
+    &:hover {
+      background-color: #465961;
+      cursor: pointer;
+    }
+  }
+}
