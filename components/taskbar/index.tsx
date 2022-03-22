@@ -55,7 +55,7 @@ class Taskbar extends Component {
 
   formatTime(date: Date): string {
     const timeOfDay = date.getHours() > this.NUM_HOURS ? 'PM' : 'AM';
-    return `${date.getHours() % this.NUM_HOURS}:${date.getMinutes()} ${timeOfDay}`;
+    return `${date.getHours() % this.NUM_HOURS}:${String(date.getMinutes()).padStart(2, '0')} ${timeOfDay}`;
   }
 
   formatDate(date: Date): string {
