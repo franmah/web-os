@@ -1,8 +1,11 @@
+import Desktop from '../components/desktop';
 import type { NextPage } from 'next';
+import Taskbar from '../components/taskbar';
 
 const Home: NextPage = () => (
-  <div >
-    hello
+  <div>
+    <Desktop />
+    <Taskbar />
   </div>
 );
 
