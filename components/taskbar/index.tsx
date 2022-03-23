@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import Image from 'next/image';
+import SearchBar from './search-bar';
 import ShortcutBar from './shortcut-bar';
 import styles from './taskbar.module.scss';
 
@@ -10,19 +11,42 @@ class Taskbar extends Component {
 
   state = {
     date: '',
+    forceSearchBar: false,
+    searchBarActive: false,
     time: ''
   };
 
   componentDidMount() {
     this.updateDateTime();
+    this.setSearchBarListeners();
+  }
+
+  setSearchBarListeners() {
+    const element = document.getElementById('searchBarContainer');
+    const searchInput = document.getElementById('searchInput');
+
+    document.addEventListener('click', () => this.setState({ searchBarActive: false }));
+    element?.addEventListener('click', () =>
+      setTimeout(() => {
+        searchInput?.focus();
+        this.setState({ searchBarActive: true });
+
+      })
+    );
+  }
+
+  handleClick = () => {
+    this.setState({ forceSearchBar: true });
   }
 
   render() {
     return (
       <div className={styles.main}>
-        <div className={styles.windowIcon}>
-          <Image src='/taskbar/windows-logo.png' alt='menu' height={24} width={24}/>
+        <div className={styles.windowIcon} onClick={this.handleClick}>
+          <Image src='/taskbar/windows-logo.png' alt='menu' height={22} width={22}/>
         </div>
+
+        <SearchBar forceSearchBar={this.state.forceSearchBar}/>
 
         <ShortcutBar/>
 
