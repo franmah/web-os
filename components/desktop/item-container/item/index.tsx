@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { FC, useEffect } from 'react';
 import styles from '../../desktop.module.scss';
 import { DesktopItem } from '..';
+import { ITEM_HEIGHT, ITEM_WIDTH } from '../desktop-item-container.service';
 
 const SHORTENED_NAME_LENGTH = 15;
 
@@ -69,7 +70,7 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function }> = ({ i
   return (
     <div id={item.name} draggable="true"
       className={styles.desktopItemContainer}
-      style={{ left: item.left, top: item.top }}
+      style={{ height: ITEM_HEIGHT, left: item.left, top: item.top, width: ITEM_WIDTH }}
     >
       <Image src={item.iconPath} alt={'icon'} width={60} height={60}/>
       { formatItemName(item.name) }

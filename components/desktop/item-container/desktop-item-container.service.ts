@@ -2,13 +2,11 @@ import { DesktopItem } from '.';
 import { ExplorerFile } from '../../../types/ExplorerElement';
 
 // TODO: MOVE TO CONSTS FILE
-export const ITEM_HEIGHT = 75;
+export const ITEM_HEIGHT = 80;
 export const ITEM_WIDTH = 60;
 export const WIDTH_OFFSET = 10;
 export const HEIGHT_OFFSET = 20;
 export const TASKBAR_HEIGHT_OFFSET = 60;
-
-
 
 // Update position to avoid going out of screen
 export const correctItemPosition = (top: number, left: number)
