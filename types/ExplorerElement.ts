@@ -1,9 +1,8 @@
-export type ExplorerElement = {
-  children: ExplorerElement[];
+export type ExplorerFile = {
+  children: ExplorerFile[];
   // contentPath: string;
-  // iconPath: string;
+  iconPath: string;
   // isFolder: boolean;
   name: string;
-  parent: ExplorerElement | null;
-  icon: any // Needs to be changed;
+  parent: ExplorerFile | null;
 }

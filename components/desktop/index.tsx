@@ -1,28 +1,50 @@
-import { FC, useState } from 'react';
-import DesktopElement from './element';
-import { ExplorerElement } from '../../types/ExplorerElement';
-import { FcAbout } from 'react-icons/fc';
+import { FC } from 'react';
+import DesktopItemContainer from './element-container';
 import styles from './desktop.module.scss';
+import { ExplorerFile } from '../../types/ExplorerElement';
 
 const Desktop: FC = () => {
-  const [elements, setElements] = useState<ExplorerElement[]>(getFakeDesktopElement());
-
   return (
-    <div className={styles.background}>
-      { elements.map((e, index) =>
-        <DesktopElement key={index} element={e}/>
-      ) }
+    <div className={styles.background} id='desktop'>
+      <DesktopItemContainer files={getFakeDesktopFiles()}/>
     </div>
   );
 };
 
-function getFakeDesktopElement(): ExplorerElement[] {
-  const elements: ExplorerElement[] = [{
-    children: [],
-    icon: <FcAbout size={40}/>,
-    name: 'This is a very long name that should be shortened.txt',
-    parent: null
-  }];
+function getFakeDesktopFiles(): ExplorerFile[] {
+  const elements: ExplorerFile[] = [
+    {
+      children: [],
+      iconPath: '/icons/folder-icon.png',
+      name: 'num #1',
+      parent: null
+    },
+    {
+      children: [],
+      iconPath: '/icons/folder-icon.png',
+      name: 'num #2',
+      parent: null
+    },
+    {
+      children: [],
+      iconPath: '/icons/folder-icon.png',
+      name: 'num #3',
+      parent: null
+    },
+    {
+      children: [],
+      iconPath: '/icons/folder-icon.png',
+      name: 'num #4',
+      parent: null
+    },
+    {
+      children: [],
+      iconPath: '/icons/folder-icon.png',
+      name: 'num #5',
+      parent: null
+    }
+    ];
+
   return elements;
 }
 

@@ -21,7 +21,7 @@
     "no-useless-concat": "error",
     "no-useless-constructor": "error",
     "prefer-const": "error",
-    "sort-imports": "error",
+    "sort-imports": "off",
     "sort-keys": "error",
     "yoda": "warn",
     "spaced-comment": ["error", "always"],

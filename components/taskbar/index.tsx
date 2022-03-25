@@ -46,7 +46,7 @@ class Taskbar extends Component {
           <Image src='/taskbar/windows-logo.png' alt='menu' height={22} width={22}/>
         </div>
 
-        <SearchBar forceSearchBar={this.state.forceSearchBar}/>
+        <SearchBar/>
 
         <ShortcutBar/>
 
