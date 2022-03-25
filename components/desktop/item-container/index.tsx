@@ -1,8 +1,10 @@
 import { ExplorerFile } from '../../../types/ExplorerElement';
 import { FC, Fragment, useEffect, useState } from 'react';
-import DesktopItemComponent from './element';
-import { correctItemPosition, isItemOverlapingOtherItems, ITEM_HEIGHT } from './desktop-item-container.service';
+import DesktopItemComponent from './item';
+import { correctItemPosition, isItemOverlapingOtherItems,
+  toItemWrappers, placeItemsAtStartPosition } from './desktop-item-container.service';
 
+// TODO: move to it's own file
 export type DesktopItem = {
   left: number,
   iconPath: string,
@@ -14,10 +16,12 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
   const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
 
   useEffect(() => {
-    setDesktopItems(toItemWrappers(files));
-  }, []); // TODO: update
+    const items = toItemWrappers(files);
+    placeItemsAtStartPosition(items);
+    setDesktopItems(items);
+  }, []);
 
-  const moveItem= (itemId: string, top: number, left: number) => {
+  const moveItem = (itemId: string, top: number, left: number) => {
     const element = desktopItems.find(el => el.name === itemId);
     if (!element) return;
 
@@ -28,17 +32,6 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
     element.left = correctedLeft;
 
     setDesktopItems(JSON.parse(JSON.stringify(desktopItems)));
-  };
-
-  const toItemWrappers = (files: ExplorerFile[]): DesktopItem[] => {
-    return files.map((file, index) => {
-      return {
-        iconPath: file.iconPath,
-        left: 1,
-        name: file.name,
-        top: 20 + (index * ITEM_HEIGHT + index * 20)
-      };
-    });
   };
 
   return (

@@ -2,7 +2,6 @@ import Image from 'next/image';
 import { FC, useEffect } from 'react';
 import styles from '../../desktop.module.scss';
 import { DesktopItem } from '..';
-import { getDestopItemNewPositionRelativeToMouse } from '../desktop-item-container.service';
 
 const SHORTENED_NAME_LENGTH = 15;
 
@@ -50,15 +49,29 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function }> = ({ i
     };
   }), [item];
 
-  // TODO: only add ... if longer than SHOR,,,
-  const formatItemName = (name: string): string => name.substring(0, SHORTENED_NAME_LENGTH) + '...';
+  const formatItemName = (name: string): string => {
+    const shortenedName = name.substring(0, SHORTENED_NAME_LENGTH);
+    return shortenedName.length > SHORTENED_NAME_LENGTH ?
+      shortenedName + '...' :
+      shortenedName;
+  };
+
+  const getDestopItemNewPositionRelativeToMouse = (event: any,
+  mouseToElementTopOffset: number,
+
+    mouseToElementLeftOffset: number) => {
+      return {
+        left: +event.clientX - mouseToElementLeftOffset,
+        top: +event.clientY - mouseToElementTopOffset
+      };
+    };
 
   return (
     <div id={item.name} draggable="true"
       className={styles.desktopItemContainer}
       style={{ left: item.left, top: item.top }}
     >
-      <Image src={item.iconPath} alt={'icon'} width={50} height={50}/>
+      <Image src={item.iconPath} alt={'icon'} width={60} height={60}/>
       { formatItemName(item.name) }
     </div>
   );
