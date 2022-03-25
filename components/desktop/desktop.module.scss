@@ -4,6 +4,20 @@
   left: 0;
   width: 100%;
   height: 100%;
-
   background-color: black;
+
+  .desktopElementContainer {
+    color: white;
+    position: absolute;
+    display: inline;
+    height: 75px;
+    width: 60px;
+    text-align: center;
+    font-size: 12px;
+
+    &:hover {
+      background-color: #1d303d;
+      border: 1px solid #566671;
+    }
+  }
 }

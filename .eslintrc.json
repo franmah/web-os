@@ -5,7 +5,6 @@
     "eslint:recommended"
   ],
   "rules": {
-    "arrow-body-style": ["error", "as-needed"],
     "camelcase": "error",
     "max-depth": ["error",  2],
     "max-lines": ["error", { 
