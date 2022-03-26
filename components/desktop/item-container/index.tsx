@@ -21,7 +21,8 @@ type SelectionBox = {
   width: number,
   height: number,
   top: number,
-  left: number
+  left: number,
+  zindex: number
 }
 
 const startSelectionBox: SelectionBox = {
@@ -31,7 +32,8 @@ const startSelectionBox: SelectionBox = {
   startX: 0,
   startY: 0,
   top: 0,
-  width: 0
+  width: 0,
+  zindex: -1
 };
 
 const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
@@ -54,13 +56,14 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
           left: +event.clientX,
           startX: +event.clientX,
           startY: +event.clientY,
-          top: +event.clientY
+          top: +event.clientY,
+          zindex: 1
         });
       }
     };
 
     const onMouseUp = () => {
-      setSelectionBox({ ...selectionBox, active: false });
+      setSelectionBox({ ...selectionBox, active: false, zindex: -1 });
     };
 
     document.addEventListener('mousedown', onMouseDown);
@@ -81,9 +84,9 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
       const height = Math.abs(selectionBox.startY - +clientY);
 
       // Mouse relative to start position
-      const bottomRight = clientX > selectionBox.startX && clientY > selectionBox.startY;
+      const bottomRight = clientX >= selectionBox.startX && clientY >= selectionBox.startY;
       const bottomLeft = clientX < selectionBox.startX && clientY > selectionBox.startY;
-      const topLeft = clientX < selectionBox.startX && clientY < selectionBox.startY;
+      const topLeft = clientX <= selectionBox.startX && clientY <= selectionBox.startY;
       const topRight = clientX > selectionBox.startX && clientY < selectionBox.startY;
 
       let top = 0, left = 0;
@@ -118,8 +121,10 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
     if (selectionBox.active) {
       document.addEventListener('mousemove', mousemove);
+      console.log('adding')
 
       return () => {
+        console.log('removiing')
         document.removeEventListener('mousemove', mousemove);
       };
     }
@@ -150,7 +155,8 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
           height: selectionBox.height,
           left: selectionBox.left,
           top: selectionBox.top,
-          width: selectionBox.width
+          width: selectionBox.width,
+          zIndex: selectionBox.zindex
         }}
       className={styles.selectionBoxOn}></div>
     </Fragment>
