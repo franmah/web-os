@@ -21,23 +21,16 @@
 
   .selectionBoxOn {
     position: absolute;
-    top: 50px;
-    left: 50px;
     border: 1px solid blue;
-    background-color: blue;
-    width: 100px;
-    height: 100px;
+    background-color: rgba(255, 0, 0, 0.185);
+    z-index: 0;
 
   }
 
   .selectionBoxOff {
     position: absolute;
-    top: 50px;
-    left: 50px;
     border: 1px solid blue;
     background-color: red;
-    width: 100px;
-    height: 100px;
 
   }
 }
