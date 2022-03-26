@@ -5,9 +5,10 @@ import { DesktopItem } from '..';
 import { ITEM_HEIGHT, ITEM_WIDTH } from '../desktop-item-container.service';
 import globalStyles from '../../../../styles/global.module.scss';
 
+// TODO: move to consts file
 const SHORTENED_NAME_LENGTH = 15;
 
-const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function }> = ({ item, moveItem }) => {
+const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectItem: Function, unselectAllOther: Function }> = ({ item, moveItem, selectItem, unselectAllOther }) => {
 
   useEffect(() => {
     let distanceMouseToItemTop = 0;
@@ -21,12 +22,17 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function }> = ({ i
         getDestopItemNewPositionRelativeToMouse(event, distanceMouseToItemTop, distanceMouseToItemLeft);
       moveItem(item.name, top, left);
 
-      // Will that work?
       onClick(event);
     };
 
     const onClick = (event: any) => {
-      // console.log('click');
+      if (!item.selected)
+        selectItem(item.name, true); // TODO: replace by id
+    };
+
+    const onClickOut = (event: any) => {
+      if (!el.contains(event.target) && item.selected)
+        selectItem(item.name, false);
     };
 
     const onDoubleClick = (event: any) => {
@@ -34,6 +40,7 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function }> = ({ i
     };
 
     const onDragStart = (event: any) => {
+      unselectAllOther(item.name);
       distanceMouseToItemTop = event.clientY - item.top;
       distanceMouseToItemLeft = event.clientX - item.left;
     };
@@ -42,16 +49,20 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function }> = ({ i
     el.addEventListener('click', onClick);
     el.addEventListener('dbClick', onDoubleClick);
     el.addEventListener('dragstart', onDragStart);
+    document.addEventListener('click', onClickOut);
 
     return () => {
-      el.removeEventListener('dragend', onDragEnd), false;
-      el.removeEventListener('click', onClick), false;
-      el.removeEventListener('dblclick', onDoubleClick), false;
+      el.removeEventListener('dragend', onDragEnd);
+      el.removeEventListener('click', onClick);
+      el.removeEventListener('dblclick', onDoubleClick);
       el.removeEventListener('dragstart', onDragStart);
+      document.removeEventListener('click', onClickOut);
     };
   }), [item];
 
   const formatItemName = (name: string): string => {
+    if (item.selected) return name;
+
     const shortenedName = name.substring(0, SHORTENED_NAME_LENGTH);
     return shortenedName.length > SHORTENED_NAME_LENGTH ?
       shortenedName + '...' :
@@ -68,9 +79,12 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function }> = ({ i
       };
     };
 
-  const getClass = () => {
-    return styles.desktopItem + ' ' + globalStyles.unselectableText;
-  };
+    const getClass = () => {
+      const selectionClass = item.selected ? styles.dekstopItemSelected : 
+        styles.dekstopItemNotSelected;
+      return styles.desktopItem + ' ' + globalStyles.unselectableText +
+        ' ' + selectionClass;
+    };
 
   return (
     <div id={item.name} draggable="true"

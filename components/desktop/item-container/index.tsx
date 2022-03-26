@@ -11,7 +11,8 @@ export type DesktopItem = {
   left: number,
   iconPath: string,
   name: string,
-  top: number
+  top: number,
+  selected: boolean
 }
 
 type SelectionBox = {
@@ -49,6 +50,7 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
   // Start selection box when dragging start
   useEffect(() => {
     const onMouseDown = (event: any) => {
+      // TODO: should check that mouse is over #desktop and nothing else
       if (!isMouseOverItem(event.clientX, event.clientY, desktopItems)) {
          setSelectionBox({
           ...selectionBox,
@@ -126,6 +128,8 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
     }
   }, [selectionBox]);
 
+
+  /** UPDATE ITEMS **/
   const moveItem = (itemId: string, top: number, left: number) => {
     const element = desktopItems.find(el => el.name === itemId);
     if (!element) return;
@@ -139,11 +143,26 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
     setDesktopItems(JSON.parse(JSON.stringify(desktopItems)));
   };
 
+  const selectItem = (id: string, selected: boolean) => {
+    const item = desktopItems.find(i => i.name === id);
+    if (!item) return;
+    item.selected = selected;
+    setDesktopItems(JSON.parse(JSON.stringify(desktopItems)));
+  };
+
+  const unselectAllOther = (id: string) => {
+    desktopItems.forEach(item => {
+      if (item.name !== id)
+        item.selected = false;
+    });
+    setDesktopItems(JSON.parse(JSON.stringify(desktopItems)));
+  }
+
   return (
     <Fragment>
       { desktopItems.map((item, index) =>
         (
-          <DesktopItemComponent key={index} item={item} moveItem={moveItem}/>
+          <DesktopItemComponent key={index} item={item} moveItem={moveItem} selectItem={selectItem} unselectAllOther={unselectAllOther}/>
         )
       )}
 
@@ -154,7 +173,7 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
           width: selectionBox.width,
           zIndex: selectionBox.zindex
         }}
-      className={styles.selectionBoxOn}></div>
+      className={styles.selectionBox}></div>
     </Fragment>
   );
 };

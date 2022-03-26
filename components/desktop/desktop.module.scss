@@ -13,14 +13,22 @@
     text-align: center;
     font-size: 12px;
     cursor: default;
+    border: 1px solid transparent;
+  }
 
+  .dekstopItemNotSelected {
     &:hover {
-      background-color: #1d303d;
+      background-color: #1d303d7e;
       border: 1px solid #566671;
     }
   }
 
-  .selectionBoxOn {
+  .dekstopItemSelected {
+    background-color: #466681ad;
+    border: 1px solid #466681ad;
+  }
+
+  .selectionBox {
     position: absolute;
     border: 1px solid #0078d7;
     background-color: #0076d760;

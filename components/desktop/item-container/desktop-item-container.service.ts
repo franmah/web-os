@@ -51,6 +51,7 @@ export const toItemWrappers = (files: ExplorerFile[]): DesktopItem[] => {
       iconPath: file.iconPath,
       left: 0,
       name: file.name,
+      selected: false,
       top: 0
     };
   });
