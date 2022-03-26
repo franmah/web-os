@@ -6,7 +6,7 @@ import { correctItemPosition, isItemOverlapingOtherItems,
 import styles from './../desktop.module.scss';
 import { clamp } from '../../../shared/services/mathHelper';
 
-// TODO: move to it's own file
+// TODO: move types to their own file
 export type DesktopItem = {
   left: number,
   iconPath: string,
@@ -121,12 +121,8 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
     if (selectionBox.active) {
       document.addEventListener('mousemove', mousemove);
-      console.log('adding')
 
-      return () => {
-        console.log('removiing')
-        document.removeEventListener('mousemove', mousemove);
-      };
+      return () => document.removeEventListener('mousemove', mousemove);
     }
   }, [selectionBox]);
 
