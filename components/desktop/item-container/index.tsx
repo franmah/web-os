@@ -68,12 +68,15 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
       setSelectionBox({ ...selectionBox, active: false, zindex: -1 });
     };
 
-    document.addEventListener('mousedown', onMouseDown);
-    document.addEventListener('mouseup', onMouseUp);
+    const desktopElemenet = document.getElementById('desktop');
+    if (!desktopElemenet) return;
+    
+    desktopElemenet.addEventListener('mousedown', onMouseDown);
+    desktopElemenet.addEventListener('mouseup', onMouseUp);
 
     return () => {
-      document.removeEventListener('mousedown', onMouseDown);
-      document.removeEventListener('mouseup', onMouseUp);
+      desktopElemenet.removeEventListener('mousedown', onMouseDown);
+      desktopElemenet.removeEventListener('mouseup', onMouseUp);
     };
   }, [desktopItems]);
 

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import SearchBar from './search-bar';
 import ShortcutBar from './shortcut-bar';
 import styles from './taskbar.module.scss';
+import globalStyles from '../../styles/global.module.scss';
 
 class Taskbar extends Component {
   NUM_FAKE_ICONS = 10;
@@ -42,7 +43,7 @@ class Taskbar extends Component {
   render() {
     return (
       <div className={styles.main}>
-        <div className={styles.windowIcon} onClick={this.handleClick}>
+        <div className={`${styles.windowIcon} ${globalStyles.unselectableText}`} onClick={this.handleClick}>
           <Image src='/taskbar/windows-logo.png' alt='menu' height={22} width={22}/>
         </div>
 
