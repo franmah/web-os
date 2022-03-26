@@ -18,4 +18,26 @@
       border: 1px solid #566671;
     }
   }
+
+  .selectionBoxOn {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    border: 1px solid blue;
+    background-color: blue;
+    width: 100px;
+    height: 100px;
+
+  }
+
+  .selectionBoxOff {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    border: 1px solid blue;
+    background-color: red;
+    width: 100px;
+    height: 100px;
+
+  }
 }

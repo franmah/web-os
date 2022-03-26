@@ -78,3 +78,13 @@ export const placeItemsAtStartPosition = (items: DesktopItem[]) => {
     return item;
   });
 };
+
+export const isMouseOverItem = (x: number, y: number, items: DesktopItem[]) => {
+  return items.some(item => {
+    const itemBottom = item.top + ITEM_HEIGHT;
+    const itemRight = item.left + ITEM_WIDTH;
+
+    return y >= item.top && y <= itemBottom &&
+      x >= item.left && x <= itemRight;
+  });
+};
