@@ -1,5 +1,6 @@
-import { DesktopItem, SelectionBox } from '.';
+import { DesktopItem } from '.';
 import { ExplorerFile } from '../../../types/ExplorerElement';
+import { SelectionBox } from '../../../types/shared/SelectionBox';
 
 // TODO: MOVE TO CONSTS FILE
 export const ITEM_HEIGHT = 80;
@@ -78,16 +79,6 @@ export const placeItemsAtStartPosition = (items: DesktopItem[]) => {
 
     currentRow += 1;
     return item;
-  });
-};
-
-export const isMouseOverItem = (x: number, y: number, items: DesktopItem[]) => {
-  return items.some(item => {
-    const itemBottom = item.top + ITEM_HEIGHT;
-    const itemRight = item.left + ITEM_WIDTH;
-
-    return y >= item.top && y <= itemBottom &&
-      x >= item.left && x <= itemRight;
   });
 };
 

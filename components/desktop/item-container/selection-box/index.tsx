@@ -1,9 +1,8 @@
 import { FC, useEffect, useState } from 'react';
-import { isMouseOverItem } from './../desktop-item-container.service';
-import { clamp } from '../../../../shared/services/mathHelper';
 import { DesktopItem } from '..';
 import { SelectionBox } from '../../../../types/shared/SelectionBox';
 import styles from './../../desktop.module.scss';
+import { getBoxNewPosition } from './selection-box.service';
 
 
 const startSelectionBox: SelectionBox = {
@@ -22,14 +21,16 @@ const startSelectionBox: SelectionBox = {
 // box component should be in app.
 // use state management (behaviorsubject, context...)
 // set state with target elementes
-const SelectionBoxComponent: FC<{ desktopItems: DesktopItem[], updateSelection: Function }> = ({ desktopItems, updateSelection }) => {
+const SelectionBoxComponent: FC<{ desktopItems: DesktopItem[], updateSelection: Function }> = 
+({ desktopItems, updateSelection }) => {
+
   const [selectionBox, setSelectionBox] = useState<SelectionBox>(startSelectionBox);
 
   // Start selection box when dragging start
   useEffect(() => {
     const onMouseDown = (event: any) => {
-      // TODO: should check that mouse is over #desktop and nothing else
-      if (!isMouseOverItem(event.clientX, event.clientY, desktopItems)) {
+      const target = event.path?.[0];
+      if (target.id === 'desktop') {
          setSelectionBox({
           ...selectionBox,
           active: true,
@@ -59,39 +60,16 @@ const SelectionBoxComponent: FC<{ desktopItems: DesktopItem[], updateSelection: 
 
   // Updates selection box div
   useEffect(() => {
+    const updateParent = () => {
+      const { top, left } = selectionBox;
+      const bottom = top + selectionBox.height;
+      const right = left + selectionBox.width;
+      updateSelection(top, bottom, left, right);
+    }
 
     const mousemove = (event: any) => {
       const { clientY, clientX } = event;
-
-      const width = Math.abs(selectionBox.startX - +clientX);
-      const height = Math.abs(selectionBox.startY - +clientY);
-
-      // Mouse relative to start position
-      const bottomRight = clientX >= selectionBox.startX && clientY >= selectionBox.startY;
-      const bottomLeft = clientX < selectionBox.startX && clientY > selectionBox.startY;
-      const topLeft = clientX <= selectionBox.startX && clientY <= selectionBox.startY;
-      const topRight = clientX > selectionBox.startX && clientY < selectionBox.startY;
-
-      let top = 0, left = 0;
-
-      // TODO: prevent from going out of window
-      if (bottomRight) {
-        top = selectionBox.startY;
-        left = selectionBox.startX;
-      } else if (bottomLeft) {
-        top = selectionBox.startY;
-        left = clientX;
-      } else if (topLeft) {
-        top = clientY;
-        left = clientX;
-      } else if (topRight) {
-        top = clientY;
-        left = selectionBox.startX;
-      }
-
-      // TODO: create const file with taskbar size
-      top = clamp(0, top, window.innerHeight - 75);
-      left = clamp(0, left, document.body.clientWidth);
+      const { top, left, width, height } = getBoxNewPosition(selectionBox, clientX, clientY);
 
       const updatedSelectionBox: SelectionBox = {
         ...selectionBox,
@@ -101,7 +79,7 @@ const SelectionBoxComponent: FC<{ desktopItems: DesktopItem[], updateSelection: 
         width
       };
 
-      updateSelection(top);
+      updateParent();
       setSelectionBox(updatedSelectionBox);
     };
 
@@ -115,13 +93,14 @@ const SelectionBoxComponent: FC<{ desktopItems: DesktopItem[], updateSelection: 
   }, [selectionBox]);
 
   return (
-      <div style={{
+      <div 
+        className={styles.selectionBox}
+        style={{
           height: selectionBox.height,
           left: selectionBox.left,
           top: selectionBox.top,
           width: selectionBox.width,
         }}
-        className={styles.selectionBox}
       >
       </div>
   );
