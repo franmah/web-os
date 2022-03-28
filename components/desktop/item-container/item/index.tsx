@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { FC, useEffect } from 'react';
 import styles from '../../desktop.module.scss';
 import { DesktopItem } from '..';
-import { ITEM_HEIGHT, ITEM_WIDTH } from '../desktop-item-container.service';
+import { ITEM_HEIGHT, ITEM_WIDTH, MAX_ITEM_HEIGHT } from '../desktop-item-container.service';
 import globalStyles from '../../../../styles/global.module.scss';
 
 // TODO: move to consts file
@@ -61,12 +61,11 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
   }), [item];
 
   const formatItemName = (name: string): string => {
-    if (item.selected) return name;
+    if (item.selected || item.name.length <= SHORTENED_NAME_LENGTH)
+     return name;
 
     const shortenedName = name.substring(0, SHORTENED_NAME_LENGTH);
-    return shortenedName.length > SHORTENED_NAME_LENGTH ?
-      shortenedName + '...' :
-      shortenedName;
+    return shortenedName + '...';
   };
 
   const getDestopItemNewPositionRelativeToMouse = (event: any,
@@ -89,7 +88,7 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
   return (
     <div id={item.name} draggable="true"
       className={getClass()}
-      style={{ height: ITEM_HEIGHT, left: item.left, top: item.top, width: ITEM_WIDTH }}
+      style={{ maxHeight: item.selected ? MAX_ITEM_HEIGHT : ITEM_HEIGHT, left: item.left, top: item.top, width: ITEM_WIDTH }}
     >
       <Image src={item.iconPath} alt={'icon'} width={60} height={60}/>
       { formatItemName(item.name) }

@@ -3,6 +3,7 @@ import { ExplorerFile } from '../../../types/ExplorerElement';
 
 // TODO: MOVE TO CONSTS FILE
 export const ITEM_HEIGHT = 80;
+export const MAX_ITEM_HEIGHT = 130;
 export const ITEM_WIDTH = 60;
 export const WIDTH_OFFSET = 10;
 export const HEIGHT_OFFSET = 20;
