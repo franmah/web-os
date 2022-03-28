@@ -21,8 +21,7 @@ const startSelectionBox: SelectionBox = {
 // box component should be in app.
 // use state management (behaviorsubject, context...)
 // set state with target elementes
-const SelectionBoxComponent: FC<{ desktopItems: DesktopItem[], updateSelection: Function }> = 
-({ desktopItems, updateSelection }) => {
+const SelectionBoxComponent: FC<{ updateSelection: Function }> = ({ updateSelection }) => {
 
   const [selectionBox, setSelectionBox] = useState<SelectionBox>(startSelectionBox);
 
@@ -43,20 +42,21 @@ const SelectionBoxComponent: FC<{ desktopItems: DesktopItem[], updateSelection: 
     };
 
     const onMouseUp = () => {
-      setSelectionBox({ ...selectionBox, active: false });
+      // TODO: hide it better
+      setSelectionBox({ ...selectionBox, active: false, width: 0, height: 0 });
     };
 
     const desktopElement = document.getElementById('desktop');
     if (!desktopElement) return;
     
     desktopElement.addEventListener('mousedown', onMouseDown);
-    desktopElement.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mouseup', onMouseUp);
 
     return () => {
       desktopElement.removeEventListener('mousedown', onMouseDown);
-      desktopElement.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mouseup', onMouseUp);
     };
-  }, [desktopItems]);
+  }, []);
 
   // Updates selection box div
   useEffect(() => {

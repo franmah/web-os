@@ -2,7 +2,7 @@ import { ExplorerFile } from '../../../types/ExplorerElement';
 import { FC, Fragment, useEffect, useState } from 'react';
 import DesktopItemComponent from './item';
 import { correctItemPosition, isItemOverlapingOtherItems,
-  toItemWrappers, placeItemsAtStartPosition } from './desktop-item-container.service';
+  toItemWrappers, placeItemsAtStartPosition, getItemsInBox } from './desktop-item-container.service';
 import SelectionBoxComponent from './selection-box';
 
 // TODO: move types to their own file
@@ -51,7 +51,25 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
     setDesktopItems(JSON.parse(JSON.stringify(desktopItems)));
   }
 
-  const handleBoxUpdates = () => {
+  const handleBoxUpdates = (top: number, bottom: number, left: number, right: number) => {
+    const items = getItemsInBox(desktopItems, top, bottom, left, right);
+
+    // let needUpdate = false;
+    // if (desktopItems.some(i => i.selected === true)) {
+    //   desktopItems.forEach(i => i.selected = false);
+    //   needUpdate = true;
+    // }
+
+    // if (items.length > 0) {
+    //   items.forEach(i => i.selected = true);
+    //   setDesktopItems(JSON.parse(JSON.stringify(desktopItems)));
+    // }
+
+    // if (needUpdate) {
+    //   console.log('updating stuff')
+    //   setDesktopItems(JSON.parse(JSON.stringify(desktopItems)));
+
+    // }
   }
 
   return (
@@ -64,7 +82,7 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
         )
       )}
 
-      <SelectionBoxComponent desktopItems={desktopItems} updateSelection={handleBoxUpdates}/>
+      <SelectionBoxComponent updateSelection={handleBoxUpdates}/>
     </Fragment>
   );
 };

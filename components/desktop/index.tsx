@@ -76,7 +76,7 @@ function getFakeDesktopFiles(): ExplorerFile[] {
     {
       children: [],
       iconPath: '/icons/folder-icon.png',
-      name: 'num #11 name is super long for real',
+      name: 'num #11',
       parent: null
     }
     ];

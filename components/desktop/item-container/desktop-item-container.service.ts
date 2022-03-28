@@ -82,10 +82,8 @@ export const placeItemsAtStartPosition = (items: DesktopItem[]) => {
   });
 };
 
-export const getItemsInSelectionBox = (items: DesktopItem[], box: SelectionBox): DesktopItem[] => {
-  const { top, left } = box;
-  const right = left + box.width;
-  const bottom = top + box.height;
+export const getItemsInBox = (items: DesktopItem[], top: number, bottom: number, left: number, 
+right: number): DesktopItem[] => {
 
   return items.filter(i => {
     const itemTop = i.top;
