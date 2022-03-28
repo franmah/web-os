@@ -1,19 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import { isMouseOverItem } from './../desktop-item-container.service';
-import styles from './../../desktop.module.scss';
 import { clamp } from '../../../../shared/services/mathHelper';
 import { DesktopItem } from '..';
+import { SelectionBox } from '../../../../types/shared/SelectionBox';
+import styles from './../../desktop.module.scss';
 
-export type SelectionBox = {
-  active: boolean,
-  startX: number,
-  startY: number,
-  width: number,
-  height: number,
-  top: number,
-  left: number,
-  zindex: number
-}
 
 const startSelectionBox: SelectionBox = {
   active: false,
@@ -23,9 +14,14 @@ const startSelectionBox: SelectionBox = {
   startY: 0,
   top: 0,
   width: 0,
-  zindex: -1
 };
 
+//
+// TODO: should be more generic: 
+// make only a single selection box. 
+// box component should be in app.
+// use state management (behaviorsubject, context...)
+// set state with target elementes
 const SelectionBoxComponent: FC<{ desktopItems: DesktopItem[], updateSelection: Function }> = ({ desktopItems, updateSelection }) => {
   const [selectionBox, setSelectionBox] = useState<SelectionBox>(startSelectionBox);
 
@@ -41,13 +37,12 @@ const SelectionBoxComponent: FC<{ desktopItems: DesktopItem[], updateSelection: 
           startX: +event.clientX,
           startY: +event.clientY,
           top: +event.clientY,
-          zindex: 1
         });
       }
     };
 
     const onMouseUp = () => {
-      setSelectionBox({ ...selectionBox, active: false, zindex: -1 });
+      setSelectionBox({ ...selectionBox, active: false });
     };
 
     const desktopElement = document.getElementById('desktop');
@@ -63,10 +58,8 @@ const SelectionBoxComponent: FC<{ desktopItems: DesktopItem[], updateSelection: 
   }, [desktopItems]);
 
   // Updates selection box div
-  // TODO: should be more generic: 
-  /// call parent with box position (or elements within box if possible) and don't use getElementById('desktop') rather receive one (could be named target).
-  // should be in a shared folder
   useEffect(() => {
+
     const mousemove = (event: any) => {
       const { clientY, clientX } = event;
 
@@ -127,7 +120,6 @@ const SelectionBoxComponent: FC<{ desktopItems: DesktopItem[], updateSelection: 
           left: selectionBox.left,
           top: selectionBox.top,
           width: selectionBox.width,
-          zIndex: selectionBox.zindex
         }}
         className={styles.selectionBox}
       >
