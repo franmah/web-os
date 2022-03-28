@@ -2,7 +2,7 @@ import { ExplorerFile } from '../../../types/ExplorerElement';
 import { FC, Fragment, useEffect, useState } from 'react';
 import DesktopItemComponent from './item';
 import { correctItemPosition, isItemOverlapingOtherItems,
-  toItemWrappers, placeItemsAtStartPosition, isMouseOverItem } from './desktop-item-container.service';
+  toItemWrappers, placeItemsAtStartPosition, isMouseOverItem, ITEM_WIDTH, ITEM_HEIGHT, getItemsInSelectionBox } from './desktop-item-container.service';
 import styles from './../desktop.module.scss';
 import { clamp } from '../../../shared/services/mathHelper';
 
@@ -15,7 +15,7 @@ export type DesktopItem = {
   selected: boolean
 }
 
-type SelectionBox = {
+export type SelectionBox = {
   active: boolean,
   startX: number,
   startY: number,
@@ -51,7 +51,7 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
   useEffect(() => {
     const onMouseDown = (event: any) => {
       // TODO: should check that mouse is over #desktop and nothing else
-      if (!isMouseOverItem(event.clientX, event.clientY, desktopItems)) {
+      if (!selectionBox.active && !isMouseOverItem(event.clientX, event.clientY, desktopItems)) {
          setSelectionBox({
           ...selectionBox,
           active: true,
@@ -115,19 +115,29 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
       top = clamp(0, top, window.innerHeight - 75);
       left = clamp(0, left, document.body.clientWidth);
 
-      setSelectionBox({
+      
+      // const itemsToSelect = getItemsInSelectionBox(desktopItems, selectionBox);
+      // itemsToSelect.forEach(i => i.selected = true);
+      // console.log('setting desktop items')
+      // setDesktopItems([...desktopItems]);
+
+      const updatedSelectionBox: SelectionBox = {
         ...selectionBox,
         height,
         left,
         top,
         width
-      });
+      };
+
+      setSelectionBox(updatedSelectionBox);
     };
 
     if (selectionBox.active) {
       document.addEventListener('mousemove', mousemove);
 
-      return () => document.removeEventListener('mousemove', mousemove);
+      return () => {
+        document.removeEventListener('mousemove', mousemove);
+      };
     }
   }, [selectionBox]);
 

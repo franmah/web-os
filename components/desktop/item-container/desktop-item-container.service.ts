@@ -1,4 +1,4 @@
-import { DesktopItem } from '.';
+import { DesktopItem, SelectionBox } from '.';
 import { ExplorerFile } from '../../../types/ExplorerElement';
 
 // TODO: MOVE TO CONSTS FILE
@@ -90,3 +90,21 @@ export const isMouseOverItem = (x: number, y: number, items: DesktopItem[]) => {
       x >= item.left && x <= itemRight;
   });
 };
+
+export const getItemsInSelectionBox = (items: DesktopItem[], box: SelectionBox): DesktopItem[] => {
+  const { top, left } = box;
+  const right = left + box.width;
+  const bottom = top + box.height;
+
+  return items.filter(i => {
+    const itemTop = i.top;
+    const itemBottom = i.top + ITEM_HEIGHT;
+    const itemLeft = i.left;
+    const itemRight = i.left + ITEM_WIDTH
+    
+    return ((top < itemTop && itemTop < bottom) ||
+      (top < itemBottom && itemBottom < bottom)) &&
+      ((left < itemLeft && itemLeft < right) ||
+      (left < itemRight && itemRight < right));
+  });
+}
