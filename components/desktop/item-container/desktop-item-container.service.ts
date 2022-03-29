@@ -1,6 +1,5 @@
-import { DesktopItem } from '.';
+import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ExplorerFile } from '../../../types/ExplorerElement';
-import { SelectionBox } from '../../../types/shared/SelectionBox';
 
 // TODO: MOVE TO CONSTS FILE
 export const ITEM_HEIGHT = 80;
