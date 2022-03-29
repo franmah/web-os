@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from 'react';
-import { DesktopItem } from '..';
 import { SelectionBox } from '../../../../types/shared/SelectionBox';
 import styles from './../../desktop.module.scss';
 import { getBoxNewPosition } from './selection-box.service';
@@ -28,8 +27,8 @@ const SelectionBoxComponent: FC<{ updateSelection: Function }> = ({ updateSelect
   // Start selection box when dragging start
   useEffect(() => {
     const onMouseDown = (event: any) => {
-      const target = event.path?.[0];
-      if (target.id === 'desktop') {
+      const target = event?.path?.[0];
+      if (target?.id === 'desktop') {
          setSelectionBox({
           ...selectionBox,
           active: true,
@@ -43,7 +42,12 @@ const SelectionBoxComponent: FC<{ updateSelection: Function }> = ({ updateSelect
 
     const onMouseUp = () => {
       // TODO: hide it better
-      setSelectionBox({ ...selectionBox, active: false, width: 0, height: 0 });
+      setSelectionBox({
+        ...selectionBox,
+        active: false,
+        width: 0,
+        height: 0
+      });
     };
 
     const desktopElement = document.getElementById('desktop');
