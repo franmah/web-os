@@ -57,6 +57,10 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
     setDesktopItems(JSON.parse(JSON.stringify(desktopItems)));
   }
 
+  const handleItemDoubleClick = (itemId: string) => {
+    console.log('received double click from item');
+  }
+
   // Not working: first two items will be unselected on mouseup even when they shouldn't
   const handleBoxUpdates = (top: number, bottom: number, left: number, right: number) => {
     const items = getItemsToSelect(desktopItems, top, bottom, left, right);
@@ -85,6 +89,7 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
             moveItem={moveItem}
             selectItem={selectItem}
             unselectAllOther={unselectAllOtherItems}
+            handleDoubleClick={handleItemDoubleClick}
           />
         )
       )}

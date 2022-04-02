@@ -5,8 +5,8 @@ import globalStyles from '../../../../styles/global.module.scss';
 import { DesktopItem } from '../../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, MAX_ITEM_HEIGHT, SHORTENED_NAME_LENGTH } from '../../../../constants/DesktopConsts';
 
-const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectItem: Function, unselectAllOther: Function }> =
-({ item, moveItem, selectItem, unselectAllOther }) => {
+const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectItem: Function, unselectAllOther: Function, handleDoubleClick: Function }> =
+({ item, moveItem, selectItem, unselectAllOther, handleDoubleClick }) => {
 
   useEffect(() => {
     let distanceMouseToItemTop = 0;
@@ -34,7 +34,7 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
     };
 
     const onDoubleClick = (event: any) => {
-      // Also trigger 'click' event
+      handleDoubleClick(item.name); // TODO: update with id
     };
 
     const onDragStart = (event: any) => {
@@ -45,7 +45,7 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
 
     el.addEventListener('dragend', onDragEnd);
     el.addEventListener('click', onClick);
-    el.addEventListener('dbClick', onDoubleClick);
+    el.addEventListener('dblclick', onDoubleClick);
     el.addEventListener('dragstart', onDragStart);
     document.addEventListener('click', onClickOut);
 
