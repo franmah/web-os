@@ -2,7 +2,7 @@ import { ExplorerFile } from '../../../types/ExplorerElement';
 import { FC, Fragment, useEffect, useState } from 'react';
 import DesktopItemComponent from './item';
 import { correctItemPosition, isItemOverlapingOtherItems,
-  toItemWrappers, placeItemsAtStartPosition, getItemsInBox } from './desktop-item-container.service';
+  toItemWrappers, placeItemsAtStartPosition, getItemsToSelect } from './desktop-item-container.service';
 import SelectionBoxComponent from './selection-box';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 
@@ -57,8 +57,11 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
     setDesktopItems(JSON.parse(JSON.stringify(desktopItems)));
   }
 
+  // Not working: first two items will be unselected on mouseup even when they shouldn't
   const handleBoxUpdates = (top: number, bottom: number, left: number, right: number) => {
-    const items = getItemsInBox(desktopItems, top, bottom, left, right);
+    const items = getItemsToSelect(desktopItems, top, bottom, left, right);
+
+    console.log(`items selected: ${items.map(i => i.name).join(', ')}`);
 
     let updated = false;
     desktopItems.forEach(i => {
@@ -76,7 +79,7 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
   return (
     <Fragment>
-      { desktopItems.map((item, index) =>
+      {desktopItems.map((item, index) =>
         (
           <DesktopItemComponent key={index} item={item} moveItem={moveItem} 
             selectItem={selectItem} unselectAllOther={unselectAllOtherItems}

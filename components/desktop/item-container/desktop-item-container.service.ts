@@ -81,7 +81,7 @@ export const placeItemsAtStartPosition = (items: DesktopItem[]) => {
   });
 };
 
-export const getItemsInBox = (items: DesktopItem[], top: number, bottom: number, left: number, 
+export const getItemsToSelect = (items: DesktopItem[], top: number, bottom: number, left: number, 
 right: number): DesktopItem[] => {
 
   return items.filter(i => {
@@ -90,9 +90,35 @@ right: number): DesktopItem[] => {
     const itemLeft = i.left;
     const itemRight = i.left + ITEM_WIDTH
     
-    return ((top < itemTop && itemTop < bottom) ||
-      (top < itemBottom && itemBottom < bottom)) &&
-      ((left < itemLeft && itemLeft < right) ||
-      (left < itemRight && itemRight < right));
+    return (
+      isItemInBox(itemTop, itemBottom, itemLeft, itemRight, top, left, right, bottom) || 
+      isBoxOverItem(itemTop, itemBottom, itemLeft, itemRight, top, left, right, bottom)
+    );
   });
 }
+
+const isItemInBox = (itemTop: number, itemBottom: number, itemLeft: number, itemRight: number, 
+top: number, left: number, right: number, bottom: number) => {
+  return (
+    (top < itemTop && itemTop < bottom) ||
+    (top < itemBottom && itemBottom < bottom)
+      ) && (
+    (left < itemLeft && itemLeft < right) ||
+    (left < itemRight && itemRight < right)
+    );
+}
+
+const isBoxOverItem = (itemTop: number, itemBottom: number, itemLeft: number, itemRight: number, 
+top: number, left: number, right: number, bottom: number) => {
+    return (
+      (itemLeft < left && itemLeft < right) &&
+      (itemRight > right && itemRight > left) &&
+      ((top < itemTop && itemTop < bottom) ||
+      (top < itemBottom && itemBottom < bottom))
+        ) || (
+      (itemTop < top && itemTop < bottom) &&
+      (itemBottom > top && itemBottom > bottom) &&
+      ((left < itemLeft && itemLeft < right) ||
+      (left < itemRight && itemRight < right))
+    );
+  }

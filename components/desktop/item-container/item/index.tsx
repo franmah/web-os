@@ -1,16 +1,20 @@
 import Image from 'next/image';
 import { FC, useEffect } from 'react';
 import styles from '../../desktop.module.scss';
-import { DesktopItem } from '..';
 import { ITEM_HEIGHT, ITEM_WIDTH, MAX_ITEM_HEIGHT } from '../desktop-item-container.service';
 import globalStyles from '../../../../styles/global.module.scss';
+import { DesktopItem } from '../../../../types/desktop/DesktopItem';
 
 // TODO: move to consts file
 const SHORTENED_NAME_LENGTH = 15;
 
-const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectItem: Function, unselectAllOther: Function }> = ({ item, moveItem, selectItem, unselectAllOther }) => {
+const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectItem: Function, unselectAllOther: Function }> =
+({ item, moveItem, selectItem, unselectAllOther }) => {
 
   useEffect(() => {
+    if (item.name === 'num #1')
+      console.log(`${item.name}: ${item.selected}`);
+    
     let distanceMouseToItemTop = 0;
     let distanceMouseToItemLeft = 0;
 
