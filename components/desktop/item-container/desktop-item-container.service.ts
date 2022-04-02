@@ -1,20 +1,14 @@
+import { HEIGHT_OFFSET, ITEM_HEIGHT, ITEM_WIDTH, WIDTH_OFFSET } from '../../../constants/DesktopConsts';
+import { TASKBAR_HEIGHT } from '../../../constants/TaskbarConsts';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ExplorerFile } from '../../../types/ExplorerElement';
-
-// TODO: MOVE TO CONSTS FILE
-export const ITEM_HEIGHT = 80;
-export const MAX_ITEM_HEIGHT = 130;
-export const ITEM_WIDTH = 60;
-export const WIDTH_OFFSET = 10;
-export const HEIGHT_OFFSET = 20;
-export const TASKBAR_HEIGHT_OFFSET = 60;
 
 // Update position to avoid going out of screen
 export const correctItemPosition = (top: number, left: number)
 : { correctedTop: number, correctedLeft: number } => {
 
   const maxWidth = document.body.clientWidth - ITEM_WIDTH - WIDTH_OFFSET;
-  const maxHeight = window.innerHeight - ITEM_HEIGHT - TASKBAR_HEIGHT_OFFSET;
+  const maxHeight = window.innerHeight - ITEM_HEIGHT - TASKBAR_HEIGHT;
 
   return {
     correctedLeft: Math.min(Math.max(left, WIDTH_OFFSET), maxWidth),
@@ -60,7 +54,7 @@ export const toItemWrappers = (files: ExplorerFile[]): DesktopItem[] => {
 
 export const placeItemsAtStartPosition = (items: DesktopItem[]) => {
   const numElementsMaxPerColumn = Math.floor(
-    (window.innerHeight - TASKBAR_HEIGHT_OFFSET) /
+    (window.innerHeight - TASKBAR_HEIGHT) /
     (ITEM_HEIGHT + HEIGHT_OFFSET)
   );
 

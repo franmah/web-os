@@ -61,8 +61,6 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
   const handleBoxUpdates = (top: number, bottom: number, left: number, right: number) => {
     const items = getItemsToSelect(desktopItems, top, bottom, left, right);
 
-    console.log(`items selected: ${items.map(i => i.name).join(', ')}`);
-
     let updated = false;
     desktopItems.forEach(i => {
       if (i.selected) {
@@ -91,7 +89,7 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
         )
       )}
 
-      <SelectionBoxComponent updateSelection={handleBoxUpdates}/>
+      {/* <SelectionBoxComponent updateSelection={handleBoxUpdates}/> */}
     </Fragment>
   );
 };
