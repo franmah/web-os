@@ -81,8 +81,12 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
     <Fragment>
       {desktopItems.map((item, index) =>
         (
-          <DesktopItemComponent key={index} item={item} moveItem={moveItem} 
-            selectItem={selectItem} unselectAllOther={unselectAllOtherItems}
+          <DesktopItemComponent 
+            key={index}
+            item={item}
+            moveItem={moveItem}
+            selectItem={selectItem}
+            unselectAllOther={unselectAllOtherItems}
           />
         )
       )}

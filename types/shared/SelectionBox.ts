@@ -6,4 +6,5 @@ export type SelectionBox = {
   height: number,
   top: number,
   left: number,
+  border: string
 }

@@ -4,7 +4,7 @@ import styles from './../../desktop.module.scss';
 import { getBoxNewPosition } from './selection-box.service';
 
 
-const startSelectionBox: SelectionBox = {
+const SELECTION_BOX_OFF: SelectionBox = {
   active: false,
   height: 0,
   left: 0,
@@ -12,17 +12,12 @@ const startSelectionBox: SelectionBox = {
   startY: 0,
   top: 0,
   width: 0,
+  border: '0px solid transparent'
 };
 
-//
-// TODO: should be more generic: 
-// make only a single selection box. 
-// box component should be in app.
-// use state management (behaviorsubject, context...)
-// set state with target elementes
 const SelectionBoxComponent: FC<{ updateSelection: Function }> = ({ updateSelection }) => {
 
-  const [selectionBox, setSelectionBox] = useState<SelectionBox>(startSelectionBox);
+  const [selectionBox, setSelectionBox] = useState<SelectionBox>(SELECTION_BOX_OFF);
 
   // Start selection box when dragging start
   useEffect(() => {
@@ -36,18 +31,13 @@ const SelectionBoxComponent: FC<{ updateSelection: Function }> = ({ updateSelect
           startX: +event.clientX,
           startY: +event.clientY,
           top: +event.clientY,
+          border: '1px solid #0078d7'
         });
       }
     };
 
     const onMouseUp = () => {
-      // TODO: hide it better
-      setSelectionBox({
-        ...selectionBox,
-        active: false,
-        width: 0,
-        height: 0
-      });
+      setSelectionBox(SELECTION_BOX_OFF);
     };
 
     const desktopElement = document.getElementById('desktop');
@@ -69,7 +59,7 @@ const SelectionBoxComponent: FC<{ updateSelection: Function }> = ({ updateSelect
       const bottom = top + selectionBox.height;
       const right = left + selectionBox.width;
       updateSelection(top, bottom, left, right);
-    }
+    };
 
     const mousemove = (event: any) => {
       const { clientY, clientX } = event;
@@ -104,6 +94,7 @@ const SelectionBoxComponent: FC<{ updateSelection: Function }> = ({ updateSelect
           left: selectionBox.left,
           top: selectionBox.top,
           width: selectionBox.width,
+          border: selectionBox.border
         }}
       >
       </div>

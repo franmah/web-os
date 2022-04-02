@@ -90,9 +90,16 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
     };
 
   return (
-    <div id={item.name} draggable="true"
+    <div
+      id={item.name}
+      draggable="true"
       className={getClass()}
-      style={{ maxHeight: item.selected ? MAX_ITEM_HEIGHT : ITEM_HEIGHT, left: item.left, top: item.top, width: ITEM_WIDTH }}
+      style={{
+        maxHeight: item.selected ? MAX_ITEM_HEIGHT : ITEM_HEIGHT, 
+        left: item.left,
+        top: item.top,
+        width: ITEM_WIDTH
+      }}
     >
       <Image src={item.iconPath} alt={'icon'} width={60} height={60}/>
       { formatItemName(item.name) }
