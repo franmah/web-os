@@ -54,7 +54,7 @@ class SearchBar extends Component {
             { color: '#dcdcdc'} }
           >
             <VscSearch size={18}/>
-            <input id='searchInput' placeholder='Type here to search' className={styles.searchInput}
+            <input id='searchInput' autoComplete='off' placeholder='Type here to search' className={styles.searchInput}
               value={this.state.value} onChange={this.handleInputChange}
             >
             </input>
