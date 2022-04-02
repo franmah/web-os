@@ -22,9 +22,9 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
     }
 
     const desktop = document.getElementById('desktop');
-    desktop?.addEventListener('mousedown', onmousedown);
+    desktop?.addEventListener('mousedown', onmousedown, true);
 
-    return () => desktop?.removeEventListener('mousedown', onmousedown);
+    return () => desktop?.removeEventListener('mousedown', onmousedown, true);
   }, [desktopItems])
 
   const moveItem = (itemId: string, top: number, left: number) => {

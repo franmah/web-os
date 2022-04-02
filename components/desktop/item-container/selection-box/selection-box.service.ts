@@ -1,3 +1,4 @@
+import { TASKBAR_HEIGHT } from "../../../../constants/TaskbarConsts";
 import { clamp } from "../../../../shared/services/mathHelper";
 import { SelectionBox } from "../../../../types/shared/SelectionBox";
 
@@ -29,8 +30,7 @@ export const getBoxNewPosition= (box: SelectionBox, clientX: number, clientY: nu
     left = box.startX;
   }
 
-  // TODO: create const file with taskbar size
-  top = clamp(0, top, window.innerHeight - 75);
+  top = clamp(0, top, window.innerHeight - TASKBAR_HEIGHT);
   left = clamp(0, left, document.body.clientWidth);
 
   return { top, left, width, height };
