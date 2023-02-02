@@ -1,8 +1,7 @@
 import { FC, useEffect, useState } from 'react';
-import { SelectionBox } from '../../../../types/shared/SelectionBox';
+import { SelectionBox } from '../../../types/shared/SelectionBox';
 import styles from './../../desktop.module.scss';
 import { getBoxNewPosition } from './selection-box.service';
-
 
 const SELECTION_BOX_OFF: SelectionBox = {
   active: false,

@@ -1,9 +1,8 @@
 import { ExplorerFile } from '../../../types/ExplorerElement';
 import { FC, Fragment, useEffect, useState } from 'react';
-import DesktopItemComponent from './item';
+import DesktopItemComponent from '../item/DesktopItem';
 import { correctItemPosition, isItemOverlapingOtherItems,
-  toItemWrappers, placeItemsAtStartPosition, getItemsToSelect } from './desktop-item-container.service';
-import SelectionBoxComponent from './selection-box';
+  toItemWrappers, placeItemsAtStartPosition, getItemsToSelect } from '../../../services/desktop-item-container.service';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 
 const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
