@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import Image from 'next/image';
-import SearchBar from './search-bar';
-import ShortcutBar from './shortcut-bar';
+import SearchBar from './search-bar/SearchBar';
+import ShortcutBar from './shortcut-bar/ShortcutBar';
 import styles from './taskbar.module.scss';
 import globalStyles from '../../styles/global.module.scss';
 

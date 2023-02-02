@@ -1,7 +1,7 @@
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import { FcApproval, FcApprove, FcAreaChart, FcBiotech, FcBookmark, FcCamera, FcClapperboard, FcGlobe } from 'react-icons/fc';
 import { Component } from 'react';
-import TaskbarShortcut from '../shortcut';
+import TaskbarShortcut from '../shortcut/Shortcut';
 import styles from '../taskbar.module.scss';
 
 class ShortcutBar extends Component {

@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import { FC, useEffect } from 'react';
-import styles from '../../desktop.module.scss';
-import globalStyles from '../../../../styles/global.module.scss';
-import { DesktopItem } from '../../../../types/desktop/DesktopItem';
-import { ITEM_HEIGHT, ITEM_WIDTH, MAX_ITEM_HEIGHT, SHORTENED_NAME_LENGTH } from '../../../../constants/DesktopConsts';
+import styles from '../desktop/desktop.module.scss';
+import globalStyles from '../../../styles/global.module.scss';
+import { DesktopItem } from '../../../types/desktop/DesktopItem';
+import { ITEM_HEIGHT, ITEM_WIDTH, MAX_ITEM_HEIGHT, SHORTENED_NAME_LENGTH } from '../../../constants/DesktopConsts';
 
 const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectItem: Function, unselectAllOther: Function, handleDoubleClick: Function }> =
 ({ item, moveItem, selectItem, unselectAllOther, handleDoubleClick }) => {

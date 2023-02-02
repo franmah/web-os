@@ -1,6 +1,6 @@
-import { TASKBAR_HEIGHT } from "../../../../constants/TaskbarConsts";
-import { clamp } from "../../../../shared/services/mathHelper";
-import { SelectionBox } from "../../../../types/shared/SelectionBox";
+import { TASKBAR_HEIGHT } from "../../../constants/TaskbarConsts";
+import { clamp } from "../../../shared/services/mathHelper";
+import { SelectionBox } from "../../../types/shared/SelectionBox";
 
 export const getBoxNewPosition= (box: SelectionBox, clientX: number, clientY: number) => {
 

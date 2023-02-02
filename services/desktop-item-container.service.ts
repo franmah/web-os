@@ -1,7 +1,7 @@
-import { HEIGHT_OFFSET, ITEM_HEIGHT, ITEM_WIDTH, WIDTH_OFFSET } from '../../../constants/DesktopConsts';
-import { TASKBAR_HEIGHT } from '../../../constants/TaskbarConsts';
-import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import { ExplorerFile } from '../../../types/ExplorerElement';
+import { HEIGHT_OFFSET, ITEM_HEIGHT, ITEM_WIDTH, WIDTH_OFFSET } from '../constants/DesktopConsts';
+import { TASKBAR_HEIGHT } from '../constants/TaskbarConsts';
+import { DesktopItem } from '../types/desktop/DesktopItem';
+import { ExplorerFile } from '../types/ExplorerElement';
 
 // Update position to avoid going out of screen
 export const correctItemPosition = (top: number, left: number)
