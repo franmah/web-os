@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { FC, useEffect } from 'react';
-import styles from '../desktop/desktop.module.scss';
+import styles from './desktop-item.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, MAX_ITEM_HEIGHT, SHORTENED_NAME_LENGTH } from '../../../constants/DesktopConsts';
