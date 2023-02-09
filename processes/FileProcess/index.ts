@@ -64,60 +64,60 @@ export class FileProcess {
         name: 'num #2',
         parent: desktop
       },
-      {
-        children: [],
-        iconPath: '/icons/folder-icon.png',
-        name: 'num #3',
-        parent: desktop
-      },
-      {
-        children: [],
-        iconPath: '/icons/folder-icon.png',
-        name: 'num #4',
-        parent: desktop
-      },
-      {
-        children: [],
-        iconPath: '/icons/folder-icon.png',
-        name: 'num #5',
-        parent: desktop
-      },
-      {
-        children: [],
-        iconPath: '/icons/folder-icon.png',
-        name: 'num #6',
-        parent: desktop
-      },
-      {
-        children: [],
-        iconPath: '/icons/folder-icon.png',
-        name: 'num #7',
-        parent: desktop
-      },
-      {
-        children: [],
-        iconPath: '/icons/folder-icon.png',
-        name: 'num #8',
-        parent: desktop
-      },
-      {
-        children: [],
-        iconPath: '/icons/folder-icon.png',
-        name: 'num #9',
-        parent: desktop
-      },
-      {
-        children: [],
-        iconPath: '/icons/folder-icon.png',
-        name: 'num #10',
-        parent: desktop
-      },
-      {
-        children: [],
-        iconPath: '/icons/folder-icon.png',
-        name: 'num #11',
-        parent: desktop
-      }
+      // {
+      //   children: [],
+      //   iconPath: '/icons/folder-icon.png',
+      //   name: 'num #3',
+      //   parent: desktop
+      // },
+      // {
+      //   children: [],
+      //   iconPath: '/icons/folder-icon.png',
+      //   name: 'num #4',
+      //   parent: desktop
+      // },
+      // {
+      //   children: [],
+      //   iconPath: '/icons/folder-icon.png',
+      //   name: 'num #5',
+      //   parent: desktop
+      // },
+      // {
+      //   children: [],
+      //   iconPath: '/icons/folder-icon.png',
+      //   name: 'num #6',
+      //   parent: desktop
+      // },
+      // {
+      //   children: [],
+      //   iconPath: '/icons/folder-icon.png',
+      //   name: 'num #7',
+      //   parent: desktop
+      // },
+      // {
+      //   children: [],
+      //   iconPath: '/icons/folder-icon.png',
+      //   name: 'num #8',
+      //   parent: desktop
+      // },
+      // {
+      //   children: [],
+      //   iconPath: '/icons/folder-icon.png',
+      //   name: 'num #9',
+      //   parent: desktop
+      // },
+      // {
+      //   children: [],
+      //   iconPath: '/icons/folder-icon.png',
+      //   name: 'num #10',
+      //   parent: desktop
+      // },
+      // {
+      //   children: [],
+      //   iconPath: '/icons/folder-icon.png',
+      //   name: 'num #11',
+      //   parent: desktop
+      // }
     ];
 
     desktop.children = elements;

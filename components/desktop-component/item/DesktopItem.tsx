@@ -8,37 +8,38 @@ import { ITEM_HEIGHT, ITEM_WIDTH, MAX_ITEM_HEIGHT, SHORTENED_NAME_LENGTH } from 
 const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectItem: Function, unselectAllOther: Function, handleDoubleClick: Function }> =
 ({ item, moveItem, selectItem, unselectAllOther, handleDoubleClick }) => {
 
+  console.log('rendering item: ' + item.name)
+
   useEffect(() => {
+
+    console.log(item.name);
+
     let distanceMouseToItemTop = 0;
     let distanceMouseToItemLeft = 0;
 
     const el = document.getElementById(item.name);
     if (!el) return;
 
-    const onDragEnd = (event: any) => {
-      const { top, left } =
-        getDestopItemNewPositionRelativeToMouse(event, distanceMouseToItemTop, distanceMouseToItemLeft);
-      moveItem(item.name, top, left);
-
-      onClick(event);
-    };
-
     const onClick = (event: any) => {
       if (!item.selected)
         selectItem(item.name, true); // TODO: replace by id
-    };
-
-    const onClickOut = (event: any) => {
-      if (!el.contains(event.target) && item.selected)
-        selectItem(item.name, false);
     };
 
     const onDoubleClick = (event: any) => {
       handleDoubleClick(item.name); // TODO: update with id
     };
 
+    const onDragEnd = (event: any) => {
+      const { top, left } = getDestopItemNewPositionRelativeToMouse(event,
+        distanceMouseToItemTop, distanceMouseToItemLeft);
+
+      moveItem(item.name, top, left);
+
+      onClick(event);
+    };
+
     const onDragStart = (event: any) => {
-      unselectAllOther(item.name);
+      // unselectAllOther(item.name);
       distanceMouseToItemTop = event.clientY - item.top;
       distanceMouseToItemLeft = event.clientX - item.left;
     };
@@ -47,14 +48,12 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
     el.addEventListener('click', onClick);
     el.addEventListener('dblclick', onDoubleClick);
     el.addEventListener('dragstart', onDragStart);
-    document.addEventListener('click', onClickOut);
 
     return () => {
       el.removeEventListener('dragend', onDragEnd);
       el.removeEventListener('click', onClick);
       el.removeEventListener('dblclick', onDoubleClick);
       el.removeEventListener('dragstart', onDragStart);
-      document.removeEventListener('click', onClickOut);
     };
   }), [item];
 
@@ -67,9 +66,8 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
   };
 
   const getDestopItemNewPositionRelativeToMouse = (event: any,
-  mouseToElementTopOffset: number,
+    mouseToElementTopOffset: number, mouseToElementLeftOffset: number) => {
 
-    mouseToElementLeftOffset: number) => {
       return {
         left: +event.clientX - mouseToElementLeftOffset,
         top: +event.clientY - mouseToElementTopOffset
