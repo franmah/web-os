@@ -36,7 +36,7 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
   const setUnselectOnMouseDown = (event: any) => {
     if (unselectAll()) {
-      setDesktopItems(() => JSON.parse(JSON.stringify(desktopItems)));
+      setDesktopItems(() => [...desktopItems]);
     }
   };
 
@@ -52,7 +52,7 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
     element.top = correctedTop;
     element.left = correctedLeft;
 
-    setDesktopItems(() => JSON.parse(JSON.stringify(desktopItems)));
+    setDesktopItems(() => [...desktopItems]);
   };
 
   const selectItem = (id: string, selected: boolean) => {
@@ -63,7 +63,7 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
     item.selected = selected;
 
     if (hasChanged) {
-      setDesktopItems(() => JSON.parse(JSON.stringify(desktopItems)));
+      setDesktopItems(() => [...desktopItems]);
     }
   };
 
@@ -73,9 +73,12 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
         item.selected = false;
     });
 
-    setDesktopItems(() => JSON.parse(JSON.stringify(desktopItems)));
+    setDesktopItems(() => [...desktopItems]);
   };
 
+  /**
+   * @returns true if any item was unselected.
+   */
   const unselectAll = (): boolean => {
     let itemsChanged = desktopItems.reduce((hasAnyChange, item) => { 
       const hasChanged = item.selected;

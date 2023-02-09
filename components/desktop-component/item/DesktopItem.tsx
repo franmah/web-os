@@ -11,7 +11,6 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
   console.log('rendering item: ' + item.name)
 
   useEffect(() => {
-
     console.log(item.name);
 
     let distanceMouseToItemTop = 0;
@@ -21,12 +20,14 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
     if (!el) return;
 
     const onClick = (event: any) => {
-      if (!item.selected)
-        selectItem(item.name, true); // TODO: replace by id
+      if (!item.selected) {
+        selectItem(item.name, true);
+        unselectAllOther(item.name);
+      }
     };
 
     const onDoubleClick = (event: any) => {
-      handleDoubleClick(item.name); // TODO: update with id
+      handleDoubleClick(item.name);
     };
 
     const onDragEnd = (event: any) => {
@@ -39,7 +40,7 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
     };
 
     const onDragStart = (event: any) => {
-      // unselectAllOther(item.name);
+      unselectAllOther(item.name);
       distanceMouseToItemTop = event.clientY - item.top;
       distanceMouseToItemLeft = event.clientX - item.left;
     };
@@ -55,7 +56,7 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
       el.removeEventListener('dblclick', onDoubleClick);
       el.removeEventListener('dragstart', onDragStart);
     };
-  }), [item];
+  }), [];
 
   const formatItemName = (name: string): string => {
     if (item.selected || item.name.length <= SHORTENED_NAME_LENGTH)
