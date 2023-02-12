@@ -19,7 +19,6 @@ import { DesktopItem } from '../../../types/desktop/DesktopItem';
     //    to check that the position is not conflicting with other items. It also saves the position at the same time. 
 
 const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
-  console.log('Rendering container')
   const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
 
   useEffect(() => {
@@ -41,7 +40,6 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
   };
 
   const moveItem = (itemName: string, top: number, left: number) => {
-    console.log('moveItem')
     const element = desktopItems.find(el => el.name === itemName);
     if (!element) return;
 

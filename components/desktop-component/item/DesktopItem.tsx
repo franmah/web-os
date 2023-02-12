@@ -8,11 +8,7 @@ import { ITEM_HEIGHT, ITEM_WIDTH, MAX_ITEM_HEIGHT, SHORTENED_NAME_LENGTH } from 
 const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectItem: Function, unselectAllOther: Function, handleDoubleClick: Function }> =
 ({ item, moveItem, selectItem, unselectAllOther, handleDoubleClick }) => {
 
-  console.log('rendering item: ' + item.name)
-
   useEffect(() => {
-    console.log(item.name);
-
     let distanceMouseToItemTop = 0;
     let distanceMouseToItemLeft = 0;
 
