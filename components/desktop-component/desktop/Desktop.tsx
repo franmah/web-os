@@ -1,12 +1,12 @@
 import { FC } from 'react';
 import DesktopItemContainer from '../item-container/ItemsContainer';
 import styles from './desktop.module.scss';
-import { FileProcess } from '../../../processes/FileProcess';
+import { File } from '../../../System/file';
 
 const Desktop: FC = () => {
   return (
     <div className={styles.background} id='desktop'>
-      <DesktopItemContainer files={FileProcess.getRoot().children[0].children}/>
+      <DesktopItemContainer files={File.getRoot().children[0].children}/>
     </div>
   );
 };

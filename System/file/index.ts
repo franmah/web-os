@@ -1,7 +1,7 @@
 import { ExplorerFile } from '../../types/ExplorerElement';
 import { v4 } from 'uuid';
 
-export class FileProcess {
+export class File {
   private static root: ExplorerFile; 
 
   static getRoot() {
