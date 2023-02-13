@@ -1,11 +1,12 @@
-import Desktop from '../components/desktop-component/desktop/Desktop';
 import type { NextPage } from 'next';
-import Taskbar from '../components/taskbar/Taskbar';
+import ProcessContextProvider from '../contexts/processContext';
+import { ProcessLoader } from '../System/processLoader';
 
 const Home: NextPage = () => (
   <div>
-    <Desktop />
-    <Taskbar />
+    <ProcessContextProvider>
+      <ProcessLoader></ProcessLoader>
+    </ProcessContextProvider>
   </div>
 );
 
