@@ -17,14 +17,9 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
   useEffect(() => {
     const desktop = document.getElementById('desktop');
-    desktop?.addEventListener('click', setUnselectOnMouseDown, true);
-    return () => desktop?.removeEventListener('click', setUnselectOnMouseDown, true);
+    desktop?.addEventListener('click', unselectAllItems, true);
+    return () => desktop?.removeEventListener('click', unselectAllItems, true);
   }, []);
-
-  const setUnselectOnMouseDown = (event: any) => {
-    setDesktopItems(prevItems => [...getAllUnselectedItems(prevItems)]);
-  };
-
   const moveItem = (itemName: string, top: number, left: number) => {
     const element = desktopItems.find(el => el.name === itemName);
     if (!element) return;
@@ -60,16 +55,17 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
     setDesktopItems(() => [...desktopItems]);
   };
 
-  const getAllUnselectedItems = (desktopItems: DesktopItem[]) => {
-    desktopItems.forEach(item => item.selected = false);
-    return desktopItems;
+  const unselectAllItems = () => {
+    setDesktopItems(prevItems => {
+      const updatedItems = prevItems.map(item => ({ ...item, selected: false}));
+      return [...updatedItems];
+    });
   };
 
   const handleItemDoubleClick = (itemId: string) => {
     console.log('received double click from item');
   };
 
-  // Not working: first two items will be unselected on mouseup even when they shouldn't
   const handleBoxUpdates = (top: number, bottom: number, left: number, right: number) => {
     const items = getItemsToSelect(desktopItems, top, bottom, left, right);
 
