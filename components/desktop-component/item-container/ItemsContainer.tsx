@@ -1,22 +1,10 @@
 import { ExplorerFile } from '../../../types/ExplorerElement';
-import { FC, Fragment, useCallback, useEffect, useState } from 'react';
+import { FC, Fragment, useEffect, useState } from 'react';
 import DesktopItemComponent from '../item/DesktopItem';
 import { correctItemPosition, isItemOverlapingOtherItems,
   toItemWrappers, placeItemsAtStartPosition, getItemsToSelect } from '../../../services/desktop-item-container.service';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-
-    // TODO: if one item changes the array of items change. So every item is rendered again
-    // use useCallback so that items find out if they've changed or not.
-
-    //  ALSO NEED TO USE A FUNCTION AND USE OLD VALUE IN setDesktopItems
-    // Why the re-render:
-    // 0. Does the container even need useState for the desktopItems.
-    // 1. desktopItems change which re-render DesktopItemContainer which re-render all items.
-    // 2. desktopItems update then desktopItems think they've changed.
-    // 3. Real issue is eventListener, maybe have one event listener on the desktop container and catch the selected item?
-    // 4. remove change on desktopItems in useEffect. The use effect will only trigger once. Then add eventListeners in that useEffect
-    // 5. maybe don't use a state for the desktop items. Each item keeps track of their own state/position. Container pass a function
-    //    to check that the position is not conflicting with other items. It also saves the position at the same time. 
+import SelectionBoxComponent from '../../shared/selection-box/selectionBox';
 
 const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
   const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
@@ -34,9 +22,7 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
   }, []);
 
   const setUnselectOnMouseDown = (event: any) => {
-    if (unselectAll()) {
-      setDesktopItems(() => [...desktopItems]);
-    }
+    setDesktopItems(prevItems => [...getAllUnselectedItems(prevItems)]);
   };
 
   const moveItem = (itemName: string, top: number, left: number) => {
@@ -74,17 +60,9 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
     setDesktopItems(() => [...desktopItems]);
   };
 
-  /**
-   * @returns true if any item was unselected.
-   */
-  const unselectAll = (): boolean => {
-    let itemsChanged = desktopItems.reduce((hasAnyChange, item) => { 
-      const hasChanged = item.selected;
-      item.selected = false;
-      return hasAnyChange || hasChanged;
-    }, false);
-    
-    return itemsChanged;
+  const getAllUnselectedItems = (desktopItems: DesktopItem[]) => {
+    desktopItems.forEach(item => item.selected = false);
+    return desktopItems;
   };
 
   const handleItemDoubleClick = (itemId: string) => {
@@ -124,7 +102,7 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
         )
       )}
 
-      {/* <SelectionBoxComponent updateSelection={handleBoxUpdates}/> */}
+      <SelectionBoxComponent updateSelection={handleBoxUpdates}/>
     </Fragment>
   );
 };

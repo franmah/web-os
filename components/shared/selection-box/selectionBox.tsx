@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { SelectionBox } from '../../../types/shared/SelectionBox';
-import styles from './../../desktop.module.scss';
+import styles from './selectionBox.module.scss';
 import { getBoxNewPosition } from './selection-box.service';
 
 const SELECTION_BOX_OFF: SelectionBox = {
@@ -21,8 +21,8 @@ const SelectionBoxComponent: FC<{ updateSelection: Function }> = ({ updateSelect
   // Start selection box when dragging start
   useEffect(() => {
     const onMouseDown = (event: any) => {
-      const target = event?.path?.[0];
-      if (target?.id === 'desktop') {
+      const target = event?.originalTarget?.id;
+      if (target === 'desktop') { // TODO: need to change it to work with componentts other than Desktop.
          setSelectionBox({
           ...selectionBox,
           active: true,
@@ -53,7 +53,7 @@ const SelectionBoxComponent: FC<{ updateSelection: Function }> = ({ updateSelect
 
   // Updates selection box div
   useEffect(() => {
-    const updateParent = () => {
+    const emitItemsInSelectionBox = () => {
       const { top, left } = selectionBox;
       const bottom = top + selectionBox.height;
       const right = left + selectionBox.width;
@@ -72,7 +72,7 @@ const SelectionBoxComponent: FC<{ updateSelection: Function }> = ({ updateSelect
         width
       };
 
-      updateParent();
+      emitItemsInSelectionBox();
       setSelectionBox(updatedSelectionBox);
     };
 
