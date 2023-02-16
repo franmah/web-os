@@ -7,7 +7,7 @@ import background from '../../../assets/background_image_light.jpg';
 const Desktop: FC = () => {
   return (
     <Fragment>
-      <img alt="background image" className={styles.backgroundImg} src={background.src}/>I
+      <img alt="background image" className={styles.backgroundImg} src={background.src}/>
       <div className={styles.background} id='desktop'>
         <DesktopItemContainer files={File.getRoot().children[0].children}/>
       </div>
