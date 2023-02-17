@@ -15,6 +15,16 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
     const el = document.getElementById(item.name);
     if (!el) return;
 
+    // Prevent selected items to be unselected in case of selection box drag
+    // Should probably find a better way to do it.
+    const onMouseDown = (event: any) => {
+      event.stopPropagation();
+    }
+
+    // TODO: instead of selecting the item, 
+    // tell itemsContainer that an element was clicked and let it handle it.
+    // Do that for every other event.
+    // Avoids multiple call to selectItem/moveItem messing with each other
     const onClick = (event: any) => {
       if (!item.selected) {
         selectItem(item.id);
@@ -26,26 +36,28 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
     };
 
     const onDragEnd = (event: any) => {
-      const { top, left } = getDestopItemNewPositionRelativeToMouse(event,
-        distanceMouseToItemTop, distanceMouseToItemLeft);
-
-      moveItem(item.id, top, left);
-
-      onClick(event);
+      const { top, left } = getDestopItemNewPositionRelativeToMouse(
+        event, distanceMouseToItemTop, distanceMouseToItemLeft);
+      moveItem(item.id, item.top, item.left, top, left);
     };
 
     const onDragStart = (event: any) => {
       distanceMouseToItemTop = event.clientY - item.top;
       distanceMouseToItemLeft = event.clientX - item.left;
+
+      if (!item.selected)
+        selectItem(item.id);
     };
 
     el.addEventListener('dragend', onDragEnd);
+    el.addEventListener('mousedown', onMouseDown);
     el.addEventListener('click', onClick);
     el.addEventListener('dblclick', onDoubleClick);
     el.addEventListener('dragstart', onDragStart);
 
     return () => {
       el.removeEventListener('dragend', onDragEnd);
+      el.removeEventListener('mousedown', onMouseDown);
       el.removeEventListener('click', onClick);
       el.removeEventListener('dblclick', onDoubleClick);
       el.removeEventListener('dragstart', onDragStart);
@@ -69,12 +81,12 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
       };
     };
 
-    const getClass = () => {
-      const selectionClass = item.selected ? styles.dekstopItemSelected : 
-        styles.dekstopItemNotSelected;
-      return styles.desktopItem + ' ' + globalStyles.unselectableText +
-        ' ' + selectionClass;
-    };
+  const getClass = () => {
+    const selectionClass = item.selected ? styles.dekstopItemSelected : 
+      styles.dekstopItemNotSelected;
+    return styles.desktopItem + ' ' + globalStyles.unselectableText +
+      ' ' + selectionClass;
+  };
 
   return (
     <div

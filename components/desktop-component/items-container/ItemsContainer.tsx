@@ -7,6 +7,7 @@ import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import SelectionBoxComponent from '../../shared/selection-box/selectionBoxComponent';
 
 const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
+
   const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
 
   useEffect(() => {
@@ -17,28 +18,53 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
   useEffect(() => {
     const desktop = document.getElementById('desktop');
-    desktop?.addEventListener('mousedown', () => selectItems(), true);
-    return () => desktop?.removeEventListener('mousedown', () => selectItems(), true);
+    desktop?.addEventListener('click', (event: any) => console.log(`left: ${event.clientX}, top: ${event.clientY}`))
+    desktop?.addEventListener('mousedown', onMouseDown);
+    return () => desktop?.removeEventListener('mousedown', onMouseDown);
   }, []);
 
-  const moveItem = (itemId: string, top: number, left: number) => {
-    const element = desktopItems.find(el => el.id === itemId);
-    if (!element) return;
-
-    const { correctedLeft, correctedTop } = correctItemPosition(top, left);
-    if (isItemOverlapingOtherItems(itemId, top, left, desktopItems)) 
-      return;
-
-    element.top = correctedTop;
-    element.left = correctedLeft;
-
-    setDesktopItems(() => [...desktopItems]);
+  const onMouseDown = () => {
+    selectItems();
   };
 
+  const moveItem = (itemId: string, startItemTop: number, startItemLeft: number, newItemTop: number, newItemLeft: number) => {
+    setDesktopItems(prevItems => {
+      const element = prevItems.find(el => el.id === itemId);
+      if (!element) {
+        return prevItems;
+      }
+
+      const updatedItems = prevItems.map(item => {
+        if (!item.selected) {
+          return {...item};
+        }
+        
+        const offsetTop = item.top - startItemTop;
+        const offsetLeft = item.left - startItemLeft;
+
+        const { correctedLeft, correctedTop } = correctItemPosition(offsetTop + newItemTop, offsetLeft + newItemLeft);
+
+        if (isItemOverlapingOtherItems(item.id, correctedLeft, correctedTop, prevItems)) {
+          return {...item};
+        }
+
+        return {
+          ...item,
+          top: correctedTop,
+          left: correctedLeft
+        };
+      });
+
+      return [...updatedItems];
+    });
+  };
+  
   const selectItems = (...ids: string[] ) => {
     setDesktopItems(prevItems => {
-      prevItems.forEach(i => i.selected = ids.includes(i.id));
-      return [...prevItems];
+      // prevItems.forEach(i => i.selected = ids.includes(i.id));
+      const updated = prevItems.map(i => ({ ...i, selected: ids.includes(i.id)}));
+      console.log('selecting items: ' + JSON.stringify(ids))
+      return [...updated];
     });
   };
 

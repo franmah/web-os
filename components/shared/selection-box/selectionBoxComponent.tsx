@@ -14,7 +14,6 @@ const SelectionBoxComponent: FC<{ targetElementId: string, emitSelectedItemsUpda
 
   // Start selection box when dragging start
   useEffect(() => {
-
     const desktopElement = document.getElementById('desktop');
     if (!desktopElement) return;
     
@@ -51,6 +50,7 @@ const SelectionBoxComponent: FC<{ targetElementId: string, emitSelectedItemsUpda
         border: '1px solid #0078d7'
       });
     }
+    event.stopPropagation();
   };
 
   const onMouseUp = () => {
