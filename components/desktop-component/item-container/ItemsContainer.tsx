@@ -17,9 +17,10 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
   useEffect(() => {
     const desktop = document.getElementById('desktop');
-    desktop?.addEventListener('click', unselectAllItems, true);
-    return () => desktop?.removeEventListener('click', unselectAllItems, true);
+    desktop?.addEventListener('mousedown', unselectAllItems, true);
+    return () => desktop?.removeEventListener('mousedown', unselectAllItems, true);
   }, []);
+
   const moveItem = (itemName: string, top: number, left: number) => {
     const element = desktopItems.find(el => el.name === itemName);
     if (!element) return;
@@ -56,6 +57,7 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
   };
 
   const unselectAllItems = () => {
+    console.log('unselect all')
     setDesktopItems(prevItems => {
       const updatedItems = prevItems.map(item => ({ ...item, selected: false}));
       return [...updatedItems];
