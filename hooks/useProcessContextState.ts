@@ -2,6 +2,7 @@ import { useState } from "react";
 import { startingProccesses } from "../System/process/StartingProccesses";
 import { Processes } from "../types/processes/processes";
 
+// In its own file because more functions (with logic) will be added (close, open...)
 const useProcessContextState = () => {
   const [processes, setProcesses] = useState<Processes>(startingProccesses);
 

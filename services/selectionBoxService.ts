@@ -1,5 +1,3 @@
-import { TASKBAR_HEIGHT } from "../constants/TaskbarConsts";
-import { clamp } from "../shared/services/mathHelper";
 import { SelectionBox, SelectionBoxSize } from "../types/shared/SelectionBox";
 
 export const SELECTION_BOX_OFF: SelectionBox = {
@@ -35,7 +33,7 @@ const isElementInBox = (element: HTMLElement, boxSize: SelectionBoxSize): boolea
 };
 
 export const getBoxNewPosition = (box: SelectionBox, clientX: number, clientY: number, maxHeight: number, maxWidth: number) => {
-  
+
   // Mouse relative to start position.
   const bottomRight = clientX >= box.startX && clientY >= box.startY;
   const bottomLeft = clientX < box.startX && clientY > box.startY;
@@ -69,9 +67,6 @@ export const getBoxNewPosition = (box: SelectionBox, clientX: number, clientY: n
     width = Math.min(clientX, maxWidth) - left;
     height = box.startY - top;
   }
-
-  top = clamp(0, top, window.innerHeight - TASKBAR_HEIGHT);
-  left = clamp(0, left, document.body.clientWidth);
 
   return { top, left, width, height };
 };
