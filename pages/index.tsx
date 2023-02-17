@@ -1,11 +1,11 @@
 import type { NextPage } from 'next';
 import ProcessContextProvider from '../contexts/processContext';
-import { ProcessLoader } from '../System/processLoader';
+import { ProcessLoaderComponent } from '../components/system/processLoaderComponent';
 
 const Home: NextPage = () => (
   <div>
     <ProcessContextProvider>
-      <ProcessLoader></ProcessLoader>
+      <ProcessLoaderComponent></ProcessLoaderComponent>
     </ProcessContextProvider>
   </div>
 );

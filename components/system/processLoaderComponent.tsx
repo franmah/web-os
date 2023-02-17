@@ -1,7 +1,7 @@
-import { ProcessContext } from "../contexts/processContext";
-import { Processes } from "../types/processes/processes";
+import { ProcessContext } from "../../contexts/processContext";
+import { Processes } from "../../types/processes/processes";
 
-export function ProcessLoader() {
+export function ProcessLoaderComponent() {
 
   return (
     <ProcessContext.Consumer>

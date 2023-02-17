@@ -1,10 +1,10 @@
 import { FC } from "react"
 import styles from "./hello.module.scss";
 
-const Hello: FC = () => {
+const HelloComponent: FC = () => {
   return (
     <div className={styles.hello}>Hello World</div>
   );
 };
 
-export default Hello;
+export default HelloComponent;

@@ -1,12 +1,12 @@
 import { ExplorerFile } from '../../../types/ExplorerElement';
 import { FC, Fragment, useEffect, useState } from 'react';
-import DesktopItemComponent from '../item/DesktopItem';
+import DesktopItemComponent from '../item/DesktopItemComponent';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import SelectionBoxComponent from '../../shared/selection-box/selectionBoxComponent';
-import { placeItemsAtStartPosition, toItemWrappers } from '../../../services/desktop-item-container.service';
+import { placeItemsAtStartPosition, toItemWrappers } from '../../../services/desktopItemContainerService';
 import { moveItemsOnDesktop } from '../../../services/desktopItemContainerUiHelperService';
 
-const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
+const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
   const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
 
@@ -18,7 +18,6 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
   useEffect(() => {
     const desktop = document.getElementById('desktop');
-    desktop?.addEventListener('click', (event: any) => console.log(`left: ${event.clientX}, top: ${event.clientY}`))
     desktop?.addEventListener('mousedown', onMouseDown);
     return () => desktop?.removeEventListener('mousedown', onMouseDown);
   }, []);
@@ -72,4 +71,4 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
   );
 };
 
-export default DesktopItemContainer;
+export default DesktopItemContainerComponent;
