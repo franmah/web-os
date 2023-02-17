@@ -1,9 +1,7 @@
 import { FC, useEffect, useState } from 'react';
-import { SelectionBox } from '../../../types/shared/SelectionBox';
+import { SelectionBox, SelectionBoxSize } from '../../../types/shared/SelectionBox';
 import styles from './selectionBox.module.scss';
-import { getBoxNewPosition } from './selection-box.service';
-import { getElementsInBox, SelectionBoxSize, SELECTION_BOX_OFF } from '../../../services/selectionBoxService';
-
+import { getBoxNewPosition, getElementsInBox, SELECTION_BOX_OFF } from '../../../services/selectionBoxService';
 
 /**
  * @emitSelectedItemsUpdate sends update of elements within selection as its dragged.
@@ -61,7 +59,8 @@ const SelectionBoxComponent: FC<{ targetElementId: string, emitSelectedItemsUpda
 
   const onMouseMove = (event: any) => {
     const { clientY, clientX } = event;
-    const { top, left, width, height } = getBoxNewPosition(selectionBox, clientX, clientY);
+    const { clientHeight, clientWidth } = document.getElementById(targetElementId) as HTMLElement;
+    const { top, left, width, height } = getBoxNewPosition(selectionBox, clientX, clientY, clientHeight, clientWidth);
 
     const updatedSelectionBox: SelectionBox = {
       ...selectionBox,
