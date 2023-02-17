@@ -5,5 +5,5 @@ export type ExplorerFile = {
   // isFolder: boolean;
   name: string;
   parent: ExplorerFile | null;
-  id?: string // TODO: remove question mark
+  id: string;
 }

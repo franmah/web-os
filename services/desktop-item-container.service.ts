@@ -41,15 +41,15 @@ const isHeightOverlapping = (i1: { top: number, left: number }, i2: DesktopItem)
 };
 
 export const toItemWrappers = (files: ExplorerFile[]): DesktopItem[] => {
-  return files.map(file => {
-    return {
+  return files?.map(file => ({
+      id: file.id,
       iconPath: file.iconPath,
       left: 0,
       name: file.name,
       selected: false,
       top: 0
-    };
-  });
+    } as DesktopItem)
+  ) || [];
 };
 
 export const placeItemsAtStartPosition = (items: DesktopItem[]) => {
@@ -74,45 +74,3 @@ export const placeItemsAtStartPosition = (items: DesktopItem[]) => {
     return item;
   });
 };
-
-export const getItemsToSelect = (items: DesktopItem[], top: number, bottom: number, left: number, 
-right: number): DesktopItem[] => {
-
-  return items.filter(i => {
-    const itemTop = i.top;
-    const itemBottom = i.top + ITEM_HEIGHT;
-    const itemLeft = i.left;
-    const itemRight = i.left + ITEM_WIDTH
-    
-    return (
-      isItemInBox(itemTop, itemBottom, itemLeft, itemRight, top, left, right, bottom) || 
-      isBoxOverItem(itemTop, itemBottom, itemLeft, itemRight, top, left, right, bottom)
-    );
-  });
-}
-
-const isItemInBox = (itemTop: number, itemBottom: number, itemLeft: number, itemRight: number, 
-top: number, left: number, right: number, bottom: number) => {
-  return (
-    (top < itemTop && itemTop < bottom) ||
-    (top < itemBottom && itemBottom < bottom)
-      ) && (
-    (left < itemLeft && itemLeft < right) ||
-    (left < itemRight && itemRight < right)
-    );
-}
-
-const isBoxOverItem = (itemTop: number, itemBottom: number, itemLeft: number, itemRight: number, 
-top: number, left: number, right: number, bottom: number) => {
-    return (
-      (itemLeft < left && itemLeft < right) &&
-      (itemRight > right && itemRight > left) &&
-      ((top < itemTop && itemTop < bottom) ||
-      (top < itemBottom && itemBottom < bottom))
-        ) || (
-      (itemTop < top && itemTop < bottom) &&
-      (itemBottom > top && itemBottom > bottom) &&
-      ((left < itemLeft && itemLeft < right) ||
-      (left < itemRight && itemRight < right))
-    );
-  }

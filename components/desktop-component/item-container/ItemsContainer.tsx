@@ -2,9 +2,9 @@ import { ExplorerFile } from '../../../types/ExplorerElement';
 import { FC, Fragment, useEffect, useState } from 'react';
 import DesktopItemComponent from '../item/DesktopItem';
 import { correctItemPosition, isItemOverlapingOtherItems,
-  toItemWrappers, placeItemsAtStartPosition, getItemsToSelect } from '../../../services/desktop-item-container.service';
+  toItemWrappers, placeItemsAtStartPosition } from '../../../services/desktop-item-container.service';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import SelectionBoxComponent from '../../shared/selection-box/selectionBox';
+import SelectionBoxComponent from '../../shared/selection-box/selectionBoxComponent';
 
 const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
   const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
@@ -48,16 +48,13 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
   };
 
   const unselectAllOtherItems = (id: string) => {
-    desktopItems.forEach(item => {
-      if (item.name !== id)
-        item.selected = false;
+    setDesktopItems(prevItems => {
+      prevItems.forEach(i => i.selected = i.id === id);
+      return [...prevItems];
     });
-
-    setDesktopItems(() => [...desktopItems]);
   };
 
   const unselectAllItems = () => {
-    console.log('unselect all')
     setDesktopItems(prevItems => {
       const updatedItems = prevItems.map(item => ({ ...item, selected: false}));
       return [...updatedItems];
@@ -68,21 +65,13 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
     console.log('received double click from item');
   };
 
-  const handleBoxUpdates = (top: number, bottom: number, left: number, right: number) => {
-    const items = getItemsToSelect(desktopItems, top, bottom, left, right);
+  const handleSelectionBoxUpdates = (elements: HTMLElement[]) => {
+    const selectedItemIds = elements.map(element => element.id);
 
-    let updated = false;
-    desktopItems.forEach(i => {
-      if (i.selected) {
-        i.selected = false;
-        updated = true;
-      }
+    setDesktopItems(prevItems => {
+      prevItems.forEach(i => i.selected = selectedItemIds.includes(i.id));
+      return [...prevItems];
     });
-
-    items.forEach(i => i.selected = true);
-
-    if (updated || items.length > 0)
-      setDesktopItems(JSON.parse(JSON.stringify(desktopItems)));
   };
 
   return (
@@ -100,7 +89,10 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
         )
       )}
 
-      <SelectionBoxComponent updateSelection={handleBoxUpdates}/>
+      <SelectionBoxComponent 
+        emitSelectedItemsUpdate={handleSelectionBoxUpdates}
+        targetElementId='desktop'
+      />
     </Fragment>
   );
 };

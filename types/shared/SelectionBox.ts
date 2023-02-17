@@ -7,4 +7,11 @@ export type SelectionBox = {
   top: number,
   left: number,
   border: string
-}
+};
+
+export type SelectionBoxSize = {
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+};

@@ -3,5 +3,6 @@ export type DesktopItem = {
   iconPath: string,
   name: string,
   top: number,
-  selected: boolean
+  selected: boolean,
+  id: string
 }
