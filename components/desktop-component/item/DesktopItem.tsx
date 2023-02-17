@@ -22,14 +22,14 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
     };
 
     const onDoubleClick = (event: any) => {
-      handleDoubleClick(item.name);
+      handleDoubleClick(item.id);
     };
 
     const onDragEnd = (event: any) => {
       const { top, left } = getDestopItemNewPositionRelativeToMouse(event,
         distanceMouseToItemTop, distanceMouseToItemLeft);
 
-      moveItem(item.name, top, left);
+      moveItem(item.id, top, left);
 
       onClick(event);
     };

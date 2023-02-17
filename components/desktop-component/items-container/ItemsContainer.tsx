@@ -21,12 +21,12 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
     return () => desktop?.removeEventListener('mousedown', () => selectItems(), true);
   }, []);
 
-  const moveItem = (itemName: string, top: number, left: number) => {
-    const element = desktopItems.find(el => el.name === itemName);
+  const moveItem = (itemId: string, top: number, left: number) => {
+    const element = desktopItems.find(el => el.id === itemId);
     if (!element) return;
 
     const { correctedLeft, correctedTop } = correctItemPosition(top, left);
-    if (isItemOverlapingOtherItems(itemName, top, left, desktopItems)) 
+    if (isItemOverlapingOtherItems(itemId, top, left, desktopItems)) 
       return;
 
     element.top = correctedTop;
