@@ -12,13 +12,13 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
   useEffect(() => {
     const items = toItemWrappers(files);
     placeItemsAtStartPosition(items);
-    setDesktopItems(items);
+    setDesktopItems(() => items);
   }, [files]);
 
   useEffect(() => {
     const desktop = document.getElementById('desktop');
-    desktop?.addEventListener('mousedown', unselectAllItems, true);
-    return () => desktop?.removeEventListener('mousedown', unselectAllItems, true);
+    desktop?.addEventListener('mousedown', () => selectItems(), true);
+    return () => desktop?.removeEventListener('mousedown', () => selectItems(), true);
   }, []);
 
   const moveItem = (itemName: string, top: number, left: number) => {
@@ -35,29 +35,10 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
     setDesktopItems(() => [...desktopItems]);
   };
 
-  const selectItem = (id: string, selected: boolean) => {
-    const item = desktopItems.find(i => i.name === id);
-    if (!item) return;
-    
-    const hasChanged = item.selected !== selected;
-    item.selected = selected;
-
-    if (hasChanged) {
-      setDesktopItems(() => [...desktopItems]);
-    }
-  };
-
-  const unselectAllOtherItems = (id: string) => {
+  const selectItems = (...ids: string[] ) => {
     setDesktopItems(prevItems => {
-      prevItems.forEach(i => i.selected = i.id === id);
+      prevItems.forEach(i => i.selected = ids.includes(i.id));
       return [...prevItems];
-    });
-  };
-
-  const unselectAllItems = () => {
-    setDesktopItems(prevItems => {
-      const updatedItems = prevItems.map(item => ({ ...item, selected: false}));
-      return [...updatedItems];
     });
   };
 
@@ -67,11 +48,7 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
   const handleSelectionBoxUpdates = (elements: HTMLElement[]) => {
     const selectedItemIds = elements.map(element => element.id);
-
-    setDesktopItems(prevItems => {
-      prevItems.forEach(i => i.selected = selectedItemIds.includes(i.id));
-      return [...prevItems];
-    });
+    selectItems(...selectedItemIds);
   };
 
   return (
@@ -82,8 +59,7 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
             key={index}
             item={item}
             moveItem={moveItem}
-            selectItem={selectItem}
-            unselectAllOther={unselectAllOtherItems}
+            selectItem={selectItems}
             handleDoubleClick={handleItemDoubleClick}
           />
         )

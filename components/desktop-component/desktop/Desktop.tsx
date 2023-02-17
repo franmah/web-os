@@ -1,5 +1,5 @@
 import { FC, Fragment } from 'react';
-import DesktopItemContainer from '../item-container/ItemsContainer';
+import DesktopItemContainer from '../items-container/ItemsContainer';
 import styles from './desktop.module.scss';
 import { File } from '../../../System/file';
 import background from '../../../assets/background_image_light.jpg';

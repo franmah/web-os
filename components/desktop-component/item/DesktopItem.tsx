@@ -5,8 +5,8 @@ import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, MAX_ITEM_HEIGHT, SHORTENED_NAME_LENGTH } from '../../../constants/DesktopConsts';
 
-const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectItem: Function, unselectAllOther: Function, handleDoubleClick: Function }> =
-({ item, moveItem, selectItem, unselectAllOther, handleDoubleClick }) => {
+const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectItem: Function, handleDoubleClick: Function }> =
+({ item, moveItem, selectItem, handleDoubleClick }) => {
 
   useEffect(() => {
     let distanceMouseToItemTop = 0;
@@ -17,8 +17,7 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
 
     const onClick = (event: any) => {
       if (!item.selected) {
-        selectItem(item.name, true);
-        unselectAllOther(item.name);
+        selectItem(item.id);
       }
     };
 
@@ -36,7 +35,6 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
     };
 
     const onDragStart = (event: any) => {
-      unselectAllOther(item.name);
       distanceMouseToItemTop = event.clientY - item.top;
       distanceMouseToItemLeft = event.clientX - item.left;
     };
