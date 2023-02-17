@@ -1,10 +1,10 @@
 import { ExplorerFile } from '../../../types/ExplorerElement';
 import { FC, Fragment, useEffect, useState } from 'react';
 import DesktopItemComponent from '../item/DesktopItem';
-import { correctItemPosition, isItemOverlapingOtherItems,
-  toItemWrappers, placeItemsAtStartPosition } from '../../../services/desktop-item-container.service';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import SelectionBoxComponent from '../../shared/selection-box/selectionBoxComponent';
+import { placeItemsAtStartPosition, toItemWrappers } from '../../../services/desktop-item-container.service';
+import { moveItemsOnDesktop } from '../../../services/desktopItemContainerUiHelperService';
 
 const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
@@ -29,41 +29,14 @@ const DesktopItemContainer: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
   const moveItem = (itemId: string, startItemTop: number, startItemLeft: number, newItemTop: number, newItemLeft: number) => {
     setDesktopItems(prevItems => {
-      const element = prevItems.find(el => el.id === itemId);
-      if (!element) {
-        return prevItems;
-      }
-
-      const updatedItems = prevItems.map(item => {
-        if (!item.selected) {
-          return {...item};
-        }
-        
-        const offsetTop = item.top - startItemTop;
-        const offsetLeft = item.left - startItemLeft;
-
-        const { correctedLeft, correctedTop } = correctItemPosition(offsetTop + newItemTop, offsetLeft + newItemLeft);
-
-        if (isItemOverlapingOtherItems(item.id, correctedLeft, correctedTop, prevItems)) {
-          return {...item};
-        }
-
-        return {
-          ...item,
-          top: correctedTop,
-          left: correctedLeft
-        };
-      });
-
+      const updatedItems = moveItemsOnDesktop(prevItems, itemId, startItemTop, startItemLeft, newItemTop, newItemLeft);
       return [...updatedItems];
     });
   };
-  
+
   const selectItems = (...ids: string[] ) => {
     setDesktopItems(prevItems => {
-      // prevItems.forEach(i => i.selected = ids.includes(i.id));
       const updated = prevItems.map(i => ({ ...i, selected: ids.includes(i.id)}));
-      console.log('selecting items: ' + JSON.stringify(ids))
       return [...updated];
     });
   };
