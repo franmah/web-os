@@ -2,7 +2,7 @@ import { ExplorerFile } from '../../../types/ExplorerElement';
 import { FC, Fragment, useEffect, useState } from 'react';
 import DesktopItemComponent from '../item/DesktopItemComponent';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import SelectionBoxComponent from '../../shared/selection-box/selectionBoxComponent';
+import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxComponent';
 import { placeItemsAtStartPosition, toItemWrappers } from '../../../services/desktopItemContainerService';
 import { moveItemsOnDesktop } from '../../../services/desktopItemContainerUiHelperService';
 
@@ -19,12 +19,21 @@ const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files })
   useEffect(() => {
     const desktop = document.getElementById('desktop');
     desktop?.addEventListener('mousedown', onMouseDown);
-    return () => desktop?.removeEventListener('mousedown', onMouseDown);
+    desktop?.addEventListener('contextmenu', onRightClick);
+    return () => {
+    desktop?.removeEventListener('contextmenu', onRightClick);
+    desktop?.removeEventListener('mousedown', onMouseDown);
+    }
   }, []);
 
   const onMouseDown = () => {
     selectItems();
   };
+  
+  const onRightClick = (event: MouseEvent) => {
+    event.preventDefault();
+    console.log('caught right click')
+  }
 
   const moveItem = (itemId: string, startItemTop: number, startItemLeft: number, newItemTop: number, newItemLeft: number) => {
     setDesktopItems(prevItems => {
