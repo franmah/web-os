@@ -38,6 +38,10 @@ const SelectionBoxComponent: FC<{ targetElementId: string, emitSelectedItemsUpda
   }, [selectionBox]);
   
   const onMouseDown = (event: any) => {
+    if (event.which === 2 || event.which === 3) {
+      return; // Only trigger on left click.
+    }
+
     const target = event?.originalTarget?.id;
     if (target === targetElementId) {
        setSelectionBox({
