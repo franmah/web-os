@@ -10,6 +10,8 @@ startItemLeft: number, newItemTop: number, newItemLeft: number) => {
     return items;
   }
 
+  const itemsToMove = items.filter(i => i.selected);
+
   const updatedItems = items.map(item => {
     if (!item.selected) {
       return { ...item };
@@ -19,8 +21,7 @@ startItemLeft: number, newItemTop: number, newItemLeft: number) => {
     const offsetLeft = item.left - startItemLeft;
 
     const { correctedLeft, correctedTop } = correctItemPosition(offsetTop + newItemTop, offsetLeft + newItemLeft);
-
-    if (isItemOverlapingOtherItems(item.id, correctedLeft, correctedTop, items)) {
+    if (checkItemPosition(item.id,  correctedTop, correctedLeft, itemsToMove, items)) {
       return { ...item };
     }
 
@@ -47,26 +48,29 @@ const correctItemPosition = (top: number, left: number)
   };
 };
 
-const isItemOverlapingOtherItems =
-(itemId: string, top: number, left: number, items: DesktopItem[]): boolean => {
-
+const checkItemPosition = (itemId: string, top: number, left: number, itemsMoving: DesktopItem[], items: DesktopItem[]): boolean => {
    return items.some(item => {
-    return item.name !== itemId && isWidthOverlapping({ left, top }, item) &&
-     isHeightOverlapping({ left, top }, item);
+    return (
+      !itemsMoving.some(i => i.id === item.id) && // Don't check item that are moving.
+      item.id !== itemId &&
+      isItemOverlapingOtherItems(top, left, item)
+    );
   });
 };
 
-const isWidthOverlapping = (i1: { top: number, left: number }, i2: DesktopItem): boolean => {
-  const i1Right = i1.left + ITEM_WIDTH + WIDTH_OFFSET;
-  const i2Right = i2.left + ITEM_WIDTH + WIDTH_OFFSET;
-  return (i1.left > i2.left && i1.left < i2Right) ||
-    (i1Right > i2.left && i1Right < i2Right);
-};
+const isItemOverlapingOtherItems = (i1Top: number, i1Left: number, i2: DesktopItem) => {
+  const i1Right = i1Left + ITEM_WIDTH;
+  const i2Right = i2.left + ITEM_WIDTH;
+  const i1Bottom = i1Top + ITEM_HEIGHT;
+  const i2Bottom = i2.top + ITEM_HEIGHT;
 
-const isHeightOverlapping = (i1: { top: number, left: number }, i2: DesktopItem): boolean => {
-  const i1Bottom = i1.top + ITEM_HEIGHT + HEIGHT_OFFSET;
-  const i2Bottom = i2.top + ITEM_HEIGHT + HEIGHT_OFFSET;
+  const left = i1Left < i2Right && i1Left > i2.left;
+  const bottom = i1Bottom < i2Bottom && i1Bottom > i2.top;
+  const top = i1Top < i2Bottom && i1Top > i2.top;
+  const right = i1Right < i2Right && i1Right > i2.left;
 
-  return (i1.top > i2.top && i1.top < i2Bottom) ||
-    (i1Bottom > i2.top && i1Bottom < i2Bottom);
-};
+  return (
+    (left && (bottom || top)) ||
+    (right && (bottom || top))    
+  );
+}
