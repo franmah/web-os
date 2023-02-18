@@ -14,14 +14,14 @@ const SelectionBoxComponent: FC<{ targetElementId: string, emitSelectedItemsUpda
 
   // Start selection box when dragging start
   useEffect(() => {
-    const desktopElement = document.getElementById('desktop');
-    if (!desktopElement) return;
+    const targetElement = document.getElementById(targetElementId);
+    if (!targetElement) return;
     
-    desktopElement.addEventListener('mousedown', onMouseDown);
+    targetElement.addEventListener('mousedown', onMouseDown);
     document.addEventListener('mouseup', onMouseUp);
 
     return () => {
-      desktopElement.removeEventListener('mousedown', onMouseDown);
+      targetElement.removeEventListener('mousedown', onMouseDown);
       document.removeEventListener('mouseup', onMouseUp);
     };
   }, []);
