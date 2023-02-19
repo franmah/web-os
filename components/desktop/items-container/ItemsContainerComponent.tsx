@@ -1,14 +1,16 @@
 import { ExplorerFile } from '../../../types/ExplorerElement';
-import { FC, Fragment, useEffect, useState } from 'react';
+import { FC, Fragment, useContext, useEffect, useState } from 'react';
 import DesktopItemComponent from '../item/DesktopItemComponent';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxComponent';
 import { placeItemsAtStartPosition, toItemWrappers } from '../../../services/desktopItemContainerService';
 import { moveItemsOnDesktop } from '../../../services/desktopItemContainerUiHelperService';
+import { ProcessContext } from '../../../contexts/processContext';
 
 const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
   const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
+  const processContext = useContext(ProcessContext);
 
   useEffect(() => {
     const items = toItemWrappers(files);
@@ -19,21 +21,22 @@ const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files })
   useEffect(() => {
     const desktop = document.getElementById('desktop');
     desktop?.addEventListener('mousedown', onMouseDown);
-    desktop?.addEventListener('contextmenu', onRightClick);
+    desktop?.addEventListener('contextmenu', onContextMenu);
+
     return () => {
-    desktop?.removeEventListener('contextmenu', onRightClick);
-    desktop?.removeEventListener('mousedown', onMouseDown);
-    }
+      desktop?.removeEventListener('contextmenu', onContextMenu);
+      desktop?.removeEventListener('mousedown', onMouseDown);
+    };
   }, []);
+
+  const onContextMenu = (event: any) => {
+    event.preventDefault();
+    processContext.openProcess('contextMenu');
+  };
 
   const onMouseDown = () => {
     selectItems();
   };
-  
-  const onRightClick = (event: MouseEvent) => {
-    event.preventDefault();
-    console.log('caught right click')
-  }
 
   const moveItem = (itemId: string, startItemTop: number, startItemLeft: number, newItemTop: number, newItemLeft: number) => {
     setDesktopItems(prevItems => {
@@ -60,17 +63,17 @@ const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files })
 
   return (
     <Fragment>
-      {desktopItems.map((item, index) =>
-        (
-          <DesktopItemComponent 
-            key={index}
-            item={item}
-            moveItem={moveItem}
-            selectItem={selectItems}
-            handleDoubleClick={handleItemDoubleClick}
-          />
-        )
-      )}
+        {desktopItems.map((item, index) =>
+          (
+            <DesktopItemComponent
+              key={index}
+              item={item}
+              moveItem={moveItem}
+              selectItem={selectItems}
+              handleDoubleClick={handleItemDoubleClick}
+            />
+          )
+        )}
 
       <SelectionBoxComponent 
         emitSelectedItemsUpdate={handleSelectionBoxUpdates}
