@@ -21,17 +21,17 @@ const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files })
   useEffect(() => {
     const desktop = document.getElementById('desktop');
     desktop?.addEventListener('mousedown', onMouseDown);
-    desktop?.addEventListener('contextmenu', onContextMenu);
+    desktop?.addEventListener('contextmenu', onContextMenuClick);
 
     return () => {
-      desktop?.removeEventListener('contextmenu', onContextMenu);
+      desktop?.removeEventListener('contextmenu', onContextMenuClick);
       desktop?.removeEventListener('mousedown', onMouseDown);
     };
   }, []);
 
-  const onContextMenu = (event: any) => {
+  const onContextMenuClick = (event: any) => {
     event.preventDefault();
-    processContext.openProcess('contextMenu');
+    processContext.openProcess('contextMenu', 'This is a test prop');
   };
 
   const onMouseDown = () => {

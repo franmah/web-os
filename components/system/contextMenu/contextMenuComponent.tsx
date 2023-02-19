@@ -1,8 +1,7 @@
 import { FC } from 'react';
 import styles from './contextMenu.module.scss';
 
-const ContextMenuComponent: FC<{}> = ({}) => {
-  
+const ContextMenuComponent: FC<{ params: string }> = ({ params }) => {
   return (
     <section 
       className={styles.contextMenuRoot}
@@ -12,6 +11,7 @@ const ContextMenuComponent: FC<{}> = ({}) => {
         left: 0
       }}
     >
+      <p style={{ color: 'white' }}>{ params } test</p>
     </section>
   );
 };

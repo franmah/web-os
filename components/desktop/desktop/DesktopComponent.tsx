@@ -16,11 +16,11 @@ const Desktop: FC = () => {
         src={background.src}
         srcSet={`${background_1080.src} 1920w, ${background_1440.src} 3440w, ${background_2400.src} 3840w`}
       />
+      
       <div className={styles.background} id='desktop'>
         <DesktopItemContainerComponent files={File.getRoot().children[0].children}/>
       </div>
     </Fragment>
-    
   );
 };
 

@@ -1,6 +1,7 @@
 export type Process = {
   name: string;
-  Component: React.ComponentType<{}>;
+  Component: React.ComponentType<{ params: any }>;
+  params: any | null;
 };
 
 export type Processes = {
@@ -9,6 +10,6 @@ export type Processes = {
 
 export type ProcessContextType = {
   processes: Processes,
-  openProcess: (processName: string) => void,
+  openProcess: (processName: string, params?: any) => void,
   closeProcess: (processId: string) => void,
-}
+};

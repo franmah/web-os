@@ -1,13 +1,16 @@
 import dynamic from 'next/dynamic';
-import { Processes } from '../../types/processes/processes';
+import { Processes } from '../../types/system/processes/processes';
 
 export const startingProccesses: Processes = {
   'desktop': {
     name: 'desktop',
-    Component: dynamic(() => import('../../components/desktop/desktop/DesktopComponent'))
+    Component: dynamic<{ params: any }>(() => import('../../components/desktop/desktop/DesktopComponent')),
+    params: null
   },
   'taskbar': {
     name: 'taskbar',
-    Component: dynamic(() => import('../../components/taskbar/Taskbar'))
+    // TODO: fix <any> once component changed to function component
+    Component: dynamic<any>(() => import('../../components/taskbar/Taskbar')),
+    params: null
   }
 };

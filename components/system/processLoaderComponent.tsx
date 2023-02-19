@@ -22,8 +22,10 @@ export function ProcessLoaderComponent() {
       {
         Object
           .entries(processContext.processes)
-          .map(([id, { Component }]) => <Component key={id}></Component>)
+          .map(([id, { Component, params }]) => 
+            <Component key={id} params={params}></Component>
+          )
       }
     </Fragment>
   );
-}
+};
