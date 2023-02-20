@@ -3,7 +3,7 @@ import { ProcessContext } from "../../../../contexts/processContext";
 import { ContextMenuCommand } from "../../../../System/contextMenuCommands/abstractCommand";
 import styles from '../contextMenu.module.scss';
 
-const ContextMenuItemComponent : FC<{ command: ContextMenuCommand }> = ({ command }) => {
+const ContextMenuItemComponent : FC<{ command: ContextMenuCommand, handleMouseEnter: Function }> = ({ command, handleMouseEnter }) => {
   const process = useContext(ProcessContext);
 
   const onClick = () => {
@@ -15,7 +15,8 @@ const ContextMenuItemComponent : FC<{ command: ContextMenuCommand }> = ({ comman
   }
 
   return (
-    <div 
+    <div
+      onMouseEnter={() => handleMouseEnter()}
       onClick={() => onClick()}
       className={styles.contextMenuItem}
     >
