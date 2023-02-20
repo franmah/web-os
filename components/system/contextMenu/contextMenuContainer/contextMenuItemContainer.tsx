@@ -14,30 +14,33 @@ const ContextMenuItemContainerComponent : FC<{ command: ContextMenuCommandContai
     setIsHovering(() => true);
   };
 
-  const handleMouseOut = () => {
+  const handleMouseLeave = () => {
     clearTimeout(closeSubMenuTimeout)
     closeSubMenuTimeout = setTimeout(() => setIsHovering(() => false), 200);
   };
 
   return (
     <section
-      onMouseLeave={handleMouseOut}
-      onMouseOver={handleMouseOver}
+      onMouseLeave={handleMouseLeave}
+      onMouseEnter={handleMouseOver}
     >
-      <div className={styles.contextMenuItem}>
+      <div className={`${styles.contextMenuItem} ${isHovering ? styles.contextMenuContainerHovered : ''}`}>
        <div>{ command.text } </div> <div>{'>'}</div>
       </div>
 
-      {
-        isHovering && 
-        <ContextMenuComponent
-          params={{
-            top: 0,
-            left: 200,
-            commands: command.commands
-          }}
-        />
-      }
+       <div>
+        {
+          isHovering && 
+          <ContextMenuComponent
+            
+            params={{
+              top: 28,
+              left: 247,
+              commands: command.commands
+            }}
+          />
+        } 
+      </div>
 
     </section>
     

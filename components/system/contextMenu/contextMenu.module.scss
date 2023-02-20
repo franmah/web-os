@@ -17,5 +17,13 @@
   &:hover {
     cursor: default;
     background-color: #f0f0f0;
+    border-radius: 4px;
   }
+}
+
+// Keep menu container hovered when sub menu is hovered.
+.contextMenuContainerHovered {
+  cursor: default;
+  background-color: #f0f0f0;
+  border-radius: 4px;
 }

@@ -8,6 +8,7 @@ import { moveItemsOnDesktop } from '../../../services/desktopItemContainerUiHelp
 import { ProcessContext } from '../../../contexts/processContext';
 import { NewFolderCommand } from '../../../System/contextMenuCommands/newFolderCommand';
 import { SortByNameCommand, SortCommandContainer } from '../../../System/contextMenuCommands/sortCommand';
+import { SubTestCommand, TestContainerCommand } from '../../../System/contextMenuCommands/testContainerCommand';
 
 const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
@@ -48,6 +49,9 @@ const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files })
         new NewFolderCommand(newFolderCallback),
         new SortCommandContainer([
           new SortByNameCommand(() => console.log('sorting by name'))
+        ]),
+        new TestContainerCommand([
+          new SubTestCommand(() => console.log('clicked sub test command'))
         ])
       ]
     });
