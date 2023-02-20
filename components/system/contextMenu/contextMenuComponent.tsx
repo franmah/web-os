@@ -1,11 +1,27 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import ContextMenuCommandContainer from '../../../System/contextMenuCommands/abstractCommandContainer';
 import { ContextMenuParams } from '../../../types/system/contextMenu/contextMenuParams';
 import styles from './contextMenu.module.scss';
-import ContextMenuItemContainerComponent from './contextMenuContainer/contextMenuItemContainer';
+import ContextMenuItemCommandContainerComponent from './contextMenuContainer/contextMenuItemContainer';
 import ContextMenuItemComponent from './contextMenuItem/contextMenuItemComponent';
 
-const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ params: { left, top, commands} }) => {
+const HOVERING_TIMEOUT = 400;
+
+const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ 
+  params: { 
+    left,
+    top,
+    commands
+  }
+}) => {
+
+  let closeSubMenuTimeout: NodeJS.Timeout;
+
+  const [isHoveringItemContainer, setIsHovering] = useState<{ id: string }>({ id: '' });
+
+  useEffect(() => {
+    return () => clearTimeout(closeSubMenuTimeout);
+  }, []);
 
   // Prevent menu from closing when clicking
   const onMouseDown = (event: any) => {
@@ -13,19 +29,15 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ params: { lef
     event.preventDefault();
   };
 
-  let closeSubMenuTimeout: NodeJS.Timeout;
-
-
-  const [isHoveringItemContainer, setIsHovering] = useState<{ id: string }>({ id: '' });
-
-  const onMouseOverContainer = (id: string) => {
+  // TODO: sub menu should stay active on mouseleave only if submenu has been entered.
+  const handleMouseEnterContainer = (id: string) => {
     clearTimeout(closeSubMenuTimeout);
-    closeSubMenuTimeout = setTimeout(() => setIsHovering(() => ({ id })), 400);
+    closeSubMenuTimeout = setTimeout(() => setIsHovering(() => ({ id })), HOVERING_TIMEOUT);
   };
 
   const handleMouseEnterItem = () => {
     clearTimeout(closeSubMenuTimeout);
-    closeSubMenuTimeout = setTimeout(() => setIsHovering(() => ({ id: '' })), 400);
+    closeSubMenuTimeout = setTimeout(() => setIsHovering(() => ({ id: '' })), HOVERING_TIMEOUT);
   }
 
   return (
@@ -40,9 +52,9 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ params: { lef
       {
         commands.map((command, index) => {
           return command instanceof ContextMenuCommandContainer ?
-            <ContextMenuItemContainerComponent 
+            <ContextMenuItemCommandContainerComponent 
               key={index} command={command as any}
-              onMouseOver={onMouseOverContainer}
+              handleMouseEnter={handleMouseEnterContainer}
             >
               { isHoveringItemContainer.id === command.id && 
                 <ContextMenuComponent  
@@ -53,7 +65,7 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ params: { lef
                   }}
                 />
               }
-            </ContextMenuItemContainerComponent>
+            </ContextMenuItemCommandContainerComponent>
               :
             <ContextMenuItemComponent
               key={index}

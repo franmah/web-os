@@ -1,16 +1,12 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import styles from '../contextMenu.module.scss';
 import ContextMenuCommandContainer from "../../../../System/contextMenuCommands/abstractCommandContainer";
-import ContextMenuComponent from "../contextMenuComponent";
-import { v4 as uuidv4 } from 'uuid';
 
-const HOVERING_TIMEOUT = 200;
-
-const ContextMenuItemContainerComponent : FC<{ 
+const ContextMenuItemCommandContainerComponent : FC<{ 
   command: ContextMenuCommandContainer
-  onMouseOver: Function,
+  handleMouseEnter: Function,
   children: any }> = 
-({ command, onMouseOver, children }) => {
+({ command, handleMouseEnter, children }) => {
 
     // TODO: delete
   useEffect(() => {
@@ -23,7 +19,7 @@ const ContextMenuItemContainerComponent : FC<{
   }, []);
 
   const handleMouseOver = () => {
-    onMouseOver(command.id, command.text);
+    handleMouseEnter(command.id, command.text);
   };
 
   return (
@@ -39,4 +35,4 @@ const ContextMenuItemContainerComponent : FC<{
   );
 };
 
-export default ContextMenuItemContainerComponent;
+export default ContextMenuItemCommandContainerComponent;
