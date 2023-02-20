@@ -54,7 +54,6 @@ const SelectionBoxComponent: FC<{ targetElementId: string, emitSelectedItemsUpda
         border: '1px solid #0078d7'
       });
     }
-    event.stopPropagation();
   };
 
   const onMouseUp = () => {

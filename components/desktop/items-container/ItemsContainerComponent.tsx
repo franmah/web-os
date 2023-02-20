@@ -6,6 +6,8 @@ import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxCompone
 import { placeItemsAtStartPosition, toItemWrappers } from '../../../services/desktopItemContainerService';
 import { moveItemsOnDesktop } from '../../../services/desktopItemContainerUiHelperService';
 import { ProcessContext } from '../../../contexts/processContext';
+import { NewFolderCommand } from '../../../System/contextMenuCommands/newFolderCommand';
+import { SortByNameCommand, SortCommandContainer } from '../../../System/contextMenuCommands/sortCommand';
 
 const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
@@ -29,9 +31,26 @@ const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files })
     };
   }, []);
 
-  const onContextMenuClick = (event: any) => {
+  const onContextMenuClick = (event: MouseEvent) => {
     event.preventDefault();
-    processContext.openProcess('contextMenu', 'This is a test prop');
+    event.stopPropagation();
+    console.log('on context menu click')
+
+    const newFolderCallback = () => {
+      console.log('new folder callback called');
+      return true;
+    }
+
+    processContext.openProcess('contextMenu', {
+      top: event.clientY,
+      left: event.clientX,
+      commands: [
+        new NewFolderCommand(newFolderCallback),
+        new SortCommandContainer([
+          new SortByNameCommand(() => console.log('sorting by name'))
+        ])
+      ]
+    });
   };
 
   const onMouseDown = () => {

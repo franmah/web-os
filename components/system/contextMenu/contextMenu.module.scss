@@ -1,6 +1,21 @@
-.contextMenuRoot {
+.contextMenu {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   position: absolute;
   width: 250px;
-  height: 200px;
-  background-color: gray;
+  height: auto;
+  padding: 8px 4px;
+  background-color: #f9f9f9;
+  border: 1px solid #d2d7da;
+  border-radius: 8px;
+}
+
+.contextMenuItem {
+  display: flex;
+  padding: 4px 4px;
+  justify-content: space-between;
+
+  &:hover {
+    cursor: default;
+    background-color: #f0f0f0;
+  }
 }
