@@ -18,6 +18,7 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ params: { lef
       onMouseDown={onMouseDown}
       className={styles.contextMenu}
       style={{
+        position: 'absolute',
         top: top,
         left: left
       }}

@@ -35,19 +35,16 @@ const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files })
   const onContextMenuClick = (event: MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    console.log('on context menu click')
-
-    const newFolderCallback = () => {
-      console.log('new folder callback called');
-      return true;
-    }
 
     processContext.openProcess('contextMenu', {
       top: event.clientY,
       left: event.clientX,
       commands: [
-        new NewFolderCommand(newFolderCallback),
+        new NewFolderCommand(() => console.log('new folder callback')),
         new SortCommandContainer([
+          new SortByNameCommand(() => console.log('sorting by name')),
+          new SortByNameCommand(() => console.log('sorting by name')),
+          new SortByNameCommand(() => console.log('sorting by name')),
           new SortByNameCommand(() => console.log('sorting by name'))
         ]),
         new TestContainerCommand([
