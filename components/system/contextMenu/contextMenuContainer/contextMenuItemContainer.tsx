@@ -5,20 +5,19 @@ import ContextMenuCommandContainer from "../../../../System/contextMenuCommands/
 const ContextMenuItemCommandContainerComponent : FC<{ 
   command: ContextMenuCommandContainer
   handleMouseEnter: Function,
-  children: any }> = 
-({ command, handleMouseEnter, children }) => {
+  isHovered: boolean,
+  children: any 
+}> = ({ command, handleMouseEnter, isHovered, children }) => {
 
-    // TODO: delete
-  useEffect(() => {
+  // TODO: pass top and right to parent so they can start the menu
+  const handleMouseOver = () => {
     const element = document.getElementById(command.id);
 
     if (!element) return;
 
     const top = element.offsetTop;
     const right = element.offsetLeft + element.offsetWidth;
-  }, []);
 
-  const handleMouseOver = () => {
     handleMouseEnter(command.id, command.text);
   };
 
@@ -26,7 +25,10 @@ const ContextMenuItemCommandContainerComponent : FC<{
     <section
       id={command.id}
       onMouseEnter={handleMouseOver}
-      className={styles.contextMenuItem}
+      className={`
+        ${styles.contextMenuItem} 
+        ${isHovered ? styles.contextMenuContainerHovered : ''}
+      `}
     >
       <div>{ command.text } </div> <div>{'>'}</div>
       { children }

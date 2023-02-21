@@ -5,7 +5,7 @@ import styles from './contextMenu.module.scss';
 import ContextMenuItemCommandContainerComponent from './contextMenuContainer/contextMenuItemContainer';
 import ContextMenuItemComponent from './contextMenuItem/contextMenuItemComponent';
 
-const HOVERING_TIMEOUT = 400;
+const HOVERING_TIMEOUT = 300;
 
 const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ 
   params: { 
@@ -29,7 +29,6 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({
     event.preventDefault();
   };
 
-  // TODO: sub menu should stay active on mouseleave only if submenu has been entered.
   const handleMouseEnterContainer = (id: string) => {
     clearTimeout(closeSubMenuTimeout);
     closeSubMenuTimeout = setTimeout(() => setIsHovering(() => ({ id })), HOVERING_TIMEOUT);
@@ -50,10 +49,12 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({
       }}
     >
       {
-        commands.map((command, index) => {
-          return command instanceof ContextMenuCommandContainer ?
+        commands.map((command, index) => 
+          command instanceof ContextMenuCommandContainer ?
             <ContextMenuItemCommandContainerComponent 
-              key={index} command={command as any}
+              key={index}
+              command={command as any}
+              isHovered={isHoveringItemContainer.id === command.id}
               handleMouseEnter={handleMouseEnterContainer}
             >
               { isHoveringItemContainer.id === command.id && 
@@ -66,13 +67,14 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({
                 />
               }
             </ContextMenuItemCommandContainerComponent>
-              :
+           
+            :
+
             <ContextMenuItemComponent
               key={index}
               command={command as any}
               handleMouseEnter={handleMouseEnterItem}
             />
-          }
         )
       }
 

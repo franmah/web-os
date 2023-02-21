@@ -3,7 +3,6 @@
   position: absolute;
   width: 200px;
   height: auto;
-  padding: 8px 4px;
   background-color: #f9f9f9;
   border: 1px solid #d2d7da;
   border-radius: 8px;
@@ -13,6 +12,7 @@
   display: flex;
   padding: 4px 4px;
   justify-content: space-between;
+  margin: 4px;
 
   &:hover {
     cursor: default;
