@@ -15,7 +15,7 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ params: { top
 
   let closeSubMenuTimeout: NodeJS.Timeout;
 
-  const [isHoveringItemContainer, setIsHovering] = useState<{ id: string }>({ id: '' });
+  const [hoveredContainerId, setHoveredContainerId] = useState<string>('');
 
   useEffect(() => {
     return () => clearTimeout(closeSubMenuTimeout);
@@ -24,13 +24,13 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ params: { top
   const handleMouseEnterContainer = (containerId: string) => {
     clearTimeout(closeSubMenuTimeout);
     closeSubMenuTimeout = setTimeout(() => {
-      setIsHovering(() => ({ id: containerId }));
+      setHoveredContainerId(() => (containerId));
     }, HOVERING_TIMEOUT);
   };
 
   const handleMouseEnterItem = () => {
     clearTimeout(closeSubMenuTimeout);
-    closeSubMenuTimeout = setTimeout(() => setIsHovering(() => ({ id: '' })), HOVERING_TIMEOUT);
+    closeSubMenuTimeout = setTimeout(() => setHoveredContainerId(() => ('')), HOVERING_TIMEOUT);
   };
 
   return (
@@ -49,7 +49,7 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ params: { top
             <ContextMenuItemCommandContainerComponent
               key={index}
               command={command as any}
-              showSubMenu={isHoveringItemContainer.id === command.id}
+              showSubMenu={hoveredContainerId === command.id}
               handleMouseEnter={handleMouseEnterContainer}
             />
            
