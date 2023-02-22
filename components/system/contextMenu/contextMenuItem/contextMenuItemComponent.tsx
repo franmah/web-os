@@ -1,4 +1,4 @@
-import { FC, Fragment, useContext } from "react";
+import { FC, useContext } from "react";
 import { ProcessContext } from "../../../../contexts/processContext";
 import { ContextMenuCommand } from "../../../../System/contextMenuCommands/abstractCommand";
 import styles from '../contextMenu.module.scss';
@@ -6,12 +6,12 @@ import styles from '../contextMenu.module.scss';
 const ContextMenuItemComponent : FC<{
   command: ContextMenuCommand,
   handleMouseEnter: () => void 
-}> = ({ command: { text, callback, IconComponent }, handleMouseEnter }) => {
+}> = ({ command: { execute, text, IconComponent }, handleMouseEnter }) => {
 
   const process = useContext(ProcessContext);
 
-  const onClick = () => {
-    const close = callback();
+  const onClickEvent = (execute: Function) => {
+    const close = execute();
 
     if (close) {
       process.closeProcess('contextMenu');
@@ -22,14 +22,11 @@ const ContextMenuItemComponent : FC<{
     <div 
       className={styles.contextMenuItem}
       onMouseOver={handleMouseEnter}
-      onClick={() => onClick()}
+      onClick={() => onClickEvent(execute)}
     >
        { IconComponent  && <div className={styles.commandIcon}> <IconComponent /> </div> }
 
-      <div
-        onMouseOver={handleMouseEnter}
-        onClick={() => onClick()}
-      >
+      <div>
         { text }
       </div>
     </div>

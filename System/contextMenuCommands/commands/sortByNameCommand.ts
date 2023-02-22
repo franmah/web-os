@@ -2,11 +2,15 @@ import { ContextMenuCommand } from "../abstractCommand";
 
 export class SortByNameCommand extends ContextMenuCommand {
 
+  private callback: () => any;
+
   constructor(callback: () => void) {
-    super('Name', callback);
+    super('Name');
+    this.callback = callback;
   }
 
-  execute(): void {
-      this.callback();
+  execute = (): boolean => {
+    this.callback();
+    return true;
   }
 }

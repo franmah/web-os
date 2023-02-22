@@ -1,11 +1,16 @@
 import { ContextMenuCommand } from "../abstractCommand";
 
 export class NewFolderCommand extends ContextMenuCommand {
+  
+  private callback: () => any;
+  
   constructor (callback: () => any) {
-    super('Folder', callback, require('react-icons/fc').FcFolder);
+    super('Folder', require('react-icons/fc').FcFolder);
+    this.callback = callback;
   }
 
-  execute() {
+  execute = (): boolean => {
     this.callback();
+    return true;
   }
 }

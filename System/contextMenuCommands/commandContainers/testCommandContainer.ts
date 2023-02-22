@@ -25,10 +25,15 @@ export class Test2Container extends ContextMenuCommandContainer {
 }
 
 export class EndTestCommand extends ContextMenuCommand {
-  execute(): void {
-    
+  
+  private callback: () => any;
+
+  execute(): boolean {
+    return false;
   }
+
   constructor() {
-    super('end', () => {})
+    super('end');
+    this.callback = () => console.log('end')
   }
 }
