@@ -20,8 +20,6 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({
   }
 }) => {
 
-  console.log('rendering')
-
   let closeSubMenuTimeout: NodeJS.Timeout;
 
   const [isHoveringItemContainer, setIsHovering] = useState<{ id: string }>({ id: '' });
@@ -47,7 +45,6 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({
   };
 
   const handleMouseEnterItem = () => {
-    console.log('mouse enter item')
     clearTimeout(closeSubMenuTimeout);
     closeSubMenuTimeout = setTimeout(() => setIsHovering(() => ({ id: '' })), HOVERING_TIMEOUT);
   };
