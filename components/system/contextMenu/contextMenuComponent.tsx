@@ -11,21 +11,14 @@ export const DEFAULT_WIDTH_SUB_MENU = MEDIUM_WIDTH_SUB_MENU;
 
 const HOVERING_TIMEOUT = 300;
 
-const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({
-  params: {
-    left,
-    top,
-    width,
-    commands
-  }
-}) => {
+const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ params: { top, left, width, commands } }) => {
 
   let closeSubMenuTimeout: NodeJS.Timeout;
 
+  // TODO: merge these two into a subMenu type or something
   const [isHoveringItemContainer, setIsHovering] = useState<{ id: string }>({ id: '' });
-  const [subMenuPosition, setSubMenuPosition] = useState<{ top: number, left: number, width: number }>({ top: 0, left: 0, width: 0 });
+  const [subMenuPosition, setSubMenuPositionState] = useState<{ top: number, left: number, width: number }>({ top: 0, left: 0, width: 0 });
 
-  // TODO: replace by a destroy function that is used by every process
   useEffect(() => {
     return () => clearTimeout(closeSubMenuTimeout);
   }, []);
@@ -36,11 +29,23 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({
     event.preventDefault();
   };
 
-  const handleMouseEnterContainer = (id: string, top: number, left: number, width: number) => {
+  const setSubMenuPosition = (containerParams: any) => {
+    // TODO: move logic to its own function
+    const updatedLeft = containerParams.left + containerParams.width + left > window.innerWidth ?
+      containerParams.left - containerParams.width :
+      containerParams.left;
+    setSubMenuPositionState(() => ({ top: containerParams.top, left: updatedLeft, width: containerParams.width }));
+  }
+
+  /**
+   * @param containerId
+   * @param top, left, width: commandContainerItemComponent's position.
+   */
+  const handleMouseEnterContainer = (containerId: string, top: number, left: number, width: number) => {
     clearTimeout(closeSubMenuTimeout);
     closeSubMenuTimeout = setTimeout(() => {
-      setIsHovering(() => ({ id }));
-      setSubMenuPosition(() => ({ top, left, width }));
+      setIsHovering(() => ({ id: containerId }));
+      setSubMenuPosition({ top, left, width });
     }, HOVERING_TIMEOUT);
   };
 
