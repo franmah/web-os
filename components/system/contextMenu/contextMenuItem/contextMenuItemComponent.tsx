@@ -3,12 +3,12 @@ import { ProcessContext } from "../../../../contexts/processContext";
 import { ContextMenuCommand } from "../../../../System/contextMenuCommands/abstractCommand";
 import styles from '../contextMenu.module.scss';
 
-const ContextMenuItemComponent : FC<{ command: ContextMenuCommand, handleMouseEnter: Function }> = ({ command, handleMouseEnter }) => {
-  const IconComponent = command.icon;
+const ContextMenuItemComponent : FC<{ command: ContextMenuCommand, handleMouseEnter: Function }> = ({ command: { text, callback, IconComponent }, handleMouseEnter }) => {
+
   const process = useContext(ProcessContext);
 
   const onClick = () => {
-    const close = command.callback();
+    const close = callback();
 
     if (close) {
       process.closeProcess('contextMenu');
@@ -23,7 +23,7 @@ const ContextMenuItemComponent : FC<{ command: ContextMenuCommand, handleMouseEn
         onMouseEnter={() => handleMouseEnter()}
         onClick={() => onClick()}
       >
-        { command.text }
+        { text }
       </div>
     </div>
   

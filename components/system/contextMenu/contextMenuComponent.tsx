@@ -18,6 +18,7 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({
   let closeSubMenuTimeout: NodeJS.Timeout;
 
   const [isHoveringItemContainer, setIsHovering] = useState<{ id: string }>({ id: '' });
+  const [subMenu, setSubMenu] = useState();
 
   useEffect(() => {
     return () => clearTimeout(closeSubMenuTimeout);
@@ -38,7 +39,7 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({
     clearTimeout(closeSubMenuTimeout);
     closeSubMenuTimeout = setTimeout(() => setIsHovering(() => ({ id: '' })), HOVERING_TIMEOUT);
   }
-
+  
   return (
     <section
       onMouseDown={onMouseDown}

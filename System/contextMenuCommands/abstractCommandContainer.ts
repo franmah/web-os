@@ -9,13 +9,13 @@ abstract class ContextMenuCommandContainer {
   text: string;
   commands: ContextMenuCommand[];
   id: string;
-  icon: ComponentType;
+  IconComponent: ComponentType;
 
   constructor(text: string, commands: ContextMenuCommand[], icon: ComponentType) {
     this.text = text;
     this.commands = commands || [];
     this.id = uuidv4();
-    this.icon = icon;
+    this.IconComponent = icon;
   }
 };
 

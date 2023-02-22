@@ -8,25 +8,24 @@ const ContextMenuItemCommandContainerComponent : FC<{
   handleMouseEnter: Function,
   isHovered: boolean,
   children: any 
-}> = ({ command, handleMouseEnter, isHovered, children }) => {
+}> = ({ command: {id, text, IconComponent}, handleMouseEnter, isHovered, children }) => {
 
-  const IconComponent = command.icon;
-
-  // TODO: pass top and right to parent so they can start the menu
   const handleMouseOver = () => {
-    const element = document.getElementById(command.id);
+    const element = document.getElementById(id);
 
-    if (!element) return;
+    if (!element) {
+      return handleMouseEnter(id, text);
+    }
 
     const top = element.offsetTop;
     const right = element.offsetLeft + element.offsetWidth;
 
-    handleMouseEnter(command.id, command.text);
+    handleMouseEnter(id, text);
   };
 
   return (
     <section
-      id={command.id}
+      id={id}
       onMouseEnter={handleMouseOver}
       className={`
         ${styles.contextMenuItemContainer} 
@@ -35,7 +34,7 @@ const ContextMenuItemCommandContainerComponent : FC<{
     >
       <div className={styles.commandInfo}>
         { IconComponent && <div className={styles.commandIcon}> <IconComponent /> </div> }
-        { command.text }
+        { text }
       </div>
       
       <MdKeyboardArrowRight className={styles.containerArrowIcon}/>

@@ -2,7 +2,7 @@ import { ComponentType } from "react";
 
 export abstract class ContextMenuCommand {
   text: string;
-  icon?: ComponentType;
+  IconComponent?: ComponentType;
    
   callback: () => any;
 
@@ -11,6 +11,6 @@ export abstract class ContextMenuCommand {
   constructor(text: string, callback: () => any, icon?: ComponentType) {
     this.text = text;
     this.callback = callback;
-    this.icon = icon
+    this.IconComponent = icon
   }
 };
