@@ -1,35 +1,49 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from '../contextMenu.module.scss';
 import ContextMenuCommandContainer from "../../../../System/contextMenuCommands/abstractCommandContainer";
 import { MdKeyboardArrowRight } from 'react-icons/md';
+import ContextMenuComponent from "../contextMenuComponent";
+import { correctSubMenuPosition } from "../../../../services/contextMenuService";
 
 const ContextMenuItemCommandContainerComponent : FC<{ 
   command: ContextMenuCommandContainer
-  handleMouseEnter: (id: string, top: number, left: number, width: number) => void,
-  isHovered: boolean,
-  children: any 
-}> = ({ command: { id, text, subMenuWidth, IconComponent }, handleMouseEnter, isHovered, children }) => {
+  handleMouseEnter: (id: string) => void,
+  showSubMenu: boolean,
+}> = ({ command: { id, text, subMenuWidth, IconComponent, commands }, handleMouseEnter, showSubMenu }) => {
 
-  const handleMouseOver = () => {
+  const [subMenuPosition, setSubMenuPosition] = useState({
+    top: 0,
+    left: 0,
+    width: 0,
+  });
+
+  useEffect(() => {
     const element = document.getElementById(id);
 
-    if (!element) {
-      return handleMouseEnter(id, 0, 0, 0);
+    if (!element || !element?.parentElement) {
+      return handleMouseEnter(id);
     }
 
     const top = element.offsetTop;
     const subMenuLeft = element.offsetLeft + element.offsetWidth;
 
-    handleMouseEnter(id, top, subMenuLeft, subMenuWidth);
-  };
+    // Prevent from going to far right
+    const updatedLeft = correctSubMenuPosition(subMenuLeft, subMenuWidth, element.parentElement.offsetLeft);
+
+    setSubMenuPosition({
+      top,
+      left:updatedLeft,
+      width: subMenuWidth,
+    });
+  }, [showSubMenu]);
 
   return (
     <section
       id={id}
-      onMouseEnter={handleMouseOver}
+      onMouseEnter={() => handleMouseEnter(id)}
       className={`
         ${styles.contextMenuItemContainer} 
-        ${isHovered ? styles.contextMenuContainerHovered : ''}
+        ${showSubMenu ? styles.contextMenuContainerHovered : ''}
       `}
     >
       <div className={styles.commandInfo}>
@@ -42,8 +56,18 @@ const ContextMenuItemCommandContainerComponent : FC<{
       
       <MdKeyboardArrowRight className={styles.containerArrowIcon}/>
 
-      {/* sub-context menu*/}
-      { children }
+      {
+        showSubMenu &&
+        <ContextMenuComponent
+          params={{
+            top: subMenuPosition.top,
+            left: subMenuPosition.left,
+            width: subMenuPosition.width,
+            commands: commands
+          }}
+        />
+      }
+    
     </section>
     
   );

@@ -15,37 +15,16 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ params: { top
 
   let closeSubMenuTimeout: NodeJS.Timeout;
 
-  // TODO: merge these two into a subMenu type or something
   const [isHoveringItemContainer, setIsHovering] = useState<{ id: string }>({ id: '' });
-  const [subMenuPosition, setSubMenuPositionState] = useState<{ top: number, left: number, width: number }>({ top: 0, left: 0, width: 0 });
 
   useEffect(() => {
     return () => clearTimeout(closeSubMenuTimeout);
   }, []);
 
-  // Prevent menu from closing when clicking
-  const onMouseDown = (event: any) => {
-    event.stopPropagation();
-    event.preventDefault();
-  };
-
-  const setSubMenuPosition = (containerParams: any) => {
-    // TODO: move logic to its own function
-    const updatedLeft = containerParams.left + containerParams.width + left > window.innerWidth ?
-      containerParams.left - containerParams.width :
-      containerParams.left;
-    setSubMenuPositionState(() => ({ top: containerParams.top, left: updatedLeft, width: containerParams.width }));
-  }
-
-  /**
-   * @param containerId
-   * @param top, left, width: commandContainerItemComponent's position.
-   */
-  const handleMouseEnterContainer = (containerId: string, top: number, left: number, width: number) => {
+  const handleMouseEnterContainer = (containerId: string) => {
     clearTimeout(closeSubMenuTimeout);
     closeSubMenuTimeout = setTimeout(() => {
       setIsHovering(() => ({ id: containerId }));
-      setSubMenuPosition({ top, left, width });
     }, HOVERING_TIMEOUT);
   };
 
@@ -56,7 +35,6 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ params: { top
 
   return (
     <section
-      onMouseDown={onMouseDown}
       className={styles.contextMenu}
       style={{
         top,
@@ -67,24 +45,13 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ params: { top
       {
         commands.map((command, index) =>
           command instanceof ContextMenuCommandContainer ?
+
             <ContextMenuItemCommandContainerComponent
               key={index}
               command={command as any}
-              isHovered={isHoveringItemContainer.id === command.id}
+              showSubMenu={isHoveringItemContainer.id === command.id}
               handleMouseEnter={handleMouseEnterContainer}
-            >
-              {
-                isHoveringItemContainer.id === command.id &&
-                <ContextMenuComponent
-                  params={{
-                    top: subMenuPosition.top,
-                    left: subMenuPosition.left,
-                    width: subMenuPosition.width,
-                    commands: command.commands
-                  }}
-                />
-              }
-            </ContextMenuItemCommandContainerComponent>
+            />
            
             :
 
