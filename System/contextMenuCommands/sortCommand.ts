@@ -13,9 +13,8 @@ export class SortByNameCommand extends ContextMenuCommand {
 }
 
 export class SortCommandContainer extends ContextMenuCommandContainer {
-  
   constructor (commands: ContextMenuCommand[]) {
-    super('Sort by', commands);
+    super('Sort by', commands, require('react-icons/fc').FcAlphabeticalSortingAz);
   }
 
 }

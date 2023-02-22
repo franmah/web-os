@@ -1,9 +1,10 @@
-import { FC, useContext } from "react";
+import { FC, Fragment, useContext } from "react";
 import { ProcessContext } from "../../../../contexts/processContext";
 import { ContextMenuCommand } from "../../../../System/contextMenuCommands/abstractCommand";
 import styles from '../contextMenu.module.scss';
 
 const ContextMenuItemComponent : FC<{ command: ContextMenuCommand, handleMouseEnter: Function }> = ({ command, handleMouseEnter }) => {
+  const IconComponent = command.icon;
   const process = useContext(ProcessContext);
 
   const onClick = () => {
@@ -12,16 +13,20 @@ const ContextMenuItemComponent : FC<{ command: ContextMenuCommand, handleMouseEn
     if (close) {
       process.closeProcess('contextMenu');
     }
-  }
+  };
 
   return (
-    <div
-      onMouseEnter={() => handleMouseEnter()}
-      onClick={() => onClick()}
-      className={styles.contextMenuItem}
-    >
-      { command.text }
+    <div className={styles.contextMenuItem}>
+       { IconComponent  && <div className={styles.commandIcon}> <IconComponent /> </div> }
+
+       <div
+        onMouseEnter={() => handleMouseEnter()}
+        onClick={() => onClick()}
+      >
+        { command.text }
+      </div>
     </div>
+  
   );
 };
 

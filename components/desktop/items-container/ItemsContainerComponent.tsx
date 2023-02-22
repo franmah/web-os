@@ -9,6 +9,7 @@ import { ProcessContext } from '../../../contexts/processContext';
 import { NewFolderCommand } from '../../../System/contextMenuCommands/newFolderCommand';
 import { SortByNameCommand, SortCommandContainer } from '../../../System/contextMenuCommands/sortCommand';
 import { SubTestCommand, TestContainerCommand } from '../../../System/contextMenuCommands/testContainerCommand';
+import { NewItemCommandContainer } from '../../../System/contextMenuCommands/newItemCommand';
 
 const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
@@ -40,15 +41,11 @@ const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files })
       top: event.clientY,
       left: event.clientX,
       commands: [
-        new NewFolderCommand(() => console.log('new folder callback')),
+        new NewItemCommandContainer([
+          new NewFolderCommand(() => console.log('new folder callback')),
+        ]),        
         new SortCommandContainer([
-          new SortByNameCommand(() => console.log('sorting by name')),
-          new SortByNameCommand(() => console.log('sorting by name')),
-          new SortByNameCommand(() => console.log('sorting by name')),
           new SortByNameCommand(() => console.log('sorting by name'))
-        ]),
-        new TestContainerCommand([
-          new SubTestCommand(() => console.log('clicked sub test command'))
         ])
       ]
     });
