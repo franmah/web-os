@@ -5,22 +5,22 @@ import { MdKeyboardArrowRight } from 'react-icons/md';
 
 const ContextMenuItemCommandContainerComponent : FC<{ 
   command: ContextMenuCommandContainer
-  handleMouseEnter: Function,
+  handleMouseEnter: (id: string, top: number, left: number, width: number) => void,
   isHovered: boolean,
   children: any 
-}> = ({ command: {id, text, IconComponent}, handleMouseEnter, isHovered, children }) => {
+}> = ({ command: { id, text, subMenuWidth, IconComponent }, handleMouseEnter, isHovered, children }) => {
 
   const handleMouseOver = () => {
     const element = document.getElementById(id);
 
     if (!element) {
-      return handleMouseEnter(id, text);
+      return handleMouseEnter(id, 0, 0, 0);
     }
 
     const top = element.offsetTop;
-    const right = element.offsetLeft + element.offsetWidth;
+    const subMenuLeft = element.offsetLeft + element.offsetWidth;
 
-    handleMouseEnter(id, text);
+    handleMouseEnter(id, top, subMenuLeft, subMenuWidth);
   };
 
   return (
@@ -33,7 +33,10 @@ const ContextMenuItemCommandContainerComponent : FC<{
       `}
     >
       <div className={styles.commandInfo}>
-        { IconComponent && <div className={styles.commandIcon}> <IconComponent /> </div> }
+        { 
+          IconComponent && 
+          <div className={styles.commandIcon}> <IconComponent /> </div> 
+        }
         { text }
       </div>
       

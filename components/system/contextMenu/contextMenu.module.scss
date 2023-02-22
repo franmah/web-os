@@ -1,7 +1,6 @@
 .contextMenu {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   position: absolute;
-  width: 280px;
   height: auto;
   background-color: #f9f9f9;
   border: 1px solid #d2d7da;
@@ -29,7 +28,7 @@
   }
 
   .commandIcon {
-    margin-right: 16px;
+    margin-right: 12px;
     display: flex;
     align-items: center;
     justify-content: center;

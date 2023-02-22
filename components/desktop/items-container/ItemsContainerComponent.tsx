@@ -6,10 +6,11 @@ import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxCompone
 import { placeItemsAtStartPosition, toItemWrappers } from '../../../services/desktopItemContainerService';
 import { moveItemsOnDesktop } from '../../../services/desktopItemContainerUiHelperService';
 import { ProcessContext } from '../../../contexts/processContext';
-import { NewFolderCommand } from '../../../System/contextMenuCommands/newFolderCommand';
-import { SortByNameCommand, SortCommandContainer } from '../../../System/contextMenuCommands/sortCommand';
-import { SubTestCommand, TestContainerCommand } from '../../../System/contextMenuCommands/testContainerCommand';
-import { NewItemCommandContainer } from '../../../System/contextMenuCommands/newItemCommand';
+import { NewFolderCommand } from '../../../System/contextMenuCommands/commands/newFolderCommand';
+import { SortCommandContainer } from '../../../System/contextMenuCommands/commandContainers/sortCommand';
+import { NewItemCommandContainer } from '../../../System/contextMenuCommands/commandContainers/newItemCommand';
+import { SortByNameCommand } from '../../../System/contextMenuCommands/commands/sortByNameCommand';
+import { EndTestCommand, Test1Container } from '../../../System/contextMenuCommands/commandContainers/testCommandContainer';
 
 const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
@@ -41,6 +42,7 @@ const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files })
       top: event.clientY,
       left: event.clientX,
       commands: [
+        new EndTestCommand(),
         new NewItemCommandContainer([
           new NewFolderCommand(() => console.log('new folder callback')),
         ]),        

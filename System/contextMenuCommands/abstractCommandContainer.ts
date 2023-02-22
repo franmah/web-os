@@ -7,15 +7,19 @@ import { ComponentType } from "react";
  */
 abstract class ContextMenuCommandContainer {
   text: string;
-  commands: ContextMenuCommand[];
+  commands: (ContextMenuCommand | ContextMenuCommandContainer) [];
   id: string;
+  subMenuWidth: number;
   IconComponent: ComponentType;
 
-  constructor(text: string, commands: ContextMenuCommand[], icon: ComponentType) {
+  constructor(text: string, commands: (ContextMenuCommand | ContextMenuCommandContainer)[],
+    subMenuWidth: number, icon: ComponentType) {
+
     this.text = text;
     this.commands = commands || [];
     this.id = uuidv4();
     this.IconComponent = icon;
+    this.subMenuWidth = subMenuWidth;
   }
 };
 
