@@ -10,7 +10,6 @@ import { NewFolderCommand } from '../../../System/contextMenuCommands/commands/n
 import { SortCommandContainer } from '../../../System/contextMenuCommands/commandContainers/sortCommand';
 import { NewItemCommandContainer } from '../../../System/contextMenuCommands/commandContainers/newItemCommand';
 import { SortByNameCommand } from '../../../System/contextMenuCommands/commands/sortByNameCommand';
-import { EndTestCommand, Test1Container } from '../../../System/contextMenuCommands/commandContainers/testCommandContainer';
 
 const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files }) => {
 
@@ -42,9 +41,8 @@ const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files })
       top: event.clientY,
       left: event.clientX,
       commands: [
-        new EndTestCommand(),
         new NewItemCommandContainer([
-          new NewFolderCommand(() => console.log('new folder callback')),
+          new NewFolderCommand(() => console.log('new folder callback'))
         ]),        
         new SortCommandContainer([
           new SortByNameCommand(() => console.log('sorting by name'))

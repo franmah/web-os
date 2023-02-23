@@ -2,8 +2,8 @@ import { FC, useEffect, useState } from "react";
 import styles from '../contextMenu.module.scss';
 import ContextMenuCommandContainer from "../../../../System/contextMenuCommands/abstractCommandContainer";
 import { MdKeyboardArrowRight } from 'react-icons/md';
-import ContextMenuComponent from "../contextMenuComponent";
-import { correctSubMenuPosition } from "../../../../services/contextMenuService";
+import ContextMenuComponent, { CONTEXT_MENU_ITEM_HEIGHT as CONTEXT_MENU_ITEM_HEIGHT } from "../contextMenuComponent";
+import { correctSubMenuLeftPosition, correctSubMenuTopPosition } from "../../../../services/contextMenuService";
 
 const ContextMenuItemCommandContainerComponent : FC<{ 
   command: ContextMenuCommandContainer
@@ -25,13 +25,15 @@ const ContextMenuItemCommandContainerComponent : FC<{
     }
 
     const top = element.offsetTop;
-    const subMenuLeft = element.offsetLeft + element.offsetWidth;
+    const left = element.offsetLeft + element.offsetWidth;
 
-    // Prevent from going to far right
-    const updatedLeft = correctSubMenuPosition(subMenuLeft, subMenuWidth, element.parentElement.offsetLeft);
+    const absolutePosition = element.getBoundingClientRect();
+
+    const updatedLeft = correctSubMenuLeftPosition(left, subMenuWidth, absolutePosition.left);
+    const updatedTop = correctSubMenuTopPosition(top, commands.length || 0, absolutePosition.top);
 
     setSubMenuPosition({
-      top,
+      top: updatedTop,
       left:updatedLeft,
       width: subMenuWidth,
     });
@@ -41,11 +43,13 @@ const ContextMenuItemCommandContainerComponent : FC<{
     <section
       id={id}
       onMouseEnter={() => handleMouseEnter(id)}
-      className={`
-        ${styles.contextMenuItemContainer} 
-        ${showSubMenu ? styles.contextMenuContainerHovered : ''}
-      `}
+      className={
+        `${styles.contextMenuItemContainer}` + ' ' +
+        `${showSubMenu ? styles.contextMenuContainerHovered : ''}`
+      }
+      style={{ height: `${CONTEXT_MENU_ITEM_HEIGHT}px`}}
     >
+
       <div className={styles.commandInfo}>
         { 
           IconComponent && 
@@ -69,7 +73,6 @@ const ContextMenuItemCommandContainerComponent : FC<{
       }
     
     </section>
-    
   );
 };
 
