@@ -1,6 +1,53 @@
-.contextMenuRoot {
+.contextMenu {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   position: absolute;
-  width: 250px;
-  height: 200px;
-  background-color: gray;
+  height: auto;
+  background-color: #f9f9f9;
+  border: 1px solid #d2d7da;
+  border-radius: 8px;
+}
+
+.contextMenuItem {
+  justify-content: start;
+}
+
+.contextMenuItemContainer {
+  justify-content: space-between;
+}
+
+.contextMenuItem, .contextMenuItemContainer {
+  display: flex;
+  padding: 4px 4px;
+  align-items: center;
+  margin: 4px;
+
+  &:hover {
+    cursor: default;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+  }
+
+  .commandIcon {
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .commandInfo {
+    display: flex;
+  }
+
+  .containerArrowIcon {
+    width: 20px;
+    height: 20px;
+    color: #8c929796;
+  }
+}
+
+// Keep menu container hovered when sub menu is hovered.
+.contextMenuContainerHovered {
+  cursor: default;
+  background-color: #f0f0f0;
+  border-radius: 4px;
 }

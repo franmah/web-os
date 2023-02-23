@@ -10,7 +10,6 @@ const useProcessContextState = (): ProcessContextType => {
 
   const closeProcess = (processId: string) => {
     setProcesses(currentProcesses => {
-      console.log({currentProcesses})
       return Object
         .entries(currentProcesses)
         .reduce(( processes, [id, process] ) => 
@@ -20,7 +19,7 @@ const useProcessContextState = (): ProcessContextType => {
     })
   };
 
-  const openProcess = (processName: string, params: any) => {
+  const openProcess = (processName: string, params: any = null) => {
     if (!ProcessDirectory[processName]) {
       return;
     }

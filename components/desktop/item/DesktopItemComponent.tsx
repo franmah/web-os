@@ -1,12 +1,15 @@
 import Image from 'next/image';
-import { FC, useEffect } from 'react';
+import { FC, useContext, useEffect } from 'react';
 import styles from './desktop-item.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, MAX_ITEM_HEIGHT, SHORTENED_NAME_LENGTH } from '../../../constants/DesktopConsts';
+import { ProcessContext } from '../../../contexts/processContext';
 
 const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectItem: Function, handleDoubleClick: Function }> =
 ({ item, moveItem, selectItem, handleDoubleClick }) => {
+
+  const { closeProcess } = useContext(ProcessContext);
 
   useEffect(() => {
     let distanceMouseToItemTop = 0;
@@ -15,10 +18,13 @@ const DesktopItemComponent: FC<{ item: DesktopItem, moveItem: Function, selectIt
     const el = document.getElementById(item.name);
     if (!el) return;
 
-    // Prevent selected items to be unselected in case of selection box drag
-    // Should probably find a better way to do it.
+      // TODO: Find a better way to close context menu 
+    // see onMouseDown()
+    // issue is that without closeProcess, a click on an item won't close the menu because of stopPropagation
+    // but without stopPropagation, selecting multiple items and moving will unselect them before they're moved.
     const onMouseDown = (event: any) => {
       event.stopPropagation();
+      closeProcess('contextMenu');
     }
 
     // TODO: instead of selecting the item, 

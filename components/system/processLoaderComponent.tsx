@@ -11,9 +11,9 @@ export function ProcessLoaderComponent() {
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', closeContextMenu, true);
+    document.addEventListener('mousedown', closeContextMenu);
     return () => {
-      document.removeEventListener('mousedown', closeContextMenu, true);
+      document.removeEventListener('mousedown', closeContextMenu);
     };
   });
 

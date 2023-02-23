@@ -1,17 +1,69 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
+import ContextMenuCommandContainer from '../../../System/contextMenuCommands/abstractCommandContainer';
+import { ContextMenuParams } from '../../../types/system/contextMenu/contextMenuParams';
 import styles from './contextMenu.module.scss';
+import ContextMenuItemCommandContainerComponent from './contextMenuContainer/contextMenuItemContainerComponent';
+import ContextMenuItemComponent from './contextMenuItem/contextMenuItemComponent';
 
-const ContextMenuComponent: FC<{ params: string }> = ({ params }) => {
+export const SMALL_WIDTH_SUB_MENU = 100;
+export const MEDIUM_WIDTH_SUB_MENU = 250;
+export const DEFAULT_WIDTH_SUB_MENU = MEDIUM_WIDTH_SUB_MENU;
+export const CONTEXT_MENU_ITEM_HEIGHT = 21;
+
+const HOVERING_TIMEOUT = 300;
+
+const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ params: { top, left, width, commands } }) => {
+
+  let closeSubMenuTimeout: NodeJS.Timeout;
+
+  const [hoveredContainerId, setHoveredContainerId] = useState<string>('');
+
+  useEffect(() => {
+    return () => clearTimeout(closeSubMenuTimeout);
+  }, []);
+
+  const handleMouseEnterContainer = (containerId: string) => {
+    clearTimeout(closeSubMenuTimeout);
+    closeSubMenuTimeout = setTimeout(() => {
+      setHoveredContainerId(() => (containerId));
+    }, HOVERING_TIMEOUT);
+  };
+
+  const handleMouseEnterItem = () => {
+    clearTimeout(closeSubMenuTimeout);
+    closeSubMenuTimeout = setTimeout(() => setHoveredContainerId(() => ('')), HOVERING_TIMEOUT);
+  };
+
   return (
-    <section 
-      className={styles.contextMenuRoot}
-      id="contextMenuRoot"
+    <section
+      className={styles.contextMenu}
       style={{
-        top: 0,
-        left: 0
+        top,
+        left,
+        width: width || DEFAULT_WIDTH_SUB_MENU
       }}
     >
-      <p style={{ color: 'white' }}>{ params } test</p>
+      {
+        commands.map((command, index) =>
+          command instanceof ContextMenuCommandContainer ?
+
+            <ContextMenuItemCommandContainerComponent
+              key={index}
+              command={command as any}
+              showSubMenu={hoveredContainerId === command.id}
+              handleMouseEnter={handleMouseEnterContainer}
+            />
+           
+            :
+
+            <ContextMenuItemComponent
+              key={index}
+              command={command as any}
+              handleMouseEnter={handleMouseEnterItem}
+            />
+        )
+      }
+
     </section>
   );
 };
