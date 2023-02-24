@@ -37,17 +37,3 @@ export const correctSubMenuTopPosition = (top: number, numElements: number, abso
     top - numElements * CONTEXT_MENU_ITEM_HEIGHT :
     top;
 };
-
-export const isClickOriginatedFromContextMenu = (event: MouseEvent): boolean => {
-  let element: any = event.target;
-
-  while (element) {
-    if (element.id === CONTEXT_MENU_ROOT_ID) {
-      return true;
-    }
-
-    element = element.parentElement;
-  }
-
-  return false;
-};
