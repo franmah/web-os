@@ -1,14 +1,9 @@
-
-/**
- * @param event 
- * @param targetPrefixId usually the prefix of the module the target is in. Not the exact id.
- */
-export const isEventOriginatedFromTarget = (event: MouseEvent, targetPrefixId: string) => {
+export const isEventOriginatedFromWithinTargetSubtree = (event: MouseEvent, targetId: string) => {
   let element: any = event.target;
 
   while (element) {
     const id: string = element.id;
-    if (id.includes(targetPrefixId)) {
+    if (id.includes(targetId)) {
       return true;
     }
 

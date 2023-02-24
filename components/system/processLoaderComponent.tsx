@@ -1,6 +1,6 @@
 import { Fragment, useContext, useEffect } from "react";
 import { ProcessContext } from "../../contexts/processContext";
-import { isEventOriginatedFromTarget } from "../../services/EventService";
+import { isEventOriginatedFromWithinTargetSubtree } from "../../services/EventService";
 import { CONTEXT_MENU_ROOT_ID } from "./contextMenu/ContextMenuRootComponent";
 
 export function ProcessLoaderComponent() {
@@ -8,7 +8,7 @@ export function ProcessLoaderComponent() {
   const processContext = useContext(ProcessContext);
 
   const closeContextMenu = (event: MouseEvent) => {
-    if (processContext.processes['contextMenu'] && !isEventOriginatedFromTarget(event, CONTEXT_MENU_ROOT_ID)) {
+    if (processContext.processes['contextMenu'] && !isEventOriginatedFromWithinTargetSubtree(event, CONTEXT_MENU_ROOT_ID)) {
       processContext.closeProcess('contextMenu');
     }
   };
