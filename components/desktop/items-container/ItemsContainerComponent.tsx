@@ -1,20 +1,22 @@
 import { ExplorerFile } from '../../../types/ExplorerElement';
-import { FC, Fragment, useContext, useEffect, useState } from 'react';
+import { FC, Fragment, useEffect, useState } from 'react';
 import DesktopItemComponent from '../item/DesktopItemComponent';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxComponent';
 import { placeItemsAtStartPosition, toItemWrappers } from '../../../services/desktopItemContainerService';
 import { moveItemsOnDesktop } from '../../../services/desktopItemContainerUiHelperService';
-import { ProcessContext } from '../../../contexts/processContext';
 import { NewFolderCommand } from '../../../System/contextMenuCommands/commands/newFolderCommand';
 import { SortCommandContainer } from '../../../System/contextMenuCommands/commandContainers/sortCommand';
 import { NewItemCommandContainer } from '../../../System/contextMenuCommands/commandContainers/newItemCommand';
 import { SortByNameCommand } from '../../../System/contextMenuCommands/commands/sortByNameCommand';
 
-const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files }) => {
+const DesktopItemContainerComponent: FC<{
+  files: ExplorerFile[],
+  onDesktopContextMenuClick: Function,
+  onItemContextMenuClick: Function
+}> = ({ files, onDesktopContextMenuClick, onItemContextMenuClick }) => {
 
   const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
-  const processContext = useContext(ProcessContext);
 
   useEffect(() => {
     const items = toItemWrappers(files);
@@ -25,6 +27,7 @@ const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files })
   useEffect(() => {
     const desktop = document.getElementById('desktop');
     desktop?.addEventListener('mousedown', onMouseDown);
+    desktop?.addEventListener('click', () => console.log('click desktop'));
     desktop?.addEventListener('contextmenu', onContextMenuClick);
 
     return () => {
@@ -34,28 +37,29 @@ const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files })
   }, []);
 
   const onContextMenuClick = (event: MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    processContext.openProcess('contextMenu', {
-      top: event.clientY,
-      left: event.clientX,
-      commands: [
-        new NewItemCommandContainer([
-          new NewFolderCommand(() => console.log('new folder callback'))
-        ]),        
-        new SortCommandContainer([
-          new SortByNameCommand(() => console.log('sorting by name'))
-        ])
-      ]
-    });
+    const commands =  [
+      new NewItemCommandContainer([
+        new NewFolderCommand(() => console.log('new folder callback'))
+      ]),        
+      new SortCommandContainer([
+        new SortByNameCommand(() => console.log('sorting by name'))
+      ])
+    ];
+      
+    onDesktopContextMenuClick(event, commands);
   };
 
   const onMouseDown = () => {
     selectItems();
   };
 
-  const moveItem = (itemId: string, startItemTop: number, startItemLeft: number, newItemTop: number, newItemLeft: number) => {
+  const moveItem = (
+    itemId: string,
+    startItemTop: number,
+    startItemLeft: number,
+    newItemTop: number,
+    newItemLeft: number
+  ) => {
     setDesktopItems(prevItems => {
       const updatedItems = moveItemsOnDesktop(prevItems, itemId, startItemTop, startItemLeft, newItemTop, newItemLeft);
       return [...updatedItems];
@@ -88,6 +92,7 @@ const DesktopItemContainerComponent: FC<{ files: ExplorerFile[] }> = ({ files })
               moveItem={moveItem}
               selectItem={selectItems}
               handleDoubleClick={handleItemDoubleClick}
+              handleContextMenuClick={event => onItemContextMenuClick(event)}
             />
           )
         )}
