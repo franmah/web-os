@@ -1,19 +1,27 @@
 import { Fragment, useContext, useEffect } from "react";
 import { ProcessContext } from "../../contexts/processContext";
+import { isClickOriginatedFromContextMenu } from "../../services/contextMenuService";
 
 export function ProcessLoaderComponent() {
 
   const processContext = useContext(ProcessContext);
 
-  const closeContextMenu = () => {
-    if (processContext.processes['contextMenu'])
+  const closeContextMenu = (event: MouseEvent) => {
+    if (processContext.processes['contextMenu'] && !isClickOriginatedFromContextMenu(event)) {
       processContext.closeProcess('contextMenu');
+    }
+  };
+
+  const onContextMenuClick = (event: MouseEvent) => {
+    event.preventDefault();
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', closeContextMenu);
+    document.addEventListener('mousedown', closeContextMenu, true);
+    document.addEventListener('contextmenu', onContextMenuClick, true);
     return () => {
-      document.removeEventListener('mousedown', closeContextMenu);
+      document.removeEventListener('mousedown', closeContextMenu, true);
+      document.removeEventListener('contextmenu', onContextMenuClick, true);
     };
   });
 

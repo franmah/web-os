@@ -1,4 +1,5 @@
 import { CONTEXT_MENU_ITEM_HEIGHT, DEFAULT_WIDTH_SUB_MENU } from "../components/system/contextMenu/contextMenuComponent";
+import { CONTEXT_MENU_ROOT_ID } from "../components/system/contextMenu/ContextMenuRootComponent";
 import { ContextMenuParams } from "../types/system/contextMenu/contextMenu";
 
 const CONTEXT_MENU_HEIGHT_OFFSET = 40;
@@ -35,4 +36,18 @@ export const correctSubMenuTopPosition = (top: number, numElements: number, abso
   return futureSubMenuBottom > window.innerHeight - CONTEXT_MENU_HEIGHT_OFFSET ?
     top - numElements * CONTEXT_MENU_ITEM_HEIGHT :
     top;
+};
+
+export const isClickOriginatedFromContextMenu = (event: MouseEvent): boolean => {
+  let element: any = event.target;
+
+  while (element) {
+    if (element.id === CONTEXT_MENU_ROOT_ID) {
+      return true;
+    }
+
+    element = element.parentElement;
+  }
+
+  return false;
 };

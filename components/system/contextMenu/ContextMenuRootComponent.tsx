@@ -9,16 +9,9 @@ const ContextMenuRootComponent: FC<{ params: ContextMenuParams }> = ({ params })
 
   const { left, top, commands } = correctRootContextMenuPosition(params);
 
-  // Prevent menu from closing when clicking
-  const onMouseDown = (event: any) => {
-    event.stopPropagation();
-    event.preventDefault();
-  };
-
   return (
     <section
-      id="contextMenuRoot"
-      onMouseDown={onMouseDown}
+      id={CONTEXT_MENU_ROOT_ID}
     >
 
       <ContextMenuComponent
