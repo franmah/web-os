@@ -30,21 +30,21 @@ export const useFileSystemContextState = () => {
   const [root, setRoot] = useState<ExplorerFile>(rootFile);
 
   const addFile = (name: string, iconPath: string, parent: ExplorerFile | null) => {
-      setRoot(root => {
+    setRoot(root => {
 
-        const file = {
-          name,
-          iconPath,
-          parent,
-          children: [],
-          id: v4()
-        };
-    
-        if (parent)
-          parent.children.push(file);
-        
-        return root;
-      });
+      const file = {
+        name,
+        iconPath,
+        parent,
+        children: [],
+        id: v4()
+      };
+  
+      if (parent)
+        parent.children.push(file);
+      
+      return root;
+    });
   };
 
   const getDesktop = (): ExplorerFile => {

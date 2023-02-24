@@ -8,48 +8,48 @@ export const getExampleDesktopChildren = (desktop: ExplorerFile): ExplorerFile[]
     id: 'num #1',
     parent: desktop
   },
-  // {
-  //   children: [],
-  //   iconPath: '/icons/folder-icon.png',
-  //   name: 'num #2',
-  //   id: 'num #2',
-  //   parent: desktop
-  // },
-  // {
-  //   children: [],
-  //   iconPath: '/icons/folder-icon.png',
-  //   name: 'num #3',
-  //   id: 'num #3',
-  //   parent: desktop
-  // },
-  // {
-  //   children: [],
-  //   iconPath: '/icons/folder-icon.png',
-  //   name: 'num #4',
-  //   id: 'num #4',
-  //   parent: desktop
-  // },
-  // {
-  //   children: [],
-  //   iconPath: '/icons/folder-icon.png',
-  //   name: 'num #5',
-  //   id: 'num #5',
-  //   parent: desktop
-  // },
-  // {
-  //   children: [],
-  //   iconPath: '/icons/folder-icon.png',
-  //   name: 'num #6',
-  //   id: 'num #6',
-  //   parent: desktop
-  // },
-  // {
-  //   children: [],
-  //   iconPath: '/icons/folder-icon.png',
-  //   name: 'num #7',
-  //   id: 'num #7',
-  //   parent: desktop
-  // },
+  {
+    children: [],
+    iconPath: '/icons/folder-icon.png',
+    name: 'num #2',
+    id: 'num #2',
+    parent: desktop
+  },
+  {
+    children: [],
+    iconPath: '/icons/folder-icon.png',
+    name: 'num #3',
+    id: 'num #3',
+    parent: desktop
+  },
+  {
+    children: [],
+    iconPath: '/icons/folder-icon.png',
+    name: 'num #4',
+    id: 'num #4',
+    parent: desktop
+  },
+  {
+    children: [],
+    iconPath: '/icons/folder-icon.png',
+    name: 'num #5',
+    id: 'num #5',
+    parent: desktop
+  },
+  {
+    children: [],
+    iconPath: '/icons/folder-icon.png',
+    name: 'num #6',
+    id: 'num #6',
+    parent: desktop
+  },
+  {
+    children: [],
+    iconPath: '/icons/folder-icon.png',
+    name: 'num #7',
+    id: 'num #7',
+    parent: desktop
+  },
   // {
   //   children: [],
   //   iconPath: '/icons/folder-icon.png',
