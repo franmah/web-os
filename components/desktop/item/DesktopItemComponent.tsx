@@ -1,20 +1,23 @@
 import Image from 'next/image';
-import { FC, useContext, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import styles from './desktop-item.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, MAX_ITEM_HEIGHT, SHORTENED_NAME_LENGTH } from '../../../constants/DesktopConsts';
-import { ProcessContext } from '../../../contexts/processContext';
 
 const DesktopItemComponent: FC<{
   item: DesktopItem,
-  moveItem: Function,
-  selectItem: Function,
-  handleDoubleClick: Function,
+  moveItem: (
+    id: string,
+    startItemTop: number,
+    startItemLeft: number,
+    newItemTop: number,
+    newItemLeft: number
+  ) => void,
+  selectItem: (...ids: string[]) => void,
+  handleDoubleClick: (id: string) => void,
   handleContextMenuClick: (event: MouseEvent) => void
 }> = ({ item, moveItem, selectItem, handleDoubleClick, handleContextMenuClick }) => {
-
-  const { closeProcess } = useContext(ProcessContext);
 
   let distanceMouseToItemTop = 0;
   let distanceMouseToItemLeft = 0;
@@ -23,14 +26,7 @@ const DesktopItemComponent: FC<{
     handleDoubleClick(item.id);
   };
 
-  // TODO: instead of selecting the item, 
-  // tell itemsContainer that an element was clicked and let it handle it.
-  // Do that for every other event.
-  // Avoids multiple call to selectItem/moveItem messing with each other
   const onClick = (event: any) => {
-    event.stopPropagation();
-    console.log('click item')
-
     if (!item.selected) {
       selectItem(item.id);
     }
@@ -42,7 +38,6 @@ const DesktopItemComponent: FC<{
   // but without stopPropagation, selecting multiple items and moving will unselect them before they're moved.
   const onMouseDown = (event: any) => {
     event.stopPropagation();
-    closeProcess('contextMenu');
   };
 
   const onDragEnd = (event: any) => {
