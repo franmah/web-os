@@ -6,4 +6,4 @@ export type ExplorerFile = {
   name: string;
   parent: ExplorerFile | null;
   id: string;
-}
+};

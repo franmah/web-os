@@ -5,5 +5,7 @@ export type ContextMenuParams = {
   top: number,
   left: number,
   width: number,
-  commands: (ContextMenuCommand | ContextMenuCommandContainer) []
+  commands: ContextMenuCommandList
 };
+
+export type ContextMenuCommandList = (ContextMenuCommand | ContextMenuCommandContainer) [];
