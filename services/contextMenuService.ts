@@ -1,5 +1,4 @@
 import { CONTEXT_MENU_ITEM_HEIGHT, DEFAULT_WIDTH_SUB_MENU } from "../components/system/contextMenu/contextMenuComponent";
-import { CONTEXT_MENU_ROOT_ID } from "../components/system/contextMenu/ContextMenuRootComponent";
 import { ContextMenuParams } from "../types/system/contextMenu/contextMenu";
 
 const CONTEXT_MENU_HEIGHT_OFFSET = 40;
