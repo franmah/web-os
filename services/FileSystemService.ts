@@ -50,32 +50,32 @@ export const getExampleDesktopChildren = (desktop: ExplorerFile): ExplorerFile[]
     id: 'num #7',
     parent: desktop
   },
-  // {
-  //   children: [],
-  //   iconPath: '/icons/folder-icon.png',
-  //   name: 'num #8',
-  //   id: 'num #8',
-  //   parent: desktop
-  // },
-  // {
-  //   children: [],
-  //   iconPath: '/icons/folder-icon.png',
-  //   name: 'num #9',
-  //   id: 'num #9',
-  //   parent: desktop
-  // },
-  // {
-  //   children: [],
-  //   iconPath: '/icons/folder-icon.png',
-  //   name: 'num #10',
-  //   id: 'num #10',
-  //   parent: desktop
-  // },
-  // {
-  //   children: [],
-  //   iconPath: '/icons/folder-icon.png',
-  //   name: 'num #11',
-  //   id: 'num #11',
-  //   parent: desktop
-  // }
+  {
+    children: [],
+    iconPath: '/icons/folder-icon.png',
+    name: 'num #8',
+    id: 'num #8',
+    parent: desktop
+  },
+  {
+    children: [],
+    iconPath: '/icons/folder-icon.png',
+    name: 'num #9',
+    id: 'num #9',
+    parent: desktop
+  },
+  {
+    children: [],
+    iconPath: '/icons/folder-icon.png',
+    name: 'num #10',
+    id: 'num #10',
+    parent: desktop
+  },
+  {
+    children: [],
+    iconPath: '/icons/folder-icon.png',
+    name: 'num #11',
+    id: 'num #11',
+    parent: desktop
+  }
 ];

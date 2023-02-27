@@ -9,6 +9,7 @@ import { NewFolderCommand } from '../../../System/contextMenuCommands/commands/n
 import { SortCommandContainer } from '../../../System/contextMenuCommands/commandContainers/sortCommand';
 import { NewItemCommandContainer } from '../../../System/contextMenuCommands/commandContainers/newItemCommand';
 import { SortByNameCommand } from '../../../System/contextMenuCommands/commands/sortByNameCommand';
+import { isEventOriginatedFromWithinTargetIdSubtree } from '../../../services/EventService';
 
 const DesktopItemContainerComponent: FC<{
   files: ExplorerFile[],
@@ -24,15 +25,19 @@ const DesktopItemContainerComponent: FC<{
     setDesktopItems(() => items);
   }, [files]);
 
+  // Any click anywhere in the app should unselect all items
+  useEffect(() => {
+    document.addEventListener('mousedown', onMouseDown, true);
+    return () => {
+      document.removeEventListener('mousedown', onMouseDown, true);
+    }
+  }, [desktopItems]);
+
   useEffect(() => {
     const desktop = document.getElementById('desktop');
-    desktop?.addEventListener('mousedown', onMouseDown);
-    desktop?.addEventListener('click', () => console.log('click desktop'));
     desktop?.addEventListener('contextmenu', onContextMenuClick);
-
     return () => {
       desktop?.removeEventListener('contextmenu', onContextMenuClick);
-      desktop?.removeEventListener('mousedown', onMouseDown);
     };
   }, []);
 
@@ -49,8 +54,22 @@ const DesktopItemContainerComponent: FC<{
     onDesktopContextMenuClick(event, commands);
   };
 
-  const onMouseDown = () => {
-    selectItems();
+  const onMouseDown = (event: MouseEvent) => {
+
+    // If mousedown is on desktop unselect all items.
+    if ((event.target as any).id === 'desktop') {
+      selectItems();
+      return;
+    } 
+
+    // If mousedown is from an item then don't unselect
+    const isEventFromAnyItem = desktopItems.some(item => 
+      isEventOriginatedFromWithinTargetIdSubtree(event, item.id)
+    );
+
+    if (!isEventFromAnyItem) {
+      selectItems();
+    }
   };
 
   const moveItem = (
