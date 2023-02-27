@@ -31,14 +31,6 @@ const DesktopItemComponent: FC<{
       selectItem(item.id);
     }
   };
-  
-  // TODO: Find a better way to close context menu 
-  // see onMouseDown()
-  // issue is that without closeProcess, a click on an item won't close the menu because of stopPropagation
-  // but without stopPropagation, selecting multiple items and moving will unselect them before they're moved.
-  const onMouseDown = (event: any) => {
-    event.stopPropagation();
-  };
 
   const onDragEnd = (event: any) => {
     const { top, left } = getDestopItemNewPositionRelativeToMouse(
@@ -64,14 +56,12 @@ const DesktopItemComponent: FC<{
     if (!el) return;
 
     el.addEventListener('dragend', onDragEnd);
-    el.addEventListener('mousedown', onMouseDown);
     el.addEventListener('click', onClick);
     el.addEventListener('dblclick', onDoubleClick);
     el.addEventListener('dragstart', onDragStart);
 
     return () => {
       el.removeEventListener('dragend', onDragEnd);
-      el.removeEventListener('mousedown', onMouseDown);
       el.removeEventListener('click', onClick);
       el.removeEventListener('dblclick', onDoubleClick);
       el.removeEventListener('dragstart', onDragStart);
