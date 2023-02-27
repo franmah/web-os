@@ -74,3 +74,34 @@ const isItemOverlapingOtherItems = (i1Top: number, i1Left: number, i2: DesktopIt
     (right && (bottom || top))    
   );
 }
+
+// TODO: doesn't work exactly like windows.
+// Items in box should be !selected. 
+// Was unable to implement it because too many events triggered for useState to follow.
+export const getSelectedItemOnDragWithCtrl = (
+  currentDesktopItems: DesktopItem[],
+  selectedItemIds: string[],
+  previousElementInBox: HTMLElement[],
+ ): DesktopItem[] => {
+  
+  const previouslySelectedItemIds = previousElementInBox.map(element => element.id);
+
+  const updatedItems = currentDesktopItems.map(i => {
+    let selected = i.selected;
+
+    if (selectedItemIds.includes(i.id)) {
+      selected = true;
+    } 
+    // Unselect item if it was in box but is not anymore.
+    else if (previouslySelectedItemIds.includes(i.id)) { 
+      selected = false;
+    }
+
+    return {
+      ...i,
+      selected
+    };
+  });
+
+  return updatedItems; 
+}

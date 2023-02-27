@@ -4,7 +4,7 @@ import DesktopItemComponent from '../item/DesktopItemComponent';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxComponent';
 import { placeItemsAtStartPosition, toItemWrappers } from '../../../services/desktopItemContainerService';
-import { moveItemsOnDesktop } from '../../../services/desktopItemContainerUiHelperService';
+import { getSelectedItemOnDragWithCtrl, moveItemsOnDesktop } from '../../../services/desktopItemContainerUiHelperService';
 import { NewFolderCommand } from '../../../System/contextMenuCommands/commands/newFolderCommand';
 import { SortCommandContainer } from '../../../System/contextMenuCommands/commandContainers/sortCommand';
 import { NewItemCommandContainer } from '../../../System/contextMenuCommands/commandContainers/newItemCommand';
@@ -55,6 +55,7 @@ const DesktopItemContainerComponent: FC<{
   };
 
   const onMouseDown = (event: MouseEvent) => {
+    if (event.ctrlKey) { return; }
 
     // If mousedown is on desktop unselect all items.
     if ((event.target as any).id === 'desktop') {
@@ -91,14 +92,31 @@ const DesktopItemContainerComponent: FC<{
       return [...updated];
     });
   };
+  
+  const selectItemsWithCtrl = (...ids: string[])=> {
+    setDesktopItems(prevItems => {
+      const updatedItems = prevItems.map(i => ({
+        ...i,
+        selected: ids.includes(i.id) ? !i.selected : i.selected
+      }));
+      return [...updatedItems];
+    });
+  }
 
   const handleItemDoubleClick = (itemId: string) => {
     console.log('received double click from item');
   };
-
-  const handleSelectionBoxUpdates = (elements: HTMLElement[]) => {
+  
+  const handleSelectionBoxUpdates = (elements: HTMLElement[], previousElementInBox: HTMLElement[], ctrlKey: boolean) => {
     const selectedItemIds = elements.map(element => element.id);
-    selectItems(...selectedItemIds);
+
+    if (!ctrlKey) {
+      return selectItems(...selectedItemIds);
+    }
+
+    setDesktopItems(currentDesktopItems => {
+      return [...getSelectedItemOnDragWithCtrl(currentDesktopItems, selectedItemIds, previousElementInBox)];
+    });
   };
 
   return (
@@ -109,7 +127,8 @@ const DesktopItemContainerComponent: FC<{
               key={index}
               item={item}
               moveItem={moveItem}
-              selectItem={selectItems}
+              selectItems={selectItems}
+              selectItemsWithCtrl={selectItemsWithCtrl}
               handleDoubleClick={handleItemDoubleClick}
               handleContextMenuClick={event => onItemContextMenuClick(event)}
             />
