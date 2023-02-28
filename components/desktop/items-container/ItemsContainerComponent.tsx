@@ -3,13 +3,14 @@ import { FC, Fragment, useEffect, useState } from 'react';
 import DesktopItemComponent from '../item/DesktopItemComponent';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxComponent';
-import { placeItemsAtStartPosition, toItemWrappers } from '../../../services/desktopItemContainerService';
+import { toItemWrappers } from '../../../services/desktopItemContainerService';
 import { getSelectedItemsFromSelectionBoxgWithCtrl, moveItemsOnDesktop, selectItemsWithShiftKey } from '../../../services/desktopItemContainerUiHelperService';
 import { NewFolderCommand } from '../../../System/contextMenuCommands/commands/newFolderCommand';
 import { SortCommandContainer } from '../../../System/contextMenuCommands/commandContainers/sortCommand';
 import { NewItemCommandContainer } from '../../../System/contextMenuCommands/commandContainers/newItemCommand';
 import { SortByNameCommand } from '../../../System/contextMenuCommands/commands/sortByNameCommand';
 import { isEventOriginatedFromWithinTargetIdSubtree } from '../../../services/EventService';
+import { DesktopSortOptions, setItemPositions } from '../../../services/DesktopItemPlacementService';
 
 const DesktopItemContainerComponent: FC<{
   files: ExplorerFile[],
@@ -21,8 +22,7 @@ const DesktopItemContainerComponent: FC<{
 
   useEffect(() => {
     const items = toItemWrappers(files);
-    placeItemsAtStartPosition(items);
-    setDesktopItems(() => items);
+    setDesktopItems(() => [...setItemPositions(items, DesktopSortOptions.default)]);
   }, [files]);
 
   // Any click anywhere in the app should unselect all items
@@ -44,10 +44,10 @@ const DesktopItemContainerComponent: FC<{
   const onContextMenuClick = (event: MouseEvent) => {
     const commands =  [
       new NewItemCommandContainer([
-        new NewFolderCommand(() => console.log('new folder callback'))
+        new NewFolderCommand(() => console.log('add folder'))
       ]),        
       new SortCommandContainer([
-        new SortByNameCommand(() => console.log('sorting by name'))
+        new SortByNameCommand(() => setDesktopItems(currentItems => [...setItemPositions(currentItems, DesktopSortOptions.name)]))
       ])
     ];
       
