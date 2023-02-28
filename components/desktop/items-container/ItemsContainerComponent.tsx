@@ -1,7 +1,7 @@
 import { ExplorerFile } from '../../../types/ExplorerElement';
 import { FC, Fragment, useEffect, useState } from 'react';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import { getNewItemName, toItemWrappers } from '../../../services/desktopItemContainerService';
+import { DEFAULT_FOLDER_ICON_PATH, getNewItemName, toItemWrappers } from '../../../services/desktopItemContainerService';
 import { getSelectedItemsFromSelectionBoxgWithCtrl, moveItemsOnDesktop, selectItemsWithShiftKey } from '../../../services/desktopItemContainerUiHelperService';
 import { NewFolderCommand } from '../../../System/contextMenuCommands/commands/newFolderCommand';
 import { SortCommandContainer } from '../../../System/contextMenuCommands/commandContainers/sortCommand';
@@ -11,6 +11,7 @@ import { isEventOriginatedFromWithinTargetIdSubtree } from '../../../services/Ev
 import { DesktopSortOptions, setItemPositions } from '../../../services/DesktopItemPlacementService';
 import DesktopItemComponent from '../item/DesktopItemComponent';
 import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxComponent';
+import { v4 } from 'uuid';
 
 const DesktopItemContainerComponent: FC<{
   files: ExplorerFile[],
@@ -60,19 +61,24 @@ const DesktopItemContainerComponent: FC<{
     setDesktopItems(currentItems => {
       const newItemName = getNewItemName(currentItems);
 
-      return currentItems;
-    });
-
-    // Create new DesktopItem
-
-    // Find available name 
-
-    // set it as being renamed
+      const item: DesktopItem = {
+        top,
+        left,
+        name: newItemName,
+        iconPath: DEFAULT_FOLDER_ICON_PATH,
+        selected: false,
+        id: v4(),
+      };
 
     // somehow catch when it's renamed (either by click or enter)
     // (what about letting the item tell the container when a file is renamed and then the container 
     // tells the parent that this file was either renamed and if its id doesn't show up in the desktop's 
     // children then you ahve to add it )
+
+      return [...currentItems, item];
+    });
+
+   
 
   }
 
