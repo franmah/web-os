@@ -59,7 +59,6 @@ const DesktopItemContainerComponent: FC<{
 
     setDesktopItems(currentItems => {
       const newItemName = getNewItemName(currentItems);
-      console.log({ newItemName })
 
       return currentItems;
     });
