@@ -1,9 +1,7 @@
 import { ExplorerFile } from '../../../types/ExplorerElement';
 import { FC, Fragment, useEffect, useState } from 'react';
-import DesktopItemComponent from '../item/DesktopItemComponent';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxComponent';
-import { toItemWrappers } from '../../../services/desktopItemContainerService';
+import { getNewItemName, toItemWrappers } from '../../../services/desktopItemContainerService';
 import { getSelectedItemsFromSelectionBoxgWithCtrl, moveItemsOnDesktop, selectItemsWithShiftKey } from '../../../services/desktopItemContainerUiHelperService';
 import { NewFolderCommand } from '../../../System/contextMenuCommands/commands/newFolderCommand';
 import { SortCommandContainer } from '../../../System/contextMenuCommands/commandContainers/sortCommand';
@@ -11,6 +9,8 @@ import { NewItemCommandContainer } from '../../../System/contextMenuCommands/com
 import { SortByNameCommand } from '../../../System/contextMenuCommands/commands/sortByNameCommand';
 import { isEventOriginatedFromWithinTargetIdSubtree } from '../../../services/EventService';
 import { DesktopSortOptions, setItemPositions } from '../../../services/DesktopItemPlacementService';
+import DesktopItemComponent from '../item/DesktopItemComponent';
+import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxComponent';
 
 const DesktopItemContainerComponent: FC<{
   files: ExplorerFile[],
@@ -44,15 +44,38 @@ const DesktopItemContainerComponent: FC<{
   const onContextMenuClick = (event: MouseEvent) => {
     const commands =  [
       new NewItemCommandContainer([
-        new NewFolderCommand(() => console.log('add folder'))
+        new NewFolderCommand(() => addFolder(event.clientY, event.clientX))
       ]),        
       new SortCommandContainer([
-        new SortByNameCommand(() => setDesktopItems(currentItems => [...setItemPositions(currentItems, DesktopSortOptions.name)]))
+        new SortByNameCommand(() => setDesktopItems(currentItems => 
+          [...setItemPositions(currentItems, DesktopSortOptions.name)]))
       ])
     ];
       
     onDesktopContextMenuClick(event, commands);
   };
+
+  const addFolder = (top: number, left: number) => {
+
+    setDesktopItems(currentItems => {
+      const newItemName = getNewItemName(currentItems);
+      console.log({ newItemName })
+
+      return currentItems;
+    });
+
+    // Create new DesktopItem
+
+    // Find available name 
+
+    // set it as being renamed
+
+    // somehow catch when it's renamed (either by click or enter)
+    // (what about letting the item tell the container when a file is renamed and then the container 
+    // tells the parent that this file was either renamed and if its id doesn't show up in the desktop's 
+    // children then you ahve to add it )
+
+  }
 
   const onMouseDown = (event: MouseEvent) => {
     if (event.ctrlKey) { return; }
