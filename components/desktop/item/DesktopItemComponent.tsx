@@ -16,9 +16,10 @@ const DesktopItemComponent: FC<{
   ) => void,
   selectItems: (...ids: string[]) => void,
   selectItemsWithCtrl: (...ids: string[]) => void,
+  selectItemsWithShift: (id: string, ctrlKey: boolean) => void,
   handleDoubleClick: (id: string) => void,
   handleContextMenuClick: (event: MouseEvent) => void
-}> = ({ item, moveItem, selectItems, selectItemsWithCtrl, handleDoubleClick, handleContextMenuClick }) => {
+}> = ({ item, moveItem, selectItems, selectItemsWithCtrl, selectItemsWithShift, handleDoubleClick, handleContextMenuClick }) => {
 
   let distanceMouseToItemTop = 0;
   let distanceMouseToItemLeft = 0;
@@ -28,7 +29,9 @@ const DesktopItemComponent: FC<{
   };
 
   const onClick = (event: MouseEvent) => {
-    if (event.ctrlKey) {
+    if (event.shiftKey) {
+      selectItemsWithShift(item.id, event.ctrlKey);
+    } else if (event.ctrlKey) {
       selectItemsWithCtrl(item.id);
     } else if (!item.selected) {
       selectItems(item.id);

@@ -4,7 +4,7 @@ import DesktopItemComponent from '../item/DesktopItemComponent';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxComponent';
 import { placeItemsAtStartPosition, toItemWrappers } from '../../../services/desktopItemContainerService';
-import { getSelectedItemOnDragWithCtrl, moveItemsOnDesktop } from '../../../services/desktopItemContainerUiHelperService';
+import { getSelectedItemsFromSelectionBoxgWithCtrl, moveItemsOnDesktop, selectItemsWithShiftKey } from '../../../services/desktopItemContainerUiHelperService';
 import { NewFolderCommand } from '../../../System/contextMenuCommands/commands/newFolderCommand';
 import { SortCommandContainer } from '../../../System/contextMenuCommands/commandContainers/sortCommand';
 import { NewItemCommandContainer } from '../../../System/contextMenuCommands/commandContainers/newItemCommand';
@@ -86,20 +86,32 @@ const DesktopItemContainerComponent: FC<{
     });
   };
 
-  const selectItems = (...ids: string[] ) => {
-    setDesktopItems(prevItems => {
-      const updated = prevItems.map(i => ({ ...i, selected: ids.includes(i.id)}));
+  const selectItems = (...itemIds: string[] ) => {
+    setDesktopItems(currentItems => {
+      const updated = currentItems.map(i => ({ ...i, selected: itemIds.includes(i.id)}));
       return [...updated];
     });
   };
   
-  const selectItemsWithCtrl = (...ids: string[])=> {
-    setDesktopItems(prevItems => {
-      const updatedItems = prevItems.map(i => ({
+  const selectItemsWithCtrl = (...itemIds: string[])=> {
+    setDesktopItems(currentItems => {
+      const updatedItems = currentItems.map(i => ({
         ...i,
-        selected: ids.includes(i.id) ? !i.selected : i.selected
+        selected: itemIds.includes(i.id) ? !i.selected : i.selected
       }));
       return [...updatedItems];
+    });
+  }
+
+  const selectItemWithShift = (itemId: string, ctrlKey: boolean) => {
+    setDesktopItems(currentItems => {
+      const clickedItem = currentItems.find(item => item.id === itemId);
+
+      if (!clickedItem || clickedItem.selected) {
+        return currentItems;
+      }
+
+      return [...selectItemsWithShiftKey(itemId, currentItems, ctrlKey)];
     });
   }
 
@@ -115,7 +127,7 @@ const DesktopItemContainerComponent: FC<{
     }
 
     setDesktopItems(currentDesktopItems => {
-      return [...getSelectedItemOnDragWithCtrl(currentDesktopItems, selectedItemIds, previousElementInBox)];
+      return [...getSelectedItemsFromSelectionBoxgWithCtrl(currentDesktopItems, selectedItemIds, previousElementInBox)];
     });
   };
 
@@ -129,6 +141,7 @@ const DesktopItemContainerComponent: FC<{
               moveItem={moveItem}
               selectItems={selectItems}
               selectItemsWithCtrl={selectItemsWithCtrl}
+              selectItemsWithShift={selectItemWithShift}
               handleDoubleClick={handleItemDoubleClick}
               handleContextMenuClick={event => onItemContextMenuClick(event)}
             />
