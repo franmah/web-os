@@ -73,4 +73,100 @@ const isItemOverlapingOtherItems = (i1Top: number, i1Left: number, i2: DesktopIt
     (left && (bottom || top)) ||
     (right && (bottom || top))    
   );
+};
+
+// TODO: doesn't work exactly like windows.
+// Items in box should be !selected. 
+// Was unable to implement it because too many events triggered for useState to follow.
+export const getSelectedItemsFromSelectionBoxgWithCtrl = (
+  currentDesktopItems: DesktopItem[],
+  selectedItemIds: string[],
+  previousElementInBox: HTMLElement[],
+ ): DesktopItem[] => {
+  
+  const previouslySelectedItemIds = previousElementInBox.map(element => element.id);
+
+  const updatedItems = currentDesktopItems.map(i => {
+    let selected = i.selected;
+
+    if (selectedItemIds.includes(i.id)) {
+      selected = true;
+    } 
+    // Unselect item if it was in box but is not anymore.
+    else if (previouslySelectedItemIds.includes(i.id)) { 
+      selected = false;
+    }
+
+    return {
+      ...i,
+      selected
+    };
+  });
+
+  return updatedItems; 
+};
+
+/**
+ * Select items that are between the most top left selected item and the clicked item,
+ * from the left of the top item to the right of the bottom item, from top to bottom.
+ * @param clickedItemId 
+ * @param items 
+ * @returns 
+ */
+export const selectItemsWithShiftKey = (clickedItemId: string, items: DesktopItem[], ctrlKey: boolean): DesktopItem[] => {
+  const clickedItem = items.find(i => i.id === clickedItemId) as DesktopItem;
+
+  if (!clickedItem) { throw Error('Select items with shift key: No clicked item.'); }
+
+  const mostTopLeftSelectedItem = getMostTopLeftSelectedItem(items);
+
+  if (!mostTopLeftSelectedItem) {
+    clickedItem.selected = true;
+    return items;
+  }
+
+  const topItem = mostTopLeftSelectedItem.top < clickedItem.top ? mostTopLeftSelectedItem : clickedItem;
+  const bottomItem = topItem.id === clickedItem.id ? mostTopLeftSelectedItem : clickedItem;
+
+  const updatedItems: DesktopItem[] = items.map(item => ({
+      ...item,
+      selected:
+        isItemBetweenSelectedAndClicked(topItem, bottomItem, item) ||
+        (ctrlKey && item.selected)
+    })
+  );
+
+  return [...updatedItems];
+};
+
+const isItemBetweenSelectedAndClicked = (topItem: DesktopItem, bottomItem: DesktopItem, item: DesktopItem): boolean => {
+  return (
+    topItem.top < item.top && item.top < bottomItem.top || // height between both selected and clicked.
+    ( 
+      (item.left >= topItem.left && item.top === topItem.top ) || // to the right of top item
+      (item.left <= bottomItem.left && item.top === bottomItem.top)// to the left of bottom item
+    )
+  );
 }
+
+const getMostTopLeftSelectedItem = (items: DesktopItem[]): DesktopItem | null => {
+  const startItem = items.find(i => i.selected);
+
+  if (!startItem) {
+    return null;
+  }
+
+  return items.reduce((neededItem, item) => {
+    if (!item.selected) {
+      return neededItem;
+    } else if (!neededItem) {
+      return item;
+    } else if (item.top < neededItem.top) {
+      return item;
+    } else if (item.top === neededItem.top && item.left < neededItem.left) {
+      return item;
+    }
+
+    return neededItem;
+  }, startItem);
+};
