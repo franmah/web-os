@@ -110,8 +110,8 @@ const DesktopItemComponent: FC<{
         width: ITEM_WIDTH
       }}
     >
-      <Image src={item.iconPath} alt={'icon'} width={60} height={60}/>
-      { formatItemName(item.name) }
+      <Image src={item.iconPath} alt={'icon'} width={40} height={40}/>
+      <div> { formatItemName(item.name) } </div>
     </div>
   );
 };
