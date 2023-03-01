@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from 'react';
 import styles from './desktop-item.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import { ITEM_HEIGHT, ITEM_WIDTH, MAX_ITEM_HEIGHT, SHORTENED_NAME_LENGTH } from '../../../constants/DesktopConsts';
+import { ITEM_HEIGHT, ITEM_WIDTH, SHORTENED_NAME_LENGTH } from '../../../constants/DesktopConsts';
 
 const DesktopItemComponent: FC<{
   item: DesktopItem,
@@ -96,7 +96,8 @@ const DesktopItemComponent: FC<{
     if (item.renaming) {
       textareaElement = document.getElementById(INPUT_ID);
       document.addEventListener('mousedown', onMouseDown);
-      document.addEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming())
+      document.addEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming());
+      resizeTextArea();
     }
 
     return () => {
@@ -139,7 +140,10 @@ const DesktopItemComponent: FC<{
 
   const onTextareaChange = (event: any) => {
     setInputNameValue(() => event?.target?.value);
+    resizeTextArea();   
+  };
 
+  const resizeTextArea = () => {
     // Resize textarea height
     if (textareaElement) {
       textareaElement.style.height = textareaElement.scrollHeight + 'px';
@@ -152,9 +156,9 @@ const DesktopItemComponent: FC<{
       draggable={!item.renaming}
       className={getClass()}
       style={{
-        maxHeight: item.selected ? MAX_ITEM_HEIGHT : ITEM_HEIGHT, 
         left: item.left,
         top: item.top,
+        minHeight: ITEM_HEIGHT,
         width: ITEM_WIDTH
       }}
     >
