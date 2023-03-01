@@ -19,7 +19,8 @@ const DesktopItemComponent: FC<{
   selectItemsWithShift: (id: string, ctrlKey: boolean) => void,
   handleDoubleClick: (id: string) => void,
   handleContextMenuClick: (event: MouseEvent) => void,
-  handleItemRenamed: (itemId: string, itemNewName: string) => void
+  handleItemRenamed: (itemId: string, itemNewName: string) => void,
+  startRenaming: (itemId: string) => void
 }> = ({
   item,
   moveItem,
@@ -28,16 +29,47 @@ const DesktopItemComponent: FC<{
   selectItemsWithShift,
   handleDoubleClick,
   handleContextMenuClick,
-  handleItemRenamed
+  handleItemRenamed,
+  startRenaming
 }) => {
 
   const [inputNameValue, setInputNameValue] = useState<string>(item.name);
   
   const INPUT_ID = item.id + '_input';
+  const TEXT_ID = item.id + '_text';
 
   let distanceMouseToItemTop = 0;
   let distanceMouseToItemLeft = 0;
   let textareaElement: HTMLElement | null;
+
+  useEffect(() => {
+    const el = document.getElementById(item.id);
+    if (!el) return;
+
+    el.addEventListener('dragend', onDragEnd);
+    el.addEventListener('click', onClick);
+    el.addEventListener('dblclick', onDoubleClick);
+    el.addEventListener('dragstart', onDragStart);
+
+    if (item.renaming) {
+      textareaElement = document.getElementById(INPUT_ID);
+      document.addEventListener('mousedown', onMouseDown);
+      document.addEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming());
+      resizeTextArea();
+    }
+
+    return () => {
+      el.removeEventListener('dragend', onDragEnd);
+      el.removeEventListener('click', onClick);
+      el.removeEventListener('dblclick', onDoubleClick);
+      el.removeEventListener('dragstart', onDragStart);
+
+      if (item.renaming) {
+        document.removeEventListener('mousedown', onMouseDown);
+        document.removeEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming())
+    }
+    };
+  }), [];
 
   const onDoubleClick = (event: MouseEvent) => {
     handleDoubleClick(item.id);
@@ -73,46 +105,16 @@ const DesktopItemComponent: FC<{
   };
 
   const onMouseDown = (event: any) => {
-    if (event?.target?.id !== INPUT_ID) {
+    if (event?.target?.id !== INPUT_ID && event?.target?.id !==  TEXT_ID) {
       onItemDoneRenaming();
     }
-  }
+  };
 
   const onItemDoneRenaming = () => {
     if (inputNameValue && inputNameValue.trim() !== '') {
       handleItemRenamed(item.id, inputNameValue.trim());
     }
-  }
-
-  useEffect(() => {
-    const el = document.getElementById(item.id);
-    if (!el) return;
-
-    el.addEventListener('dragend', onDragEnd);
-    el.addEventListener('click', onClick);
-    el.addEventListener('dblclick', onDoubleClick);
-    el.addEventListener('dragstart', onDragStart);
-
-    if (item.renaming) {
-      textareaElement = document.getElementById(INPUT_ID);
-      document.addEventListener('mousedown', onMouseDown);
-      document.addEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming());
-      resizeTextArea();
-    }
-
-    return () => {
-      el.removeEventListener('dragend', onDragEnd);
-      el.removeEventListener('click', onClick);
-      el.removeEventListener('dblclick', onDoubleClick);
-      el.removeEventListener('dragstart', onDragStart);
-
-      
-      if (item.renaming) {
-        document.removeEventListener('mousedown', onMouseDown);
-        document.removeEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming())
-    }
-    };
-  }), [];
+  };
 
   const formatItemName = (name: string): string => {
     if (item.selected || item.name.length <= SHORTENED_NAME_LENGTH)
@@ -120,6 +122,12 @@ const DesktopItemComponent: FC<{
 
     const shortenedName = name.substring(0, SHORTENED_NAME_LENGTH);
     return shortenedName + '...';
+  };
+
+  const onItemNameClick = () => {
+    if (item.selected) {
+      startRenaming(item.id);
+    }
   };
 
   const getDestopItemNewPositionRelativeToMouse = (event: any,
@@ -178,7 +186,7 @@ const DesktopItemComponent: FC<{
 
           :
 
-          <div> { formatItemName(item.name) } </div>
+          <div id={TEXT_ID} onClick={onItemNameClick}> { formatItemName(item.name) } </div>
       }
 
     </div>

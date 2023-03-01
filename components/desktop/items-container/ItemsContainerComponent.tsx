@@ -180,6 +180,15 @@ const DesktopItemContainerComponent: FC<{
     }
   };
 
+  const handleItemRenaming = (itemId: string) => {
+    setDesktopItems(currentItems => {
+      return currentItems.map(i => ({
+        ...i,
+        renaming: i.id === itemId 
+      }))
+    });
+  };
+
   return (
     <Fragment>
       {
@@ -194,6 +203,7 @@ const DesktopItemContainerComponent: FC<{
             handleDoubleClick={handleItemDoubleClick}
             handleContextMenuClick={event => onItemContextMenuClick(event)}
             handleItemRenamed={onItemRenamed}
+            startRenaming={handleItemRenaming}
           />
         )
       }
