@@ -41,22 +41,26 @@ const SelectionBoxComponent: FC<{
   }, [selectionBox]);
   
   const onMouseDown = (event: any) => {
-    if (event.which === 2 || event.which === 3) {
-      return; // Only trigger on left click.
-    }
-
-    const target = event?.originalTarget?.id;
-    if (target === targetElementId) {
-       setSelectionBox({
-        ...selectionBox,
-        active: true,
-        left: +event.clientX,
-        startX: +event.clientX,
-        startY: +event.clientY,
-        top: +event.clientY,
-        border: '1px solid #0078d7'
-      });
-    }
+    try {
+      if (event.which === 2 || event.which === 3) {
+        return; // Only trigger on left click.
+      }
+  
+      const target = event?.target?.id;
+      if (target === targetElementId) {
+         setSelectionBox({
+          ...selectionBox,
+          active: true,
+          left: +event.clientX,
+          startX: +event.clientX,
+          startY: +event.clientY,
+          top: +event.clientY,
+          border: '1px solid #0078d7'
+        });
+      }
+    } catch (error) {
+      console.warn(`Error in selection box component mouse down:\n${error}`);
+    }   
   };
 
   const onMouseUp = () => {

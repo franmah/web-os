@@ -4,5 +4,6 @@ export type DesktopItem = {
   name: string,
   top: number,
   selected: boolean,
+  renaming: boolean,
   id: string
 }

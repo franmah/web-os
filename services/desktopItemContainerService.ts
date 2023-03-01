@@ -13,6 +13,7 @@ export const toItemWrappers = (files: ExplorerFile[]): DesktopItem[] => {
       name: file.name,
       selected: false,
       top: 0,
+      renaming: false
     } as DesktopItem)
   ) || [];
 };

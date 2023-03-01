@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styles from './desktop-item.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
@@ -18,8 +18,22 @@ const DesktopItemComponent: FC<{
   selectItemsWithCtrl: (...ids: string[]) => void,
   selectItemsWithShift: (id: string, ctrlKey: boolean) => void,
   handleDoubleClick: (id: string) => void,
-  handleContextMenuClick: (event: MouseEvent) => void
-}> = ({ item, moveItem, selectItems, selectItemsWithCtrl, selectItemsWithShift, handleDoubleClick, handleContextMenuClick }) => {
+  handleContextMenuClick: (event: MouseEvent) => void,
+  handleItemRenamed: (itemId: string, itemNewName: string) => void
+}> = ({
+  item,
+  moveItem,
+  selectItems,
+  selectItemsWithCtrl,
+  selectItemsWithShift,
+  handleDoubleClick,
+  handleContextMenuClick,
+  handleItemRenamed
+}) => {
+
+  const [inputNameValue, setInputNameValue] = useState<string>(item.name);
+  
+  const INPUT_ID = item.id + '_input';
 
   let distanceMouseToItemTop = 0;
   let distanceMouseToItemLeft = 0;
@@ -57,8 +71,14 @@ const DesktopItemComponent: FC<{
     handleContextMenuClick(event);
   };
 
+  const onMouseDown = (event: any) => {
+    if (event?.target?.id !== INPUT_ID) {
+      handleItemRenamed(item.id, inputNameValue);
+    }
+  }
+
   useEffect(() => {
-    const el = document.getElementById(item.name);
+    const el = document.getElementById(item.id);
     if (!el) return;
 
     el.addEventListener('dragend', onDragEnd);
@@ -66,11 +86,20 @@ const DesktopItemComponent: FC<{
     el.addEventListener('dblclick', onDoubleClick);
     el.addEventListener('dragstart', onDragStart);
 
+    if (item.renaming) {
+      document.addEventListener('mousedown', onMouseDown);
+    }
+
     return () => {
       el.removeEventListener('dragend', onDragEnd);
       el.removeEventListener('click', onClick);
       el.removeEventListener('dblclick', onDoubleClick);
       el.removeEventListener('dragstart', onDragStart);
+
+      
+      if (item.renaming) {
+        document.removeEventListener('mousedown', onMouseDown);
+      }
     };
   }), [];
 
@@ -98,10 +127,14 @@ const DesktopItemComponent: FC<{
       ' ' + selectionClass;
   };
 
+  const handleName = (event: any) => {
+    setInputNameValue(() => event?.target?.value);
+  }
+
   return (
     <div
-      id={item.name}
-      draggable="true"
+      id={item.id}
+      draggable={!item.renaming}
       className={getClass()}
       style={{
         maxHeight: item.selected ? MAX_ITEM_HEIGHT : ITEM_HEIGHT, 
@@ -110,8 +143,15 @@ const DesktopItemComponent: FC<{
         width: ITEM_WIDTH
       }}
     >
+
       <Image src={item.iconPath} alt={'icon'} width={40} height={40}/>
-      <div> { formatItemName(item.name) } </div>
+
+      {
+        item.renaming ?
+          <input id={INPUT_ID} type='text' value={inputNameValue} onChange={handleName}></input> :
+          <div> { formatItemName(item.name) } </div>
+      }
+
     </div>
   );
 };
