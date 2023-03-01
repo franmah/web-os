@@ -98,6 +98,7 @@ const DesktopItemComponent: FC<{
 
       
       if (item.renaming) {
+        
         document.removeEventListener('mousedown', onMouseDown);
       }
     };
@@ -148,7 +149,15 @@ const DesktopItemComponent: FC<{
 
       {
         item.renaming ?
-          <input id={INPUT_ID} type='text' value={inputNameValue} onChange={handleName}></input> :
+          <input
+            id={INPUT_ID}
+            type='text'
+            autoFocus
+            onFocus={(event) => event.target.select()}
+            value={inputNameValue}
+            onChange={handleName}
+          >            
+          </input> :
           <div> { formatItemName(item.name) } </div>
       }
 
