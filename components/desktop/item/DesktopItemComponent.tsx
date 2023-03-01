@@ -37,6 +37,7 @@ const DesktopItemComponent: FC<{
 
   let distanceMouseToItemTop = 0;
   let distanceMouseToItemLeft = 0;
+  let textareaElement: HTMLElement | null;
 
   const onDoubleClick = (event: any) => {
     handleDoubleClick(item.id);
@@ -72,7 +73,15 @@ const DesktopItemComponent: FC<{
   };
 
   const onMouseDown = (event: any) => {
+    console.log('mouse down')
     if (event?.target?.id !== INPUT_ID) {
+      onItemDoneRenaming();
+    }
+  }
+
+  const onItemDoneRenaming = () => {
+    if (inputNameValue && inputNameValue !== '') {
+      console.log('item: ' + inputNameValue)
       handleItemRenamed(item.id, inputNameValue);
     }
   }
@@ -87,6 +96,7 @@ const DesktopItemComponent: FC<{
     el.addEventListener('dragstart', onDragStart);
 
     if (item.renaming) {
+      textareaElement = document.getElementById(INPUT_ID);
       document.addEventListener('mousedown', onMouseDown);
     }
 
@@ -98,7 +108,6 @@ const DesktopItemComponent: FC<{
 
       
       if (item.renaming) {
-        
         document.removeEventListener('mousedown', onMouseDown);
       }
     };
@@ -128,8 +137,13 @@ const DesktopItemComponent: FC<{
       ' ' + selectionClass;
   };
 
-  const handleName = (event: any) => {
+  const handleInputName = (event: any) => {
     setInputNameValue(() => event?.target?.value);
+
+    // Resize textarea height
+    if (textareaElement) {
+      textareaElement.style.height = textareaElement.scrollHeight + 'px';
+    }
   }
 
   return (
@@ -149,15 +163,14 @@ const DesktopItemComponent: FC<{
 
       {
         item.renaming ?
-          <input
+          <textarea
             id={INPUT_ID}
-            type='text'
             autoFocus
-            onFocus={(event) => event.target.select()}
+            onFocus={event => event?.target?.select()}
             value={inputNameValue}
-            onChange={handleName}
+            onChange={handleInputName}
           >            
-          </input> :
+          </textarea> :
           <div> { formatItemName(item.name) } </div>
       }
 

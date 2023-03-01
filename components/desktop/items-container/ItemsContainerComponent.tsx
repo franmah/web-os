@@ -83,7 +83,12 @@ const DesktopItemContainerComponent: FC<{
   };
 
   const onItemRenamed = (itemId: string, itemNewName: string) => {
+    console.log('container: ' + itemNewName)
     setDesktopItems(currentItems => {
+      if (!itemNewName || itemNewName === '') {
+        return currentItems;
+      }
+
       const isNameAlreadyUsed = currentItems.find(i => i.name === itemNewName && i.id !== itemId);
 
       if (!isNameAlreadyUsed) {
