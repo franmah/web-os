@@ -1,9 +1,7 @@
-import { ExplorerFile } from '../../../types/ExplorerElement';
+import { ExplorerFile } from '../../../types/system/file/ExplorerElement';
 import { FC, Fragment, useEffect, useState } from 'react';
-import DesktopItemComponent from '../item/DesktopItemComponent';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxComponent';
-import { toItemWrappers } from '../../../services/desktopItemContainerService';
+import { DEFAULT_FOLDER_ICON_PATH, getNewItemName, toItemWrappers } from '../../../services/desktopItemContainerService';
 import { getSelectedItemsFromSelectionBoxgWithCtrl, moveItemsOnDesktop, selectItemsWithShiftKey } from '../../../services/desktopItemContainerUiHelperService';
 import { NewFolderCommand } from '../../../System/contextMenuCommands/commands/newFolderCommand';
 import { SortCommandContainer } from '../../../System/contextMenuCommands/commandContainers/sortCommand';
@@ -11,12 +9,17 @@ import { NewItemCommandContainer } from '../../../System/contextMenuCommands/com
 import { SortByNameCommand } from '../../../System/contextMenuCommands/commands/sortByNameCommand';
 import { isEventOriginatedFromWithinTargetIdSubtree } from '../../../services/EventService';
 import { DesktopSortOptions, setItemPositions } from '../../../services/DesktopItemPlacementService';
+import DesktopItemComponent from '../item/DesktopItemComponent';
+import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxComponent';
+import { v4 } from 'uuid';
+import { ContextMenuCommandList } from '../../../types/system/contextMenu/contextMenu';
 
 const DesktopItemContainerComponent: FC<{
   files: ExplorerFile[],
-  onDesktopContextMenuClick: Function,
-  onItemContextMenuClick: Function
-}> = ({ files, onDesktopContextMenuClick, onItemContextMenuClick }) => {
+  onDesktopContextMenuClick: (event: MouseEvent, commands: ContextMenuCommandList) => void,
+  onItemContextMenuClick: (event: MouseEvent) => void,
+  onFileChange: (newItem: DesktopItem) => void
+}> = ({ files, onDesktopContextMenuClick, onItemContextMenuClick, onFileChange }) => {
 
   const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
 
@@ -44,14 +47,61 @@ const DesktopItemContainerComponent: FC<{
   const onContextMenuClick = (event: MouseEvent) => {
     const commands =  [
       new NewItemCommandContainer([
-        new NewFolderCommand(() => console.log('add folder'))
+        new NewFolderCommand(() => addFolder(event.clientY, event.clientX))
       ]),        
       new SortCommandContainer([
-        new SortByNameCommand(() => setDesktopItems(currentItems => [...setItemPositions(currentItems, DesktopSortOptions.name)]))
+        new SortByNameCommand(() => setDesktopItems(currentItems => 
+          [...setItemPositions(currentItems, DesktopSortOptions.name)]))
       ])
     ];
       
     onDesktopContextMenuClick(event, commands);
+  };
+
+  const addFolder = (top: number, left: number) => {
+
+    setDesktopItems(currentItems => {
+      const newItemName = getNewItemName(currentItems);
+
+      const item: DesktopItem = {
+        top,
+        left,
+        name: newItemName,
+        iconPath: DEFAULT_FOLDER_ICON_PATH,
+        selected: false,
+        id: v4(),
+        renaming: true
+      };
+
+      return [...currentItems, item];
+    });
+  };
+
+  const onItemRenamed = (itemId: string, itemNewName: string) => {
+    setDesktopItems(currentItems => {
+      if (!itemNewName || itemNewName.trim() === '') {
+        return currentItems;
+      }
+
+      const isNameAlreadyUsed = currentItems.find(i => i.name === itemNewName && i.id !== itemId);
+
+      if (!isNameAlreadyUsed) {
+        const updatedItems: DesktopItem[] = currentItems.map(i => ({
+          ...i,
+          name: i.id === itemId ? itemNewName : i.name,
+          renaming: false,
+          selected: i.id === itemId
+        }));
+
+        const newItem = updatedItems.find(i => i.id === itemId) as DesktopItem;
+
+        onFileChange(newItem);
+        
+        return [...updatedItems];
+      }
+
+      return currentItems;
+    });
   };
 
   const onMouseDown = (event: MouseEvent) => {
@@ -63,7 +113,8 @@ const DesktopItemContainerComponent: FC<{
       return;
     } 
 
-    // If mousedown is from an item then don't unselect
+    // TODO: is that even used?
+    // If mousedown event comes from an item then don't unselect
     const isEventFromAnyItem = desktopItems.some(item => 
       isEventOriginatedFromWithinTargetIdSubtree(event, item.id)
     );
@@ -115,38 +166,37 @@ const DesktopItemContainerComponent: FC<{
     });
   }
 
-  const handleItemDoubleClick = (itemId: string) => {
-    console.log('received double click from item');
-  };
+  const handleItemDoubleClick = (itemId: string) => {  };
   
   const handleSelectionBoxUpdates = (elements: HTMLElement[], previousElementInBox: HTMLElement[], ctrlKey: boolean) => {
     const selectedItemIds = elements.map(element => element.id);
 
     if (!ctrlKey) {
-      return selectItems(...selectedItemIds);
+      selectItems(...selectedItemIds);
+    } else {
+      setDesktopItems(currentDesktopItems => {
+        return [...getSelectedItemsFromSelectionBoxgWithCtrl(currentDesktopItems, selectedItemIds, previousElementInBox)];
+      });
     }
-
-    setDesktopItems(currentDesktopItems => {
-      return [...getSelectedItemsFromSelectionBoxgWithCtrl(currentDesktopItems, selectedItemIds, previousElementInBox)];
-    });
   };
 
   return (
     <Fragment>
-        {desktopItems.map((item, index) =>
-          (
-            <DesktopItemComponent
-              key={index}
-              item={item}
-              moveItem={moveItem}
-              selectItems={selectItems}
-              selectItemsWithCtrl={selectItemsWithCtrl}
-              selectItemsWithShift={selectItemWithShift}
-              handleDoubleClick={handleItemDoubleClick}
-              handleContextMenuClick={event => onItemContextMenuClick(event)}
-            />
-          )
-        )}
+      {
+        desktopItems.map((item, index) =>
+          <DesktopItemComponent
+            key={index}
+            item={item}
+            moveItem={moveItem}
+            selectItems={selectItems}
+            selectItemsWithCtrl={selectItemsWithCtrl}
+            selectItemsWithShift={selectItemWithShift}
+            handleDoubleClick={handleItemDoubleClick}
+            handleContextMenuClick={event => onItemContextMenuClick(event)}
+            handleItemRenamed={onItemRenamed}
+          />
+        )
+      }
 
       <SelectionBoxComponent 
         emitSelectedItemsUpdate={handleSelectionBoxUpdates}

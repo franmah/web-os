@@ -1,9 +1,9 @@
 import Image from 'next/image';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styles from './desktop-item.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import { ITEM_HEIGHT, ITEM_WIDTH, MAX_ITEM_HEIGHT, SHORTENED_NAME_LENGTH } from '../../../constants/DesktopConsts';
+import { ITEM_HEIGHT, ITEM_WIDTH, SHORTENED_NAME_LENGTH } from '../../../constants/DesktopConsts';
 
 const DesktopItemComponent: FC<{
   item: DesktopItem,
@@ -18,13 +18,28 @@ const DesktopItemComponent: FC<{
   selectItemsWithCtrl: (...ids: string[]) => void,
   selectItemsWithShift: (id: string, ctrlKey: boolean) => void,
   handleDoubleClick: (id: string) => void,
-  handleContextMenuClick: (event: MouseEvent) => void
-}> = ({ item, moveItem, selectItems, selectItemsWithCtrl, selectItemsWithShift, handleDoubleClick, handleContextMenuClick }) => {
+  handleContextMenuClick: (event: MouseEvent) => void,
+  handleItemRenamed: (itemId: string, itemNewName: string) => void
+}> = ({
+  item,
+  moveItem,
+  selectItems,
+  selectItemsWithCtrl,
+  selectItemsWithShift,
+  handleDoubleClick,
+  handleContextMenuClick,
+  handleItemRenamed
+}) => {
+
+  const [inputNameValue, setInputNameValue] = useState<string>(item.name);
+  
+  const INPUT_ID = item.id + '_input';
 
   let distanceMouseToItemTop = 0;
   let distanceMouseToItemLeft = 0;
+  let textareaElement: HTMLElement | null;
 
-  const onDoubleClick = (event: any) => {
+  const onDoubleClick = (event: MouseEvent) => {
     handleDoubleClick(item.id);
   };
 
@@ -33,7 +48,7 @@ const DesktopItemComponent: FC<{
       selectItemsWithShift(item.id, event.ctrlKey);
     } else if (event.ctrlKey) {
       selectItemsWithCtrl(item.id);
-    } else if (!item.selected) {
+    } else {
       selectItems(item.id);
     }
   };
@@ -57,8 +72,20 @@ const DesktopItemComponent: FC<{
     handleContextMenuClick(event);
   };
 
+  const onMouseDown = (event: any) => {
+    if (event?.target?.id !== INPUT_ID) {
+      onItemDoneRenaming();
+    }
+  }
+
+  const onItemDoneRenaming = () => {
+    if (inputNameValue && inputNameValue.trim() !== '') {
+      handleItemRenamed(item.id, inputNameValue.trim());
+    }
+  }
+
   useEffect(() => {
-    const el = document.getElementById(item.name);
+    const el = document.getElementById(item.id);
     if (!el) return;
 
     el.addEventListener('dragend', onDragEnd);
@@ -66,11 +93,24 @@ const DesktopItemComponent: FC<{
     el.addEventListener('dblclick', onDoubleClick);
     el.addEventListener('dragstart', onDragStart);
 
+    if (item.renaming) {
+      textareaElement = document.getElementById(INPUT_ID);
+      document.addEventListener('mousedown', onMouseDown);
+      document.addEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming());
+      resizeTextArea();
+    }
+
     return () => {
       el.removeEventListener('dragend', onDragEnd);
       el.removeEventListener('click', onClick);
       el.removeEventListener('dblclick', onDoubleClick);
       el.removeEventListener('dragstart', onDragStart);
+
+      
+      if (item.renaming) {
+        document.removeEventListener('mousedown', onMouseDown);
+        document.removeEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming())
+    }
     };
   }), [];
 
@@ -98,20 +138,49 @@ const DesktopItemComponent: FC<{
       ' ' + selectionClass;
   };
 
+  const onTextareaChange = (event: any) => {
+    setInputNameValue(() => event?.target?.value);
+    resizeTextArea();   
+  };
+
+  const resizeTextArea = () => {
+    // Resize textarea height
+    if (textareaElement) {
+      textareaElement.style.height = textareaElement.scrollHeight + 'px';
+    }
+  };
+
   return (
     <div
-      id={item.name}
-      draggable="true"
+      id={item.id}
+      draggable={!item.renaming}
       className={getClass()}
       style={{
-        maxHeight: item.selected ? MAX_ITEM_HEIGHT : ITEM_HEIGHT, 
         left: item.left,
         top: item.top,
+        minHeight: ITEM_HEIGHT,
         width: ITEM_WIDTH
       }}
     >
+
       <Image src={item.iconPath} alt={'icon'} width={40} height={40}/>
-      <div> { formatItemName(item.name) } </div>
+
+      {
+        item.renaming ?
+          <textarea
+            id={INPUT_ID}
+            autoFocus
+            onFocus={event => event?.target?.select()}
+            value={inputNameValue}
+            onChange={onTextareaChange}
+          >            
+          </textarea>
+
+          :
+
+          <div> { formatItemName(item.name) } </div>
+      }
+
     </div>
   );
 };
