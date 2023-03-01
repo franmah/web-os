@@ -84,7 +84,7 @@ const DesktopItemContainerComponent: FC<{
 
   const onItemRenamed = (itemId: string, itemNewName: string) => {
     setDesktopItems(currentItems => {
-      if (!itemNewName || itemNewName === '') {
+      if (!itemNewName || itemNewName.trim() === '') {
         return currentItems;
       }
 
@@ -106,7 +106,6 @@ const DesktopItemContainerComponent: FC<{
   };
 
   const onMouseDown = (event: MouseEvent) => {
-    console.log('mouse down')
     if (event.ctrlKey) { return; }
 
     // If mousedown is on desktop unselect all items.
@@ -168,9 +167,7 @@ const DesktopItemContainerComponent: FC<{
     });
   }
 
-  const handleItemDoubleClick = (itemId: string) => {
-    console.log('received double click from item');
-  };
+  const handleItemDoubleClick = (itemId: string) => {  };
   
   const handleSelectionBoxUpdates = (elements: HTMLElement[], previousElementInBox: HTMLElement[], ctrlKey: boolean) => {
     const selectedItemIds = elements.map(element => element.id);

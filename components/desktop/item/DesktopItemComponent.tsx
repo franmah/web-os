@@ -79,9 +79,8 @@ const DesktopItemComponent: FC<{
   }
 
   const onItemDoneRenaming = () => {
-    if (inputNameValue && inputNameValue !== '') {
-      console.log('item: ' + inputNameValue)
-      handleItemRenamed(item.id, inputNameValue);
+    if (inputNameValue && inputNameValue.trim() !== '') {
+      handleItemRenamed(item.id, inputNameValue.trim());
     }
   }
 
@@ -97,6 +96,7 @@ const DesktopItemComponent: FC<{
     if (item.renaming) {
       textareaElement = document.getElementById(INPUT_ID);
       document.addEventListener('mousedown', onMouseDown);
+      document.addEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming())
     }
 
     return () => {
@@ -108,7 +108,8 @@ const DesktopItemComponent: FC<{
       
       if (item.renaming) {
         document.removeEventListener('mousedown', onMouseDown);
-      }
+        document.removeEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming())
+    }
     };
   }), [];
 
@@ -136,14 +137,14 @@ const DesktopItemComponent: FC<{
       ' ' + selectionClass;
   };
 
-  const handleInputName = (event: any) => {
+  const onTextareaChange = (event: any) => {
     setInputNameValue(() => event?.target?.value);
 
     // Resize textarea height
     if (textareaElement) {
       textareaElement.style.height = textareaElement.scrollHeight + 'px';
     }
-  }
+  };
 
   return (
     <div
@@ -167,9 +168,12 @@ const DesktopItemComponent: FC<{
             autoFocus
             onFocus={event => event?.target?.select()}
             value={inputNameValue}
-            onChange={handleInputName}
+            onChange={onTextareaChange}
           >            
-          </textarea> :
+          </textarea>
+
+          :
+
           <div> { formatItemName(item.name) } </div>
       }
 
