@@ -1,4 +1,4 @@
-import { ExplorerFile } from "../types/ExplorerElement";
+import { ExplorerFile } from "../types/system/file/ExplorerElement";
 
 export const getExampleDesktopChildren = (desktop: ExplorerFile): ExplorerFile[] => [
   {

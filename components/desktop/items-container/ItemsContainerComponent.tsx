@@ -1,4 +1,4 @@
-import { ExplorerFile } from '../../../types/ExplorerElement';
+import { ExplorerFile } from '../../../types/system/file/ExplorerElement';
 import { FC, Fragment, useEffect, useState } from 'react';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { DEFAULT_FOLDER_ICON_PATH, getNewItemName, toItemWrappers } from '../../../services/desktopItemContainerService';
@@ -12,12 +12,14 @@ import { DesktopSortOptions, setItemPositions } from '../../../services/DesktopI
 import DesktopItemComponent from '../item/DesktopItemComponent';
 import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxComponent';
 import { v4 } from 'uuid';
+import { ContextMenuCommandList } from '../../../types/system/contextMenu/contextMenu';
 
 const DesktopItemContainerComponent: FC<{
   files: ExplorerFile[],
-  onDesktopContextMenuClick: Function,
-  onItemContextMenuClick: Function
-}> = ({ files, onDesktopContextMenuClick, onItemContextMenuClick }) => {
+  onDesktopContextMenuClick: (event: MouseEvent, commands: ContextMenuCommandList) => void,
+  onItemContextMenuClick: (event: MouseEvent) => void,
+  onFileChange: (newItem: DesktopItem) => void
+}> = ({ files, onDesktopContextMenuClick, onItemContextMenuClick, onFileChange }) => {
 
   const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
 
@@ -71,13 +73,6 @@ const DesktopItemContainerComponent: FC<{
         renaming: true
       };
 
-      /*
-       - Check that name is valid (no duplicate or weird symbol)
-       - let desktop component know about item so that it can add it to the file system:
-        calls onDesktopItemFileChanged in desktop component and if its id doesn't show up in the desktop's 
-        children then you havee to create a new file in the system.
-      */
-
       return [...currentItems, item];
     });
   };
@@ -91,12 +86,16 @@ const DesktopItemContainerComponent: FC<{
       const isNameAlreadyUsed = currentItems.find(i => i.name === itemNewName && i.id !== itemId);
 
       if (!isNameAlreadyUsed) {
-        const updatedItems = currentItems.map(i => ({
+        const updatedItems: DesktopItem[] = currentItems.map(i => ({
           ...i,
           name: i.id === itemId ? itemNewName : i.name,
           renaming: false,
           selected: i.id === itemId
-        }))
+        }));
+
+        const newItem = updatedItems.find(i => i.id === itemId) as DesktopItem;
+
+        onFileChange(newItem);
         
         return [...updatedItems];
       }

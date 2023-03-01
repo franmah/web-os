@@ -8,9 +8,11 @@ import background_2400 from '../../../assets/background_image_light_2400_2.jpg';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
 import { ProcessContext } from '../../../contexts/processContext';
 import { ContextMenuCommandList } from '../../../types/system/contextMenu/contextMenu';
+import { DesktopItem } from '../../../types/desktop/DesktopItem';
+import { ExplorerFile } from '../../../types/system/file/ExplorerElement';
 
 const Desktop: FC = () => {
-  const { getDesktop } = useContext(FileSystemContext);
+  const { getDesktop, addFile } = useContext(FileSystemContext);
   const processContext = useContext(ProcessContext);
 
   const handleItemContextMenuClick = (event: MouseEvent) => {
@@ -29,6 +31,14 @@ const Desktop: FC = () => {
     });
   };
 
+  const handleFileChange = (newItem: DesktopItem) => {
+    const oldFile = getDesktop().children?.find(file => file.id === newItem.id);
+
+    if (!oldFile) {
+      addFile(newItem.name, '', getDesktop(), newItem.id);
+    }
+  };
+
   return (
     <Fragment>
       <img
@@ -43,6 +53,7 @@ const Desktop: FC = () => {
           files={getDesktop().children}
           onDesktopContextMenuClick={handleDesktopContextMenuClick}
           onItemContextMenuClick={handleItemContextMenuClick}
+          onFileChange={handleFileChange}
         />
       </div>
     </Fragment>

@@ -1,5 +1,5 @@
 import { DesktopItem } from '../types/desktop/DesktopItem';
-import { ExplorerFile } from '../types/ExplorerElement';
+import { ExplorerFile } from '../types/system/file/ExplorerElement';
 
 const DEFAULT_FOLDER_NAME = 'New folder';
 const NEW_FOLDER_NAME_REGEX = /New folder \([2-9]+\)/g;

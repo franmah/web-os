@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { v4 } from "uuid";
 import { getExampleDesktopChildren } from "../services/FileSystemService";
-import { ExplorerFile } from "../types/ExplorerElement";
+import { ExplorerFile } from "../types/system/file/ExplorerElement";
 
 export const useFileSystemContextState = () => {
   const rootFile: ExplorerFile = {
@@ -29,7 +29,7 @@ export const useFileSystemContextState = () => {
 
   const [root, setRoot] = useState<ExplorerFile>(rootFile);
 
-  const addFile = (name: string, iconPath: string, parent: ExplorerFile | null) => {
+  const addFile = (name: string, iconPath: string, parent: ExplorerFile | null, id?: string) => {
     setRoot(root => {
 
       const file = {
@@ -37,7 +37,7 @@ export const useFileSystemContextState = () => {
         iconPath,
         parent,
         children: [],
-        id: v4()
+        id: id || v4()
       };
   
       if (parent)
