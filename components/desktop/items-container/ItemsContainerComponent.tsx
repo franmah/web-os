@@ -83,7 +83,6 @@ const DesktopItemContainerComponent: FC<{
   };
 
   const onItemRenamed = (itemId: string, itemNewName: string) => {
-    console.log('container: ' + itemNewName)
     setDesktopItems(currentItems => {
       if (!itemNewName || itemNewName === '') {
         return currentItems;
@@ -92,21 +91,22 @@ const DesktopItemContainerComponent: FC<{
       const isNameAlreadyUsed = currentItems.find(i => i.name === itemNewName && i.id !== itemId);
 
       if (!isNameAlreadyUsed) {
-          const updatedItems = currentItems.map(i => ({
-            ...i,
-            name: i.id === itemId ? itemNewName : i.name,
-            renaming: false,
-            selected: i.id === itemId
-          }))
-          
-          return [...updatedItems];
+        const updatedItems = currentItems.map(i => ({
+          ...i,
+          name: i.id === itemId ? itemNewName : i.name,
+          renaming: false,
+          selected: i.id === itemId
+        }))
+        
+        return [...updatedItems];
       }
 
       return currentItems;
-    })
+    });
   };
 
   const onMouseDown = (event: MouseEvent) => {
+    console.log('mouse down')
     if (event.ctrlKey) { return; }
 
     // If mousedown is on desktop unselect all items.
@@ -115,7 +115,8 @@ const DesktopItemContainerComponent: FC<{
       return;
     } 
 
-    // If mousedown is from an item then don't unselect
+    // TODO: is that even used?
+    // If mousedown event comes from an item then don't unselect
     const isEventFromAnyItem = desktopItems.some(item => 
       isEventOriginatedFromWithinTargetIdSubtree(event, item.id)
     );

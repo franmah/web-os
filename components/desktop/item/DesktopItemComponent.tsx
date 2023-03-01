@@ -39,7 +39,7 @@ const DesktopItemComponent: FC<{
   let distanceMouseToItemLeft = 0;
   let textareaElement: HTMLElement | null;
 
-  const onDoubleClick = (event: any) => {
+  const onDoubleClick = (event: MouseEvent) => {
     handleDoubleClick(item.id);
   };
 
@@ -48,7 +48,7 @@ const DesktopItemComponent: FC<{
       selectItemsWithShift(item.id, event.ctrlKey);
     } else if (event.ctrlKey) {
       selectItemsWithCtrl(item.id);
-    } else if (!item.selected) {
+    } else {
       selectItems(item.id);
     }
   };
@@ -73,7 +73,6 @@ const DesktopItemComponent: FC<{
   };
 
   const onMouseDown = (event: any) => {
-    console.log('mouse down')
     if (event?.target?.id !== INPUT_ID) {
       onItemDoneRenaming();
     }
