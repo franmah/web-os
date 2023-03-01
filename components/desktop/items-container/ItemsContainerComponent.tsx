@@ -9,10 +9,10 @@ import { NewItemCommandContainer } from '../../../System/contextMenuCommands/com
 import { SortByNameCommand } from '../../../System/contextMenuCommands/commands/sortByNameCommand';
 import { isEventOriginatedFromWithinTargetIdSubtree } from '../../../services/EventService';
 import { DesktopSortOptions, setItemPositions } from '../../../services/DesktopItemPlacementService';
-import DesktopItemComponent from '../item/DesktopItemComponent';
-import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxComponent';
 import { v4 } from 'uuid';
 import { ContextMenuCommandList } from '../../../types/system/contextMenu/contextMenu';
+import DesktopItemComponent from '../item/DesktopItemComponent';
+import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxComponent';
 
 const DesktopItemContainerComponent: FC<{
   files: ExplorerFile[],
@@ -113,7 +113,6 @@ const DesktopItemContainerComponent: FC<{
       return;
     } 
 
-    // TODO: is that even used?
     // If mousedown event comes from an item then don't unselect
     const isEventFromAnyItem = desktopItems.some(item => 
       isEventOriginatedFromWithinTargetIdSubtree(event, item.id)
@@ -131,8 +130,8 @@ const DesktopItemContainerComponent: FC<{
     newItemTop: number,
     newItemLeft: number
   ) => {
-    setDesktopItems(prevItems => {
-      const updatedItems = moveItemsOnDesktop(prevItems, itemId, startItemTop, startItemLeft, newItemTop, newItemLeft);
+    setDesktopItems(currentItems => {
+      const updatedItems = moveItemsOnDesktop(currentItems, itemId, startItemTop, startItemLeft, newItemTop, newItemLeft);
       return [...updatedItems];
     });
   };
@@ -166,7 +165,9 @@ const DesktopItemContainerComponent: FC<{
     });
   }
 
-  const handleItemDoubleClick = (itemId: string) => {  };
+  const handleItemDoubleClick = (itemId: string) => { 
+    console.log('double click');
+  };
   
   const handleSelectionBoxUpdates = (elements: HTMLElement[], previousElementInBox: HTMLElement[], ctrlKey: boolean) => {
     const selectedItemIds = elements.map(element => element.id);

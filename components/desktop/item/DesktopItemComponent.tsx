@@ -43,13 +43,6 @@ const DesktopItemComponent: FC<{
   let textareaElement: HTMLElement | null;
 
   useEffect(() => {
-    const el = document.getElementById(item.id);
-    if (!el) return;
-
-    el.addEventListener('dragend', onDragEnd);
-    el.addEventListener('click', onClick);
-    el.addEventListener('dblclick', onDoubleClick);
-    el.addEventListener('dragstart', onDragStart);
 
     if (item.renaming) {
       textareaElement = document.getElementById(INPUT_ID);
@@ -59,23 +52,18 @@ const DesktopItemComponent: FC<{
     }
 
     return () => {
-      el.removeEventListener('dragend', onDragEnd);
-      el.removeEventListener('click', onClick);
-      el.removeEventListener('dblclick', onDoubleClick);
-      el.removeEventListener('dragstart', onDragStart);
-
       if (item.renaming) {
         document.removeEventListener('mousedown', onMouseDown);
         document.removeEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming())
-    }
+      }
     };
   }), [];
 
-  const onDoubleClick = (event: MouseEvent) => {
+  const onDoubleClick = (event: any) => {
     handleDoubleClick(item.id);
   };
 
-  const onClick = (event: MouseEvent) => {
+  const onClick = (event: any) => {
     if (event.shiftKey) {
       selectItemsWithShift(item.id, event.ctrlKey);
     } else if (event.ctrlKey) {
@@ -130,9 +118,11 @@ const DesktopItemComponent: FC<{
     }
   };
 
-  const getDestopItemNewPositionRelativeToMouse = (event: any,
-    mouseToElementTopOffset: number, mouseToElementLeftOffset: number) => {
-
+  const getDestopItemNewPositionRelativeToMouse = (
+    event: any,
+    mouseToElementTopOffset: number,
+    mouseToElementLeftOffset: number
+  ) => {
       return {
         left: +event.clientX - mouseToElementLeftOffset,
         top: +event.clientY - mouseToElementTopOffset
@@ -152,7 +142,6 @@ const DesktopItemComponent: FC<{
   };
 
   const resizeTextArea = () => {
-    // Resize textarea height
     if (textareaElement) {
       textareaElement.style.height = textareaElement.scrollHeight + 'px';
     }
@@ -163,6 +152,10 @@ const DesktopItemComponent: FC<{
       id={item.id}
       draggable={!item.renaming}
       className={getClass()}
+      onDragEnd={onDragEnd}
+      onClick={onClick}
+      onDragStart={onDragStart}
+      onDoubleClick={onDoubleClick}
       style={{
         left: item.left,
         top: item.top,
