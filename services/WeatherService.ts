@@ -1,6 +1,8 @@
 export type Weather = {
   temperature: string;
+  temperatureUnit: string;
   forecast: string;
+
 };
 
 export const getWeatherInformation = async (latitude: number, longitude: number): Promise<Weather> => {
@@ -13,12 +15,10 @@ export const getWeatherInformation = async (latitude: number, longitude: number)
     const forecast = await forecastRes.json();
     const todayForecast = forecast.properties.periods[0];
 
-    const temperature = todayForecast.temperature + todayForecast.temperatureUnit;
-    const shortForecast = todayForecast.shortForecast;
-
     return {
-      temperature,
-      forecast: shortForecast
+      temperature: todayForecast.temperature,
+      temperatureUnit: todayForecast.temperatureUnit,
+      forecast: todayForecast.shortForecast
     };
   } catch (error) {
     console.error(`Error getting weather information: ${error}`);
