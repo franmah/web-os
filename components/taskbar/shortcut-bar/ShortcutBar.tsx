@@ -4,18 +4,19 @@ import { FcApproval, FcApprove, FcAreaChart, FcBiotech, FcBookmark,
 import { FC, useState } from 'react';
 import TaskbarShortcut from '../shortcut/Shortcut';
 import styles from './shortcutBar.module.scss';
+import Image from 'next/image';
 
 const ShortcutBar: FC<{}> = () => {
 
   const STARTING_ICONS = [
-    (<FcAreaChart size={28} key={0}/>),
-    (<FcBookmark size={28} key={1}/>),
-    (<FcApproval size={28} key={2}/>),
-    (<FcApprove size={28} key={3}/>),
-    (<FcBiotech size={28} key={4}/>),
-    (<FcCamera size={28} key={5}/>),
-    (<FcClapperboard size={28} key={6}/>),
-    (<FcGlobe size={28} key={7}/>)
+    (<FcAreaChart key={0}/>),
+    (<FcBookmark key={1}/>),
+    (<FcApproval key={2}/>),
+    (<FcApprove key={3}/>),
+    (<FcBiotech key={4}/>),
+    (<FcCamera key={5}/>),
+    (<FcClapperboard key={6}/>),
+    (<FcGlobe key={7}/>)
   ];
 
   const [shortcutItems, setItems] = useState(STARTING_ICONS);
@@ -37,8 +38,11 @@ const ShortcutBar: FC<{}> = () => {
       {
         (provided: any) => (
           <TaskbarShortcut>
-            <div className={styles.shortcutItem} ref={provided.innerRef}
-              {...provided.draggableProps} {...provided.dragHandleProps}
+            <div
+              className={styles.shortcutItem}
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
             >
               {item}
             </div>
@@ -49,18 +53,31 @@ const ShortcutBar: FC<{}> = () => {
   ));
   
   return (
-    <DragDropContext onDragEnd={handleReorderShortcutItemsOnDragEnd}>
-      <Droppable droppableId="taskbarShortcutItems" direction="horizontal">
-        {
-          (provided: any) => (
-            <div className={styles.shortcuts} ref={provided.innerRef} {...provided.droppableProps}>
-              { getFakeIconList() }
-              {provided.placeholder}
-            </div>
-          )
-        }
-      </Droppable>
-    </DragDropContext>
+    <section className={styles.shortcutBar}>
+      <TaskbarShortcut>
+        <Image src='/taskbar/windows-logo.png' alt='menu' height={22} width={22}/>
+      </TaskbarShortcut>
+
+      {/* TODO: put all drag/drop part into a wrapper component */}
+      <DragDropContext onDragEnd={handleReorderShortcutItemsOnDragEnd}>
+        <Droppable droppableId="taskbarShortcutItems" direction="horizontal">
+          {
+            (provided: any) => (
+              <div
+                className={styles.shortcuts}
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+
+                {getFakeIconList()}
+                {provided.placeholder}
+                
+              </div>
+            )
+          }
+        </Droppable>
+      </DragDropContext>
+    </section>
   );
 };
 

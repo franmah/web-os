@@ -12,16 +12,6 @@
   .appSection {
     display: flex;
 
-    .windowIcon {
-      padding: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-  
-      &:hover {      
-        background-color: #f8f8f8;
-      }
-    }
+    
   }
 }

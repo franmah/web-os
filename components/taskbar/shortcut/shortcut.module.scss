@@ -1,13 +1,14 @@
 .shortcut {
-  width: 50px;
+  width: 40px;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-right: 2px;
-
+  margin: 0px 2px;
+  border-radius: 4px;
+  padding: 2px 4px;
+  
   &:hover {
-    background-color: #465961;
-    cursor: pointer;
+    background-color: #f8f8f8;
   }
 }

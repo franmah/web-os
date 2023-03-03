@@ -1,8 +1,11 @@
-.shortcuts {
-  flex: 1;
+.shortcutBar {
   display: flex;
+  align-items: center;
+  justify-content: center;
 
-  .shortcutItem {
-    cursor: pointer;
+  .shortcuts {
+    flex: 1;
+    display: flex;
   }
 }
+
