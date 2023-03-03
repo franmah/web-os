@@ -2,6 +2,7 @@ import { FC } from 'react';
 import ShortcutBar from '../shortcut-bar/ShortcutBar';
 import styles from './taskbar.module.scss';
 import TaskbarClock from '../clock/TaskbarClock';
+import WeatherComponent from '../weather/weatherTaskabar';
 
 const Taskbar: FC<{}> = () => {
 
@@ -9,12 +10,10 @@ const Taskbar: FC<{}> = () => {
     <section className={styles.taskbarMain}>
       
       <div>
-        METEO
+        <WeatherComponent />
       </div>
 
-      <div className={styles.appSection}>
-        <ShortcutBar />
-      </div>
+      <ShortcutBar />
 
       <TaskbarClock />
 
