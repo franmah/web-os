@@ -3,7 +3,7 @@ import { FcApproval, FcApprove, FcAreaChart, FcBiotech, FcBookmark,
   FcCamera, FcClapperboard, FcGlobe } from 'react-icons/fc';
 import { FC, useState } from 'react';
 import TaskbarShortcut from '../shortcut/Shortcut';
-import styles from '../taskbar.module.scss';
+import styles from './shortcutBar.module.scss';
 
 const ShortcutBar: FC<{}> = () => {
 
