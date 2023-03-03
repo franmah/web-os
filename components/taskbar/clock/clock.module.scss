@@ -1,0 +1,15 @@
+.datetime {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: end;
+  font-size: 12px;
+  text-align: center;
+  color: black;
+  padding: 2px 8px;
+
+  &:hover {
+    background-color: #465961;
+    cursor: pointer;
+  }
+}
