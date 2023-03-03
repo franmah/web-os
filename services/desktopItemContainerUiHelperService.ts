@@ -21,9 +21,9 @@ startItemLeft: number, newItemTop: number, newItemLeft: number) => {
     const offsetLeft = item.left - startItemLeft;
 
     const { correctedLeft, correctedTop } = correctItemPosition(offsetTop + newItemTop, offsetLeft + newItemLeft);
-    if (checkItemPosition(item.id,  correctedTop, correctedLeft, itemsToMove, items)) {
-      return { ...item };
-    }
+    // if (isPositionInvalid(item.id,  correctedTop, correctedLeft, itemsToMove, items)) {
+    //   return { ...item };
+    // }
 
     return {
       ...item,
@@ -48,7 +48,7 @@ const correctItemPosition = (top: number, left: number)
   };
 };
 
-const checkItemPosition = (itemId: string, top: number, left: number, itemsMoving: DesktopItem[], items: DesktopItem[]): boolean => {
+const isPositionInvalid = (itemId: string, top: number, left: number, itemsMoving: DesktopItem[], items: DesktopItem[]): boolean => {
    return items.some(item => {
     return (
       !itemsMoving.some(i => i.id === item.id) && // Don't check item that are moving.

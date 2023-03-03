@@ -164,7 +164,7 @@ const DesktopItemComponent: FC<{
       }}
     >
 
-      <Image src={item.iconPath} alt={'icon'} width={40} height={40}/>
+      <Image src={item.iconPath} alt={'icon'} width={48} height={40}/>
 
       {
         item.renaming ?
