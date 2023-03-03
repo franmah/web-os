@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import ShortcutBar from './shortcut-bar/ShortcutBar';
+import ShortcutBar from '../shortcut-bar/ShortcutBar';
 import styles from './taskbar.module.scss';
-import TaskbarClock from './clock/TaskbarClock';
+import TaskbarClock from '../clock/TaskbarClock';
 
 const Taskbar: FC<{}> = () => {
 

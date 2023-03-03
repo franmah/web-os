@@ -10,7 +10,7 @@ export const startingProccesses: Processes = {
   'taskbar': {
     name: 'taskbar',
     // TODO: fix <any> once component changed to function component
-    Component: dynamic<any>(() => import('../../components/taskbar/Taskbar')),
+    Component: dynamic<any>(() => import('../../components/taskbar-component/taskbar/Taskbar')),
     params: null
   }
 };

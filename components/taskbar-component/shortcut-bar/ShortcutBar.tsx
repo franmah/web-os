@@ -2,21 +2,21 @@ import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautif
 import { FcApproval, FcApprove, FcAreaChart, FcBiotech, FcBookmark,
   FcCamera, FcClapperboard, FcGlobe } from 'react-icons/fc';
 import { FC, useState } from 'react';
-import TaskbarShortcut from '../shortcut/Shortcut';
+import TaskbarShortcut from './shortcut/Shortcut';
 import styles from './shortcutBar.module.scss';
 import Image from 'next/image';
 
 const ShortcutBar: FC<{}> = () => {
 
   const STARTING_ICONS = [
-    (<FcAreaChart key={0}/>),
-    (<FcBookmark key={1}/>),
-    (<FcApproval key={2}/>),
-    (<FcApprove key={3}/>),
-    (<FcBiotech key={4}/>),
-    (<FcCamera key={5}/>),
-    (<FcClapperboard key={6}/>),
-    (<FcGlobe key={7}/>)
+    (<FcAreaChart size={28} key={0}/>),
+    (<FcBookmark size={28} key={1}/>),
+    (<FcApproval size={28} key={2}/>),
+    (<FcApprove size={28} key={3}/>),
+    (<FcBiotech size={28} key={4}/>),
+    (<FcCamera size={28} key={5}/>),
+    (<FcClapperboard size={28} key={6}/>),
+    (<FcGlobe size={28} key={7}/>)
   ];
 
   const [shortcutItems, setItems] = useState(STARTING_ICONS);
@@ -55,10 +55,11 @@ const ShortcutBar: FC<{}> = () => {
   return (
     <section className={styles.shortcutBar}>
       <TaskbarShortcut>
-        <Image src='/taskbar/windows-logo.png' alt='menu' height={22} width={22}/>
+        <Image src='/taskbar/windows-logo.png' alt='menu' height={23} width={23}/>
       </TaskbarShortcut>
 
       {/* TODO: put all drag/drop part into a wrapper component */}
+      {/* TODO: drag not working */}
       <DragDropContext onDragEnd={handleReorderShortcutItemsOnDragEnd}>
         <Droppable droppableId="taskbarShortcutItems" direction="horizontal">
           {
