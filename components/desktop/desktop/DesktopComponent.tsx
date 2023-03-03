@@ -10,6 +10,7 @@ import { ProcessContext } from '../../../contexts/processContext';
 import { ContextMenuCommandList } from '../../../types/system/contextMenu/contextMenu';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ExplorerFile } from '../../../types/system/file/ExplorerElement';
+import { FOLDER_ICON_PATH } from '../../../constants/FileSystemConsts';
 
 const Desktop: FC = () => {
   const { getDesktop, addFile } = useContext(FileSystemContext);
@@ -35,7 +36,7 @@ const Desktop: FC = () => {
     const oldFile = getDesktop().children?.find(file => file.id === newItem.id);
 
     if (!oldFile) {
-      addFile(newItem.name, '', getDesktop(), newItem.id);
+      addFile(newItem.name, FOLDER_ICON_PATH, getDesktop(), newItem.id);
     }
   };
 
