@@ -16,8 +16,9 @@ const TaskbarClock: FC<{}> = () => {
   }, []);
   
   const getTime = (): string => {
-    const timeOfDay = date.getHours() > NUM_HOURS ? 'PM' : 'AM';
-    return `${date.getHours() % NUM_HOURS}:${String(date.getMinutes()).padStart(2, '0')} ${timeOfDay}`;
+    const timeOfDay = date.getHours() >= NUM_HOURS ? 'PM' : 'AM';
+    const hour = date.getHours() > NUM_HOURS ? date.getHours() % NUM_HOURS : date.getHours();
+    return `${hour}:${String(date.getMinutes()).padStart(2, '0')} ${timeOfDay}`;
   }
 
   const getDate = (): string => {
