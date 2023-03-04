@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import styles from './clock.module.scss';
+import globalStyles from '../../../styles/global.module.scss';
 
 const TaskbarClock: FC<{}> = () => {
 
@@ -24,7 +25,7 @@ const TaskbarClock: FC<{}> = () => {
   };
 
   return (
-    <div className={styles.datetime}>
+    <div className={`${styles.datetime} ${globalStyles.unselectableText}`}>
       <div>{getTime()}</div>
       <div>{getDate()}</div>
     </div>
