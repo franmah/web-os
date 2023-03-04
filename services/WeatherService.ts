@@ -1,13 +1,6 @@
 import { weatherCodeLookupDay, weatherCodeLookupNight } from "../constants/weatherCodes";
+import { Weather } from "../types/taskbar/weather";
 
-export type Weather = {
-  temperature: string;
-  temperatureUnit: string;
-  forecast: string;
-  icon: string;
-};
-
-//http://api.weatherapi.com/v1/forecast.json?key=f34bddabceab41c2a0900913230403&q=London&days=1&aqi=no&alerts=no
 const BASE_URL = 'http://api.weatherapi.com/v1/forecast.json?key=f34bddabceab41c2a0900913230403&days=1&aqi=no&alerts=no&q=';
 
 export const getWeatherInformation = async (latitude: number, longitude: number): Promise<Weather> => {
