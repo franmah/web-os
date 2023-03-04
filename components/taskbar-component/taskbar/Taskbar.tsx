@@ -9,9 +9,7 @@ const Taskbar: FC<{}> = () => {
   return (
     <section className={styles.taskbarMain}>
       
-      <div>
-        <WeatherComponent />
-      </div>
+      <WeatherComponent />
 
       <ShortcutBar />
 
