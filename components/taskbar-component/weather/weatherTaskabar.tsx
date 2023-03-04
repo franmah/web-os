@@ -1,8 +1,9 @@
-import { FC, Fragment, useEffect, useState } from "react";
+import { FC, Fragment, useCallback, useEffect, useState } from "react";
 import { getWeatherInformation, Weather } from "../../../services/WeatherService";
 import styles from './weather.module.scss';
-import { IoIosPartlySunny } from 'react-icons/io';
 import globalStyles from '../../../styles/global.module.scss';
+import Image from 'next/image';
+
 
 const WeatherComponent: FC<{}> = () => {
 
@@ -15,12 +16,12 @@ const WeatherComponent: FC<{}> = () => {
     );
   }, []);
   
-  const onCurrentPositionAllowed = async (position: any) => {
+  const onCurrentPositionAllowed = useCallback(async (position: any) => {
     const latitude = position?.coords?.latitude;
     const longitude = position?.coords?.longitude;
     const weatherData = await getWeatherInformation(latitude, longitude)
     setWeather(weatherData);
-  };
+  }, []);
   
   return (
     <Fragment>
@@ -28,7 +29,7 @@ const WeatherComponent: FC<{}> = () => {
         weather && (
           <section className={`${styles.weatherTaskbar} ${globalStyles.unselectableText}`}>
 
-            <IoIosPartlySunny size={28} style={{ color: 'rgba(255, 217, 0, 0.96)'}}/>
+            <Image src={weather.icon} alt='weather' width={28} height={28}/>
 
             <div className={styles.weatherInfo}>
               <div> {weather.temperature}°{weather.temperatureUnit} </div>

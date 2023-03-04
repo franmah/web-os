@@ -57,7 +57,8 @@ const ShortcutBar: FC<{}> = () => {
         <Image src='/taskbar/windows-logo.png' alt='menu' height={23} width={23}/>
       </TaskbarShortcut>
 
-      {/* TODO: put all drag/drop part into a wrapper component 
+      {
+      /* TODO: put all drag/drop part into a wrapper component 
           If possible, move handleReorderShortcutItemsOnDragEnd to also be in that wrapper component
       
       */}
