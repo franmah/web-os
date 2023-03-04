@@ -1,0 +1,16 @@
+.datetime {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  font-size: 12px;
+  text-align: center;
+  color: black;
+  padding: 2px 8px;
+  margin-right: 8px;
+
+  &:hover {
+    background-color: #f8f8f8;
+    cursor: default;
+  }
+}
