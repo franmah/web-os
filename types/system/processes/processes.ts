@@ -2,6 +2,7 @@ export type Process = {
   name: string;
   Component: React.ComponentType<{ params: any }>;
   params: any | null;
+  hasWindow: boolean
 };
 
 export type Processes = {
