@@ -44,15 +44,14 @@ const DEFAULT_WINDOW_STATE: WindowState = {
 /* TODO:
 - resizing:
   - enough border width to resize
-  - change cursor depending on direction
   - keep cursor changed while resizing even if going out of window
-  - Make sure that window.module.scss .topBorderHeader width doesn't mess up when component gets bigger
   - Move the border divs to their own component that accepts children
 - Fix maximizing by double clicking (after it's maximized)
 - put types in their own folder
 - try useRef for better performance
 - add icons to top right
 - Make sure style matches windows 11
+- change shadow box when window is selected
 
 
 */
@@ -227,6 +226,7 @@ const WindowComponent: FC<{ children: React.ReactNode }> = ({ children }) => {
 
     {/*  BOTTOM BORDER */}
     <div className={styles.bottomHeaderBorder}>
+      
       <div
         className={styles.bottomLeft}
         onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.BottomLeft)}>
