@@ -8,6 +8,7 @@ export type WindowState = {
   width: number,
   height: number,
   moving: boolean,
+  resizing: boolean,
   previousClientX: number,
   previousClientY: number
 };
@@ -18,27 +19,35 @@ const DEFAULT_WINDOW_STATE: WindowState = {
   width: 400,
   height: 400,
   moving: false,
+  resizing: false,
   previousClientX: 0,
-  previousClientY: 0 //TODO: move to its own state
+  previousClientY: 0
 };
 
 const WindowComponent: FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const [options, setOptions] = useState<WindowState>(DEFAULT_WINDOW_STATE);
 
+  // TODO: event listener on mouseup and mousemove are very inefficient because
+  // they set the state every time (needed in order to get most updated state)
+  // But that means the component renders on every mousemove/mouseup
+  // maybe useRef instead of useState? (not for every field though)
   useEffect(() => {
-
-    document.addEventListener('mouseup', stopMogingWindow);
+    document.addEventListener('mouseup', stopMogingAndResizingWindow);
+    // Listener on document otherwise window stops updating if mouse moves out of it (if user moves mouse too fast)
+    document.addEventListener('mousemove', onMouseMove);
 
     return () => {
-      document.removeEventListener('mouseup', stopMogingWindow);
+      document.removeEventListener('mouseup', stopMogingAndResizingWindow);
+      document.removeEventListener('mousemove', onMouseMove);
     }
   }, []);
 
-  const stopMogingWindow = () => {
+  const stopMogingAndResizingWindow = () => {
     setOptions(options => ({
       ...options,
-      moving: false
+      moving: false,
+      resizing: false
     }));
   };
 
@@ -50,29 +59,62 @@ const WindowComponent: FC<{ children: React.ReactNode }> = ({ children }) => {
       previousClientY: event.clientY
     }));
   };
-  
 
-  const moveWindow = (event: any) => {
+  const onBordersMouseDown = (event: any) => {
+    setOptions(state => ({
+      ...state,
+      resizing: true,
+      previousClientX: event.clientX,
+      previousClientY: event.clientY
+    }));
+  };
 
+  const onMouseMove = (event: MouseEvent) => {
     setOptions(options => {
-      const mouseX = event.clientX;
-      const mouseY = event.clientY;
-  
-      const changeX = mouseX - options.previousClientX;
-      const changeY = mouseY - options.previousClientY;
-      return {
-        ...options,
-        top: options.top + changeY,
-        left: options.left + changeX,
-        previousClientX: mouseX,
-        previousClientY: mouseY
+      if (options.moving) {
+        return moveWindow(event, options);
+      } else if (options.resizing) {
+        return resizeWindow(event, options);
       }
+      return options;
     });
+  };
+
+  const resizeWindow = (event: any, options: WindowState) => {
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+
+    const changeX = mouseX - options.previousClientX;
+    const changeY = mouseY - options.previousClientY;
+
+    return {
+      ...options,
+      width: options.width + changeX,
+      height: options.height + changeY,
+      previousClientX: mouseX,
+      previousClientY: mouseY
+    }
+  };
+
+  const moveWindow = (event: any, options: WindowState) => {
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+
+    const changeX = mouseX - options.previousClientX;
+    const changeY = mouseY - options.previousClientY;
+    return {
+      ...options,
+      top: options.top + changeY,
+      left: options.left + changeX,
+      previousClientX: mouseX,
+      previousClientY: mouseY
+    }
   };
 
   return (
     <div
       className={styles.window}
+      onMouseDown={onBordersMouseDown}
       style={{
         top: options.top,
         left: options.left,
@@ -82,7 +124,6 @@ const WindowComponent: FC<{ children: React.ReactNode }> = ({ children }) => {
     >
 
       <div
-        onMouseMove={event => options.moving && moveWindow(event)}
         onMouseDown={onHeaderMouseDown}
         className={styles.header}
       >
