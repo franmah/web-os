@@ -2,6 +2,7 @@ import { Fragment, useContext, useEffect } from "react";
 import { ProcessContext } from "../../contexts/processContext";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../services/EventService";
 import { CONTEXT_MENU_ROOT_ID } from "./contextMenu/ContextMenuRootComponent";
+import WindowComponent from "./window/window";
 
 export function ProcessLoaderComponent() {
 
@@ -33,8 +34,11 @@ export function ProcessLoaderComponent() {
       {
         Object
           .entries(processContext.processes)
-          .map(([id, { Component, params }]) => 
-            <Component key={id} params={params}></Component>
+          .map(([id, { Component, params, hasWindow }]) =>
+            hasWindow ?
+              <WindowComponent> <Component key={id} params={params}/> </WindowComponent>
+              :
+              <Component key={id} params={params}></Component>
           )
       }
     </Fragment>
