@@ -1,6 +1,11 @@
 import { FC, useEffect, useState } from "react";
 import { TASKBAR_HEIGHT } from "../../../constants/TaskbarConsts";
+import { resizeWindow } from "../../../services/WindowResizeService";
 import styles from './window.module.scss';
+
+export enum WindowResizeDirection {
+  Top, Bottom, Left, Right, TopRight, TopLeft, BottomLeft, BottomRight
+};
 
 // TODO: move to its own folder
 export type WindowState = {
@@ -10,6 +15,7 @@ export type WindowState = {
   height: number,
   moving: boolean,
   resizing: boolean,
+  resizeDirection: WindowResizeDirection,
   previousClientX: number,
   previousClientY: number,
   previousTop: number,
@@ -25,6 +31,7 @@ const DEFAULT_WINDOW_STATE: WindowState = {
   height: 400,
   moving: false,
   resizing: false,
+  resizeDirection: WindowResizeDirection.Top,
   previousClientX: 0,
   previousClientY: 0,
   previousTop: 150,
@@ -32,6 +39,23 @@ const DEFAULT_WINDOW_STATE: WindowState = {
   previousWidth: 400,
   previousHeight: 400
 };
+
+
+/* TODO:
+- resizing:
+  - enough border width to resize
+  - change cursor depending on direction
+  - keep cursor changed while resizing even if going out of window
+  - Make sure that window.module.scss .topBorderHeader width doesn't mess up when component gets bigger
+  - Move the border divs to their own component that accepts children
+- Fix maximizing by double clicking (after it's maximized)
+- put types in their own folder
+- try useRef for better performance
+- add icons to top right
+- Make sure style matches windows 11
+
+
+*/
 
 /**
  * ISSUE:
@@ -66,7 +90,6 @@ const WindowComponent: FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const stopMogingAndResizingWindow = () => {
     setOptions(options => {
-      console.log('setting up previous: saving: ' + (options.moving))
       if (options.resizing || options.moving) {
         return {
           ...options,
@@ -78,14 +101,12 @@ const WindowComponent: FC<{ children: React.ReactNode }> = ({ children }) => {
           previousWidth: options.width
         }
       } else {
-        console.log('NOT setting up previous')
         return options;
       }
     });
   };
 
   const onHeaderMouseDown = (event: any) => {
-    console.log('on mouse down: setting moving to true')
     setOptions(state => ({
       ...state,
       moving: true,
@@ -94,42 +115,27 @@ const WindowComponent: FC<{ children: React.ReactNode }> = ({ children }) => {
     }));
   };
 
-  const onBordersMouseDown = (event: any) => {
-    console.log('border mouse down')
+  const onBordersMouseDown = (event: any, direction: WindowResizeDirection) => {
     setOptions(state => ({
       ...state,
       resizing: true,
       previousClientX: event.clientX,
-      previousClientY: event.clientY
+      previousClientY: event.clientY,
+      resizeDirection: direction
     }));
   };
 
   const onMouseMove = (event: MouseEvent) => {
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
     setOptions(options => {
-      console.log(options.resizing)
       if (options.moving) {
         return moveWindow(event, options);
       } else if (options.resizing) {
-        return resizeWindow(event, options);
+        return resizeWindow(mouseX, mouseY, options);
       }
       return options;
     });
-  };
-
-  const resizeWindow = (event: any, options: WindowState): WindowState => {
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
-
-    const changeX = mouseX - options.previousClientX;
-    const changeY = mouseY - options.previousClientY;
-    console.log(changeX)
-    return {
-      ...options,
-      width: options.width + changeX,
-      height: options.height + changeY,
-      previousClientX: mouseX,
-      previousClientY: mouseY,
-    }
   };
 
   const moveWindow = (event: any, options: WindowState): WindowState => {
@@ -148,7 +154,6 @@ const WindowComponent: FC<{ children: React.ReactNode }> = ({ children }) => {
   };
 
   const maximizeWindow = (event: any) => {
-    console.log('double click')
     setOptions(options => {
       const isAlreadyMaximized = 
         options.height === window.innerHeight - TASKBAR_HEIGHT &&
@@ -169,7 +174,6 @@ const WindowComponent: FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div
       className={styles.window}
-      onMouseDown={onBordersMouseDown}
       style={{
         top: options.top,
         left: options.left,
@@ -178,18 +182,65 @@ const WindowComponent: FC<{ children: React.ReactNode }> = ({ children }) => {
       }}
     >
 
+    {/*  TOP BORDER */}
+    <div className={styles.topBorderHeader}>
       <div
-        onMouseDown={onHeaderMouseDown}
-        onDoubleClick={maximizeWindow}
-        onDragCapture={() => console.log("drag start")}
-        className={styles.header}
-      >
+        className={styles.topLeft}
+        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopLeft)}>
+      </div>
+      <div 
+        className={styles.topBorder} 
+        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Top)}>
       </div>
 
-      <div className={styles.childrenContainer}>
-        { children }
+      <div
+        className={styles.topRight}
+        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopRight)}>
       </div>
-     
+    </div>
+
+    {/*  LEFT + RIGHT + CONTENT */}
+    <div className={styles.center}>
+      <div
+        className={styles.centerLeft}
+        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Left)}>
+      </div>
+
+      <div className={styles.centerContent}>
+        <div
+          onMouseDown={onHeaderMouseDown}
+          onDoubleClick={maximizeWindow}
+          className={styles.header}
+        >
+        </div>
+
+        <div className={styles.childrenContainer}>
+          { children }
+        </div>
+      </div>
+
+      <div
+        className={styles.centerRight}
+        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Right)}>
+      </div>
+    </div>
+
+    {/*  BOTTOM BORDER */}
+    <div className={styles.bottomHeaderBorder}>
+      <div
+        className={styles.bottomLeft}
+        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.BottomLeft)}>
+      </div>
+      <div
+        className={styles.bottomBorder}
+        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Bottom)}>
+      </div>
+      <div
+        className={styles.bottomRight}
+        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.BottomRight)}>
+      </div>
+    </div>
+
     </div>
   );
 };
