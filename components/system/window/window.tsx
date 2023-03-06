@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { TASKBAR_HEIGHT } from "../../../constants/TaskbarConsts";
 import { resizeWindow } from "../../../services/WindowResizeService";
+import WindowBorderComponent from "./border/border";
 import styles from './window.module.scss';
 
 export enum WindowResizeDirection {
@@ -40,12 +41,10 @@ const DEFAULT_WINDOW_STATE: WindowState = {
   previousHeight: 400
 };
 
-
 /* TODO:
 - resizing:
-  - enough border width to resize
+  - enough border width to resize + thin window borders if possible 
   - keep cursor changed while resizing even if going out of window
-  - Move the border divs to their own component that accepts children
 - Fix maximizing by double clicking (after it's maximized)
 - put types in their own folder
 - try useRef for better performance
@@ -177,71 +176,25 @@ const WindowComponent: FC<{ children: React.ReactNode }> = ({ children }) => {
         top: options.top,
         left: options.left,
         width: `${options.width}px`,
-        height: `${options.height}px`
+        height: `${options.height}px`,
       }}
     >
+      <WindowBorderComponent
+        onBordersMouseDown={onBordersMouseDown}
+      >
+        <div className={styles.centerContent}>
+          <div
+            onMouseDown={onHeaderMouseDown}
+            onDoubleClick={maximizeWindow}
+            className={styles.header}
+          >
+          </div>
 
-    {/*  TOP BORDER */}
-    <div className={styles.topBorderHeader}>
-      <div
-        className={styles.topLeft}
-        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopLeft)}>
-      </div>
-      <div 
-        className={styles.topBorder} 
-        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Top)}>
-      </div>
-
-      <div
-        className={styles.topRight}
-        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopRight)}>
-      </div>
-    </div>
-
-    {/*  LEFT + RIGHT + CONTENT */}
-    <div className={styles.center}>
-      <div
-        className={styles.centerLeft}
-        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Left)}>
-      </div>
-
-      <div className={styles.centerContent}>
-        <div
-          onMouseDown={onHeaderMouseDown}
-          onDoubleClick={maximizeWindow}
-          className={styles.header}
-        >
-        </div>
-
-        <div className={styles.childrenContainer}>
           { children }
         </div>
-      </div>
-
-      <div
-        className={styles.centerRight}
-        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Right)}>
-      </div>
+      </WindowBorderComponent>    
     </div>
-
-    {/*  BOTTOM BORDER */}
-    <div className={styles.bottomHeaderBorder}>
-      
-      <div
-        className={styles.bottomLeft}
-        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.BottomLeft)}>
-      </div>
-      <div
-        className={styles.bottomBorder}
-        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Bottom)}>
-      </div>
-      <div
-        className={styles.bottomRight}
-        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.BottomRight)}>
-      </div>
-    </div>
-
-    </div>
+    
   );
 };
 
