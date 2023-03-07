@@ -18,6 +18,7 @@
   move useState into its own hook. Create functions called by children components instead of 
   changing the state directly LIKE useProcessContextState
 
+- Decide whether to differentiate a click from a double click.
 
 - put types in their own folder
 - Make sure style matches windows 11

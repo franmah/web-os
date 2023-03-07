@@ -154,6 +154,11 @@ const WindowComponent: FC<{
     const changeX = mouseX - options.previousClientX;
     const changeY = mouseY - options.previousClientY;
 
+    // If window was maximized when move started: restore previous width and height relative to mouse
+    if (options.maximized) {
+      return getRestoredWindowOptionsRelativeToMouse(mouseX, mouseY, options);
+    };
+
     return {
       ...options,
       maximized: false,
@@ -163,6 +168,27 @@ const WindowComponent: FC<{
       previousClientY: mouseY,
     }
   };
+
+  const getRestoredWindowOptionsRelativeToMouse = (mouseX: number, mouseY: number, options: WindowState): WindowState => {
+    // should start with mouse in middle and prevent from going out of screen.
+    let leftPosition = mouseX -  options.previousWidth / 2;
+    leftPosition = Math.max(leftPosition, 0); // Don't go over left side of screen;
+
+    // Dont go over right side of screen
+    const windowRight = leftPosition + options.previousWidth;
+    leftPosition = windowRight > window.innerWidth ?
+      window.innerWidth - options.previousWidth :
+      leftPosition;
+
+    return {
+      ...options,
+      maximized: false,
+      top: mouseY,
+      left: leftPosition,
+      height: options.previousHeight,
+      width: options.previousWidth
+    }
+  }
 
   const maximizeOrRestoreWindow = (event: any) => {
     setOptions(options => {
