@@ -24,13 +24,14 @@ export type WindowState = {
   previousLeft: number,
   previousWidth: number,
   previousHeight: number,
+  maximized: boolean
 };
 
 const DEFAULT_WINDOW_STATE: WindowState = {
-  top: 150,
-  left: 150,
-  width: 400,
-  height: 400,
+  top: 100,
+  left: 400,
+  width: 1000,
+  height: 600,
   moving: false,
   resizing: false,
   resizeDirection: WindowResizeDirection.Top,
@@ -39,25 +40,30 @@ const DEFAULT_WINDOW_STATE: WindowState = {
   previousTop: 150,
   previousLeft: 150,
   previousWidth: 400,
-  previousHeight: 400
+  previousHeight: 400,
+  maximized: false
 };
 
 /* TODO:
 - resizing:
-  - enough border width to resize + thin window borders if possible 
   - keep cursor changed while resizing even if going out of window
+  - try to move border component outside of window component (see how close, maximize icon reach the top of the window, 
+      theres' not extra border layer) 
 - Make header it's own component + add icons to top right
   - restore down: VscChromeRestore
   - maximize: VscChromeMaximize
   - minimize: FaRegWindowMinimize
+  - maximize/restore should work + animation?
+  - maximize/restore should show special menu if click hover icon for a few seconds
+  - close should work
 - IF TIME: Find a way to show context info when hovergin something for a while (a reusable component or something.)
-- Fix maximizing by double clicking (after it's maximized)
 - Window should size maxmize when hitting top, bottom, left or right of root window element
 - put types in their own folder
 - try useRef for better performance
 - Make sure style matches windows 11
 - change shadow box when window is selected
-
+- Fix <HeaderComponent.../> error in window.tsx
+- Minimize should be done later
 - BIG CHANGE:
   OPTION 1: 
     move useState in components into their own hook so that anyone can change them?
@@ -68,6 +74,7 @@ const DEFAULT_WINDOW_STATE: WindowState = {
     changing the state directly (like process context, you have to use openProcess, you don't setProcesses
     directly)
 
+- Fix error and warning messages.
 - Eventually I'll need a WindowManagerSystemProcess that know where windows are in case I want 
 to resize when window hits left/right and user wants anoter window to take the rest of the space
 
@@ -86,7 +93,7 @@ to resize when window hits left/right and user wants anoter window to take the r
  * 
  * Or maybe use on drag start
  */
-const WindowComponent: FC<{ children: React.ReactNode }> = ({ children }) => {
+const WindowComponent: FC<{ params: any, children: React.ReactNode }> = ({ params, children }) => {
 
   const [options, setOptions] = useState<WindowState>(DEFAULT_WINDOW_STATE);
 
@@ -203,6 +210,7 @@ const WindowComponent: FC<{ children: React.ReactNode }> = ({ children }) => {
       >
         <div className={styles.centerContent}>
           <HeaderComponent
+            maximized={options.maximized}
             onHeaderMouseDown={onHeaderMouseDown}
             maximizeWindow={maximizeWindow}
           >
