@@ -6,14 +6,11 @@ const HeaderComponent: FC<{
   maximized: boolean,
   onHeaderMouseDown: (event: any) => void,
   maximizeWindow: (event: any) => void,
-}> = ({ maximized, onHeaderMouseDown, maximizeWindow }) => {
-  
+  onClose: () => void
+}> = ({ maximized, onHeaderMouseDown, maximizeWindow, onClose }) => {
+
   const onMinimize = (event: any) => {
     console.log('minimize')
-  };
-
-  const onClose = (event: any) => {
-    console.log('close')
   };
 
   return (
