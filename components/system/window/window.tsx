@@ -75,17 +75,28 @@ const WindowComponent: FC<{
   // But that means the component renders on every mousemove/mouseup
   // maybe useRef instead of useState? (not for every field though)
   useEffect(() => {
-    document.addEventListener('mouseup', stopMogingAndResizingWindow);
+    document.addEventListener('mouseup', stopMovingAndResizingWindow);
     // Listener on document otherwise window stops updating if mouse moves out of it (if user moves mouse too fast)
     document.addEventListener('mousemove', onMouseMove);
 
     return () => {
-      document.removeEventListener('mouseup', stopMogingAndResizingWindow);
+      document.removeEventListener('mouseup', stopMovingAndResizingWindow);
       document.removeEventListener('mousemove', onMouseMove);
     }
   }, []);
 
-  const stopMogingAndResizingWindow = () => {
+  // TODO: change to return options instead of setting them if possible.
+  const restoreWindow = () => {
+    setOptions(options => ({
+      ...options,
+      top: options.previousTop,
+      left: options.previousLeft,
+      height: options.previousHeight,
+      width: options.previousWidth
+    }));
+  }
+
+  const stopMovingAndResizingWindow = () => {
     setOptions(options => {
       if (options.resizing || options.moving) {
         return {
@@ -103,13 +114,20 @@ const WindowComponent: FC<{
     });
   };
 
-  const onHeaderMouseDown = (event: any) => {
-    setOptions(state => ({
-      ...state,
-      moving: true,
-      previousClientX: event.clientX,
-      previousClientY: event.clientY
-    }));
+  const startMovingWindow = (event: any) => {
+    setOptions(state => {
+      if (state.maximized) {
+        restoreWindow();
+        return { ...state };
+      }
+      
+      return {
+        ...state,
+        moving: true,
+        previousClientX: event.clientX,
+        previousClientY: event.clientY
+      };
+    })   
   };
 
   const onBordersMouseDown = (event: any, direction: WindowResizeDirection) => {
@@ -141,6 +159,7 @@ const WindowComponent: FC<{
 
     const changeX = mouseX - options.previousClientX;
     const changeY = mouseY - options.previousClientY;
+
     return {
       ...options,
       top: options.top + changeY,
@@ -152,12 +171,6 @@ const WindowComponent: FC<{
 
   const maximizeWindow = (event: any) => {
     setOptions(options => {
-      const isAlreadyMaximized = 
-        options.height === window.innerHeight - TASKBAR_HEIGHT &&
-        options.width === window.innerHeight &&
-        options.top === 0 &&
-        options.left === 0;
-
       return {
         ...options,
         top: options.maximized ? options.previousTop : 0,
@@ -190,7 +203,7 @@ const WindowComponent: FC<{
           <HeaderComponent
             onClose={closeWindowProcess}
             maximized={options.maximized}
-            onHeaderMouseDown={onHeaderMouseDown}
+            startMovingWindow={startMovingWindow}
             maximizeWindow={maximizeWindow}
           >
           </HeaderComponent>
@@ -199,7 +212,6 @@ const WindowComponent: FC<{
         </div>
       </WindowBorderComponent>    
     </div>
-    
   );
 };
 

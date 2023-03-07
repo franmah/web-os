@@ -3,6 +3,8 @@
 - Make header it's own component + add icons to top right
   - maximize/restore should work + animation?
   - maximize/restore should show special menu if click hover icon for a few seconds
+  - window maximzed: moving should put it back to it's old position.
+  - scroll cursor should not show when window is maximized.
   - Window should size maxmize when hitting top, bottom, left or right of root window element
 
 - resizing:

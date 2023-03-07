@@ -4,10 +4,10 @@ import {VscChromeMinimize,  VscChromeRestore, VscChromeMaximize, VscClose } from
 
 const HeaderComponent: FC<{
   maximized: boolean,
-  onHeaderMouseDown: (event: any) => void,
+  startMovingWindow: (event: any) => void,
   maximizeWindow: (event: any) => void,
   onClose: () => void
-}> = ({ maximized, onHeaderMouseDown, maximizeWindow, onClose }) => {
+}> = ({ maximized, startMovingWindow, maximizeWindow, onClose }) => {
 
   const onMinimize = (event: any) => {
     console.log('minimize')
@@ -19,7 +19,7 @@ const HeaderComponent: FC<{
     >
       <div 
         className={styles.moveContainer}
-        onMouseDown={onHeaderMouseDown}
+        onMouseDown={startMovingWindow}
         onDoubleClick={maximizeWindow}
       ></div>
          
