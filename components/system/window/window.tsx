@@ -85,19 +85,17 @@ const WindowComponent: FC<{
     }
   }, []);
 
-  // TODO: change to return options instead of setting them if possible.
-  const restoreWindow = () => {
-    setOptions(options => ({
-      ...options,
-      top: options.previousTop,
-      left: options.previousLeft,
-      height: options.previousHeight,
-      width: options.previousWidth
-    }));
-  }
-
   const stopMovingAndResizingWindow = () => {
     setOptions(options => {
+      // Prevent save position when clicking header and window is maximized
+      if (options.maximized) {
+        return {
+          ...options,
+          moving: false,
+          resizing: false
+        }
+      }
+
       if (options.resizing || options.moving) {
         return {
           ...options,
@@ -115,20 +113,28 @@ const WindowComponent: FC<{
   };
 
   const onHeaderClick = (event: any) => {
-    setOptions(state => {
-      if (state.maximized) {
-        restoreWindow();
-        return { ...state };
-      }
-      
-      // Start moving window
+    setOptions(state => {     
       return {
         ...state,
         moving: true,
         previousClientX: event.clientX,
         previousClientY: event.clientY
       };
-    })   
+    });
+  };
+
+  const onMouseMove = (event: MouseEvent) => {
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+
+    setOptions(options => {
+      if (options.moving) {
+        return moveWindow(event, options);
+      } else if (options.resizing) {
+        return resizeWindow(mouseX, mouseY, options);
+      }
+      return options;
+    });
   };
 
   const onBordersMouseDown = (event: any, direction: WindowResizeDirection) => {
@@ -141,19 +147,6 @@ const WindowComponent: FC<{
     }));
   };
 
-  const onMouseMove = (event: MouseEvent) => {
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
-    setOptions(options => {
-      if (options.moving) {
-        return moveWindow(event, options);
-      } else if (options.resizing) {
-        return resizeWindow(mouseX, mouseY, options);
-      }
-      return options;
-    });
-  };
-
   const moveWindow = (event: any, options: WindowState): WindowState => {
     const mouseX = event.clientX;
     const mouseY = event.clientY;
@@ -163,6 +156,7 @@ const WindowComponent: FC<{
 
     return {
       ...options,
+      maximized: false,
       top: options.top + changeY,
       left: options.left + changeX,
       previousClientX: mouseX,
@@ -170,7 +164,7 @@ const WindowComponent: FC<{
     }
   };
 
-  const maximizeWindow = (event: any) => {
+  const maximizeOrRestoreWindow = (event: any) => {
     setOptions(options => {
       return {
         ...options,
@@ -205,7 +199,7 @@ const WindowComponent: FC<{
             onClose={closeWindowProcess}
             maximized={options.maximized}
             startMovingWindow={onHeaderClick}
-            maximizeWindow={maximizeWindow}
+            maximizeWindow={maximizeOrRestoreWindow}
           >
           </HeaderComponent>
 
