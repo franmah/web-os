@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { TASKBAR_HEIGHT } from "../../../constants/TaskbarConsts";
 import { resizeWindow } from "../../../services/WindowResizeService";
 import WindowBorderComponent from "./border/border";
+import HeaderComponent from "./header/header";
 import styles from './window.module.scss';
 
 export enum WindowResizeDirection {
@@ -45,12 +46,30 @@ const DEFAULT_WINDOW_STATE: WindowState = {
 - resizing:
   - enough border width to resize + thin window borders if possible 
   - keep cursor changed while resizing even if going out of window
+- Make header it's own component + add icons to top right
+  - restore down: VscChromeRestore
+  - maximize: VscChromeMaximize
+  - minimize: FaRegWindowMinimize
+- IF TIME: Find a way to show context info when hovergin something for a while (a reusable component or something.)
 - Fix maximizing by double clicking (after it's maximized)
+- Window should size maxmize when hitting top, bottom, left or right of root window element
 - put types in their own folder
 - try useRef for better performance
-- add icons to top right
 - Make sure style matches windows 11
 - change shadow box when window is selected
+
+- BIG CHANGE:
+  OPTION 1: 
+    move useState in components into their own hook so that anyone can change them?
+    For example, WindowComponent passes functions to HeaderComponent to maximise and move window.
+    But if it had access to the state hook it wouldn't have to.
+  OPTION 2:
+    move useState into its own hook. Create functions called by children components instead of 
+    changing the state directly (like process context, you have to use openProcess, you don't setProcesses
+    directly)
+
+- Eventually I'll need a WindowManagerSystemProcess that know where windows are in case I want 
+to resize when window hits left/right and user wants anoter window to take the rest of the space
 
 
 */
@@ -183,12 +202,11 @@ const WindowComponent: FC<{ children: React.ReactNode }> = ({ children }) => {
         onBordersMouseDown={onBordersMouseDown}
       >
         <div className={styles.centerContent}>
-          <div
-            onMouseDown={onHeaderMouseDown}
-            onDoubleClick={maximizeWindow}
-            className={styles.header}
+          <HeaderComponent
+            onHeaderMouseDown={onHeaderMouseDown}
+            maximizeWindow={maximizeWindow}
           >
-          </div>
+          </HeaderComponent>
 
           { children }
         </div>
