@@ -4,6 +4,7 @@ import { isEventOriginatedFromWithinTargetIdSubtree } from "../../services/Event
 import { CONTEXT_MENU_ROOT_ID } from "./contextMenu/ContextMenuRootComponent";
 import WindowComponent from "./window/window";
 
+// TODO: Move the code in map() to it's own ProcessRenderComponent.
 export function ProcessLoaderComponent() {
 
   const processContext = useContext(ProcessContext);

@@ -17,13 +17,15 @@
 - Make sure style matches windows 11
 - change shadow box when window is selected
 - Fix <HeaderComponent.../> error in window.tsx
-- Minimize should be done later
+- Fix error and warning messages in console.
+
 - BIG CHANGE: ONLY FUNCTION THAT CHANGE STATE SHOULD BE IN HOOK (closeWindow shouldn't be for example)
   move useState into its own hook. Create functions called by children components instead of 
   changing the state directly LIKE useProcessContextState
     
+- Minimize should be done later (needs shortcut bar to work)
+  could be done either hiding window or tell processLoader not to render because it's minimized (add minimize function to useProcessContextState)
 
-- Fix error and warning messages.
 - Eventually I'll need a WindowManagerSystemProcess that know where windows are in case I want 
 to resize when window hits left/right and user wants anoter window to take the rest of the space
 
