@@ -160,10 +160,11 @@ const WindowComponent: FC<{
 
       return {
         ...options,
-        top: isAlreadyMaximized ? options.previousTop : 0,
-        left: isAlreadyMaximized ? options.previousLeft : 0,
-        width: isAlreadyMaximized ? options.previousWidth : window.innerWidth,
-        height: isAlreadyMaximized ? options.previousHeight : window.innerHeight - TASKBAR_HEIGHT
+        top: options.maximized ? options.previousTop : 0,
+        left: options.maximized ? options.previousLeft : 0,
+        width: options.maximized ? options.previousWidth : window.innerWidth,
+        height: options.maximized ? options.previousHeight : window.innerHeight - TASKBAR_HEIGHT,
+        maximized: !options.maximized
       }
     });
   };

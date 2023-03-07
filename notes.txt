@@ -1,17 +1,15 @@
 /* TODO:
+
+- Make header it's own component + add icons to top right
+  - maximize/restore should work + animation?
+  - maximize/restore should show special menu if click hover icon for a few seconds
+  - Window should size maxmize when hitting top, bottom, left or right of root window element
+
 - resizing:
   - keep cursor changed while resizing even if going out of window
   - try to move border component outside of window component (see how close, maximize icon reach the top of the window, 
       theres' not extra border layer) 
-- Make header it's own component + add icons to top right
-  - restore down: VscChromeRestore
-  - maximize: VscChromeMaximize
-  - minimize: FaRegWindowMinimize
-  - maximize/restore should work + animation?
-  - maximize/restore should show special menu if click hover icon for a few seconds
-  - close should work
 - IF TIME: Find a way to show context info when hovergin something for a while (a reusable component or something.)
-- Window should size maxmize when hitting top, bottom, left or right of root window element
 - put types in their own folder
 - try useRef for better performance
 - Make sure style matches windows 11
@@ -19,7 +17,9 @@
 - Fix <HeaderComponent.../> error in window.tsx
 - Fix error and warning messages in console.
 
-- BIG CHANGE: ONLY FUNCTION THAT CHANGE STATE SHOULD BE IN HOOK (closeWindow shouldn't be for example)
+- BIG CHANGE: 
+  SHOULD ASK REDDIT FIRST
+  ONLY FUNCTION THAT CHANGE STATE SHOULD BE IN HOOK (closeWindow shouldn't be for example)
   move useState into its own hook. Create functions called by children components instead of 
   changing the state directly LIKE useProcessContextState
     
