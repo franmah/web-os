@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { TASKBAR_HEIGHT } from "../../../constants/TaskbarConsts";
 import { ProcessContext } from "../../../contexts/processContext";
-import { resizeWindow } from "../../../services/WindowResizeService";
+import { finishMovingWindow, moveWindow, resizeWindow } from "../../../services/WindowResizeService";
 import WindowBorderComponent from "./border/border";
 import HeaderComponent from "./header/header";
 import styles from './window.module.scss';
@@ -29,7 +29,8 @@ export type WindowState = {
   previousLeft: number,
   previousWidth: number,
   previousHeight: number,
-  maximized: boolean
+  maximized: boolean,
+  sideMaximized: boolean
 };
 
 const DEFAULT_WINDOW_STATE: WindowState = {
@@ -46,7 +47,8 @@ const DEFAULT_WINDOW_STATE: WindowState = {
   previousLeft: 150,
   previousWidth: 400,
   previousHeight: 400,
-  maximized: false
+  maximized: false,
+  sideMaximized: false
 };
 
 /**
@@ -85,7 +87,7 @@ const WindowComponent: FC<{
     }
   }, []);
 
-  const stopMovingAndResizingWindow = () => {
+  const stopMovingAndResizingWindow = (event: MouseEvent) => {
     setOptions(options => {
       // Prevent save position when clicking header and window is maximized
       if (options.maximized) {
@@ -96,20 +98,28 @@ const WindowComponent: FC<{
         }
       }
 
-      if (options.resizing || options.moving) {
-        return {
-          ...options,
-          moving: false,
-          resizing: false,
-          previousTop: options.top,
-          previousLeft: options.left,
-          previousHeight: options.height,
-          previousWidth: options.width
-        }
-      } else {
+      if (!options.resizing && !options.moving) {
         return options;
       }
-    });
+
+      const mouseX = event.clientX;
+      const mouseY = event.clientY;
+
+      options.maximized = false;
+      options.previousTop = options.top,
+      options.previousLeft = options.left,
+      options.previousHeight = options.height,
+      options.previousWidth = options.width
+
+      if (options.moving) {
+        options = finishMovingWindow(mouseX, mouseY, options);
+      }
+
+      options.resizing = false;
+      options.moving = false;
+
+      return { ...options };
+  });
   };
 
   const onHeaderClick = (event: any) => {
@@ -146,49 +156,6 @@ const WindowComponent: FC<{
       resizeDirection: direction
     }));
   };
-
-  const moveWindow = (event: any, options: WindowState): WindowState => {
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
-
-    const changeX = mouseX - options.previousClientX;
-    const changeY = mouseY - options.previousClientY;
-
-    // If window was maximized when move started: restore previous width and height relative to mouse
-    if (options.maximized) {
-      return getRestoredWindowOptionsRelativeToMouse(mouseX, mouseY, options);
-    };
-
-    return {
-      ...options,
-      maximized: false,
-      top: options.top + changeY,
-      left: options.left + changeX,
-      previousClientX: mouseX,
-      previousClientY: mouseY,
-    }
-  };
-
-  const getRestoredWindowOptionsRelativeToMouse = (mouseX: number, mouseY: number, options: WindowState): WindowState => {
-    // should start with mouse in middle and prevent from going out of screen.
-    let leftPosition = mouseX -  options.previousWidth / 2;
-    leftPosition = Math.max(leftPosition, 0); // Don't go over left side of screen;
-
-    // Dont go over right side of screen
-    const windowRight = leftPosition + options.previousWidth;
-    leftPosition = windowRight > window.innerWidth ?
-      window.innerWidth - options.previousWidth :
-      leftPosition;
-
-    return {
-      ...options,
-      maximized: false,
-      top: mouseY,
-      left: leftPosition,
-      height: options.previousHeight,
-      width: options.previousWidth
-    }
-  }
 
   const maximizeOrRestoreWindow = (event: any) => {
     setOptions(options => {

@@ -1,15 +1,17 @@
 /* TODO:
 
 - Make header it's own component + add icons to top right
-  - window maximzed: moving should put it back to it's old position.
+  - if window is side maximized, then moving it should restore it's original size.
+  - resizing and reaching top shoudle set height to max
+  - if window is side maximized, then moving to the side should slid the window and still be considered size maximized (don't do if too hard)
   - scroll cursor should not show when window is maximized.
-  - Window should size maxmize when hitting top, bottom, left or right of root window element
+  
+- Fix error and warning messages in console.
 
 - resizing:
   - keep cursor changed while resizing even if going out of window
 - change shadow box when window is selected
 - Fix <HeaderComponent.../> error in window.tsx
-- Fix error and warning messages in console.
 - try useRef for better performance
 
 - BIG CHANGE: 
@@ -21,8 +23,10 @@
 - Decide whether to differentiate a click from a double click.
 
 - put types in their own folder
+- organize window service into multiple services if needed
 - Make sure style matches windows 11
-- Add animation: on Maximize/restore, when moving and mouse reaches side
+- Add animation: on Maximize/restore
+- Add animation when moving window and mouse reaches side (and maximize)
 - Maximze button should show special menu when hovered after a while. (let's you side maximize it)
 - IF TIME: Find a way to show context info when hovergin something for a while (a reusable component or something.
 
