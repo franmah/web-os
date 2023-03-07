@@ -1,29 +1,30 @@
 /* TODO:
 
 - Make header it's own component + add icons to top right
-  - maximize/restore should work + animation?
-  - maximize/restore should show special menu if click hover icon for a few seconds
   - window maximzed: moving should put it back to it's old position.
   - scroll cursor should not show when window is maximized.
   - Window should size maxmize when hitting top, bottom, left or right of root window element
 
 - resizing:
   - keep cursor changed while resizing even if going out of window
-  - try to move border component outside of window component (see how close, maximize icon reach the top of the window, 
-      theres' not extra border layer) 
-- IF TIME: Find a way to show context info when hovergin something for a while (a reusable component or something.)
-- put types in their own folder
-- try useRef for better performance
-- Make sure style matches windows 11
 - change shadow box when window is selected
 - Fix <HeaderComponent.../> error in window.tsx
 - Fix error and warning messages in console.
+- try useRef for better performance
 
 - BIG CHANGE: 
   SHOULD ASK REDDIT FIRST
   ONLY FUNCTION THAT CHANGE STATE SHOULD BE IN HOOK (closeWindow shouldn't be for example)
   move useState into its own hook. Create functions called by children components instead of 
   changing the state directly LIKE useProcessContextState
+
+
+- put types in their own folder
+- Make sure style matches windows 11
+- Add animation: on Maximize/restore, when moving and mouse reaches side
+- Maximze button should show special menu when hovered after a while. (let's you side maximize it)
+- IF TIME: Find a way to show context info when hovergin something for a while (a reusable component or something.
+
     
 - Minimize should be done later (needs shortcut bar to work)
   could be done either hiding window or tell processLoader not to render because it's minimized (add minimize function to useProcessContextState)

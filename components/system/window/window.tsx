@@ -114,13 +114,14 @@ const WindowComponent: FC<{
     });
   };
 
-  const startMovingWindow = (event: any) => {
+  const onHeaderClick = (event: any) => {
     setOptions(state => {
       if (state.maximized) {
         restoreWindow();
         return { ...state };
       }
       
+      // Start moving window
       return {
         ...state,
         moving: true,
@@ -203,7 +204,7 @@ const WindowComponent: FC<{
           <HeaderComponent
             onClose={closeWindowProcess}
             maximized={options.maximized}
-            startMovingWindow={startMovingWindow}
+            startMovingWindow={onHeaderClick}
             maximizeWindow={maximizeWindow}
           >
           </HeaderComponent>
