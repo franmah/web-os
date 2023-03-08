@@ -1,10 +1,8 @@
 /* TODO:
 
-- Make header it's own component + add icons to top right
-  - if window is side maximized, then moving it should restore it's original size.
-  - resizing and reaching top shoudle set height to max
-  - if window is side maximized, then moving to the side should slid the window and still be considered size maximized (don't do if too hard)
-  - scroll cursor should not show when window is maximized.
+
+- resizing and reaching top shoudle set height to max
+- scroll cursor should not show when window is maximized.
 
 - Fix error and warning messages in console.
 

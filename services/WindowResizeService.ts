@@ -2,7 +2,6 @@ import { WindowResizeDirection, WindowState } from "../components/system/window/
 import { TASKBAR_HEIGHT } from "../constants/TaskbarConsts";
 
 export const resizeWindow = (mouseX: number, mouseY: number, options: WindowState): WindowState => {
-  console.log('resize: ' + options.resizeDirection)
   switch (options.resizeDirection) {
     case WindowResizeDirection.Top: return resizeTop(mouseY, options);
     case WindowResizeDirection.Bottom: return resizeBottom(mouseY, options);
@@ -90,7 +89,6 @@ export  const moveWindow = (event: any, options: WindowState): WindowState => {
 };
 
 export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, options: WindowState): WindowState => {
-  console.log('stop moving')
   // Prevent save position when clicking header and window is maximized
   if (options.maximized || options.sideMaximized) {
     return {
@@ -111,6 +109,15 @@ export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, optio
   
   if (options.moving) {
     options = finishMovingWindow(mouseX, mouseY, options);
+  }
+
+  if (options.resizing && isMouseOverTopOfScreen(mouseY)) {
+    options = {
+      ...options,
+      sideMaximized: true,
+      top: 0,
+      height: window.innerHeight - TASKBAR_HEIGHT
+    }
   }
 
   if (!options.maximized && !options.sideMaximized) {
@@ -134,7 +141,6 @@ const saveWindowPosition = (options: WindowState): WindowState => {
 }
 
 const getRestoredWindowOptionsRelativeToMouse = (mouseX: number, mouseY: number, options: WindowState): WindowState => {
-  console.log('getRestoredWinow...')
   // should start with mouse in middle and prevent from going out of screen.
   let leftPosition = mouseX -  options.previousWidth / 2;
   leftPosition = Math.max(leftPosition, 0); // Don't go over left side of screen;
@@ -157,7 +163,6 @@ const getRestoredWindowOptionsRelativeToMouse = (mouseX: number, mouseY: number,
 }
 
 export const finishMovingWindow = (mouseX: number, mouseY: number, options: WindowState): WindowState => {
-  console.log('fix')
   const outsideTop = mouseY <= 0;
   const outsideLeft = mouseX <= 0;
   const outsideRight = mouseX >= window.innerWidth;
