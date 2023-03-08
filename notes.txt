@@ -1,7 +1,5 @@
 /* TODO:
 
-- scroll cursor should not show when window is maximized.
-
 - Fix error and warning messages in console.
 
 - resizing:
@@ -31,6 +29,4 @@
 
 - Eventually I'll need a WindowManagerSystemProcess that know where windows are in case I want 
 to resize when window hits left/right and user wants anoter window to take the rest of the space
-
-
 */

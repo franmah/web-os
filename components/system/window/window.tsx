@@ -1,7 +1,6 @@
 import { FC, useContext, useEffect, useState } from "react";
-import { TASKBAR_HEIGHT } from "../../../constants/TaskbarConsts";
 import { ProcessContext } from "../../../contexts/processContext";
-import { finishMovingWindow, maximizeOrRestoreWindow, moveWindow, resizeWindow, stopMovingAndResizingWindow } from "../../../services/WindowResizeService";
+import { maximizeOrRestoreWindow, moveWindow, resizeWindow, stopMovingAndResizingWindow } from "../../../services/WindowResizeService";
 import WindowBorderComponent from "./border/border";
 import HeaderComponent from "./header/header";
 import styles from './window.module.scss';
