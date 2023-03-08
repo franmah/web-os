@@ -1,12 +1,13 @@
 $extra-border-padding: 6px;
 
-$border-size: 4px;
-$corner-length: 4px;
+$border-size: 6px;
+$corner-length: 8px;
 $corner-radius: 8px;
+$border-offset: -4px;
 
 .topBorderHeader {
   position: absolute;
-  top: -2px;
+  top: $border-offset;
   left: 0px;
   z-index: 10;
 
@@ -53,7 +54,7 @@ $corner-radius: 8px;
   position: absolute;
   z-index: 10;
   top: 0px;
-  left: -2px;
+  left: $border-offset;
   height: calc(100% + 2px);
   width: $border-size;
 
@@ -99,7 +100,7 @@ $corner-radius: 8px;
     border-top-right-radius: $corner-radius;
     
     &:hover {
-      cursor:se-resize;
+      cursor: ne-resize;
     }
   }
 
@@ -123,7 +124,7 @@ $corner-radius: 8px;
 
 .bottomBorder {
   position: absolute;
-  bottom: -3px;
+  bottom: $border-offset;
   left: 0px;
   z-index: 10;
   

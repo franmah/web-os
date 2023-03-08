@@ -4,6 +4,7 @@
   - resizing area should be outside of window
   - keep cursor changed while resizing even if going out of window
 
+- window border radius size should be a global style and applied to header, hello and window
 - change shadow box when window is selected
 - Fix <HeaderComponent.../> error in window.tsx
 - try useRef for better performance
