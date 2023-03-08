@@ -1,24 +1,18 @@
-.center {
-  display: flex;
-  width: 100%;
-  height: 100%;
-
-  .centerLeft, .centerRight {
-    width: 2px;
-
-    &:hover {
-      cursor: e-resize;
-    }
-  }
-}
+$border-size: 8px;
+$extra-border-padding: 6px;
 
 .topBorderHeader {
-  display: flex;
-  width: calc(100% + 6px);
+  position: absolute;
+  top: -$extra-border-padding;
+  left: -$extra-border-padding;
+  z-index: 10;
 
+  display: flex;
+  width: calc(100% + ($extra-border-padding * 2));
+  
   .topBorder {
     flex: 1;
-    height: 4px;
+    height: $border-size;
     
     &:hover {
       cursor: n-resize;
@@ -27,25 +21,45 @@
 
   .topLeft, .topRight {
     width: 8px;
-    height: 4px;
+    height: $border-size;
   }
 
-  .topLeft:hover {
-    cursor:se-resize;
-  }
+  .topLeft:hover { cursor:se-resize; }
 
-  .topRight:hover {
-    cursor: ne-resize;
+  .topRight:hover { cursor: ne-resize; }
+}
+
+.center {
+  position: absolute;
+  top: 0px;
+  left: -$extra-border-padding;
+  z-index: 10;
+
+  display: flex;
+  width: calc(100% + ($extra-border-padding * 2));
+  height: 100%;
+
+  .centerLeft, .centerRight {
+    width: $border-size;
+
+    &:hover {
+      cursor: e-resize;
+    }
   }
 }
 
-.bottomHeaderBorder {
+.bottomBorder {
+  position: absolute;
+  bottom: -$extra-border-padding;
+  left: -$extra-border-padding;
+  z-index: 10;
+  
   display: flex; 
-  width: calc(100% + 8px);
+  width: calc(100% + $extra-border-padding * 2);
 
-  .bottomBorder {
+  .bottom {
     flex: 1;
-    height: 4px;
+    height: $border-size;
     
     &:hover {
       cursor: n-resize;
@@ -54,14 +68,10 @@
 
   .bottomLeft, .bottomRight {
     width: 8px;
-    height: 4px;
+    height: $border-size;
   }
 
-  .bottomLeft:hover {
-    cursor: ne-resize;
-  }
+  .bottomLeft:hover { cursor: ne-resize; }
 
-  .bottomRight:hover {
-    cursor: se-resize;
-  }
+  .bottomRight:hover { cursor: se-resize; }
 }

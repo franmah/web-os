@@ -135,6 +135,7 @@ const WindowComponent: FC<{
       }}
     >
       <WindowBorderComponent
+        height={options.height}
         allowResize={!options.maximized}
         onBordersMouseDown={onBordersMouseDown}
       >

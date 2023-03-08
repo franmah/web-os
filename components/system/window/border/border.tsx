@@ -3,10 +3,11 @@ import { WindowResizeDirection } from "../window";
 import styles from './border.module.scss';
 
 const WindowBorderComponent: FC<{
+  height: number,
   allowResize: boolean,
   onBordersMouseDown: (event: any, direction: WindowResizeDirection) => void,
   children: React.ReactNode,
-}> = ({ allowResize, onBordersMouseDown, children }) => {
+}> = ({ height, allowResize, onBordersMouseDown, children }) => {
 
   const getClass = (direction: string) => {
     if (!allowResize){
@@ -30,9 +31,7 @@ const WindowBorderComponent: FC<{
     <div
       style={{
         width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column'
+        height: `${height}px`,
       }}
     >
       {/*  TOP BORDER */}
@@ -68,14 +67,14 @@ const WindowBorderComponent: FC<{
       </div>
 
       {/*  BOTTOM BORDER */}
-      <div className={styles.bottomHeaderBorder}>
+      <div className={styles.bottomBorder}>
         
         <div
           className={getClass('bottomLeft')}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.BottomLeft)}>
         </div>
         <div
-          className={getClass('bottomBorder')}
+          className={getClass('bottom')}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Bottom)}>
         </div>
         <div
