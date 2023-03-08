@@ -1,7 +1,5 @@
 /* TODO:
 
-
-- resizing and reaching top shoudle set height to max
 - scroll cursor should not show when window is maximized.
 
 - Fix error and warning messages in console.

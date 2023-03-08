@@ -14,7 +14,6 @@ export enum WindowResizeDirection {
   Top, Bottom, Left, Right, TopRight, TopLeft, BottomLeft, BottomRight
 };
 
-// TODO: move to its own folder
 export type WindowState = {
   top: number,
   left: number,
@@ -51,18 +50,6 @@ const DEFAULT_WINDOW_STATE: WindowState = {
   sideMaximized: false
 };
 
-/**
- * ISSUE:
- * When window is in fullscreen, the previous position is saved.
- * When double clicking, it triggers a mouse down that will set the options to resize/move
- * which then sets the previous position (stopMovingAndResizingWindow) to full
- * 
- * See this for how to use event.detail + timeout
- * https://stackoverflow.com/a/60177326
- * onMouseDown functions whould have to setTimeout before moving/resizing to make sure it's not a double click
- * 
- * Or maybe use on drag start
- */
 const WindowComponent: FC<{
   params: WindowParams,
   children: React.ReactNode }
@@ -149,6 +136,7 @@ const WindowComponent: FC<{
       }}
     >
       <WindowBorderComponent
+        allowResize={!options.maximized}
         onBordersMouseDown={onBordersMouseDown}
       >
         <div className={styles.centerContent}>
