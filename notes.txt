@@ -1,26 +1,22 @@
 /* TODO:
 
-- Fix error and warning messages in console.
-
 - resizing:
+  - resizing area should be outside of window
   - keep cursor changed while resizing even if going out of window
+
 - change shadow box when window is selected
 - Fix <HeaderComponent.../> error in window.tsx
 - try useRef for better performance
 
-- Before big change, refactor code into services. And organize window service into multiple services if needed
-- BIG CHANGE:  
-  SHOULD ASK REDDIT FIRST
-  ONLY FUNCTION THAT CHANGE STATE SHOULD BE IN HOOK (closeWindow shouldn't be for example)
-  move useState into its own hook. Create functions called by children components instead of 
-  changing the state directly LIKE useProcessContextState
+- Refactor code into services. And organize window service into multiple services if needed
 
 - put types in their own folder
 
-- Make sure style matches windows 11
 - Add animation: on Maximize/restore
 - Add animation when moving window and mouse reaches side (and maximize)
 - Maximze button should show special menu when hovered after a while. (let's you side maximize it)
+
+- Make sure style matches windows 11
 - IF TIME: Find a way to show context info when hovergin something for a while (a reusable component or something.
 
     
