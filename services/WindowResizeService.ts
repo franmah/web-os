@@ -89,7 +89,39 @@ export  const moveWindow = (event: any, options: WindowState): WindowState => {
   }
 };
 
+export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, options: WindowState): WindowState => {
+  console.log('stop moving')
+  // Prevent save position when clicking header and window is maximized
+  if (options.maximized || options.sideMaximized) {
+    return {
+      ...options,
+      moving: false,
+      resizing: false
+    }
+  }
+
+  if (!options.resizing && !options.moving) {
+    return options;
+  }
+
+  options.maximized = false;
+  options.previousTop = options.top,
+  options.previousLeft = options.left,
+  options.previousHeight = options.height,
+  options.previousWidth = options.width
+
+  if (options.moving) {
+    options = finishMovingWindow(mouseX, mouseY, options);
+  }
+
+  options.resizing = false;
+  options.moving = false;
+
+  return { ...options };
+};
+
 const getRestoredWindowOptionsRelativeToMouse = (mouseX: number, mouseY: number, options: WindowState): WindowState => {
+  console.log('getRestoredWinow...')
   // should start with mouse in middle and prevent from going out of screen.
   let leftPosition = mouseX -  options.previousWidth / 2;
   leftPosition = Math.max(leftPosition, 0); // Don't go over left side of screen;
@@ -112,6 +144,7 @@ const getRestoredWindowOptionsRelativeToMouse = (mouseX: number, mouseY: number,
 }
 
 export const finishMovingWindow = (mouseX: number, mouseY: number, options: WindowState): WindowState => {
+  console.log('fix')
   const outsideTop = mouseY <= 0;
   const outsideLeft = mouseX <= 0;
   const outsideRight = mouseX >= window.innerWidth;
@@ -148,6 +181,30 @@ export const finishMovingWindow = (mouseX: number, mouseY: number, options: Wind
   return {
     ...options
   }
-}
+};
+
+export const maximizeOrRestoreWindow = (options: WindowState): WindowState => {
+  console.log('maximize or restore')
+
+  if (options.sideMaximized) {
+    return {
+      ...options,
+      sideMaximized: false,
+      top: options.previousTop,
+      left: options.previousLeft,
+      width: options.previousWidth,
+      height: options.previousHeight
+    }
+  }
+
+  return {
+    ...options,
+    top: options.maximized ? options.previousTop : 0,
+    left: options.maximized ? options.previousLeft : 0,
+    width: options.maximized ? options.previousWidth : window.innerWidth,
+    height: options.maximized ? options.previousHeight : window.innerHeight - TASKBAR_HEIGHT,
+    maximized: !options.maximized,
+  }
+};
 
 const isMouseOverTopOfScreen = (mouseY: number) => mouseY < 0;

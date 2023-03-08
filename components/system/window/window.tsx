@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { TASKBAR_HEIGHT } from "../../../constants/TaskbarConsts";
 import { ProcessContext } from "../../../contexts/processContext";
-import { finishMovingWindow, moveWindow, resizeWindow } from "../../../services/WindowResizeService";
+import { finishMovingWindow, maximizeOrRestoreWindow, moveWindow, resizeWindow, stopMovingAndResizingWindow } from "../../../services/WindowResizeService";
 import WindowBorderComponent from "./border/border";
 import HeaderComponent from "./header/header";
 import styles from './window.module.scss';
@@ -77,49 +77,20 @@ const WindowComponent: FC<{
   // But that means the component renders on every mousemove/mouseup
   // maybe useRef instead of useState? (not for every field though)
   useEffect(() => {
-    document.addEventListener('mouseup', stopMovingAndResizingWindow);
+    document.addEventListener('mouseup', onMouseUp);
     // Listener on document otherwise window stops updating if mouse moves out of it (if user moves mouse too fast)
     document.addEventListener('mousemove', onMouseMove);
 
     return () => {
-      document.removeEventListener('mouseup', stopMovingAndResizingWindow);
+      document.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('mousemove', onMouseMove);
     }
   }, []);
 
-  const stopMovingAndResizingWindow = (event: MouseEvent) => {
+  const onMouseUp = (event: MouseEvent) => {
     setOptions(options => {
-      // Prevent save position when clicking header and window is maximized
-      if (options.maximized) {
-        return {
-          ...options,
-          moving: false,
-          resizing: false
-        }
-      }
-
-      if (!options.resizing && !options.moving) {
-        return options;
-      }
-
-      const mouseX = event.clientX;
-      const mouseY = event.clientY;
-
-      options.maximized = false;
-      options.previousTop = options.top,
-      options.previousLeft = options.left,
-      options.previousHeight = options.height,
-      options.previousWidth = options.width
-
-      if (options.moving) {
-        options = finishMovingWindow(mouseX, mouseY, options);
-      }
-
-      options.resizing = false;
-      options.moving = false;
-
-      return { ...options };
-  });
+     return stopMovingAndResizingWindow(event.clientX, event.clientY, options);
+    });
   };
 
   const onHeaderClick = (event: any) => {
@@ -157,16 +128,9 @@ const WindowComponent: FC<{
     }));
   };
 
-  const maximizeOrRestoreWindow = (event: any) => {
+  const onHeaderDoubleClick = (event: any) => {
     setOptions(options => {
-      return {
-        ...options,
-        top: options.maximized ? options.previousTop : 0,
-        left: options.maximized ? options.previousLeft : 0,
-        width: options.maximized ? options.previousWidth : window.innerWidth,
-        height: options.maximized ? options.previousHeight : window.innerHeight - TASKBAR_HEIGHT,
-        maximized: !options.maximized
-      }
+      return maximizeOrRestoreWindow(options);
     });
   };
 
@@ -192,7 +156,7 @@ const WindowComponent: FC<{
             onClose={closeWindowProcess}
             maximized={options.maximized}
             startMovingWindow={onHeaderClick}
-            maximizeWindow={maximizeOrRestoreWindow}
+            maximizeWindow={onHeaderDoubleClick}
           >
           </HeaderComponent>
 

@@ -5,7 +5,7 @@
   - resizing and reaching top shoudle set height to max
   - if window is side maximized, then moving to the side should slid the window and still be considered size maximized (don't do if too hard)
   - scroll cursor should not show when window is maximized.
-  
+
 - Fix error and warning messages in console.
 
 - resizing:
@@ -14,16 +14,15 @@
 - Fix <HeaderComponent.../> error in window.tsx
 - try useRef for better performance
 
-- BIG CHANGE: 
+- Before big change, refactor code into services. And organize window service into multiple services if needed
+- BIG CHANGE:  
   SHOULD ASK REDDIT FIRST
   ONLY FUNCTION THAT CHANGE STATE SHOULD BE IN HOOK (closeWindow shouldn't be for example)
   move useState into its own hook. Create functions called by children components instead of 
   changing the state directly LIKE useProcessContextState
 
-- Decide whether to differentiate a click from a double click.
-
 - put types in their own folder
-- organize window service into multiple services if needed
+
 - Make sure style matches windows 11
 - Add animation: on Maximize/restore
 - Add animation when moving window and mouse reaches side (and maximize)
