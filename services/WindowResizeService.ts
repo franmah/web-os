@@ -104,14 +104,17 @@ export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, optio
     return options;
   }
 
+  // BUG: saving position before checking if the window has been moved to the side and set as side maximized.
+  // When double clicking it will remember this position rather than real original position.
   options.maximized = false;
-  options.previousTop = options.top,
-  options.previousLeft = options.left,
-  options.previousHeight = options.height,
-  options.previousWidth = options.width
 
+  
   if (options.moving) {
     options = finishMovingWindow(mouseX, mouseY, options);
+  }
+
+  if (!options.maximized && !options.sideMaximized) {
+    options = saveWindowPosition(options);
   }
 
   options.resizing = false;
@@ -119,6 +122,16 @@ export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, optio
 
   return { ...options };
 };
+
+const saveWindowPosition = (options: WindowState): WindowState => {
+  return {
+    ...options,
+    previousTop: options.top,
+    previousLeft: options.left,
+    previousHeight: options.height,
+    previousWidth: options.width
+  }
+}
 
 const getRestoredWindowOptionsRelativeToMouse = (mouseX: number, mouseY: number, options: WindowState): WindowState => {
   console.log('getRestoredWinow...')
