@@ -1,16 +1,17 @@
 /* TODO:
 
 - animations
-  - animation on top maximize
   - animation on left side maximize
   - animation on right side maximize
   - add animation to maximize window
+  - Fix the weird calculation for width and height (why -65px?)
   - create animation folder + move modals to their own component.
   - add fade out animation (when maximizing window but then no)
 
 - resizing:
   - keep cursor changed while resizing even if going out of window
   - should set a min height/width to prevent resizing down too much
+- moving window left/right should stop once mouse is passed screen
 - window border radius size should be a global style and applied to header, hello and window
 - change shadow box when window is selected
 - Fix <HeaderComponent.../> error in window.tsx

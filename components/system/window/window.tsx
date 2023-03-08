@@ -29,7 +29,7 @@ export type WindowState = {
   previousHeight: number,
   maximized: boolean,
   sideMaximized: boolean,
-  showMaximizePlacehodler: boolean
+  showMaximizePlacehodler: 'full' | 'left' | 'right' | null
 };
 
 const DEFAULT_WINDOW_STATE: WindowState = {
@@ -48,7 +48,7 @@ const DEFAULT_WINDOW_STATE: WindowState = {
   previousHeight: 400,
   maximized: false,
   sideMaximized: false,
-  showMaximizePlacehodler: false
+  showMaximizePlacehodler: null
 };
 
 const WindowComponent: FC<{
@@ -126,9 +126,9 @@ const WindowComponent: FC<{
     closeProcess(processId);
   };
 
-  const placeHolderInEffect = (top: number, left: number, width: number, height: number) => {
+  const maximizeAnimation = (left: number, width: number, height: number) => {
     return `
-      @keyframes maximize-placeholder {
+      @keyframes window-maximize-animation {
         0%   {top: ${0}px; left: ${left}px; width: ${width}px; height: ${height}px;}
         90%   {top: ${0}px; left: ${8}px; width: calc(100% - 16px); height: calc(100% - 65px);}
         100% {top: ${8}px; left: ${8}px; width: calc(100% - 16px); height: calc(100% - 65px);}
@@ -136,17 +136,58 @@ const WindowComponent: FC<{
     `;
   };
 
+  const leftMaximizeAnimation = (top: number, height: number) => {
+    return `
+      @keyframes window-left-maximize-animation {
+        0%   {top: ${top}px; left: ${0}px; width: ${0}px; height: ${height}px;}
+        90%   {top: ${8}px; left: ${0}px; width: calc(100% / 2 - 8px); height: calc(100% - 65px);}
+        100% {top: ${8}px; left: ${8}px; width: calc(100% / 2 - 8px); height: calc(100% - 65px);}
+      }
+    `;
+  };
+
+  const rightMaximizeAnimation = (top: number, height: number) => {
+    return `
+      @keyframes window-right-maximize-animation {
+        0%   {top: ${top}px; right: ${0}px; width: ${0}px; height: ${height}px;}
+        90%   {top: ${8}px; right: ${8}px; width: calc(100% / 2 - 8px); height: calc(100% - 65px);}
+        100% {top: ${8}px; right: ${8}px; width:calc(100% / 2 - 8px); height: calc(100% - 65px);}
+      }
+    `;
+  };
+
   return (
     <Fragment>
-      <style children={placeHolderInEffect(options.top, options.left, options.width, options.height)} />
-      {
-        options.showMaximizePlacehodler &&
-        <div
-          style={{ animationName: 'maximize-placeholder'}}
-          className={styles.maximizePlaceholderModal}
-        >
-        </div>
-      }
+      <style children={`
+        ${maximizeAnimation(options.left, options.width, options.height)} 
+        ${leftMaximizeAnimation(options.top, options.height)} 
+        ${rightMaximizeAnimation(options.top, options.height)}
+      `}/>
+
+      <Fragment>
+        {
+          options.showMaximizePlacehodler === 'full' &&
+          <div
+            style={{ animationName: 'window-maximize-animation'}}
+            className={styles.maximizePlaceholderModal}
+          >
+          </div>
+        }
+        {
+          options.showMaximizePlacehodler === 'left' && 
+          <div 
+            className={styles.leftSideMaximizePlaceholderModal} 
+            style={{ animationName: 'window-left-maximize-animation'}}
+          ></div>
+        }
+        { 
+          options.showMaximizePlacehodler === 'right' &&
+          <div 
+            className={styles.rightSideMaximizePlaceholderModal}
+            style={{ animationName: 'window-right-maximize-animation'}}
+          ></div>
+        }
+      </Fragment>
 
       <div
         className={styles.window}

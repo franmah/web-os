@@ -77,9 +77,15 @@ export  const moveWindow = (event: any, options: WindowState): WindowState => {
     return getRestoredWindowOptionsRelativeToMouse(mouseX, mouseY, options);
   }
 
+  const showMaximizePlacehodler =
+    isMouseOverTopOfScreen(mouseY) ? 'full' :
+    isMouseLeftOfScreen(mouseX) ? 'left' :
+    isMouseRightOfScreen(mouseX) ? 'right' :
+    null;
+
   return {
     ...options,
-    showMaximizePlacehodler: isMouseOverTopOfScreen(mouseY),
+    showMaximizePlacehodler,
     maximized: false,
     sideMaximized: false,
     top: Math.max(0, options.top + changeY),
@@ -125,7 +131,7 @@ export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, optio
     options = saveWindowPosition(options);
   }
 
-  options.showMaximizePlacehodler = false;
+  options.showMaximizePlacehodler = null;
   options.resizing = false;
   options.moving = false;
 
@@ -227,4 +233,8 @@ export const maximizeOrRestoreWindow = (options: WindowState): WindowState => {
   }
 };
 
-const isMouseOverTopOfScreen = (mouseY: number) => mouseY < 0;
+const isMouseOverTopOfScreen = (mouseY: number) => mouseY <= 0;
+
+const isMouseLeftOfScreen = (mouseX: number) => mouseX <= 0;
+
+const isMouseRightOfScreen = (mouseX: number) => mouseX >= window.innerWidth;
