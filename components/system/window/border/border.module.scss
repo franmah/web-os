@@ -1,18 +1,21 @@
-$border-size: 8px;
 $extra-border-padding: 6px;
+
+$border-size: 4px;
+$corner-length: 4px;
+$corner-radius: 8px;
 
 .topBorderHeader {
   position: absolute;
-  top: -$extra-border-padding;
-  left: -$extra-border-padding;
+  top: -2px;
+  left: 0px;
   z-index: 10;
 
   display: flex;
-  width: calc(100% + ($extra-border-padding * 2));
+  width: calc(100% + 2px);
+  height: $border-size;
   
   .topBorder {
     flex: 1;
-    height: $border-size;
     
     &:hover {
       cursor: n-resize;
@@ -20,8 +23,15 @@ $extra-border-padding: 6px;
   }
 
   .topLeft, .topRight {
-    width: 8px;
-    height: $border-size;
+    width: $corner-length;
+  }
+
+  .topLeft {
+    border-top-left-radius: $corner-radius;
+  }
+
+  .topRight {
+    border-top-right-radius: $corner-radius;
   }
 
   .topLeft:hover { cursor:se-resize; }
@@ -29,37 +39,100 @@ $extra-border-padding: 6px;
   .topRight:hover { cursor: ne-resize; }
 }
 
-.center {
-  position: absolute;
-  top: 0px;
-  left: -$extra-border-padding;
-  z-index: 10;
-
-  display: flex;
-  width: calc(100% + ($extra-border-padding * 2));
+.children {
+  z-index: 1;
+  width: 100%;
   height: 100%;
 
-  .centerLeft, .centerRight {
-    width: $border-size;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.centerLeft {
+  position: absolute;
+  z-index: 10;
+  top: 0px;
+  left: -2px;
+  height: calc(100% + 2px);
+  width: $border-size;
+
+  display: flex;
+  flex-direction: column;
+
+  .leftCenterTop {
+    height: $corner-length;
+    border-top-left-radius: $corner-radius;
+    
+    &:hover {
+      cursor:se-resize;
+    }
+  }
+
+  .leftCenterMiddle {
+    flex: 1;
+  
+    &:hover {
+      cursor: e-resize;
+    }
+  }
+
+  .leftCenterBottom {
+    height: $corner-length;
+    border-bottom-left-radius: $corner-radius;
+  }
+}
+
+.centerRight {
+  z-index: 10;
+  position: absolute;
+  top: 0px;
+  left: calc(100% - 2px);
+  height: calc(100%);
+
+  display: flex;
+  flex-direction: column;
+  width: $border-size;
+
+  .rightCenterTop {
+    height:$corner-length;
+    border-top-right-radius: $corner-radius;
+    
+    &:hover {
+      cursor:se-resize;
+    }
+  }
+
+  .rightCenterMiddle {
+    flex: 1;
 
     &:hover {
       cursor: e-resize;
     }
   }
+
+  .rightCenterBottom {
+    height: $corner-length;
+    border-bottom-right-radius: $corner-radius;
+  }
+  
+  &:hover {
+    cursor: e-resize;
+  }
 }
 
 .bottomBorder {
   position: absolute;
-  bottom: -$extra-border-padding;
-  left: -$extra-border-padding;
+  bottom: -3px;
+  left: 0px;
   z-index: 10;
   
   display: flex; 
-  width: calc(100% + $extra-border-padding * 2);
+  width: calc(100% + 2px);
+  height: $border-size;
 
   .bottom {
     flex: 1;
-    height: $border-size;
     
     &:hover {
       cursor: n-resize;
@@ -67,8 +140,15 @@ $extra-border-padding: 6px;
   }
 
   .bottomLeft, .bottomRight {
-    width: 8px;
-    height: $border-size;
+    width: $corner-length;
+  }
+
+  .bottomLeft {
+    border-bottom-left-radius: $corner-radius;
+  }
+
+  .bottomRight {
+    border-bottom-right-radius: $corner-radius;
   }
 
   .bottomLeft:hover { cursor: ne-resize; }

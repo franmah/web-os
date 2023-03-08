@@ -15,7 +15,7 @@ const WindowBorderComponent: FC<{
 
     switch (direction) {
       case 'top': return styles.topBorder;
-      case 'topLeft': return styles.topleft;
+      case 'topLeft': return styles.topLeft;
       case 'topRight': return styles.topRight
       case 'centerLeft': return styles.centerLeft;
       case 'centerRight': return styles.centerRight;
@@ -30,7 +30,7 @@ const WindowBorderComponent: FC<{
     <div
       style={{
         width: '100%',
-        height: `100%`,
+        height: '100%',
       }}
     >
       {/*  TOP BORDER */}
@@ -51,18 +51,25 @@ const WindowBorderComponent: FC<{
       </div>
 
       {/*  LEFT + RIGHT BORDERS + CONTENT */}
-      <div className={styles.center}>
-        <div
-          className={getClass('centerLeft')}
-          onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Left)}>
-        </div>
+      <div
+        className={getClass('centerLeft')}
+        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Left)}
+      >
+          <div className={styles.leftCenterTop}></div>
+          <div className={styles.leftCenterMiddle}></div>
+          <div className={styles.leftCenterBottom}></div>
+      </div>
 
-        { children }
+      {/* CHILDREN */}
+      <div className={styles.children}>{ children }</div>
 
-        <div
-          className={getClass('centerRight')}
-          onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Right)}>
-        </div>
+      <div
+        className={getClass('centerRight')}
+        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Right)}
+      >
+        <div className={styles.rightCenterTop}></div>
+        <div className={styles.rightCenterMiddle}></div>
+        <div className={styles.rightCenterBottom}></div>
       </div>
 
       {/*  BOTTOM BORDER */}
