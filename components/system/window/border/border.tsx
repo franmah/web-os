@@ -3,11 +3,10 @@ import { WindowResizeDirection } from "../window";
 import styles from './border.module.scss';
 
 const WindowBorderComponent: FC<{
-  height: number,
   allowResize: boolean,
   onBordersMouseDown: (event: any, direction: WindowResizeDirection) => void,
   children: React.ReactNode,
-}> = ({ height, allowResize, onBordersMouseDown, children }) => {
+}> = ({ allowResize, onBordersMouseDown, children }) => {
 
   const getClass = (direction: string) => {
     if (!allowResize){
@@ -31,7 +30,7 @@ const WindowBorderComponent: FC<{
     <div
       style={{
         width: '100%',
-        height: `${height}px`,
+        height: `100%`,
       }}
     >
       {/*  TOP BORDER */}
