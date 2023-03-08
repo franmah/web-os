@@ -79,6 +79,7 @@ export  const moveWindow = (event: any, options: WindowState): WindowState => {
 
   return {
     ...options,
+    showMaximizePlacehodler: isMouseOverTopOfScreen(mouseY),
     maximized: false,
     sideMaximized: false,
     top: Math.max(0, options.top + changeY),
@@ -124,6 +125,7 @@ export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, optio
     options = saveWindowPosition(options);
   }
 
+  options.showMaximizePlacehodler = false;
   options.resizing = false;
   options.moving = false;
 

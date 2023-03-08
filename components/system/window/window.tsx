@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, Fragment, useContext, useEffect, useState } from "react";
 import { ProcessContext } from "../../../contexts/processContext";
 import { maximizeOrRestoreWindow, moveWindow, resizeWindow, stopMovingAndResizingWindow } from "../../../services/WindowResizeService";
 import WindowBorderComponent from "./border/border";
@@ -28,7 +28,8 @@ export type WindowState = {
   previousWidth: number,
   previousHeight: number,
   maximized: boolean,
-  sideMaximized: boolean
+  sideMaximized: boolean,
+  showMaximizePlacehodler: boolean
 };
 
 const DEFAULT_WINDOW_STATE: WindowState = {
@@ -46,13 +47,14 @@ const DEFAULT_WINDOW_STATE: WindowState = {
   previousWidth: 400,
   previousHeight: 400,
   maximized: false,
-  sideMaximized: false
+  sideMaximized: false,
+  showMaximizePlacehodler: false
 };
 
 const WindowComponent: FC<{
   params: WindowParams,
-  children: React.ReactNode }
-> = ({ params: { processId }, children }) => {
+  children: React.ReactNode
+}> = ({ params: { processId }, children }) => {
 
   const { closeProcess } = useContext(ProcessContext);
 
@@ -104,7 +106,7 @@ const WindowComponent: FC<{
     });
   };
 
-  const onBordersMouseDown = (event: any, direction: WindowResizeDirection) => {
+  const onBorderMouseDown = (event: any, direction: WindowResizeDirection) => {
     setOptions(state => ({
       ...state,
       resizing: true,
@@ -124,33 +126,58 @@ const WindowComponent: FC<{
     closeProcess(processId);
   };
 
-  return (
-    <div
-      className={styles.window}
-      style={{
-        top: options.top,
-        left: options.left,
-        width: `${options.width}px`,
-        height: `${options.height}px`,
-      }}
-    >
-      <WindowBorderComponent
-        allowResize={!options.maximized}
-        onBordersMouseDown={onBordersMouseDown}
-      >
-        <div className={styles.centerContent}>
-          <HeaderComponent
-            onClose={closeWindowProcess}
-            maximized={options.maximized}
-            startMovingWindow={onHeaderClick}
-            maximizeWindow={onHeaderDoubleClick}
-          >
-          </HeaderComponent>
+  const placeHolderInEffect = (top: number, left: number, width: number, height: number) => {
+    return `
+      @keyframes maximize-placeholder {
+        0%   {top: ${0}px; left: ${left}px; width: ${width}px; height: ${height}px;}
+        90%   {top: ${0}px; left: ${8}px; width: calc(100% - 16px); height: calc(100% - 65px);}
+        100% {top: ${8}px; left: ${8}px; width: calc(100% - 16px); height: calc(100% - 65px);}
+      }
+    `;
+  };
 
-          { children }
+  return (
+    <Fragment>
+      <style children={placeHolderInEffect(options.top, options.left, options.width, options.height)} />
+      {
+        options.showMaximizePlacehodler &&
+        <div
+          style={{ animationName: 'maximize-placeholder'}}
+          className={styles.maximizePlaceholderModal}
+        >
         </div>
-      </WindowBorderComponent>    
-    </div>
+      }
+
+      <div
+        className={styles.window}
+        style={{
+          top: options.top,
+          left: options.left,
+          width: `${options.width}px`,
+          height: `${options.height}px`,
+        }}
+      >
+
+        <WindowBorderComponent
+          allowResize={!options.maximized}
+          onBordersMouseDown={onBorderMouseDown}
+        >
+
+          <div className={styles.centerContent}>
+            <HeaderComponent
+              maximized={options.maximized}
+              startMovingWindow={onHeaderClick}
+              maximizeWindow={onHeaderDoubleClick}
+              onClose={closeWindowProcess}
+            >
+            </HeaderComponent>
+
+            { children }
+          </div>
+
+        </WindowBorderComponent>    
+      </div>
+    </Fragment>
   );
 };
 
