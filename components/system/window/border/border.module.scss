@@ -33,7 +33,7 @@ $border-offset: -4px;
     border-top-right-radius: $corner-radius;
   }
 
-  .topLeft:hover { cursor:se-resize; }
+  .topLeft:hover { cursor: se-resize; }
 
   .topRight:hover { cursor: ne-resize; }
 }
@@ -64,7 +64,7 @@ $border-offset: -4px;
     border-top-left-radius: $corner-radius;
     
     &:hover {
-      cursor:se-resize;
+      cursor: se-resize;
     }
   }
 

@@ -40,7 +40,7 @@ const WindowBorderComponent: FC<{
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopLeft)}>
         </div>
         <div 
-          className={getClass('top')} 
+          className={getClass('top')}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Top)}>
         </div>
 
@@ -53,11 +53,16 @@ const WindowBorderComponent: FC<{
       {/*  LEFT + RIGHT BORDERS + CONTENT */}
       <div
         className={getClass('centerLeft')}
-        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Left)}
       >
-          <div className={styles.leftCenterTop}></div>
-          <div className={styles.leftCenterMiddle}></div>
-          <div className={styles.leftCenterBottom}></div>
+          <div className={styles.leftCenterTop} 
+            onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopLeft)}
+          ></div>
+          <div className={styles.leftCenterMiddle}
+            onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Left)}
+          ></div>
+          <div className={styles.leftCenterBottom}
+            onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.BottomLeft)}
+          ></div>
       </div>
 
       {/* CHILDREN */}
@@ -65,11 +70,16 @@ const WindowBorderComponent: FC<{
 
       <div
         className={getClass('centerRight')}
-        onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Right)}
       >
-        <div className={styles.rightCenterTop}></div>
-        <div className={styles.rightCenterMiddle}></div>
-        <div className={styles.rightCenterBottom}></div>
+        <div className={styles.rightCenterTop}
+          onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopRight)}
+        ></div>
+        <div className={styles.rightCenterMiddle}
+          onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Right)}
+        ></div>
+        <div className={styles.rightCenterBottom}
+          onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.BottomRight)}
+        ></div>
       </div>
 
       {/*  BOTTOM BORDER */}

@@ -3,26 +3,50 @@ import { TASKBAR_HEIGHT } from "../constants/TaskbarConsts";
 
 export const resizeWindow = (mouseX: number, mouseY: number, options: WindowState): WindowState => {
   switch (options.resizeDirection) {
-    case WindowResizeDirection.Top: return resizeTop(mouseY, options);
-    case WindowResizeDirection.Bottom: return resizeBottom(mouseY, options);
-    case WindowResizeDirection.Left: return resizeLeft(mouseX, options);
-    case WindowResizeDirection.Right: return resizeRight(mouseX, options);
+    case WindowResizeDirection.Top: {
+      document.body.style.cursor = 'n-resize';
+      return resizeTop(mouseY, options);
+    } 
+    
+    case WindowResizeDirection.Bottom: {
+      document.body.style.cursor = 'n-resize';
+      return resizeBottom(mouseY, options);
+    } 
+    
+    case WindowResizeDirection.Left: {
+      document.body.style.cursor = 'e-resize';
+      return resizeLeft(mouseX, options);
+    } 
+    
+    case WindowResizeDirection.Right: {
+      document.body.style.cursor = 'e-resize';
+      return resizeRight(mouseX, options);
+    } 
+    
     case WindowResizeDirection.TopLeft: {
+      document.body.style.cursor = 'se-resize';
       const updatedOptions = resizeTop(mouseY, options);
       return resizeLeft(mouseX, updatedOptions);
-    }
+    } 
+    
     case WindowResizeDirection.TopRight: {
+      document.body.style.cursor = 'ne-resize';
       const updatedOptions = resizeTop(mouseY, options);
       return resizeRight(mouseX, updatedOptions);
-    }
+    } 
+    
     case WindowResizeDirection.BottomLeft: {
+      document.body.style.cursor = 'ne-resize';
       const updatedOptions = resizeBottom(mouseY, options);
       return resizeLeft(mouseX, updatedOptions);
-    }
+    } 
+    
     case WindowResizeDirection.BottomRight: {
+      document.body.style.cursor = 'se-resize';
       const updatedOptions = resizeBottom(mouseY, options);
       return resizeRight(mouseX, updatedOptions);
     }
+
     default: return options;
   }
 };
@@ -96,6 +120,8 @@ export  const moveWindow = (event: any, options: WindowState): WindowState => {
 };
 
 export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, options: WindowState): WindowState => {
+  document.body.style.cursor = 'default';
+  
   // Prevent save position when clicking header and window is maximized
   if (options.maximized || options.sideMaximized) {
     return {
