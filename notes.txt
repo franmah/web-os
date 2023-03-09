@@ -3,21 +3,25 @@
 - change shadow box and header text color when window is selected
 - Fix <HeaderComponent.../> error in window.tsx
 - try useRef for better performance
-- Refactor code into services. And organize window service into multiple services if needed
 
-- put types in their own folder
 
 - Add animation: on Maximize/restore
-- Add animation when moving window and mouse reaches side (and maximize)
-- Maximze button should show special menu when hovered after a while. (let's you side maximize it)
+- Maximize button
+  - show special menu when hovered after a while. (let's you side maximize it)
+  - apply special menu effect when selected
 
 - Make sure style matches windows 11
-- IF TIME: Find a way to show context info when hovergin something for a while (a reusable component or something.
+
+- Refactor
+  - Refactor code into services. And organize window service into multiple services if needed
+  - put types in their own folder
+
+
+// TODO in anothe branch
+-- Change to styled components so that variables are not defined multiple times
+  - (update to fit styled components) window border radius size should be a global style and applied to header, hello and window
 
     
 - Minimize should be done later (needs shortcut bar to work)
   could be done either hiding window or tell processLoader not to render because it's minimized (add minimize function to useProcessContextState)
 
-
--- Change to styled components so that variables are not defined multiple times
-  - (update to fit styled components) window border radius size should be a global style and applied to header, hello and window
