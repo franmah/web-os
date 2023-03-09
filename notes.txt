@@ -1,11 +1,7 @@
 /* TODO:
 
 - animations
-  - animation on left side maximize
-  - animation on right side maximize
-  - add animation to maximize window
   - Fix the weird calculation for width and height (why -65px?)
-  - create animation folder + move modals to their own component.
   - add fade out animation (when maximizing window but then no)
 
 - resizing:

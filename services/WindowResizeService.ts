@@ -1,4 +1,4 @@
-import { WindowResizeDirection, WindowState } from "../components/system/window/window"
+import { MaximizePlaceholderDirection, WindowResizeDirection, WindowState } from "../components/system/window/window"
 import { TASKBAR_HEIGHT } from "../constants/TaskbarConsts";
 
 export const resizeWindow = (mouseX: number, mouseY: number, options: WindowState): WindowState => {
@@ -78,10 +78,10 @@ export  const moveWindow = (event: any, options: WindowState): WindowState => {
   }
 
   const showMaximizePlacehodler =
-    isMouseOverTopOfScreen(mouseY) ? 'full' :
-    isMouseLeftOfScreen(mouseX) ? 'left' :
-    isMouseRightOfScreen(mouseX) ? 'right' :
-    null;
+    isMouseOverTopOfScreen(mouseY) ? MaximizePlaceholderDirection.Full :
+    isMouseLeftOfScreen(mouseX) ? MaximizePlaceholderDirection.Left :
+    isMouseRightOfScreen(mouseX) ? MaximizePlaceholderDirection.Right :
+    MaximizePlaceholderDirection.null;
 
   return {
     ...options,
@@ -131,7 +131,7 @@ export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, optio
     options = saveWindowPosition(options);
   }
 
-  options.showMaximizePlacehodler = null;
+  options.showMaximizePlacehodler = MaximizePlaceholderDirection.null;
   options.resizing = false;
   options.moving = false;
 

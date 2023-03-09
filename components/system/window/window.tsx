@@ -1,6 +1,7 @@
 import { FC, Fragment, useContext, useEffect, useState } from "react";
 import { ProcessContext } from "../../../contexts/processContext";
 import { maximizeOrRestoreWindow, moveWindow, resizeWindow, stopMovingAndResizingWindow } from "../../../services/WindowResizeService";
+import WindowAnimationPlaceholderComponent from "./animationPlaceholder/animationPlaceholder";
 import WindowBorderComponent from "./border/border";
 import HeaderComponent from "./header/header";
 import styles from './window.module.scss';
@@ -12,6 +13,10 @@ export type WindowParams = {
 export enum WindowResizeDirection {
   Top, Bottom, Left, Right, TopRight, TopLeft, BottomLeft, BottomRight
 };
+
+export enum MaximizePlaceholderDirection {
+  Full, Left, Right, null
+}
 
 export type WindowState = {
   top: number,
@@ -29,7 +34,7 @@ export type WindowState = {
   previousHeight: number,
   maximized: boolean,
   sideMaximized: boolean,
-  showMaximizePlacehodler: 'full' | 'left' | 'right' | null
+  showMaximizePlacehodler: MaximizePlaceholderDirection
 };
 
 const DEFAULT_WINDOW_STATE: WindowState = {
@@ -42,13 +47,13 @@ const DEFAULT_WINDOW_STATE: WindowState = {
   resizeDirection: WindowResizeDirection.Top,
   previousClientX: 0,
   previousClientY: 0,
-  previousTop: 150,
-  previousLeft: 150,
-  previousWidth: 400,
-  previousHeight: 400,
+  previousTop: 100,
+  previousLeft: 400,
+  previousWidth: 1000,
+  previousHeight: 600,
   maximized: false,
   sideMaximized: false,
-  showMaximizePlacehodler: null
+  showMaximizePlacehodler: MaximizePlaceholderDirection.null
 };
 
 const WindowComponent: FC<{
@@ -126,68 +131,15 @@ const WindowComponent: FC<{
     closeProcess(processId);
   };
 
-  const maximizeAnimation = (left: number, width: number, height: number) => {
-    return `
-      @keyframes window-maximize-animation {
-        0%   {top: ${0}px; left: ${left}px; width: ${width}px; height: ${height}px;}
-        90%   {top: ${0}px; left: ${8}px; width: calc(100% - 16px); height: calc(100% - 65px);}
-        100% {top: ${8}px; left: ${8}px; width: calc(100% - 16px); height: calc(100% - 65px);}
-      }
-    `;
-  };
-
-  const leftMaximizeAnimation = (top: number, height: number) => {
-    return `
-      @keyframes window-left-maximize-animation {
-        0%   {top: ${top}px; left: ${0}px; width: ${0}px; height: ${height}px;}
-        90%   {top: ${8}px; left: ${0}px; width: calc(100% / 2 - 8px); height: calc(100% - 65px);}
-        100% {top: ${8}px; left: ${8}px; width: calc(100% / 2 - 8px); height: calc(100% - 65px);}
-      }
-    `;
-  };
-
-  const rightMaximizeAnimation = (top: number, height: number) => {
-    return `
-      @keyframes window-right-maximize-animation {
-        0%   {top: ${top}px; right: ${0}px; width: ${0}px; height: ${height}px;}
-        90%   {top: ${8}px; right: ${8}px; width: calc(100% / 2 - 8px); height: calc(100% - 65px);}
-        100% {top: ${8}px; right: ${8}px; width:calc(100% / 2 - 8px); height: calc(100% - 65px);}
-      }
-    `;
-  };
-
   return (
     <Fragment>
-      <style children={`
-        ${maximizeAnimation(options.left, options.width, options.height)} 
-        ${leftMaximizeAnimation(options.top, options.height)} 
-        ${rightMaximizeAnimation(options.top, options.height)}
-      `}/>
-
-      <Fragment>
-        {
-          options.showMaximizePlacehodler === 'full' &&
-          <div
-            style={{ animationName: 'window-maximize-animation'}}
-            className={styles.maximizePlaceholderModal}
-          >
-          </div>
-        }
-        {
-          options.showMaximizePlacehodler === 'left' && 
-          <div 
-            className={styles.leftSideMaximizePlaceholderModal} 
-            style={{ animationName: 'window-left-maximize-animation'}}
-          ></div>
-        }
-        { 
-          options.showMaximizePlacehodler === 'right' &&
-          <div 
-            className={styles.rightSideMaximizePlaceholderModal}
-            style={{ animationName: 'window-right-maximize-animation'}}
-          ></div>
-        }
-      </Fragment>
+      <WindowAnimationPlaceholderComponent
+        showMaximizePlacehodler={options.showMaximizePlacehodler}
+        top={options.top}
+        left={options.left}
+        width={options.width}
+        height={options.height}
+      />
 
       <div
         className={styles.window}
