@@ -2,10 +2,9 @@
 
 - animations
 
-- resizing:
-  - should set a min height/width to prevent resizing down too much
 - moving window left/right should stop once mouse is passed screen
-- window border radius size should be a global style and applied to header, hello and window
+- add optional params to header
+- window 
 - change shadow box when window is selected
 - Fix <HeaderComponent.../> error in window.tsx
 - try useRef for better performance
@@ -27,3 +26,4 @@
 
 
 -- Change to styled components so that variables are not defined multiple times
+  - (update to fit styled components) window border radius size should be a global style and applied to header, hello and window

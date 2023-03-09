@@ -17,6 +17,7 @@ const HeaderComponent: FC<{
     <header
       className={styles.header}
     >
+      {/* Empty box used to start moving window */}
       <div 
         className={styles.moveContainer}
         onMouseDown={startMovingWindow}
