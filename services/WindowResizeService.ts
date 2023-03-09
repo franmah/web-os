@@ -91,15 +91,17 @@ export  const moveWindow = (event: any, options: WindowState): WindowState => {
   const mouseX = event.clientX;
   const mouseY = event.clientY;
 
-  const changeX = mouseX - options.previousClientX;
-  const changeY = isMouseOverTopOfScreen(mouseY) ?
-    0 :
-    mouseY - options.previousClientY;
-
   // If window was maximized when move started: restore previous width and height relative to mouse
   if (options.maximized || options.sideMaximized) {
     return getRestoredWindowOptionsRelativeToMouse(mouseX, mouseY, options);
   }
+
+  const changeX = isMouseLeftOfScreen(mouseX) || isMouseRightOfScreen(mouseX) ?
+    0 :
+    mouseX - options.previousClientX;
+  const changeY = isMouseOverTopOfScreen(mouseY) ?
+    0 :
+    mouseY - options.previousClientY;
 
   const showMaximizePlacehodler =
     isMouseOverTopOfScreen(mouseY) ? MaximizePlaceholderDirection.Full :
