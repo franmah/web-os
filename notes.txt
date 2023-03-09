@@ -28,6 +28,5 @@
 - Minimize should be done later (needs shortcut bar to work)
   could be done either hiding window or tell processLoader not to render because it's minimized (add minimize function to useProcessContextState)
 
-- Eventually I'll need a WindowManagerSystemProcess that know where windows are in case I want 
-to resize when window hits left/right and user wants anoter window to take the rest of the space
-*/
+
+-- Change to styled components so that variables are not defined multiple times
