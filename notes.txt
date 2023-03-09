@@ -1,9 +1,18 @@
 /* TODO:
-- FIX WJNDOW OPTIONS ERROR: when starting process, Paramus should be for the process not the wjndow.
-Fix the passing of window options and header options
+
 - change shadow box and header text color when window is selected
+- it looks like the window's borders should have a color
+- Refactor Processes
+  - Window in load process should be in it's own component: RenderProcess
+  - Window should not receive process params, it should receive its own windowParams but the component starting the process should still be able to pass windowParams
+
 - Fix <HeaderComponent.../> error in window.tsx
-- try useRef for better performance
+- try useRef for better performance 
+    Message :
+        // TODO: event listener on mouseup and mousemove are very inefficient because
+        // they set the state every time (needed in order to get most updated state)
+        // But that means the component renders on every mousemove/mouseup
+        // maybe useRef instead of useState? (not for every field though)
 
 
 - Add animation: on Maximize/restore
@@ -14,15 +23,18 @@ Fix the passing of window options and header options
 - Make sure style matches windows 11
 
 - Refactor
+  - window options/state is too big, try to break it down (maybe into multiple states?).
   - Refactor code into services. And organize window service into multiple services if needed
   - put types in their own folder
 
+  -- You should be able to open the same process multiple times unless it's set to unique
 
-// TODO in anothe branch
+
+// TODO in another branch
 -- Change to styled components so that variables are not defined multiple times
   - (update to fit styled components) window border radius size should be a global style and applied to header, hello and window
 
-    
+
 - Minimize should be done later (needs shortcut bar to work)
   could be done either hiding window or tell processLoader not to render because it's minimized (add minimize function to useProcessContextState)
 

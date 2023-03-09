@@ -2,10 +2,8 @@
   position: absolute;
   z-index: 100;
   background-color: #ced8eb;
-  box-shadow: 0px 0px 8px 2px #00000041;
   min-width: 150px;
   min-height: 200px;
-
   border-radius: 8px;
 
   .centerContent {
@@ -15,4 +13,12 @@
     height: 100%;
     border-radius: 8px;
   }
+}
+
+.windowUnselected {
+  box-shadow: 0px 0px 4px 2px #0000002a;
+}
+
+.windowSelected {
+  box-shadow: 0px 0px 16px 2px #0000003a;
 }

@@ -1,5 +1,7 @@
 import { FC, Fragment, useContext, useEffect, useState } from "react";
+import { v4 } from "uuid";
 import { ProcessContext } from "../../../contexts/processContext";
+import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/EventService";
 import { maximizeOrRestoreWindow, moveWindow, resizeWindow, stopMovingAndResizingWindow } from "../../../services/WindowResizeService";
 import WindowAnimationPlaceholderComponent from "./animationPlaceholder/animationPlaceholder";
 import WindowBorderComponent from "./border/border";
@@ -8,6 +10,7 @@ import styles from './window.module.scss';
 
 export type WindowParams = {
   processId: string,
+  windowId: string,
   headerOptions?: WindowHeaderOptions
 };
 
@@ -17,7 +20,7 @@ export enum WindowResizeDirection {
 
 export enum MaximizePlaceholderDirection {
   Full, Left, Right, null
-}
+};
 
 export type WindowState = {
   top: number,
@@ -35,7 +38,8 @@ export type WindowState = {
   previousHeight: number,
   maximized: boolean,
   sideMaximized: boolean,
-  showMaximizePlacehodler: MaximizePlaceholderDirection
+  showMaximizePlacehodler: MaximizePlaceholderDirection,
+  selected: boolean
 };
 
 const DEFAULT_WINDOW_STATE: WindowState = {
@@ -54,7 +58,8 @@ const DEFAULT_WINDOW_STATE: WindowState = {
   previousHeight: 600,
   maximized: false,
   sideMaximized: false,
-  showMaximizePlacehodler: MaximizePlaceholderDirection.null
+  showMaximizePlacehodler: MaximizePlaceholderDirection.null,
+  selected: true
 };
 
 const WindowComponent: FC<{
@@ -66,20 +71,28 @@ const WindowComponent: FC<{
 
   const [options, setOptions] = useState<WindowState>(DEFAULT_WINDOW_STATE);
 
-  // TODO: event listener on mouseup and mousemove are very inefficient because
-  // they set the state every time (needed in order to get most updated state)
-  // But that means the component renders on every mousemove/mouseup
-  // maybe useRef instead of useState? (not for every field though)
   useEffect(() => {
     document.addEventListener('mouseup', onMouseUp);
     // Listener on document otherwise window stops updating if mouse moves out of it (if user moves mouse too fast)
     document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mousedown', onDocumentMouseDown)
 
     return () => {
       document.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mousedown', onDocumentMouseDown);
     }
   }, []);
+
+  const onDocumentMouseDown = (event: MouseEvent) => {
+    if (isEventOriginatedFromWithinTargetIdSubtree(event, params.windowId)) {
+      console.log('selecting window')
+      setOptions(currentOptions => ({ ...currentOptions, selected: true }));
+    } else {
+      console.log('unselecting window')
+      setOptions(currentOptions => ({ ...currentOptions, selected: false }));
+    }
+  };
 
   const onMouseUp = (event: MouseEvent) => {
     setOptions(options => {
@@ -132,6 +145,10 @@ const WindowComponent: FC<{
     closeProcess(params.processId);
   };
 
+  const getClass = () => {
+    return `${styles.window} ${ options.selected ? styles.windowSelected : styles.windowUnselected}`;
+  }
+
   return (
     <Fragment>
       <WindowAnimationPlaceholderComponent
@@ -143,7 +160,8 @@ const WindowComponent: FC<{
       />
 
       <div
-        className={styles.window}
+        id={params.windowId}
+        className={getClass()}
         style={{
           top: options.top,
           left: options.left,
@@ -160,6 +178,7 @@ const WindowComponent: FC<{
 
           <div className={styles.centerContent}>
             <HeaderComponent
+              selected={options.selected}
               options={params.headerOptions}
               maximized={options.maximized}
               startMovingWindow={onHeaderClick}

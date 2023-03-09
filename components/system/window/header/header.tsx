@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { FC } from "react";
 import styles from './header.module.scss';
 import {VscChromeMinimize,  VscChromeRestore, VscChromeMaximize, VscClose } from 'react-icons/vsc';
+import { DEFAULT_FOLDER_ICON_PATH } from '../../../../services/desktopItemContainerService';
 
 export type WindowHeaderOptions = {
   icon?: string;
@@ -9,36 +10,44 @@ export type WindowHeaderOptions = {
 };
 
 const HeaderComponent: FC<{
+  selected: boolean,
   options: WindowHeaderOptions | undefined,
   maximized: boolean,
   startMovingWindow: (event: any) => void,
   maximizeWindow: (event: any) => void,
   onClose: () => void
-}> = ({ options, maximized, startMovingWindow, maximizeWindow, onClose }) => {
+}> = ({ selected, options, maximized, startMovingWindow, maximizeWindow, onClose }) => {
   
   const onMinimize = (event: any) => {
     console.log('minimize')
   };
 
+  const getClass = () => {
+    return `${styles.header} ${!selected ? styles.windowUnselectedHeader : ''}`;
+  };
+
   return (
     <header
-      className={styles.header}
+      className={getClass()}
     >
-      {
-        options?.icon &&
-          <Image
-            className={styles.icon}
-            src={options.icon} 
-            alt={'window name'} 
-            width={24} 
-            height={24}
-          />
-      }
+      <div className={styles.headerInfo}>
+        {
+          options?.icon &&
+            <Image
+              className={styles.icon}
+              src={options?.icon} 
+              alt={'window name'} 
+              width={24} 
+              height={24}
+            />
+        }
 
-      {
-        options?.text && 
-          <div className={styles.text}>{ options.text }</div>
-      }
+        {
+          options?.text && 
+            <div className={styles.text}>{ options.text }</div>
+        }
+      </div>
+      
 
       {/* Empty box used to start moving window */}
       <div 

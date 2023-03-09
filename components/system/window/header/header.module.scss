@@ -1,17 +1,28 @@
+$unselected-color: rgb(121, 118, 118);
+
 .header {
   width: 100%;
   height: 25px;
   display: flex;
   align-items: center;
 
-  .icon {
+  .headerInfo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-left: 4px;
+
+    .icon {
+      margin-right: 4px;
+    }
+  
+    .text {
+      font-family: 'Segoe UI';
+      font-size: small;
+    }
   }
 
-  .text {
-    font-family: 'Segoe UI';
-    font-size: small;
-  }
+  
 
   .moveContainer {
     flex: 1;
@@ -38,5 +49,16 @@
 
   .close:hover {
     background-color: #e81123;
+  }
+}
+
+.windowUnselectedHeader {
+
+  .text {
+    color: $unselected-color;
+  }
+
+  .maximize, .minimize, .close {
+    color: $unselected-color;
   }
 }

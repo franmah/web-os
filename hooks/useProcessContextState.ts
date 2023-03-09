@@ -1,10 +1,9 @@
 import { useState } from "react";
+import { v4 } from "uuid";
 import { ProcessDirectory } from "../System/process/ProcessDirectory";
 import { startingProccesses } from "../System/process/StartingProccesses";
 import { ProcessContextType, Processes } from "../types/system/processes/processes";
 
-// In its own file because more functions (with logic) will be added (close, open...)
-// Should only be accessed by ProcessContextProvider
 const useProcessContextState = (): ProcessContextType => {
   const [processes, setProcesses] = useState<Processes>(startingProccesses);
 
@@ -31,7 +30,8 @@ const useProcessContextState = (): ProcessContextType => {
           ...ProcessDirectory[processName],
           params: {
             ...ProcessDirectory[processName].params,
-            ...params
+            ...params,
+            windowId: v4()
           }
         }
       };
