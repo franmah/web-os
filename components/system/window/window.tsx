@@ -3,7 +3,7 @@ import { ProcessContext } from "../../../contexts/processContext";
 import { maximizeOrRestoreWindow, moveWindow, resizeWindow, stopMovingAndResizingWindow } from "../../../services/WindowResizeService";
 import WindowAnimationPlaceholderComponent from "./animationPlaceholder/animationPlaceholder";
 import WindowBorderComponent from "./border/border";
-import HeaderComponent from "./header/header";
+import HeaderComponent, { WindowHeaderOptions } from "./header/header";
 import styles from './window.module.scss';
 
 export type WindowParams = {
@@ -57,9 +57,10 @@ const DEFAULT_WINDOW_STATE: WindowState = {
 };
 
 const WindowComponent: FC<{
+  headerOptions?: WindowHeaderOptions,
   params: WindowParams,
   children: React.ReactNode
-}> = ({ params: { processId }, children }) => {
+}> = ({ headerOptions, params: { processId }, children }) => {
 
   const { closeProcess } = useContext(ProcessContext);
 
@@ -159,6 +160,7 @@ const WindowComponent: FC<{
 
           <div className={styles.centerContent}>
             <HeaderComponent
+              options={headerOptions}
               maximized={options.maximized}
               startMovingWindow={onHeaderClick}
               maximizeWindow={onHeaderDoubleClick}

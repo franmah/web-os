@@ -14,8 +14,6 @@ const WindowBorderComponent: FC<{
       return '';
     }
 
-    console.log(isResizing)
-
     switch (direction) {
       case 'top': return styles.topBorder + ' ' + (!isResizing && styles.topBorderHover);
       case 'topLeft': return styles.topLeft + ' ' + (!isResizing && styles.topLeftHover);
