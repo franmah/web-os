@@ -7,7 +7,8 @@ import HeaderComponent, { WindowHeaderOptions } from "./header/header";
 import styles from './window.module.scss';
 
 export type WindowParams = {
-  processId: string
+  processId: string,
+  headerOptions?: WindowHeaderOptions
 };
 
 export enum WindowResizeDirection {
@@ -57,10 +58,9 @@ const DEFAULT_WINDOW_STATE: WindowState = {
 };
 
 const WindowComponent: FC<{
-  headerOptions?: WindowHeaderOptions,
   params: WindowParams,
   children: React.ReactNode
-}> = ({ headerOptions, params: { processId }, children }) => {
+}> = ({ params, children }) => {
 
   const { closeProcess } = useContext(ProcessContext);
 
@@ -129,7 +129,7 @@ const WindowComponent: FC<{
   };
 
   const closeWindowProcess = () => {
-    closeProcess(processId);
+    closeProcess(params.processId);
   };
 
   return (
@@ -160,7 +160,7 @@ const WindowComponent: FC<{
 
           <div className={styles.centerContent}>
             <HeaderComponent
-              options={headerOptions}
+              options={params.headerOptions}
               maximized={options.maximized}
               startMovingWindow={onHeaderClick}
               maximizeWindow={onHeaderDoubleClick}

@@ -9,7 +9,7 @@ export type WindowHeaderOptions = {
 };
 
 const HeaderComponent: FC<{
-  options: WindowHeaderOptions,
+  options: WindowHeaderOptions | undefined,
   maximized: boolean,
   startMovingWindow: (event: any) => void,
   maximizeWindow: (event: any) => void,
