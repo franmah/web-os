@@ -3,8 +3,6 @@
 - animations
 
 - resizing:
-  - keep cursor changed while resizing even if going out of window
-  - no hover border while resizing
   - should set a min height/width to prevent resizing down too much
 - moving window left/right should stop once mouse is passed screen
 - window border radius size should be a global style and applied to header, hello and window
