@@ -1,5 +1,6 @@
 /* TODO:
-
+- FIX WJNDOW OPTIONS ERROR: when starting process, Paramus should be for the process not the wjndow.
+Fix the passing of window options and header options
 - change shadow box and header text color when window is selected
 - Fix <HeaderComponent.../> error in window.tsx
 - try useRef for better performance
