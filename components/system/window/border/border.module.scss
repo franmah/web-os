@@ -3,6 +3,29 @@ $corner-length: 8px;
 $corner-radius: 8px;
 $border-offset: -4px;
 
+.children {
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.topBorderHover:hover { cursor: n-resize; }
+.topLeftHover:hover { cursor: se-resize; }
+.topRightHover:hover { cursor: ne-resize; }
+.bottomHover:hover { cursor: n-resize; }
+.bottomLeftHover:hover { cursor: ne-resize; }
+.bottomRightHover:hover { cursor: se-resize; }
+.leftCenterTopHover:hover { cursor: se-resize; }
+.leftCenterMiddleHover:hover { cursor: e-resize; }
+.leftCenterBottomHover:hover { cursor: ne-resize; }
+.rightCenterTopHover:hover { cursor: ne-resize; }
+.rightCenterMiddleHover:hover { cursor: e-resize; }
+.rightCenterBottomHover:hover { cursor: se-resize; }
+
 .topBorderHeader {
   position: absolute;
   top: $border-offset;
@@ -15,10 +38,6 @@ $border-offset: -4px;
   
   .topBorder {
     flex: 1;
-    
-    &:hover {
-      cursor: n-resize;
-    }
   }
 
   .topLeft, .topRight {
@@ -32,20 +51,6 @@ $border-offset: -4px;
   .topRight {
     border-top-right-radius: $corner-radius;
   }
-
-  .topLeft:hover { cursor: se-resize; }
-
-  .topRight:hover { cursor: ne-resize; }
-}
-
-.children {
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-
-  position: absolute;
-  left: 0;
-  top: 0;
 }
 
 .centerLeft {
@@ -62,18 +67,10 @@ $border-offset: -4px;
   .leftCenterTop {
     height: $corner-length;
     border-top-left-radius: $corner-radius;
-    
-    &:hover {
-      cursor: se-resize;
-    }
   }
 
   .leftCenterMiddle {
     flex: 1;
-  
-    &:hover {
-      cursor: e-resize;
-    }
   }
 
   .leftCenterBottom {
@@ -96,27 +93,15 @@ $border-offset: -4px;
   .rightCenterTop {
     height:$corner-length;
     border-top-right-radius: $corner-radius;
-    
-    &:hover {
-      cursor: ne-resize;
-    }
   }
 
   .rightCenterMiddle {
     flex: 1;
-
-    &:hover {
-      cursor: e-resize;
-    }
   }
 
   .rightCenterBottom {
     height: $corner-length;
     border-bottom-right-radius: $corner-radius;
-  }
-  
-  &:hover {
-    cursor: e-resize;
   }
 }
 
@@ -132,10 +117,6 @@ $border-offset: -4px;
 
   .bottom {
     flex: 1;
-    
-    &:hover {
-      cursor: n-resize;
-    }
   }
 
   .bottomLeft, .bottomRight {
@@ -150,7 +131,4 @@ $border-offset: -4px;
     border-bottom-right-radius: $corner-radius;
   }
 
-  .bottomLeft:hover { cursor: ne-resize; }
-
-  .bottomRight:hover { cursor: se-resize; }
 }

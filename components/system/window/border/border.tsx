@@ -4,24 +4,31 @@ import styles from './border.module.scss';
 
 const WindowBorderComponent: FC<{
   allowResize: boolean,
+  isResizing: boolean,
   onBordersMouseDown: (event: any, direction: WindowResizeDirection) => void,
   children: React.ReactNode,
-}> = ({ allowResize, onBordersMouseDown, children }) => {
+}> = ({ allowResize, isResizing, onBordersMouseDown, children }) => {
 
   const getClass = (direction: string) => {
     if (!allowResize){
       return '';
     }
 
+    console.log(isResizing)
+
     switch (direction) {
-      case 'top': return styles.topBorder;
-      case 'topLeft': return styles.topLeft;
-      case 'topRight': return styles.topRight
-      case 'centerLeft': return styles.centerLeft;
-      case 'centerRight': return styles.centerRight;
-      case 'bottom': return styles.bottom;
-      case 'bottomLeft': return styles.bottomLeft;
-      case 'bottomRight': return styles.bottomRight;
+      case 'top': return styles.topBorder + ' ' + (!isResizing && styles.topBorderHover);
+      case 'topLeft': return styles.topLeft + ' ' + (!isResizing && styles.topLeftHover);
+      case 'topRight': return styles.topRight + ' ' + (!isResizing && styles.topRightHover);
+      case 'bottom': return styles.bottom + ' ' + (!isResizing && styles.bottomHover);
+      case 'bottomLeft': return styles.bottomLeft + ' ' + (!isResizing && styles.bottomLeftHover);
+      case 'bottomRight': return styles.bottomRight + ' ' + (!isResizing && styles.bottomRightHover);
+      case 'leftCenterTop': return styles.leftCenterTop + ' ' + (!isResizing && styles.leftCenterTopHover);
+      case 'leftCenterMiddle': return styles.leftCenterMiddle + ' ' + (!isResizing && styles.leftCenterMiddleHover);
+      case 'leftCenterBottom': return styles.leftCenterBottom + ' ' + (!isResizing && styles.leftCenterBottomHover);
+      case 'rightCenterTop' : return styles.rightCenterTop + ' ' + (!isResizing && styles.rightCenterTopHover);
+      case 'rightCenterMiddle' : return styles.rightCenterMiddle + ' ' + (!isResizing && styles.rightCenterMiddleHover);
+      case 'rightCenterBottom' : return styles.rightCenterBottom + ' ' + (!isResizing && styles.rightCenterBottomHover);
       default: return '';
     }
   };
@@ -39,6 +46,7 @@ const WindowBorderComponent: FC<{
           className={getClass('topLeft')}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopLeft)}>
         </div>
+        
         <div 
           className={getClass('top')}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Top)}>
@@ -52,15 +60,15 @@ const WindowBorderComponent: FC<{
 
       {/*  LEFT + RIGHT BORDERS + CONTENT */}
       <div
-        className={getClass('centerLeft')}
+        className={styles.centerLeft}
       >
-          <div className={styles.leftCenterTop} 
+          <div className={getClass('leftCenterTop')} 
             onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopLeft)}
           ></div>
-          <div className={styles.leftCenterMiddle}
+          <div className={getClass('leftCenterMiddle')}
             onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Left)}
           ></div>
-          <div className={styles.leftCenterBottom}
+          <div className={getClass('leftCenterBottom')}
             onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.BottomLeft)}
           ></div>
       </div>
@@ -69,15 +77,15 @@ const WindowBorderComponent: FC<{
       <div className={styles.children}>{ children }</div>
 
       <div
-        className={getClass('centerRight')}
+        className={styles.centerRight}
       >
-        <div className={styles.rightCenterTop}
+        <div className={getClass('rightCenterTop')}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopRight)}
         ></div>
-        <div className={styles.rightCenterMiddle}
+        <div className={getClass('rightCenterMiddle')}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Right)}
         ></div>
-        <div className={styles.rightCenterBottom}
+        <div className={getClass('rightCenterBottom')}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.BottomRight)}
         ></div>
       </div>
