@@ -24,18 +24,23 @@ const useProcessContextState = (): ProcessContextType => {
       return;
     }
 
-    setProcesses(currentProcesses => 
-      ({
+    setProcesses(currentProcesses => {
+      const processes =  {
         ... currentProcesses,
         [processName]: {
           ...ProcessDirectory[processName],
-          params
+          params: {
+            ...ProcessDirectory[processName].params,
+            ...params
+          }
         }
-      })
-    )
+      };
+
+      return processes
+    });
   };
 
   return { processes, openProcess, closeProcess };
-}
+};
 
 export default useProcessContextState;

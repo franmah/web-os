@@ -16,15 +16,14 @@ export const ProcessDirectory: Processes = {
   },
   'taskbar': {
     name: 'taskbar',
-    // TODO: fix <any> once component changed to function component
-    Component: dynamic<any>(() => import('../../components/taskbar-component/taskbar/Taskbar')),
+    Component: dynamic<{ params: any }>(() => import('../../components/taskbar-component/taskbar/Taskbar')),
     params: null,
     hasWindow: false
   },
   'hello': {
     name: 'hello',
-    Component: dynamic<any>(() => import('../../components/hello/helloComponent')),
-    params: null,
+    Component: dynamic<{ params: any }>(() => import('../../components/hello/helloComponent')),
+    params: { headerOptions: { text: 'Youtube Player' } },
     hasWindow: true
   }
 };

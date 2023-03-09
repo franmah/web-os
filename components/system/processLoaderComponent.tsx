@@ -37,7 +37,7 @@ export function ProcessLoaderComponent() {
           .entries(processContext.processes)
           .map(([id, { Component, params, hasWindow }]) =>
             hasWindow ?
-              <WindowComponent key={id} params={{processId: id}}> 
+              <WindowComponent key={id} params={{ ...params, processId: id}}> 
                 <Component key={id} params={params}/>
               </WindowComponent>
               :
