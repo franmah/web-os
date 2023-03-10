@@ -1,9 +1,6 @@
 /* TODO:
 
-- change shadow box and header text color when window is selected
-- it looks like the window's borders should have a color
 - Refactor Processes
-  - Window in load process should be in it's own component: RenderProcess
   - Window should not receive process params, it should receive its own windowParams but the component starting the process should still be able to pass windowParams
 
 - Fix <HeaderComponent.../> error in window.tsx

@@ -86,10 +86,8 @@ const WindowComponent: FC<{
 
   const onDocumentMouseDown = (event: MouseEvent) => {
     if (isEventOriginatedFromWithinTargetIdSubtree(event, params.windowId)) {
-      console.log('selecting window')
       setOptions(currentOptions => ({ ...currentOptions, selected: true }));
     } else {
-      console.log('unselecting window')
       setOptions(currentOptions => ({ ...currentOptions, selected: false }));
     }
   };

@@ -1,12 +1,11 @@
-import { Fragment, useContext, useEffect } from "react";
-import { v4 } from "uuid";
+import { FC, Fragment, useContext, useEffect } from "react";
 import { ProcessContext } from "../../contexts/processContext";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../services/EventService";
 import { CONTEXT_MENU_ROOT_ID } from "./contextMenu/ContextMenuRootComponent";
-import WindowComponent from "./window/window";
+import ProcessRenderer from "./processRenderer";
 
 // TODO: Move the code in map() to it's own ProcessRenderComponent.
-export function ProcessLoaderComponent() {
+export const ProcessLoaderComponent: FC<{}> = () => {
 
   const processContext = useContext(ProcessContext);
 
@@ -41,13 +40,13 @@ export function ProcessLoaderComponent() {
       {
         Object
           .entries(processContext.processes)
-          .map(([id, { Component, params, hasWindow }]) =>
-            hasWindow ?
-              <WindowComponent key={params?.windowId} params={{ ...params, processId: id}}> 
-                <Component params={params}/>
-              </WindowComponent>
-              :
-              <Component key={id} params={params}></Component>
+          .map(([id, process]) =>
+
+            <ProcessRenderer
+              key={id}
+              id={id}
+              process={process}
+            />
           )
       }
     </Fragment>

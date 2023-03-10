@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { FC } from "react";
 import styles from './header.module.scss';
 import {VscChromeMinimize,  VscChromeRestore, VscChromeMaximize, VscClose } from 'react-icons/vsc';
-import { DEFAULT_FOLDER_ICON_PATH } from '../../../../services/desktopItemContainerService';
+import globalStyles from '../../../../styles/global.module.scss';
 
 export type WindowHeaderOptions = {
   icon?: string;
@@ -23,7 +23,11 @@ const HeaderComponent: FC<{
   };
 
   const getClass = () => {
-    return `${styles.header} ${!selected ? styles.windowUnselectedHeader : ''}`;
+    return `
+      ${styles.header} 
+      ${!selected ? styles.windowUnselectedHeader : ''} 
+      ${globalStyles.unselectableText}
+    `;
   };
 
   return (
