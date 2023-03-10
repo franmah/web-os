@@ -37,7 +37,7 @@ export const ProcessDirectory: ProcessDirectoryEntry = {
     name: 'hello',
     Component: dynamic<{ params: any }>(() => import('../../components/hello/helloComponent')),
     params: null,
-    windowParams: { headerOptions: { text: 'Youtube Player' } },
+    windowParams: { headerOptions: { icon: '/icons/youtube-logo.png',text: 'Youtube Player' } },
     hasWindow: true
   }
 };
