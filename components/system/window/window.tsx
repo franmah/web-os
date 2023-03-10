@@ -1,5 +1,4 @@
 import { FC, Fragment, useContext, useEffect, useState } from "react";
-import { v4 } from "uuid";
 import { ProcessContext } from "../../../contexts/processContext";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/EventService";
 import { maximizeOrRestoreWindow, moveWindow, resizeWindow, stopMovingAndResizingWindow } from "../../../services/WindowResizeService";
@@ -11,7 +10,7 @@ import styles from './window.module.scss';
 export type WindowParams = {
   processId: string,
   windowId: string,
-  headerOptions?: WindowHeaderOptions
+  headerOptions?: WindowHeaderOptions,
 };
 
 export enum WindowResizeDirection {
@@ -63,9 +62,9 @@ const DEFAULT_WINDOW_STATE: WindowState = {
 };
 
 const WindowComponent: FC<{
-  params: WindowParams,
+  windowParams: WindowParams,
   children: React.ReactNode
-}> = ({ params, children }) => {
+}> = ({ windowParams, children }) => {
 
   const { closeProcess } = useContext(ProcessContext);
 
@@ -85,7 +84,7 @@ const WindowComponent: FC<{
   }, []);
 
   const onDocumentMouseDown = (event: MouseEvent) => {
-    if (isEventOriginatedFromWithinTargetIdSubtree(event, params.windowId)) {
+    if (isEventOriginatedFromWithinTargetIdSubtree(event, windowParams.windowId)) {
       setOptions(currentOptions => ({ ...currentOptions, selected: true }));
     } else {
       setOptions(currentOptions => ({ ...currentOptions, selected: false }));
@@ -140,7 +139,7 @@ const WindowComponent: FC<{
   };
 
   const closeWindowProcess = () => {
-    closeProcess(params.processId);
+    closeProcess(windowParams.processId);
   };
 
   const getClass = () => {
@@ -158,7 +157,7 @@ const WindowComponent: FC<{
       />
 
       <div
-        id={params.windowId}
+        id={windowParams.windowId}
         className={getClass()}
         style={{
           top: options.top,
@@ -177,7 +176,7 @@ const WindowComponent: FC<{
           <div className={styles.centerContent}>
             <HeaderComponent
               selected={options.selected}
-              options={params.headerOptions}
+              options={windowParams.headerOptions}
               maximized={options.maximized}
               startMovingWindow={onHeaderClick}
               maximizeWindow={onHeaderDoubleClick}

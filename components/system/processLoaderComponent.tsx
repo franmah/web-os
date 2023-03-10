@@ -2,16 +2,15 @@ import { FC, Fragment, useContext, useEffect } from "react";
 import { ProcessContext } from "../../contexts/processContext";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../services/EventService";
 import { CONTEXT_MENU_ROOT_ID } from "./contextMenu/ContextMenuRootComponent";
-import ProcessRenderer from "./processRenderer";
+import ProcessRenderer from "./processRendererComponent";
 
-// TODO: Move the code in map() to it's own ProcessRenderComponent.
 export const ProcessLoaderComponent: FC<{}> = () => {
 
   const processContext = useContext(ProcessContext);
 
   // TODO: remove (opens test hello component)
   useEffect(() => {
-    processContext.openProcess('hello', null)
+    processContext.openProcess('hello');
   }, [])
 
   const closeContextMenu = (event: MouseEvent) => {

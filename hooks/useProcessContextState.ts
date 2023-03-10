@@ -18,25 +18,33 @@ const useProcessContextState = (): ProcessContextType => {
     })
   };
 
-  const openProcess = (processName: string, params: any = null) => {
+  const openProcess = (processName: string, params: any = null, windowParams: any = null) => {
     if (!ProcessDirectory[processName]) {
       return;
     }
 
-    setProcesses(currentProcesses => {
-      const processes =  {
-        ... currentProcesses,
-        [processName]: {
-          ...ProcessDirectory[processName],
-          params: {
-            ...ProcessDirectory[processName].params,
-            ...params,
-            windowId: v4()
-          }
-        }
-      };
+    const newProcessId = v4();
 
-      return processes
+    const newProcess = {
+      ...ProcessDirectory[processName],
+      params: {
+        ...ProcessDirectory[processName].params,
+        ...params,
+        processId: newProcessId
+      },
+      windowParams: {
+        ...ProcessDirectory[processName].windowParams,
+        ...windowParams,
+        processId: newProcessId,
+        windowId: v4()
+      }
+    };
+
+    setProcesses(currentProcesses => {
+      return {
+        ... currentProcesses,
+        [newProcessId]: newProcess
+      };
     });
   };
 

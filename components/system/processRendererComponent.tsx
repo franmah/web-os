@@ -2,9 +2,9 @@ import { FC } from "react";
 import { Process } from "../../types/system/processes/processes";
 import WindowComponent from "./window/window";
 
-const ProcessRenderer: FC<{ id: string, process: Process }> = ({ id, process: { params, hasWindow, Component } }) => {
+const ProcessRenderer: FC<{ id: string, process: Process }> = ({ id, process: { params, hasWindow, Component, windowParams } }) => {
   return hasWindow ?
-    <WindowComponent key={params?.windowId} params={{ ...params, processId: id}}> 
+    <WindowComponent key={windowParams?.windowId} windowParams={{ ...windowParams }}> 
       <Component params={params}/>
     </WindowComponent>
     :

@@ -1,7 +1,7 @@
 import { FC } from "react"
 import styles from "./hello.module.scss";
 
-const HelloComponent: FC = () => {
+const HelloComponent: FC<{ params: any }> = ({ params }) => {
   return (
     <iframe
       className={styles.video}
