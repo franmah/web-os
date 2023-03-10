@@ -181,8 +181,7 @@ const WindowComponent: FC<{
               startMovingWindow={onHeaderClick}
               maximizeWindow={onHeaderDoubleClick}
               onClose={closeWindowProcess}
-            >
-            </HeaderComponent>
+            />
 
             { children }
           </div>

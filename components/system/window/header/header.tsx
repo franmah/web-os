@@ -15,7 +15,7 @@ const HeaderComponent: FC<{
   maximized: boolean,
   startMovingWindow: (event: any) => void,
   maximizeWindow: (event: any) => void,
-  onClose: () => void
+  onClose: () => void,
 }> = ({ selected, options, maximized, startMovingWindow, maximizeWindow, onClose }) => {
   
   const onMinimize = (event: any) => {

@@ -1,9 +1,5 @@
 /* TODO:
 
-- Refactor Processes
-  - Window should not receive process params, it should receive its own windowParams but the component starting the process should still be able to pass windowParams
-
-- Fix <HeaderComponent.../> error in window.tsx
 - try useRef for better performance 
     Message :
         // TODO: event listener on mouseup and mousemove are very inefficient because
