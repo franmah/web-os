@@ -1,9 +1,49 @@
 import Image from 'next/image';
-import { FC, useEffect, useState } from 'react';
+import { FC, memo, useEffect, useState } from 'react';
 import styles from './desktop-item.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, SHORTENED_NAME_LENGTH } from '../../../constants/DesktopConsts';
+import { areItemsTheSame } from '../../../services/DesktopItemService';
+
+// TODO: new improved item component. Finish and use in desktop container.
+export const ItemTestComponentMemo = memo((props: any) => {
+  const item = props?.props?.item;
+
+  console.log('render item: ' + item.name)
+
+  const onClick = () => {
+    props.props.onClick(item.id)
+  }
+  
+  const getClass = () => {
+    const selectionClass = item.selected ? styles.dekstopItemSelected : 
+      styles.dekstopItemNotSelected;
+    return styles.desktopItem + ' ' + globalStyles.unselectableText +
+      ' ' + selectionClass;
+  };
+
+  return (
+    <div
+      id={item.id}
+      className={getClass()}
+      onClick={onClick}
+      style={{
+        left: item.left,
+        top: item.top,
+        minHeight: ITEM_HEIGHT,
+        width: ITEM_WIDTH,
+        border: '1px solid red'
+      }}
+    >
+      <Image src={item.iconPath} alt={'icon'} width={48} height={40}/>
+    </div>
+  );
+}, (prev, current) => {
+  const prevItem = prev?.props?.item;
+  const currItem = current?.props?.item;
+  return areItemsTheSame(prevItem, currItem);
+});
 
 const DesktopItemComponent: FC<{
   item: DesktopItem,
