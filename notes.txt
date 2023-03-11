@@ -1,8 +1,8 @@
 /* TODO:
 
+- Header keeps rendering because headerId is different on every render
+
 - Maximize button
-  - show special menu when hovered after a while. (let's you side maximize it)
-  - apply special menu effect when selected
   - Fix modal diseapring when mouse hover out of window (but not out of modal)
 
 - header icons should be smaller (and fix maximize options div if needed)
@@ -13,8 +13,6 @@
   - window options/state is too big, try to break it down (maybe into multiple states?).
   - Refactor code into services. And organize window service into multiple services if needed
   - put types in their own folder
-
-  -- You should be able to open the same process multiple times unless it's set to unique
 
 
 // TODO in another branch

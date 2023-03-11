@@ -1,10 +1,11 @@
 import Image from 'next/image';
-import { FC, useEffect, useState } from "react";
+import { FC, memo, useEffect, useState } from "react";
 import styles from './header.module.scss';
 import {VscChromeMinimize,  VscChromeRestore, VscChromeMaximize, VscClose } from 'react-icons/vsc';
 import globalStyles from '../../../../styles/global.module.scss';
 import { setMaximizeMenuListeners } from '../../../../services/WindowHeaderService';
 import MaximizeOptionsModalComponent, { CustomMaximizeDirection } from '../maximizeOptionsModal/maximizeOptionsModal';
+import { v4 } from 'uuid';
 
 export type WindowHeaderOptions = {
   icon?: string;
@@ -17,22 +18,22 @@ const HeaderComponent: FC<{
   selected: boolean,
   options: WindowHeaderOptions | undefined,
   maximized: boolean,
-  headerId: string,
   startMovingWindow: (event: any) => void,
   maximizeWindow: (event: any) => void,
   onClose: () => void,
   moveToCustomMaximizeOptionClick: (direcction: CustomMaximizeDirection) => void
-}> = ({
+}> = memo(({
   selected,
   options, 
   maximized,
-  headerId,
   startMovingWindow,
   maximizeWindow,
   onClose,
   moveToCustomMaximizeOptionClick
 }) => {
+  console.log('render')
 
+  const [headerId] = useState<string>(v4());
   const [showMaximizeMenu, setShowMaximizeMenu] = useState<boolean>(true);
   
   const onMinimize = (event: any) => {
@@ -133,6 +134,11 @@ const HeaderComponent: FC<{
 
     </header>
   )
-};
+}, (state1, state2) => 
+  state1.selected === state2.selected &&
+  state1.options?.icon === state2.options?.icon &&
+  state1.options?.text === state2.options?.text &&
+  state1.maximized === state2.maximized
+);
 
 export default HeaderComponent;

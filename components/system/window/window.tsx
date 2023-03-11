@@ -189,7 +189,6 @@ const WindowComponent: FC<{
               selected={options.selected}
               options={windowParams.headerOptions}
               maximized={options.maximized}
-              headerId={v4()}
               startMovingWindow={onHeaderClick}
               maximizeWindow={onHeaderDoubleClick}
               onClose={closeWindowProcess}
