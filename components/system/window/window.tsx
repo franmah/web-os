@@ -1,4 +1,5 @@
 import { FC, Fragment, useContext, useEffect, useState } from "react";
+import { v4 } from "uuid";
 import { ProcessContext } from "../../../contexts/processContext";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/EventService";
 import { maximizeOrRestoreWindow, moveWindow, resizeWindow, stopMovingAndResizingWindow } from "../../../services/WindowResizeService";
@@ -178,6 +179,7 @@ const WindowComponent: FC<{
               selected={options.selected}
               options={windowParams.headerOptions}
               maximized={options.maximized}
+              headerId={v4()}
               startMovingWindow={onHeaderClick}
               maximizeWindow={onHeaderDoubleClick}
               onClose={closeWindowProcess}

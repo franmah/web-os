@@ -3,7 +3,10 @@
 - Maximize button
   - show special menu when hovered after a while. (let's you side maximize it)
   - apply special menu effect when selected
+  - Fix modal diseapring when mouse hover out of window (but not out of modal)
 
+- header icons should be smaller (and fix maximize options div if needed)
+- check what hover does on unselected windows (does it show maximize menu options?)
 - Make sure style matches windows 11
 
 - Refactor
@@ -19,6 +22,7 @@
   - (update to fit styled components) window border radius size should be a global style and applied to header, hello and window
 
 - Finish performance improved new Desktop item component (memo). AS WELL AS OTHER IMPROVEMENTS AND OTHER COMPONENTS (useMemo, memo and useCallback)
+  - window header should be memo()
   - try useCallback without memo's second argument (areItemsSame)
 
 - Minimize should be done later (needs shortcut bar to work)

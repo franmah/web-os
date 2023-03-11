@@ -1,5 +1,14 @@
 $unselected-color: rgb(121, 118, 118);
 
+.maximizeOptionModal {
+  position: absolute;
+  top: 20px;
+  width: 200px;
+  height: 135px;
+  border-radius: 6px;
+  background-color: #dbe9fbf8;
+}
+
 .header {
   width: 100%;
   height: 25px;
@@ -21,8 +30,6 @@ $unselected-color: rgb(121, 118, 118);
       font-size: small;
     }
   }
-
-  
 
   .moveContainer {
     flex: 1;
