@@ -31,10 +31,9 @@ const HeaderComponent: FC<{
   onClose,
   moveToCustomMaximizeOptionClick
 }) => {
-  console.log('render')
 
   const [headerId] = useState<string>(v4());
-  const [showMaximizeMenu, setShowMaximizeMenu] = useState<boolean>(true);
+  const [showMaximizeMenu, setShowMaximizeMenu] = useState<boolean>(false);
   
   const onMinimize = (event: any) => {
     console.log('minimize');
