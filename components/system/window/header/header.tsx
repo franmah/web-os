@@ -112,8 +112,11 @@ const HeaderComponent: FC<{
           { maximized ? <VscChromeRestore/> : <VscChromeMaximize/> }
         </div>
 
-        { showMaximizeMenu && 
-          <div className={styles.maximizeOptionModal}> 
+        { 
+          showMaximizeMenu && 
+          <div
+            className={styles.maximizeOptionModal}
+          > 
             <MaximizeOptionsModalComponent
               onCustomMaximizeClick={onCustomMaximizeClick}
             />
