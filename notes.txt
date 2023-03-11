@@ -1,14 +1,5 @@
 /* TODO:
 
-- try useRef for better performance 
-    Message :
-        // TODO: event listener on mouseup and mousemove are very inefficient because
-        // they set the state every time (needed in order to get most updated state)
-        // But that means the component renders on every mousemove/mouseup
-        // maybe useRef instead of useState? (not for every field though)
-
-
-- Add animation: on Maximize/restore
 - Maximize button
   - show special menu when hovered after a while. (let's you side maximize it)
   - apply special menu effect when selected
@@ -27,6 +18,8 @@
 -- Change to styled components so that variables are not defined multiple times
   - (update to fit styled components) window border radius size should be a global style and applied to header, hello and window
 
+- Finish performance improved new Desktop item component (memo). AS WELL AS OTHER IMPROVEMENTS AND OTHER COMPONENTS (useMemo, memo and useCallback)
+  - try useCallback without memo's second argument (areItemsSame)
 
 - Minimize should be done later (needs shortcut bar to work)
   could be done either hiding window or tell processLoader not to render because it's minimized (add minimize function to useProcessContextState)
