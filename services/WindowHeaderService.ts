@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import { CUSTOM_MAXIMIZE_MODAL_DELAY } from "../constants/WindowHeader";
 
 export const setMaximizeMenuListeners = (maximizeElementId: string,
 setShowMaximizeMenu: Dispatch<SetStateAction<boolean>>) => {
@@ -10,7 +11,7 @@ setShowMaximizeMenu: Dispatch<SetStateAction<boolean>>) => {
   const onMouseEnter = () => {
     timeout = setTimeout(() => {
       setShowMaximizeMenu(true) 
-    }, 100);
+    }, CUSTOM_MAXIMIZE_MODAL_DELAY);
   };
 
   const onMouseLeave = () => {

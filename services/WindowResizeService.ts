@@ -238,8 +238,6 @@ export const finishMovingWindow = (mouseX: number, mouseY: number, options: Wind
 };
 
 export const maximizeOrRestoreWindow = (options: WindowState): WindowState => {
-  console.log('maximize or restore')
-
   if (options.sideMaximized) {
     return {
       ...options,

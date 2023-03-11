@@ -4,7 +4,7 @@ import styles from './header.module.scss';
 import {VscChromeMinimize,  VscChromeRestore, VscChromeMaximize, VscClose } from 'react-icons/vsc';
 import globalStyles from '../../../../styles/global.module.scss';
 import { setMaximizeMenuListeners } from '../../../../services/WindowHeaderService';
-import MaximizeOptionsModalComponent, { CustomMaximizeDirection } from '../maximizeOptions/maximizeOptionsModal';
+import MaximizeOptionsModalComponent, { CustomMaximizeDirection } from '../maximizeOptionsModal/maximizeOptionsModal';
 
 export type WindowHeaderOptions = {
   icon?: string;
@@ -21,7 +21,17 @@ const HeaderComponent: FC<{
   startMovingWindow: (event: any) => void,
   maximizeWindow: (event: any) => void,
   onClose: () => void,
-}> = ({ selected, options, maximized, headerId, startMovingWindow, maximizeWindow, onClose }) => {
+  moveToCustomMaximizeOptionClick: (direcction: CustomMaximizeDirection) => void
+}> = ({
+  selected,
+  options, 
+  maximized,
+  headerId,
+  startMovingWindow,
+  maximizeWindow,
+  onClose,
+  moveToCustomMaximizeOptionClick
+}) => {
 
   const [showMaximizeMenu, setShowMaximizeMenu] = useState<boolean>(true);
   
@@ -38,8 +48,14 @@ const HeaderComponent: FC<{
   });
 
   const onCustomMaximizeClick = (direction: CustomMaximizeDirection) => {
-    console.log(direction);
+    setShowMaximizeMenu(false);
+    moveToCustomMaximizeOptionClick(direction);
   };
+
+  const onMaximizeIconClick = (event: React.MouseEvent) => {
+    setShowMaximizeMenu(false);
+    maximizeWindow(event);
+  }
 
   const getClass = () => {
     return `
@@ -86,11 +102,16 @@ const HeaderComponent: FC<{
       </div>
 
       <div 
-        className={styles.maximize}
-        onClick={maximizeWindow}
+        className={styles.maximizeContainer}
         id={MAXIMIZE_DIV_ID + '_' + headerId}
       >
-        { maximized ? <VscChromeRestore/> : <VscChromeMaximize/> }
+        <div
+          onClick={onMaximizeIconClick}
+          className={styles.maximizeIcon}
+        >
+          { maximized ? <VscChromeRestore/> : <VscChromeMaximize/> }
+        </div>
+
         { showMaximizeMenu && 
           <div className={styles.maximizeOptionModal}> 
             <MaximizeOptionsModalComponent

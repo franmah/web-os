@@ -2,10 +2,12 @@ import { FC, Fragment, useContext, useEffect, useState } from "react";
 import { v4 } from "uuid";
 import { ProcessContext } from "../../../contexts/processContext";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/EventService";
+import { getWindowOptionForCustomMaximize } from "../../../services/system/window/WindowCustomMaximizeOptionService.ts";
 import { maximizeOrRestoreWindow, moveWindow, resizeWindow, stopMovingAndResizingWindow } from "../../../services/WindowResizeService";
 import WindowAnimationPlaceholderComponent from "./animationPlaceholder/animationPlaceholder";
 import WindowBorderComponent from "./border/border";
 import HeaderComponent, { WindowHeaderOptions } from "./header/header";
+import { CustomMaximizeDirection } from "./maximizeOptionsModal/maximizeOptionsModal";
 import styles from './window.module.scss';
 
 export type WindowParams = {
@@ -145,7 +147,15 @@ const WindowComponent: FC<{
 
   const getClass = () => {
     return `${styles.window} ${ options.selected ? styles.windowSelected : styles.windowUnselected}`;
-  }
+  };
+
+  const moveToCustomMaximizeOptionClick = (direction: CustomMaximizeDirection) => {
+    setOptions(options => ({
+      ...options,
+      sideMaximized: true,
+      ...getWindowOptionForCustomMaximize(direction, window.innerWidth, window.innerHeight)
+    }));
+  };
 
   return (
     <Fragment>
@@ -183,6 +193,7 @@ const WindowComponent: FC<{
               startMovingWindow={onHeaderClick}
               maximizeWindow={onHeaderDoubleClick}
               onClose={closeWindowProcess}
+              moveToCustomMaximizeOptionClick={(direction) => moveToCustomMaximizeOptionClick(direction)}
             />
 
             { children }
