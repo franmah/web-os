@@ -16,7 +16,10 @@
 
 
 // TODO in another branch
--- Change to styled components so that variables are not defined multiple times
+- Use semantic html tags instead of div wherever possible + USE FRAGMENT wherever possible
+  - https://developer.mozilla.org/en-US/docs/Web/HTML/Element
+  - https://developer.mozilla.org/en-US/docs/Web/HTML/Element
+- Change to styled components so that variables are not defined multiple times
   - (update to fit styled components) window border radius size should be a global style and applied to header, hello and window
 
 - Fix context menu bug (clicking on new folder doesn't hide menu)
