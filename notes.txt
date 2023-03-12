@@ -16,6 +16,8 @@
 
 
 // TODO in another branch
+- Look at next's documentation (like react)
+
 - Use semantic html tags instead of div wherever possible + USE FRAGMENT wherever possible
   - https://developer.mozilla.org/en-US/docs/Web/HTML/Element
   - https://developer.mozilla.org/en-US/docs/Web/HTML/Element
