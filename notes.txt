@@ -9,13 +9,16 @@
 - check what hover does on unselected windows (does it show maximize menu options?)
 - Make sure style matches windows 11
 
+- Opening a youtube process should open it with window
 - Refactor
   - window options/state is too big, try to break it down (maybe into multiple states?).
   - Refactor code into services. And organize window service into multiple services if needed
   - put types in their own folder
+ 
 
 
 // TODO in another branch
+
 - Look at next's documentation (like react)
 
 - Use semantic html tags instead of div wherever possible + USE FRAGMENT wherever possible
