@@ -59,11 +59,11 @@ $unselected-color: rgb(121, 118, 118);
     width: 100%;
   }
 
-  .close {
+  .closeIcon {
     border-top-right-radius: 8px;
   }
 
-  .close:hover {
+  .closeIcon:hover {
     background-color: #e81123;
   }
 }
@@ -76,5 +76,9 @@ $unselected-color: rgb(121, 118, 118);
 
   .maximizeIcon, .minimizeIcon, .closeIcon {
     color: $unselected-color;
+
+    &:hover {
+      color: black;
+    }
   }
 }

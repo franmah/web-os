@@ -1,4 +1,4 @@
-- check what hover does on unselected windows (does it show maximize menu options?)
+- header control icon should be black when hovered (selected or not)
 - Make sure style matches windows 11
 
 - Refactor
