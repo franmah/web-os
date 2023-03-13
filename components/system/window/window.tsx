@@ -181,7 +181,7 @@ const WindowComponent: FC<{
       >
 
         <WindowBorderComponent
-          allowResize={!options.maximized}
+          allowResize={!options.maximized && !options.moving}
           isResizing={options.resizing}
           onBordersMouseDown={onBorderMouseDown}
         >

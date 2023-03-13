@@ -1,7 +1,6 @@
 /* TODO:
 
 - Maximize button
-  - figure out what should happen when window is side/custom maximized and user click maximize icon
   - icon when moving should stay at default (and not change to scroll when hovering borders)
 
 
