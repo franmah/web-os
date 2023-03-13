@@ -37,7 +37,7 @@ $unselected-color: rgb(121, 118, 118);
     height: 100%;
   }
 
-  .maximizeContainer, .minimize, .close {
+  .maximizeContainer, .minimizeIcon, .closeIcon {
     height: 100%;
     display: flex;
     justify-content: center;
@@ -45,7 +45,7 @@ $unselected-color: rgb(121, 118, 118);
     width: 46px;
   }
 
-  .maximizeContainer, .minimize {
+  .maximizeContainer, .minimizeIcon {
     &:hover {
       background-color: #aeb7c7;
     }
@@ -74,7 +74,7 @@ $unselected-color: rgb(121, 118, 118);
     color: $unselected-color;
   }
 
-  .maximize, .minimize, .close {
+  .maximizeIcon, .minimizeIcon, .closeIcon {
     color: $unselected-color;
   }
 }
