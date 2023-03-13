@@ -73,9 +73,13 @@ const WindowComponent: FC<{
 
   const [options, setOptions] = useState<WindowState>(DEFAULT_WINDOW_STATE);
 
+  const closeWindowProcess = () => {
+    closeProcess(windowParams.processId);
+  };
+
   useEffect(() => {
-    document.addEventListener('mouseup', onMouseUp);
     // Listener on document otherwise window stops updating if mouse moves out of it (if user moves mouse too fast)
+    document.addEventListener('mouseup', onMouseUp);
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mousedown', onDocumentMouseDown)
 
@@ -135,26 +139,24 @@ const WindowComponent: FC<{
     }));
   };
 
-  const onHeaderDoubleClick = (event: any) => {
+  const maximizeWindow = (event: any) => {
     setOptions(options => {
       return maximizeOrRestoreWindow(options);
     });
   };
 
-  const closeWindowProcess = () => {
-    closeProcess(windowParams.processId);
+  
+  const moveToCustomMaximizeOptionClick = (direction: CustomMaximizeDirection) => {
+    setOptions(options => ({
+      ...options,
+      maximized: false,
+      sideMaximized: true,
+      ...getWindowOptionForCustomMaximize(direction, window.innerWidth, window.innerHeight)
+    }));
   };
 
   const getClass = () => {
     return `${styles.window} ${ options.selected ? styles.windowSelected : styles.windowUnselected}`;
-  };
-
-  const moveToCustomMaximizeOptionClick = (direction: CustomMaximizeDirection) => {
-    setOptions(options => ({
-      ...options,
-      sideMaximized: true,
-      ...getWindowOptionForCustomMaximize(direction, window.innerWidth, window.innerHeight)
-    }));
   };
 
   return (
@@ -190,7 +192,7 @@ const WindowComponent: FC<{
               options={windowParams.headerOptions}
               maximized={options.maximized}
               startMovingWindow={onHeaderClick}
-              maximizeWindow={onHeaderDoubleClick}
+              maximizeWindow={maximizeWindow}
               onClose={closeWindowProcess}
               moveToCustomMaximizeOptionClick={(direction) => moveToCustomMaximizeOptionClick(direction)}
             />

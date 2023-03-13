@@ -1,20 +1,23 @@
 /* TODO:
 
 - Maximize button
-  - Fix modal diseapring when mouse hover out of window (but not out of modal)
   - figure out what should happen when window is side/custom maximized and user click maximize icon
   - icon when moving should stay at default (and not change to scroll when hovering borders)
+
+
+  // BUG: saving position before checking if the window has been moved to the side and set as side maximized.
+  // When double clicking it will remember this position rather than real original position.
 
 - header icons should be smaller (and fix maximize options div if needed)
 - check what hover does on unselected windows (does it show maximize menu options?)
 - Make sure style matches windows 11
 
-- Opening a youtube process should open it with window
 - Refactor
   - window options/state is too big, try to break it down (maybe into multiple states?).
   - Refactor code into services. And organize window service into multiple services if needed
   - put types in their own folder
  
+- Opening a youtube process should open it with window
 
 
 // TODO in another branch

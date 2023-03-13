@@ -91,7 +91,6 @@ export  const moveWindow = (event: any, options: WindowState): WindowState => {
   const mouseX = event.clientX;
   const mouseY = event.clientY;
 
-  // If window was maximized when move started: restore previous width and height relative to mouse
   if (options.maximized || options.sideMaximized) {
     return getRestoredWindowOptionsRelativeToMouse(mouseX, mouseY, options);
   }
@@ -137,11 +136,8 @@ export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, optio
     return options;
   }
 
-  // BUG: saving position before checking if the window has been moved to the side and set as side maximized.
-  // When double clicking it will remember this position rather than real original position.
   options.maximized = false;
 
-  
   if (options.moving) {
     options = finishMovingWindow(mouseX, mouseY, options);
   }
@@ -174,7 +170,7 @@ const saveWindowPosition = (options: WindowState): WindowState => {
     previousHeight: options.height,
     previousWidth: options.width
   }
-}
+};
 
 const getRestoredWindowOptionsRelativeToMouse = (mouseX: number, mouseY: number, options: WindowState): WindowState => {
   // should start with mouse in middle and prevent from going out of screen.
@@ -196,7 +192,7 @@ const getRestoredWindowOptionsRelativeToMouse = (mouseX: number, mouseY: number,
     height: options.previousHeight,
     width: options.previousWidth
   }
-}
+};
 
 export const finishMovingWindow = (mouseX: number, mouseY: number, options: WindowState): WindowState => {
   const outsideTop = mouseY <= 0;
@@ -238,17 +234,6 @@ export const finishMovingWindow = (mouseX: number, mouseY: number, options: Wind
 };
 
 export const maximizeOrRestoreWindow = (options: WindowState): WindowState => {
-  if (options.sideMaximized) {
-    return {
-      ...options,
-      sideMaximized: false,
-      top: options.previousTop,
-      left: options.previousLeft,
-      width: options.previousWidth,
-      height: options.previousHeight
-    }
-  }
-
   return {
     ...options,
     top: options.maximized ? options.previousTop : 0,
