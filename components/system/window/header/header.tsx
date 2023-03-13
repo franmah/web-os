@@ -71,7 +71,6 @@ const HeaderComponent: FC<{
     <header
       className={getClass()}
     >
-      <div className={styles.headerInfo}>
         {
           options?.icon &&
             <Image
@@ -83,18 +82,14 @@ const HeaderComponent: FC<{
             />
         }
 
-        {
-          options?.text && 
-            <div className={styles.text}>{ options.text }</div>
-        }
-      </div>  
-
       {/* Empty box used to start moving window */}
       <div 
-        className={styles.moveContainer}
+        className={styles.textContainer}
         onMouseDown={startMovingWindow}
         onDoubleClick={maximizeWindow}
-      ></div>
+      >
+        { options?.text }
+      </div>
          
       <div 
         className={styles.minimizeIcon}
