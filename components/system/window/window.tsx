@@ -1,5 +1,4 @@
 import { FC, Fragment, useContext, useEffect, useState } from "react";
-import { v4 } from "uuid";
 import { ProcessContext } from "../../../contexts/processContext";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/EventService";
 import { getWindowOptionForCustomMaximize } from "../../../services/system/window/WindowCustomMaximizeOptionService.ts";
@@ -14,6 +13,10 @@ export type WindowParams = {
   processId: string,
   windowId: string,
   headerOptions?: WindowHeaderOptions,
+};
+
+export enum WindowMaximize {
+  Full, Side, Height, None
 };
 
 export enum WindowResizeDirection {
@@ -38,8 +41,7 @@ export type WindowState = {
   previousLeft: number,
   previousWidth: number,
   previousHeight: number,
-  maximized: boolean,
-  sideMaximized: boolean,
+  maximized: WindowMaximize,
   showMaximizePlacehodler: MaximizePlaceholderDirection,
   selected: boolean
 };
@@ -58,8 +60,7 @@ const DEFAULT_WINDOW_STATE: WindowState = {
   previousLeft: 400,
   previousWidth: 1000,
   previousHeight: 600,
-  maximized: false,
-  sideMaximized: false,
+  maximized: WindowMaximize.None,
   showMaximizePlacehodler: MaximizePlaceholderDirection.null,
   selected: true
 };
@@ -149,8 +150,7 @@ const WindowComponent: FC<{
   const moveToCustomMaximizeOptionClick = (direction: CustomMaximizeDirection) => {
     setOptions(options => ({
       ...options,
-      maximized: false,
-      sideMaximized: true,
+      maximized: WindowMaximize.Side,
       ...getWindowOptionForCustomMaximize(direction, window.innerWidth, window.innerHeight)
     }));
   };
@@ -181,7 +181,7 @@ const WindowComponent: FC<{
       >
 
         <WindowBorderComponent
-          allowResize={!options.maximized && !options.moving}
+          allowResize={options.maximized !== WindowMaximize.Full && !options.moving}
           isResizing={options.resizing}
           onBordersMouseDown={onBorderMouseDown}
         >

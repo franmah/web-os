@@ -1,5 +1,7 @@
-- merge window name/text and move box
-- clicking icon should show a context menu (but not the normal context menu)
+Missing resizing interactions:
+  - merge maximized, side maximized and custom maximize into an enum. same for height maximize (from height resize)
+  - block resize going out of screen (any direction) and same for moving window
+  - when resizing up and reaching top, window should show height maximize animation
 
 - Make sure style matches windows 11
 

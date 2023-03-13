@@ -1,4 +1,4 @@
-import { MaximizePlaceholderDirection, WindowResizeDirection, WindowState } from "../components/system/window/window"
+import { MaximizePlaceholderDirection, WindowMaximize, WindowResizeDirection, WindowState } from "../components/system/window/window"
 import { TASKBAR_HEIGHT } from "../constants/TaskbarConsts";
 
 export const resizeWindow = (mouseX: number, mouseY: number, options: WindowState): WindowState => {
@@ -91,7 +91,7 @@ export  const moveWindow = (event: any, options: WindowState): WindowState => {
   const mouseX = event.clientX;
   const mouseY = event.clientY;
 
-  if (options.maximized || options.sideMaximized) {
+  if (options.maximized !== WindowMaximize.None) {
     return getRestoredWindowOptionsRelativeToMouse(mouseX, mouseY, options);
   }
 
@@ -111,8 +111,7 @@ export  const moveWindow = (event: any, options: WindowState): WindowState => {
   return {
     ...options,
     showMaximizePlacehodler,
-    maximized: false,
-    sideMaximized: false,
+    maximized: WindowMaximize.None,
     top: Math.max(0, options.top + changeY),
     left: options.left + changeX,
     previousClientX: mouseX,
@@ -124,7 +123,7 @@ export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, optio
   document.body.style.cursor = 'default';
   
   // Prevent save position when clicking header and window is maximized
-  if (options.maximized || options.sideMaximized) {
+  if (options.maximized === WindowMaximize.Full|| options.maximized === WindowMaximize.Side) {
     return {
       ...options,
       moving: false,
@@ -136,7 +135,7 @@ export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, optio
     return options;
   }
 
-  options.maximized = false;
+  options.maximized = WindowMaximize.None; // TODO: might now work
 
   if (options.moving) {
     options = finishMovingWindow(mouseX, mouseY, options);
@@ -145,13 +144,13 @@ export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, optio
   if (options.resizing && isMouseOverTopOfScreen(mouseY)) {
     options = {
       ...options,
-      sideMaximized: true,
+      maximized: WindowMaximize.Side,
       top: 0,
       height: window.innerHeight - TASKBAR_HEIGHT
     }
   }
 
-  if (!options.maximized && !options.sideMaximized) {
+  if (options.maximized === WindowMaximize.None) {
     options = saveWindowPosition(options);
   }
 
@@ -185,8 +184,7 @@ const getRestoredWindowOptionsRelativeToMouse = (mouseX: number, mouseY: number,
 
   return {
     ...options,
-    maximized: false,
-    sideMaximized: false,
+    maximized: WindowMaximize.None,
     top: mouseY,
     left: leftPosition,
     height: options.previousHeight,
@@ -202,7 +200,7 @@ export const finishMovingWindow = (mouseX: number, mouseY: number, options: Wind
   if (outsideTop) {
     return {
       ...options,
-      maximized: true,
+      maximized: WindowMaximize.Full,
       top: 0,
       left: 0,
       height: window.innerHeight - TASKBAR_HEIGHT,
@@ -211,7 +209,7 @@ export const finishMovingWindow = (mouseX: number, mouseY: number, options: Wind
   } else if (outsideLeft) {
     return {
       ...options,
-      sideMaximized: true,
+      maximized: WindowMaximize.Side,
       top: 0,
       left: 0,
       width: window.innerWidth / 2,
@@ -220,7 +218,7 @@ export const finishMovingWindow = (mouseX: number, mouseY: number, options: Wind
   } else if (outsideRight) {
     return {
       ...options,
-      sideMaximized: true,
+      maximized: WindowMaximize.Side,
       top: 0,
       left: window.innerWidth / 2,
       width: window.innerWidth / 2,
@@ -236,11 +234,11 @@ export const finishMovingWindow = (mouseX: number, mouseY: number, options: Wind
 export const maximizeOrRestoreWindow = (options: WindowState): WindowState => {
   return {
     ...options,
-    top: options.maximized ? options.previousTop : 0,
-    left: options.maximized ? options.previousLeft : 0,
-    width: options.maximized ? options.previousWidth : window.innerWidth,
-    height: options.maximized ? options.previousHeight : window.innerHeight - TASKBAR_HEIGHT,
-    maximized: !options.maximized,
+    top: options.maximized === WindowMaximize.Full ? options.previousTop : 0,
+    left: options.maximized === WindowMaximize.Full ? options.previousLeft : 0,
+    width: options.maximized === WindowMaximize.Full ? options.previousWidth : window.innerWidth,
+    height: options.maximized === WindowMaximize.Full ? options.previousHeight : window.innerHeight - TASKBAR_HEIGHT,
+    maximized: options.maximized === WindowMaximize.Full ? WindowMaximize.None : WindowMaximize.Full,
   }
 };
 

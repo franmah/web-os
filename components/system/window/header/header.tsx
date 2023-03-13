@@ -6,6 +6,7 @@ import globalStyles from '../../../../styles/global.module.scss';
 import { setMaximizeMenuListeners } from '../../../../services/WindowHeaderService';
 import MaximizeOptionsModalComponent, { CustomMaximizeDirection } from '../maximizeOptionsModal/maximizeOptionsModal';
 import { v4 } from 'uuid';
+import { WindowMaximize } from '../window';
 
 const CONTROL_ICON_SIZE = 12;
 
@@ -19,7 +20,7 @@ const MAXIMIZE_DIV_ID = 'maximizeHeaderDiv';
 const HeaderComponent: FC<{
   selected: boolean,
   options: WindowHeaderOptions | undefined,
-  maximized: boolean,
+  maximized: WindowMaximize,
   startMovingWindow: (event: any) => void,
   maximizeWindow: (event: any) => void,
   onClose: () => void,
@@ -106,7 +107,11 @@ const HeaderComponent: FC<{
           onClick={onMaximizeIconClick}
           className={styles.maximizeIcon}
         >
-          { maximized ? <VscChromeRestore size={CONTROL_ICON_SIZE}/> : <VscChromeMaximize size={CONTROL_ICON_SIZE}/> }
+          { 
+            maximized === WindowMaximize.Full ? 
+            <VscChromeRestore size={CONTROL_ICON_SIZE}/> :
+            <VscChromeMaximize size={CONTROL_ICON_SIZE}/>
+          }
         </div>
 
         { 
