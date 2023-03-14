@@ -24,7 +24,7 @@ export enum WindowResizeDirection {
 };
 
 export enum MaximizePlaceholderDirection {
-  Full, Left, Right, null
+  Full, Left, Right, Height, None
 };
 
 export type WindowState = {
@@ -59,7 +59,7 @@ const DEFAULT_WINDOW_STATE: WindowState = {
   moving: false,
   maximized: WindowMaximize.None,
   resizeDirection: WindowResizeDirection.None,
-  showMaximizePlacehodler: MaximizePlaceholderDirection.null,
+  showMaximizePlacehodler: MaximizePlaceholderDirection.None,
   selected: true
 };
 

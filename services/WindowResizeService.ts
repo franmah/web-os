@@ -2,10 +2,18 @@ import { MaximizePlaceholderDirection, WindowMaximize, WindowResizeDirection, Wi
 import { TASKBAR_HEIGHT } from "../constants/TaskbarConsts";
 
 export const resizeWindow = (mouseX: number, mouseY: number, options: WindowState): WindowState => {
+  options.showMaximizePlacehodler = MaximizePlaceholderDirection.None;
+
   switch (options.resizeDirection) {
     case WindowResizeDirection.Top: {
       document.body.style.cursor = 'n-resize';
-      return resizeTop(mouseY, options);
+      const updatedOptions = resizeTop(mouseY, options);
+
+      if (updatedOptions.top <= 0) {
+        updatedOptions.showMaximizePlacehodler = MaximizePlaceholderDirection.Height;
+      }
+      
+      return updatedOptions;
     } 
     
     case WindowResizeDirection.Bottom: {
@@ -113,7 +121,7 @@ export  const moveWindow = (event: any, options: WindowState): WindowState => {
     isMouseOverTopOfScreen(mouseY) ? MaximizePlaceholderDirection.Full :
     isMouseLeftOfScreen(mouseX) ? MaximizePlaceholderDirection.Left :
     isMouseRightOfScreen(mouseX) ? MaximizePlaceholderDirection.Right :
-    MaximizePlaceholderDirection.null;
+    MaximizePlaceholderDirection.None;
 
   return {
     ...options,
@@ -135,6 +143,17 @@ export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, optio
       ...options,
       moving: false,
       resizeDirection: WindowResizeDirection.None
+    }
+  }
+
+  if (options.resizeDirection === WindowResizeDirection.Top && options.showMaximizePlacehodler === MaximizePlaceholderDirection.Height) {
+    return {
+      ...options,
+      showMaximizePlacehodler: MaximizePlaceholderDirection.None,
+      resizeDirection: WindowResizeDirection.None,
+      maximized: WindowMaximize.Height,
+      top: 0,
+      height: window.innerHeight - TASKBAR_HEIGHT
     }
   }
 
@@ -161,7 +180,7 @@ export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, optio
     options = saveWindowPosition(options);
   }
 
-  options.showMaximizePlacehodler = MaximizePlaceholderDirection.null;
+  options.showMaximizePlacehodler = MaximizePlaceholderDirection.None;
   options.resizeDirection = WindowResizeDirection.None
   options.moving = false;
 
