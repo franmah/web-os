@@ -1,6 +1,5 @@
 .window {
   position: absolute;
-  z-index: 100;
   background-color: #ced8eb;
   min-width: 150px;// Defined by const in window.tsx (WINDOW_MIN_WIDTH). SHOULD BE MOVED TO STYLED COMPONENT.
   min-height: 200px; // Defined by const in window.tsx (WINDOW_MIN_HEIGHT).

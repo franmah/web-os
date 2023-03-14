@@ -1,5 +1,6 @@
 - BUG: Placeholder should be over other windows but under current window. Meaning there should be a z-index change
 - Make sure style matches windows 11
+- improve window and subcomponent performance by using memo
 
 - Refactor
   - window options/state is too big, try to break it down (maybe into multiple states?).

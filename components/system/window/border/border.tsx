@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { WINDOW_BORDER_ZINDEX } from "../../../../constants/Zindex";
 import { WindowResizeDirection } from "../window";
 import styles from './border.module.scss';
 
@@ -39,7 +40,10 @@ const WindowBorderComponent: FC<{
       }}
     >
       {/*  TOP BORDER */}
-      <div className={styles.topBorderHeader}>
+      <div
+        className={styles.topBorderHeader}
+        style={{ zIndex: WINDOW_BORDER_ZINDEX }}
+      >
         <div
           className={getClass('topLeft')}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopLeft)}>
@@ -59,6 +63,7 @@ const WindowBorderComponent: FC<{
       {/*  LEFT + RIGHT BORDERS + CONTENT */}
       <div
         className={styles.centerLeft}
+        style={{ zIndex: WINDOW_BORDER_ZINDEX }}
       >
           <div className={getClass('leftCenterTop')} 
             onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopLeft)}
@@ -76,6 +81,7 @@ const WindowBorderComponent: FC<{
 
       <div
         className={styles.centerRight}
+        style={{ zIndex: WINDOW_BORDER_ZINDEX }}
       >
         <div className={getClass('rightCenterTop')}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopRight)}
@@ -89,7 +95,10 @@ const WindowBorderComponent: FC<{
       </div>
 
       {/*  BOTTOM BORDER */}
-      <div className={styles.bottomBorder}>
+      <div
+        className={styles.bottomBorder}
+        style={{ zIndex: WINDOW_BORDER_ZINDEX }}
+      >
         
         <div
           className={getClass('bottomLeft')}

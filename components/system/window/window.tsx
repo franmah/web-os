@@ -1,4 +1,5 @@
 import { FC, Fragment, useContext, useEffect, useState } from "react";
+import { WINDOW_SELECTED_ZINDEX, WINDOW_UNSELECTED_ZINDEX } from "../../../constants/Zindex";
 import { ProcessContext } from "../../../contexts/processContext";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/EventService";
 import { getWindowOptionForCustomMaximize } from "../../../services/system/window/WindowCustomMaximizeOptionService.ts";
@@ -177,6 +178,7 @@ const WindowComponent: FC<{
           left: options.left,
           width: `${options.width}px`,
           height: `${options.height}px`,
+          zIndex: options.selected ? WINDOW_SELECTED_ZINDEX : WINDOW_UNSELECTED_ZINDEX
         }}
       >
 

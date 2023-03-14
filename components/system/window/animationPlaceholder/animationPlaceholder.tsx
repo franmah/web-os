@@ -1,5 +1,6 @@
 import { FC, Fragment, memo } from "react";
 import { heightMaximizeAnimation, leftMaximizeAnimation, maximizeAnimation, rightMaximizeAnimation } from "../../../../animations/windowMaximizeAnimations";
+import { WINDOW_ANIMATION_PLACEHOLDER_ZINDEX } from "../../../../constants/Zindex";
 import { MaximizePlaceholderDirection } from "../window";
 import styles from './animationPlaceholder.module.scss';
 
@@ -18,7 +19,7 @@ const WindowAnimationPlaceholderComponent: FC<{
       case MaximizePlaceholderDirection.Right: return styles.rightSideMaximizePlaceholderModal;
       default: return styles.hideModal;
     };
-  }
+  };
 
   const getAnimation = () => {
     switch (showMaximizePlacehodler) {
@@ -26,7 +27,7 @@ const WindowAnimationPlaceholderComponent: FC<{
       case MaximizePlaceholderDirection.Left: return leftMaximizeAnimation;
       case MaximizePlaceholderDirection.Right: return rightMaximizeAnimation;
     }
-  }
+  };
 
   return (
     <Fragment>
@@ -39,7 +40,10 @@ const WindowAnimationPlaceholderComponent: FC<{
 
       {
         <div
-          style={{ animationName: getAnimation()?.name }}
+          style={{ 
+            animationName: getAnimation()?.name,
+            zIndex: WINDOW_ANIMATION_PLACEHOLDER_ZINDEX
+          }}
           className={getClass()}
         ></div>
       }
@@ -48,6 +52,7 @@ const WindowAnimationPlaceholderComponent: FC<{
         <div 
           style={{ 
             animationName: heightMaximizeAnimation.name,
+            zIndex: WINDOW_ANIMATION_PLACEHOLDER_ZINDEX,
             width,
             left
           }}
