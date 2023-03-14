@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, memo } from "react";
 import { WINDOW_BORDER_ZINDEX } from "../../../../constants/Zindex";
 import { WindowResizeDirection } from "../window";
 import styles from './border.module.scss';
@@ -8,7 +8,7 @@ const WindowBorderComponent: FC<{
   isResizing: boolean,
   onBordersMouseDown: (event: any, direction: WindowResizeDirection) => void,
   children: React.ReactNode,
-}> = ({ allowResize, isResizing, onBordersMouseDown, children }) => {
+}> = memo(({ allowResize, isResizing, onBordersMouseDown, children }) => {
 
   const getClass = (direction: string) => {
     if (!allowResize){
@@ -116,6 +116,11 @@ const WindowBorderComponent: FC<{
     </div>
       
   );
-};
+}, (oldProps, newProps) => {
+  return (
+    oldProps.allowResize === newProps.allowResize &&
+    oldProps.isResizing === newProps.isResizing
+  );
+});
 
 export default WindowBorderComponent;

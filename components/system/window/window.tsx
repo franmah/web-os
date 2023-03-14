@@ -94,11 +94,11 @@ const WindowComponent: FC<{
   }, []);
 
   const onDocumentMouseDown = (event: MouseEvent) => {
-    if (isEventOriginatedFromWithinTargetIdSubtree(event, windowParams.windowId)) {
-      setOptions(currentOptions => ({ ...currentOptions, selected: true }));
-    } else {
-      setOptions(currentOptions => ({ ...currentOptions, selected: false }));
-    }
+    const isClickInWindow = isEventOriginatedFromWithinTargetIdSubtree(event, windowParams.windowId);
+    setOptions(currentOptions => ({
+      ...currentOptions,
+      selected: isClickInWindow
+    }));
   };
 
   const startMoving = (event: any) => {
