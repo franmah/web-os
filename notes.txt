@@ -1,7 +1,5 @@
 Missing resizing interactions:
-  - merge maximized, side maximized and custom maximize into an enum. same for height maximize (from height resize)
-  - block resize going out of screen (any direction) and same for moving window
-  - when resizing up and reaching top, window should show height maximize animation
+  - BUG: resizing left-top and left-bottom moves the window
 
 - Make sure style matches windows 11
 

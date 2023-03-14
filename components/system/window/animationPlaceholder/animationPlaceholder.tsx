@@ -10,9 +10,7 @@ const WindowAnimationPlaceholderComponent: FC<{
   width: number,
   height: number
 }> = memo(({ showMaximizePlacehodler, top, left, width, height }) => {
-  console.log(width)
 
-  console.log(showMaximizePlacehodler)
   return (
     <Fragment>
       <style children={`

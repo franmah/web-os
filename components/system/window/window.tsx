@@ -9,6 +9,9 @@ import HeaderComponent, { WindowHeaderOptions } from "./header/header";
 import { CustomMaximizeDirection } from "./maximizeOptionsModal/maximizeOptionsModal";
 import styles from './window.module.scss';
 
+export const WINDOW_MIN_HEIGH = 200; // TODO: move into styles component
+export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
+
 export type WindowParams = {
   processId: string,
   windowId: string,
@@ -97,13 +100,7 @@ const WindowComponent: FC<{
     }
   };
 
-  const onMouseUp = (event: MouseEvent) => {
-    setOptions(options => {
-     return stopMovingAndResizingWindow(event.clientX, event.clientY, options);
-    });
-  };
-
-  const onHeaderClick = (event: any) => {
+  const startMoving = (event: any) => {
     setOptions(state => {     
       return {
         ...state,
@@ -112,6 +109,15 @@ const WindowComponent: FC<{
         previousClientY: event.clientY
       };
     });
+  };
+
+  const startResizing = (event: any, direction: WindowResizeDirection) => {
+    setOptions(state => ({
+      ...state,
+      previousClientX: event.clientX,
+      previousClientY: event.clientY,
+      resizeDirection: direction
+    }));
   };
 
   const onMouseMove = (event: MouseEvent) => {
@@ -128,13 +134,10 @@ const WindowComponent: FC<{
     });
   };
 
-  const onBorderMouseDown = (event: any, direction: WindowResizeDirection) => {
-    setOptions(state => ({
-      ...state,
-      previousClientX: event.clientX,
-      previousClientY: event.clientY,
-      resizeDirection: direction
-    }));
+  const onMouseUp = (event: MouseEvent) => {
+    setOptions(options => {
+     return stopMovingAndResizingWindow(event.clientX, event.clientY, options);
+    });
   };
 
   const maximizeWindow = (event: any) => {
@@ -180,7 +183,7 @@ const WindowComponent: FC<{
         <WindowBorderComponent
           allowResize={options.maximized !== WindowMaximize.Full && !options.moving}
           isResizing={options.resizeDirection !== WindowResizeDirection.None}
-          onBordersMouseDown={onBorderMouseDown}
+          onBordersMouseDown={startResizing}
         >
 
           <div className={styles.centerContent}>
@@ -188,7 +191,7 @@ const WindowComponent: FC<{
               selected={options.selected}
               options={windowParams.headerOptions}
               maximized={options.maximized}
-              startMovingWindow={onHeaderClick}
+              startMovingWindow={startMoving}
               maximizeWindow={maximizeWindow}
               onClose={closeWindowProcess}
               moveToCustomMaximizeOptionClick={(direction) => moveToCustomMaximizeOptionClick(direction)}

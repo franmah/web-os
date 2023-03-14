@@ -1,15 +1,16 @@
-import { MaximizePlaceholderDirection, WindowMaximize, WindowResizeDirection, WindowState } from "../components/system/window/window"
+import { MaximizePlaceholderDirection, WindowMaximize, WindowResizeDirection, WindowState, WINDOW_MIN_HEIGH, WINDOW_MIN_WIDTH } from "../components/system/window/window";
 import { TASKBAR_HEIGHT } from "../constants/TaskbarConsts";
 
 export const resizeWindow = (mouseX: number, mouseY: number, options: WindowState): WindowState => {
   options.showMaximizePlacehodler = MaximizePlaceholderDirection.None;
 
   switch (options.resizeDirection) {
+
     case WindowResizeDirection.Top: {
       document.body.style.cursor = 'n-resize';
       const updatedOptions = resizeTop(mouseY, options);
 
-      if (updatedOptions.top <= 0) {
+      if (isMouseOverTopOfScreen(mouseY)) {
         updatedOptions.showMaximizePlacehodler = MaximizePlaceholderDirection.Height;
       }
       
@@ -62,11 +63,16 @@ export const resizeWindow = (mouseX: number, mouseY: number, options: WindowStat
 const resizeTop = (mouseY: number, options: WindowState) : WindowState => {
   const updatedTop = Math.max(0, mouseY);
   const addedHeight = options.top - updatedTop;
+  const newHeight = options.height + addedHeight;
+
+  if (newHeight < WINDOW_MIN_HEIGH) {
+    return options;
+  }
 
   return {
     ...options,
     top: updatedTop,
-    height: options.height + addedHeight,
+    height: newHeight
   }
 };
 
@@ -82,11 +88,16 @@ const resizeBottom = (mouseY: number, options: WindowState) : WindowState => {
 const resizeLeft = (mouseX: number, options: WindowState) : WindowState => {
   const updatedLeft = Math.max(0, mouseX);
   const addedWidth = options.left - updatedLeft;
+  const newWidth = options.width + addedWidth;
+
+  if (newWidth < WINDOW_MIN_WIDTH) {
+    return options;
+  }
 
   return {
     ...options,
     left: updatedLeft,
-    width: options.width + addedWidth
+    width: newWidth
   }
 };
 
