@@ -1,6 +1,6 @@
 import { CustomMaximizeDirection } from "../../../components/system/window/maximizeOptionsModal/maximizeOptionsModal";
-import { WindowState } from "../../../components/system/window/window";
 import { TASKBAR_HEIGHT } from "../../../constants/TaskbarConsts";
+import { WindowState } from "../../../types/system/window/WindowState";
 
 export const getWindowOptionForCustomMaximize = (direction: CustomMaximizeDirection,
 windowWidth: number, windowHeight: number): Partial<WindowState> => {
