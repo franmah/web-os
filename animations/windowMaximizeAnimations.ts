@@ -40,3 +40,15 @@ export const rightMaximizeAnimation = {
     `;
   }
 };
+
+export const heightMaximizeAnimation = {
+  name: 'window-height-maximize-placeholder-animation',
+  animation: (left: number, width: number, height: number) => {
+    return `
+      @keyframes window-height-maximize-placeholder-animation {
+        0%   {top: 0px; left: ${left}px; width: ${width}; height: ${height}px;}
+        100% {top: 0px; left: ${left}px; width: ${width}; height: calc(100% - ${TASKBAR_HEIGHT}px - ${HEIGHT_OFFSET});}
+      }
+    `;
+  }
+};

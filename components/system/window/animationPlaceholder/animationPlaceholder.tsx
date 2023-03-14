@@ -1,5 +1,5 @@
-import { FC, Fragment } from "react";
-import { leftMaximizeAnimation, maximizeAnimation, rightMaximizeAnimation } from "../../../../animations/windowMaximizeAnimations";
+import { FC, Fragment, memo } from "react";
+import { heightMaximizeAnimation, leftMaximizeAnimation, maximizeAnimation, rightMaximizeAnimation } from "../../../../animations/windowMaximizeAnimations";
 import { MaximizePlaceholderDirection } from "../window";
 import styles from './animationPlaceholder.module.scss';
 
@@ -9,13 +9,17 @@ const WindowAnimationPlaceholderComponent: FC<{
   left: number,
   width: number,
   height: number
-}> = ({ showMaximizePlacehodler, top, left, width, height }) => {
+}> = memo(({ showMaximizePlacehodler, top, left, width, height }) => {
+  console.log(width)
+
+  console.log(showMaximizePlacehodler)
   return (
     <Fragment>
       <style children={`
         ${maximizeAnimation.animation(left, width, height)} 
         ${leftMaximizeAnimation.animation(top, height)} 
-        ${rightMaximizeAnimation.animation(top, height)}
+        ${rightMaximizeAnimation.animation(top, height)} 
+        ${heightMaximizeAnimation.animation(left, width, height)}
       `}/>
 
       {
@@ -40,8 +44,25 @@ const WindowAnimationPlaceholderComponent: FC<{
           style={{ animationName: rightMaximizeAnimation.name }}
         ></div>
       }
+      { 
+        showMaximizePlacehodler === MaximizePlaceholderDirection.Height &&
+        <div 
+          style={{ 
+            animationName: heightMaximizeAnimation.name,
+            width,
+            left
+          }}
+          className={styles.heightMaximizePlaceholderModal}
+        >
+          
+        </div>
+      }
     </Fragment>
   );
-};
+}, (oldProps, newProps) => {
+  return (
+    oldProps.showMaximizePlacehodler === newProps.showMaximizePlacehodler
+  )
+});
 
 export default WindowAnimationPlaceholderComponent;

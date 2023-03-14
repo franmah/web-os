@@ -9,7 +9,8 @@ Missing resizing interactions:
   - window options/state is too big, try to break it down (maybe into multiple states?).
   - Refactor code into services. And organize window service into multiple services if needed
   - put types in their own folder
- 
+  - refactor animation divs in animationPlacehodlerComponenet into one div. + refactor scss?
+  
 - Opening a youtube process should open it with window
 
 
