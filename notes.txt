@@ -1,6 +1,5 @@
-  
-- Opening a youtube process should open it with window
 
+- When opening a process the window should be shifted if another window is already at the starting position.
 
 - Fix context menu bug (clicking on new folder doesn't hide menu)
   - I think there's a bug because a unique process id is generate now. There should be some process that don't have a unique id.

@@ -4,8 +4,9 @@ export type Process = {
   name: string;
   Component: React.ComponentType<{ params: any }>;
   params: any | null;
-  windowParams: WindowProps | null;
+  windowParams: Partial<WindowProps> | null;
   hasWindow: boolean;
+  isUnique: boolean;
 };
 
 export type Processes = {
