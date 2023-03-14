@@ -1,13 +1,10 @@
-Missing resizing interactions:
-  - BUG: resizing left-top and left-bottom moves the window
-
+- Placeholder should be over other windows but under current window. Meaning there should be a z-index change
 - Make sure style matches windows 11
 
 - Refactor
   - window options/state is too big, try to break it down (maybe into multiple states?).
   - Refactor code into services. And organize window service into multiple services if needed
   - put types in their own folder
-  - refactor animation divs in animationPlacehodlerComponenet into one div. + refactor scss?
   
 - Opening a youtube process should open it with window
 
@@ -17,8 +14,7 @@ Missing resizing interactions:
 - Fix context menu bug (clicking on new folder doesn't hide menu)
   - I think there's a bug because a unique process id is generate now. There should be some process that don't have a unique id.
 
-- Look into moving <style> with animations to metadata (https://developer.mozilla.org/en-US/docs/Web/HTML/Element#document_metadata)
-   and loading all animation in the same tag. If it's goog practice
+- Look into moving <style> with animations to metadata (https://developer.mozilla.org/en-US/docs/Web/HTML/Element#document_metadata) and loading all animation in the same tag. If it's goog practice
   
 - Look at next's documentation (like react)
 
@@ -27,6 +23,7 @@ Missing resizing interactions:
   - https://developer.mozilla.org/en-US/docs/Web/HTML/Element
   
 - Change to styled components so that variables are not defined multiple times
+  - Fix the z-index madness
   - (update to fit styled components) window border radius size should be a global style and applied to header, hello and window
 
 - Finish performance improved new Desktop item component (memo). AS WELL AS OTHER IMPROVEMENTS AND OTHER COMPONENTS (useMemo, memo and useCallback)

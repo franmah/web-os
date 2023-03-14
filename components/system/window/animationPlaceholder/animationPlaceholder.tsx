@@ -4,12 +4,29 @@ import { MaximizePlaceholderDirection } from "../window";
 import styles from './animationPlaceholder.module.scss';
 
 const WindowAnimationPlaceholderComponent: FC<{
-  showMaximizePlacehodler: MaximizePlaceholderDirection,
+  placeholderDirection: MaximizePlaceholderDirection,
   top: number,
   left: number,
   width: number,
   height: number
-}> = memo(({ showMaximizePlacehodler, top, left, width, height }) => {
+}> = memo(({ placeholderDirection: showMaximizePlacehodler, top, left, width, height }) => {
+
+  const getClass = () => {
+    switch (showMaximizePlacehodler) {
+      case MaximizePlaceholderDirection.Full: return styles.maximizePlaceholderModal;
+      case MaximizePlaceholderDirection.Left: return styles.leftSideMaximizePlaceholderModal;
+      case MaximizePlaceholderDirection.Right: return styles.rightSideMaximizePlaceholderModal;
+      default: return styles.hideModal;
+    };
+  }
+
+  const getAnimation = () => {
+    switch (showMaximizePlacehodler) {
+      case MaximizePlaceholderDirection.Full: return maximizeAnimation;
+      case MaximizePlaceholderDirection.Left: return leftMaximizeAnimation;
+      case MaximizePlaceholderDirection.Right: return rightMaximizeAnimation;
+    }
+  }
 
   return (
     <Fragment>
@@ -21,25 +38,9 @@ const WindowAnimationPlaceholderComponent: FC<{
       `}/>
 
       {
-        showMaximizePlacehodler === MaximizePlaceholderDirection.Full &&
         <div
-          style={{ animationName: maximizeAnimation.name }}
-          className={styles.maximizePlaceholderModal}
-        >
-        </div>
-      }
-      {
-        showMaximizePlacehodler === MaximizePlaceholderDirection.Left && 
-        <div 
-          className={styles.leftSideMaximizePlaceholderModal} 
-          style={{ animationName: leftMaximizeAnimation.name }}
-        ></div>
-      }
-      { 
-        showMaximizePlacehodler === MaximizePlaceholderDirection.Right &&
-        <div 
-          className={styles.rightSideMaximizePlaceholderModal}
-          style={{ animationName: rightMaximizeAnimation.name }}
+          style={{ animationName: getAnimation()?.name }}
+          className={getClass()}
         ></div>
       }
       { 
@@ -52,14 +53,13 @@ const WindowAnimationPlaceholderComponent: FC<{
           }}
           className={styles.heightMaximizePlaceholderModal}
         >
-          
         </div>
       }
     </Fragment>
   );
 }, (oldProps, newProps) => {
   return (
-    oldProps.showMaximizePlacehodler === newProps.showMaximizePlacehodler
+    oldProps.placeholderDirection === newProps.placeholderDirection
   )
 });
 

@@ -162,7 +162,7 @@ const WindowComponent: FC<{
   return (
     <Fragment>
       <WindowAnimationPlaceholderComponent
-        showMaximizePlacehodler={options.showMaximizePlacehodler}
+        placeholderDirection={options.showMaximizePlacehodler}
         top={options.top}
         left={options.left}
         width={options.width}
