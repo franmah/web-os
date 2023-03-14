@@ -8,11 +8,6 @@ export const ProcessLoaderComponent: FC<{}> = () => {
 
   const processContext = useContext(ProcessContext);
 
-  // TODO: remove (opens test hello component)
-  useEffect(() => {
-    processContext.openProcess('hello');
-  }, [])
-
   const closeContextMenu = (event: MouseEvent) => {
     const isContextProcessOpen = !!processContext.processes['contextMenu'];
     const isMouseDownInContextMenu = isEventOriginatedFromWithinTargetIdSubtree(event, CONTEXT_MENU_ROOT_ID);

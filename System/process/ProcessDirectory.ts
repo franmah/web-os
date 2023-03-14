@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { WindowProps } from "../../components/system/window/window";
+import { WindowProps } from "../../types/system/window/WindowProps";
 
 export type ProcessDirectoryEntry = {
   [name: string]: {
@@ -37,7 +37,7 @@ export const ProcessDirectory: ProcessDirectoryEntry = {
     name: 'hello',
     Component: dynamic<{ params: any }>(() => import('../../components/hello/helloComponent')),
     params: null,
-    windowParams: { headerOptions: { icon: '/icons/youtube-logo.png',text: 'Youtube Player dddddddddddddddddddddddddddddddddddddddd' } },
+    windowParams: { headerOptions: { icon: '/icons/youtube-logo.png',text: 'Youtube Player' } },
     hasWindow: true
   }
 };

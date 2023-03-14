@@ -57,7 +57,7 @@ const DesktopItemComponent: FC<{
   selectItems: (...ids: string[]) => void,
   selectItemsWithCtrl: (...ids: string[]) => void,
   selectItemsWithShift: (id: string, ctrlKey: boolean) => void,
-  handleDoubleClick: (id: string) => void,
+  handleDoubleClick: (item: DesktopItem) => void,
   handleContextMenuClick: (event: MouseEvent) => void,
   handleItemRenamed: (itemId: string, itemNewName: string) => void,
   startRenaming: (itemId: string) => void
@@ -99,8 +99,8 @@ const DesktopItemComponent: FC<{
     };
   }), [];
 
-  const onDoubleClick = (event: any) => {
-    handleDoubleClick(item.id);
+  const onDoubleClick = () => {
+    handleDoubleClick(item);
   };
 
   const onClick = (event: any) => {

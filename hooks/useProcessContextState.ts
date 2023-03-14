@@ -23,6 +23,7 @@ const useProcessContextState = (): ProcessContextType => {
       return;
     }
 
+    // TODO: only generate id is process is not unique
     const newProcessId = v4();
 
     const newProcess = {

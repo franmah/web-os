@@ -1,4 +1,4 @@
-import { WindowProps } from "../../../components/system/window/window";
+import { WindowProps } from "../window/WindowProps";
 
 export type Process = {
   name: string;

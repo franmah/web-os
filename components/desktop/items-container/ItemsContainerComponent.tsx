@@ -18,8 +18,9 @@ const DesktopItemContainerComponent: FC<{
   files: ExplorerFile[],
   onDesktopContextMenuClick: (event: MouseEvent, commands: ContextMenuCommandList) => void,
   onItemContextMenuClick: (event: MouseEvent) => void,
-  onFileChange: (newItem: DesktopItem) => void
-}> = ({ files, onDesktopContextMenuClick, onItemContextMenuClick, onFileChange }) => {
+  onFileChange: (newItem: DesktopItem) => void,
+  onItemDoubleClick: (item: DesktopItem) => void
+}> = ({ files, onDesktopContextMenuClick, onItemContextMenuClick, onFileChange, onItemDoubleClick }) => {
 
   const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
 
@@ -165,8 +166,8 @@ const DesktopItemContainerComponent: FC<{
     });
   }
 
-  const handleItemDoubleClick = (itemId: string) => { 
-    console.log('double click');
+  const handleItemDoubleClick = (item: DesktopItem) => { 
+    onItemDoubleClick(item);
   };
   
   const handleSelectionBoxUpdates = (elements: HTMLElement[], previousElementInBox: HTMLElement[], ctrlKey: boolean) => {

@@ -1,16 +1,11 @@
-
-- Refactor
-  - window options/state is too big, try to break it down (maybe into multiple states?).
-  - Refactor code into services. And organize window service into multiple services if needed
-  - put types in their own folder
   
 - Opening a youtube process should open it with window
 
 
-// TODO in another branch
-
 - Fix context menu bug (clicking on new folder doesn't hide menu)
   - I think there's a bug because a unique process id is generate now. There should be some process that don't have a unique id.
+
+// TODO in another branch
 
 - Look into moving <style> with animations to metadata (https://developer.mozilla.org/en-US/docs/Web/HTML/Element#document_metadata) and loading all animation in the same tag. If it's goog practice
   
