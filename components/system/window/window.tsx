@@ -20,7 +20,7 @@ export enum WindowMaximize {
 };
 
 export enum WindowResizeDirection {
-  Top, Bottom, Left, Right, TopRight, TopLeft, BottomLeft, BottomRight
+  Top, Bottom, Left, Right, TopRight, TopLeft, BottomLeft, BottomRight, None
 };
 
 export enum MaximizePlaceholderDirection {
@@ -33,7 +33,6 @@ export type WindowState = {
   width: number,
   height: number,
   moving: boolean,
-  resizing: boolean,
   resizeDirection: WindowResizeDirection,
   previousClientX: number,
   previousClientY: number,
@@ -51,16 +50,15 @@ const DEFAULT_WINDOW_STATE: WindowState = {
   left: 400,
   width: 1000,
   height: 600,
-  moving: false,
-  resizing: false,
-  resizeDirection: WindowResizeDirection.Top,
   previousClientX: 0,
   previousClientY: 0,
   previousTop: 100,
   previousLeft: 400,
   previousWidth: 1000,
   previousHeight: 600,
+  moving: false,
   maximized: WindowMaximize.None,
+  resizeDirection: WindowResizeDirection.None,
   showMaximizePlacehodler: MaximizePlaceholderDirection.null,
   selected: true
 };
@@ -82,7 +80,7 @@ const WindowComponent: FC<{
     // Listener on document otherwise window stops updating if mouse moves out of it (if user moves mouse too fast)
     document.addEventListener('mouseup', onMouseUp);
     document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mousedown', onDocumentMouseDown)
+    document.addEventListener('mousedown', onDocumentMouseDown);
 
     return () => {
       document.removeEventListener('mouseup', onMouseUp);
@@ -123,7 +121,7 @@ const WindowComponent: FC<{
     setOptions(options => {
       if (options.moving) {
         return moveWindow(event, options);
-      } else if (options.resizing) {
+      } else if (options.resizeDirection !== WindowResizeDirection.None) {
         return resizeWindow(mouseX, mouseY, options);
       }
       return options;
@@ -133,7 +131,6 @@ const WindowComponent: FC<{
   const onBorderMouseDown = (event: any, direction: WindowResizeDirection) => {
     setOptions(state => ({
       ...state,
-      resizing: true,
       previousClientX: event.clientX,
       previousClientY: event.clientY,
       resizeDirection: direction
@@ -182,7 +179,7 @@ const WindowComponent: FC<{
 
         <WindowBorderComponent
           allowResize={options.maximized !== WindowMaximize.Full && !options.moving}
-          isResizing={options.resizing}
+          isResizing={options.resizeDirection !== WindowResizeDirection.None}
           onBordersMouseDown={onBorderMouseDown}
         >
 

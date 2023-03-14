@@ -52,10 +52,12 @@ export const resizeWindow = (mouseX: number, mouseY: number, options: WindowStat
 };
 
 const resizeTop = (mouseY: number, options: WindowState) : WindowState => {
-  const addedHeight = options.top - mouseY;
+  const updatedTop = Math.max(0, mouseY);
+  const addedHeight = options.top - updatedTop;
+
   return {
     ...options,
-    top: mouseY,
+    top: updatedTop,
     height: options.height + addedHeight,
   }
 };
@@ -70,20 +72,25 @@ const resizeBottom = (mouseY: number, options: WindowState) : WindowState => {
 };
 
 const resizeLeft = (mouseX: number, options: WindowState) : WindowState => {
-  const addedWidth = options.left - mouseX;
+  const updatedLeft = Math.max(0, mouseX);
+  const addedWidth = options.left - updatedLeft;
+
   return {
     ...options,
-    left: mouseX,
+    left: updatedLeft,
     width: options.width + addedWidth
   }
 };
 
 const resizeRight = (mouseX: number, options: WindowState) : WindowState => {
   const addedWidth = mouseX - (options.width + options.left);
+  const updatedWidth = options.width + addedWidth;
 
   return {
     ...options,
-    width: options.width + addedWidth
+    width: options.left + updatedWidth > window.innerWidth ? 
+      updatedWidth - (options.left + updatedWidth - window.innerWidth) :
+      updatedWidth
   }
 };
 
@@ -127,21 +134,21 @@ export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, optio
     return {
       ...options,
       moving: false,
-      resizing: false
+      resizeDirection: WindowResizeDirection.None
     }
   }
 
-  if (!options.resizing && !options.moving) {
+  if (options.resizeDirection === WindowResizeDirection.None && !options.moving) {
     return options;
   }
 
-  options.maximized = WindowMaximize.None; // TODO: might now work
+  options.maximized = WindowMaximize.None;
 
   if (options.moving) {
     options = finishMovingWindow(mouseX, mouseY, options);
   }
 
-  if (options.resizing && isMouseOverTopOfScreen(mouseY)) {
+  if (options.resizeDirection !== WindowResizeDirection.None && isMouseOverTopOfScreen(mouseY)) {
     options = {
       ...options,
       maximized: WindowMaximize.Side,
@@ -155,7 +162,7 @@ export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, optio
   }
 
   options.showMaximizePlacehodler = MaximizePlaceholderDirection.null;
-  options.resizing = false;
+  options.resizeDirection = WindowResizeDirection.None
   options.moving = false;
 
   return { ...options };
