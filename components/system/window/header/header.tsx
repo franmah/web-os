@@ -3,29 +3,14 @@ import { FC, memo, useEffect, useState } from "react";
 import styles from './header.module.scss';
 import {VscChromeMinimize,  VscChromeRestore, VscChromeMaximize, VscClose } from 'react-icons/vsc';
 import globalStyles from '../../../../styles/global.module.scss';
-import { setMaximizeMenuListeners } from '../../../../services/WindowHeaderService';
+import { setMaximizeMenuListeners } from '../../../../services/system/window/WindowHeaderService';
 import MaximizeOptionsModalComponent, { CustomMaximizeDirection } from '../maximizeOptionsModal/maximizeOptionsModal';
 import { v4 } from 'uuid';
-import { WindowMaximize } from '../window';
+import { WindowMaximize } from '../../../../constants/system/window/WindowMaximizeEnum';
+import { WindowHeaderProps } from '../../../../types/system/window/WindowHeaderProps';
+import { CONTROL_ICON_SIZE, MAXIMIZE_DIV_ID } from '../../../../constants/system/window/WindowHeaderConts';
 
-const CONTROL_ICON_SIZE = 12;
-
-export type WindowHeaderOptions = {
-  icon?: string;
-  text?: string;
-};
-
-const MAXIMIZE_DIV_ID = 'maximizeHeaderDiv';
-
-const HeaderComponent: FC<{
-  selected: boolean,
-  options: WindowHeaderOptions | undefined,
-  maximized: WindowMaximize,
-  startMovingWindow: (event: any) => void,
-  maximizeWindow: (event: any) => void,
-  onClose: () => void,
-  moveToCustomMaximizeOptionClick: (direcction: CustomMaximizeDirection) => void
-}> = memo(({
+const HeaderComponent: FC<WindowHeaderProps> = memo(({
   selected,
   options, 
   maximized,
@@ -72,18 +57,17 @@ const HeaderComponent: FC<{
     <header
       className={getClass()}
     >
-        {
-          options?.icon &&
-            <Image
-              className={styles.icon}
-              src={options?.icon} 
-              alt={'window name'} 
-              width={24} 
-              height={24}
-            />
-        }
+      {
+        options?.icon &&
+          <Image
+            className={styles.icon}
+            src={options?.icon} 
+            alt={'window name'} 
+            width={24} 
+            height={24}
+          />
+      }
 
-      {/* Empty box used to start moving window */}
       <div 
         className={styles.textContainer}
         onMouseDown={startMovingWindow}

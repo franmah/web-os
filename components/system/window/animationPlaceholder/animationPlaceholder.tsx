@@ -1,7 +1,7 @@
 import { FC, Fragment, memo } from "react";
 import { heightMaximizeAnimation, leftMaximizeAnimation, maximizeAnimation, rightMaximizeAnimation } from "../../../../animations/windowMaximizeAnimations";
+import { MaximizePlaceholderDirection } from "../../../../constants/system/window/MaximizePlaceholderDirectionEnum";
 import { WINDOW_ANIMATION_PLACEHOLDER_ZINDEX } from "../../../../constants/Zindex";
-import { MaximizePlaceholderDirection } from "../window";
 import styles from './animationPlaceholder.module.scss';
 
 const WindowAnimationPlaceholderComponent: FC<{
@@ -10,10 +10,10 @@ const WindowAnimationPlaceholderComponent: FC<{
   left: number,
   width: number,
   height: number
-}> = memo(({ placeholderDirection: showMaximizePlacehodler, top, left, width, height }) => {
+}> = memo(({ placeholderDirection, top, left, width, height }) => {
 
   const getClass = () => {
-    switch (showMaximizePlacehodler) {
+    switch (placeholderDirection) {
       case MaximizePlaceholderDirection.Full: return styles.maximizePlaceholderModal;
       case MaximizePlaceholderDirection.Left: return styles.leftSideMaximizePlaceholderModal;
       case MaximizePlaceholderDirection.Right: return styles.rightSideMaximizePlaceholderModal;
@@ -22,7 +22,7 @@ const WindowAnimationPlaceholderComponent: FC<{
   };
 
   const getAnimation = () => {
-    switch (showMaximizePlacehodler) {
+    switch (placeholderDirection) {
       case MaximizePlaceholderDirection.Full: return maximizeAnimation;
       case MaximizePlaceholderDirection.Left: return leftMaximizeAnimation;
       case MaximizePlaceholderDirection.Right: return rightMaximizeAnimation;
@@ -48,7 +48,7 @@ const WindowAnimationPlaceholderComponent: FC<{
         ></div>
       }
       { 
-        showMaximizePlacehodler === MaximizePlaceholderDirection.Height &&
+        placeholderDirection === MaximizePlaceholderDirection.Height &&
         <div 
           style={{ 
             animationName: heightMaximizeAnimation.name,

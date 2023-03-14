@@ -1,1 +1,0 @@
-export const CUSTOM_MAXIMIZE_MODAL_DELAY = 1000;

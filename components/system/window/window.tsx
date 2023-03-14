@@ -1,74 +1,28 @@
 import { FC, Fragment, useContext, useEffect, useState } from "react";
+import { DEFAULT_WINDOW_STATE } from "../../../constants/system/window/WindowConsts";
+import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeEnum";
+import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
 import { WINDOW_SELECTED_ZINDEX, WINDOW_UNSELECTED_ZINDEX } from "../../../constants/Zindex";
 import { ProcessContext } from "../../../contexts/processContext";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/EventService";
+import { maximizeOrRestoreWindow } from "../../../services/system/window/MaximizeRestoreWindowService";
+import { moveWindow } from "../../../services/system/window/MoveWindowService";
 import { getWindowOptionForCustomMaximize } from "../../../services/system/window/WindowCustomMaximizeOptionService.ts";
-import { maximizeOrRestoreWindow, moveWindow, resizeWindow, stopMovingAndResizingWindow } from "../../../services/WindowResizeService";
+import { resizeWindow } from "../../../services/system/window/WindowResizeService";
+import { stopMovingAndResizingWindow } from "../../../services/system/window/WindowService";
+import { WindowProps } from "../../../types/system/window/WindowProps";
+import { WindowState } from "../../../types/system/window/WindowState";
 import WindowAnimationPlaceholderComponent from "./animationPlaceholder/animationPlaceholder";
-import WindowBorderComponent from "./border/border";
-import HeaderComponent, { WindowHeaderOptions } from "./header/header";
+import WindowBorderComponent from "./border/windowBorder";
+import HeaderComponent from "./header/header";
 import { CustomMaximizeDirection } from "./maximizeOptionsModal/maximizeOptionsModal";
 import styles from './window.module.scss';
 
 export const WINDOW_MIN_HEIGH = 200; // TODO: move into styles component
 export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
 
-export type WindowParams = {
-  processId: string,
-  windowId: string,
-  headerOptions?: WindowHeaderOptions,
-};
-
-export enum WindowMaximize {
-  Full, Side, Height, None
-};
-
-export enum WindowResizeDirection {
-  Top, Bottom, Left, Right, TopRight, TopLeft, BottomLeft, BottomRight, None
-};
-
-export enum MaximizePlaceholderDirection {
-  Full, Left, Right, Height, None
-};
-
-export type WindowState = {
-  top: number,
-  left: number,
-  width: number,
-  height: number,
-  moving: boolean,
-  resizeDirection: WindowResizeDirection,
-  previousClientX: number,
-  previousClientY: number,
-  previousTop: number,
-  previousLeft: number,
-  previousWidth: number,
-  previousHeight: number,
-  maximized: WindowMaximize,
-  showMaximizePlacehodler: MaximizePlaceholderDirection,
-  selected: boolean
-};
-
-const DEFAULT_WINDOW_STATE: WindowState = {
-  top: 100,
-  left: 400,
-  width: 1000,
-  height: 600,
-  previousClientX: 0,
-  previousClientY: 0,
-  previousTop: 100,
-  previousLeft: 400,
-  previousWidth: 1000,
-  previousHeight: 600,
-  moving: false,
-  maximized: WindowMaximize.None,
-  resizeDirection: WindowResizeDirection.None,
-  showMaximizePlacehodler: MaximizePlaceholderDirection.None,
-  selected: true
-};
-
 const WindowComponent: FC<{
-  windowParams: WindowParams,
+  windowParams: WindowProps,
   children: React.ReactNode
 }> = ({ windowParams, children }) => {
 

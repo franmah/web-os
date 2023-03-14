@@ -1,6 +1,6 @@
 import { FC, memo } from "react";
+import { WindowResizeDirection } from "../../../../constants/system/window/WindowResizeDirectionEnum";
 import { WINDOW_BORDER_ZINDEX } from "../../../../constants/Zindex";
-import { WindowResizeDirection } from "../window";
 import styles from './border.module.scss';
 
 const WindowBorderComponent: FC<{

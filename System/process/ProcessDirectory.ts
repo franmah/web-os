@@ -1,12 +1,12 @@
 import dynamic from "next/dynamic";
-import { WindowParams } from "../../components/system/window/window";
+import { WindowProps } from "../../components/system/window/window";
 
 export type ProcessDirectoryEntry = {
   [name: string]: {
     name: string,
     Component: React.ComponentType<{ params: any }>,
     params: any,
-    windowParams: Partial<WindowParams> | null,
+    windowParams: Partial<WindowProps> | null,
     hasWindow: boolean
   }
 };
