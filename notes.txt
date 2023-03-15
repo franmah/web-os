@@ -1,6 +1,7 @@
 - Use the code in processRendererComponent to create a window Manager. The window manager should only pass a starting position to the window for now.
 - BUG: Fix error message in processRendererComponent for windowsParams
-
+- BUG: because the window will use mouseY as top when moving, the window will shift when start moving.
+    - Don't use mouse as top but rather find the offset.
 // TODO in another branch
 
 - Look into moving <style> with animations to metadata (https://developer.mozilla.org/en-US/docs/Web/HTML/Element#document_metadata) and loading all animation in the same tag. If it's goog practice
