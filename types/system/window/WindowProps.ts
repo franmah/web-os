@@ -1,4 +1,4 @@
-import { WindowHeaderOptions } from "../../../components/system/window/header/header";
+import { WindowHeaderOptions } from "./WindowHeaderOptions";
 
 export type WindowProps = {
   processId: string,
