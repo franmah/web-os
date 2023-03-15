@@ -1,4 +1,4 @@
-
+- Use the code in processRendererComponent to create a window Manager. The window manager should only pass a starting position to the window for now.
 - BUG: Fix error message in processRendererComponent for windowsParams
 
 // TODO in another branch
