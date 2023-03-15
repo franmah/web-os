@@ -25,16 +25,17 @@ const ProcessRenderer: FC<{ id: string, process: Process }> = ({ id, process: { 
     }
 
 
-  return hasWindow ?
-    <WindowComponent
-      startingPosition={startingPosition}
-      key={windowParams?.windowId}
-      windowParams={{ ...windowParams }}
-    > 
-      <Component params={params}/>
-    </WindowComponent>
-    :
-    <Component key={id} params={params}></Component>
+    return <Component key={id} params={params}></Component>
+  // return hasWindow ?
+  //   <WindowComponent
+  //     startingPosition={startingPosition}
+  //     key={windowParams?.windowId}
+  //     windowParams={{ ...windowParams }}
+  //   > 
+  //     <Component params={params}/>
+  //   </WindowComponent>
+  //   :
+  //   <Component key={id} params={params}></Component>
 };
 
 export default ProcessRenderer;
