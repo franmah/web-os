@@ -55,11 +55,11 @@ export const ProcessLoaderComponent: FC<{}> = () => {
             />
           )
       }
-      {
-        <WindowManagerComponent 
-          processes={windowedProcesses}
-        />
-      }
+      
+      <WindowManagerComponent 
+        processes={windowedProcesses}
+      />
+      
     </Fragment>
   );
 };

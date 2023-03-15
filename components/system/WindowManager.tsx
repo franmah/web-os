@@ -10,14 +10,15 @@ type WindowManagerState = {
 
 export const WindowManagerComponent: FC<{ processes: Processes }> = ({ processes }) => {
 
-  const [windowProps, setWindowProps] = useState<WindowManagerState>({});
+  const [windowStates, setWindowStates] = useState<WindowManagerState>({});
 
   useEffect(() => {
-    setWindowProps(currentState => {
-      return Object.entries(processes).reduce((updatedState, [_, process] ) => {
+    console.log('sup')
+    setWindowStates(currentState => {
+      const updatedState = Object.entries(processes).reduce((updatedState, [_, process] ) => {
         const windowId = process.windowParams?.windowId || '';
-        
         if (currentState[windowId]) {
+          console.log(windowId + ' is already present')
           return {
             ...updatedState,
             [windowId]: {
@@ -25,34 +26,56 @@ export const WindowManagerComponent: FC<{ processes: Processes }> = ({ processes
             }
           }
         } else {
+          console.log(windowId + ' is new')
           return {
             ...updatedState,
             [windowId]: DEFAULT_WINDOW_STATE 
           };
         }
-      }, {} as WindowManagerState);
-
+      }, {});
+      console.log({updatedState})
+      return updatedState
     });
   }, [processes]);
+
+  const updateWindowState = (windowId: string, state: Partial<WindowState>, origin?: string) => {
+    console.log(origin)
+    setWindowStates(currentState => ({
+      ...currentState,
+      [windowId]: {
+        ...currentState[windowId],
+        ...state
+      }
+    }));
+  } 
 
   return (
     <>
       {
         Object.entries(processes)
           .map(([id, process]) => {
-
-            return (
-              <WindowComponent
-                key={id}
-                startingPosition={{ top: 100, left: 100 }}
-                windowParams={process.windowParams}
-              >
-                <process.Component 
-                  params={process.params}
-                />
-              </WindowComponent>
-             
-            )
+            const windowId = process.windowParams?.windowId || '';
+            const props = windowStates[windowId];
+            if (props) {
+              return (
+                <WindowComponent
+                  key={id}
+                  windowId={windowId}
+                  windowParams={process.windowParams}
+                  state={props}
+                  updateState={updateWindowState}
+                  windowState={props}
+                >
+                  <process.Component 
+                    params={process.params}
+                  />
+                </WindowComponent>
+               
+              )
+            }
+            else 
+              return null
+           
           })
       }
     </>

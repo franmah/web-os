@@ -5,7 +5,7 @@ import { WindowState } from "../../../types/system/window/WindowState";
 import { getRestoredWindowOptionsRelativeToMouse } from "./MaximizeRestoreWindowService";
 import { isMouseLeftOfScreen, isMouseOverTopOfScreen, isMouseRightOfScreen } from "./WindowService";
 
-export  const moveWindow = (event: any, options: WindowState): WindowState => {
+export  const moveWindow = (event: any, options: WindowState): Partial<WindowState> => {
   const mouseX = event.clientX;
   const mouseY = event.clientY;
 
@@ -24,7 +24,6 @@ export  const moveWindow = (event: any, options: WindowState): WindowState => {
     MaximizePlaceholderDirection.None;
 
   return {
-    ...options,
     showMaximizePlacehodler,
     maximized: WindowMaximize.None,
     top: Math.max(0, mouseY),
@@ -34,14 +33,13 @@ export  const moveWindow = (event: any, options: WindowState): WindowState => {
   }
 };
 
-export const finishMovingWindow = (mouseX: number, mouseY: number, options: WindowState): WindowState => {
+export const finishMovingWindow = (mouseX: number, mouseY: number, options: WindowState): Partial<WindowState> => {
   const outsideTop = mouseY <= 0;
   const outsideLeft = mouseX <= 0;
   const outsideRight = mouseX >= window.innerWidth;
 
   if (outsideTop) {
     return {
-      ...options,
       maximized: WindowMaximize.Full,
       top: 0,
       left: 0,
@@ -50,7 +48,6 @@ export const finishMovingWindow = (mouseX: number, mouseY: number, options: Wind
     }
   } else if (outsideLeft) {
     return {
-      ...options,
       maximized: WindowMaximize.Side,
       top: 0,
       left: 0,
@@ -59,7 +56,6 @@ export const finishMovingWindow = (mouseX: number, mouseY: number, options: Wind
     }
   } else if (outsideRight) {
     return {
-      ...options,
       maximized: WindowMaximize.Side,
       top: 0,
       left: window.innerWidth / 2,
@@ -68,7 +64,5 @@ export const finishMovingWindow = (mouseX: number, mouseY: number, options: Wind
     }
   }
 
-  return {
-    ...options
-  }
+  return {}
 };

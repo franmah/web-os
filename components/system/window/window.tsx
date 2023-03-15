@@ -22,17 +22,20 @@ export const WINDOW_MIN_HEIGH = 200; // TODO: move into styles component
 export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
 
 const WindowComponent: FC<{
-  windowParams: WindowProps,
-  startingPosition: { top: number, left: number }, // TODO: get rid of once WindowManager is used
+  windowParams: WindowProps, //TODO: change type
+  windowState: WindowState,
+  windowId: string,
+  updateState: (windowId: string, state: Partial<WindowState>, origin?: string) => void,
   children: React.ReactNode
-}> = ({ windowParams, startingPosition, children }) => {
+}> = ({ windowParams, windowId, windowState, updateState, children }) => {
+  // console.log(windowId)
+  console.log({ windowState })
 
-  const { closeProcess } = useContext(ProcessContext);
+  const { closeProcess } = useContext(ProcessContext); // TODO: the window manager state will be messed up.
 
-  const [options, setOptions] = useState<WindowState>({
-    ...DEFAULT_WINDOW_STATE,
-    ...startingPosition
-  });
+  // const [options, setOptions] = useState<WindowState>({
+  //   ...DEFAULT_WINDOW_STATE
+  // });
 
   const closeWindowProcess = () => {
     closeProcess(windowParams.processId);
@@ -53,104 +56,92 @@ const WindowComponent: FC<{
 
   const onDocumentMouseDown = (event: MouseEvent) => {
     const isClickInWindow = isEventOriginatedFromWithinTargetIdSubtree(event, windowParams.windowId);
-    setOptions(currentOptions => ({
-      ...currentOptions,
+    updateState(windowId, {
       selected: isClickInWindow
-    }));
+    }, 'onDocumentMouseDOwn');
   };
 
   const startMoving = (event: any) => {
-    setOptions(state => {     
-      return {
-        ...state,
-        moving: true,
-        previousClientX: event.clientX,
-        previousClientY: event.clientY
-      };
-    });
+    updateState(windowId, {
+      moving: true,
+      previousClientX: event.clientX,
+      previousClientY: event.clientY
+    }, 'start moving');
   };
 
   const startResizing = (event: any, direction: WindowResizeDirection) => {
-    setOptions(state => ({
-      ...state,
+    updateState(windowId, {
       previousClientX: event.clientX,
       previousClientY: event.clientY,
       resizeDirection: direction
-    }));
+    }, 'startResizing');
   };
 
   const onMouseMove = (event: MouseEvent) => {
     const mouseX = event.clientX;
     const mouseY = event.clientY;
-
-    setOptions(options => {
-      if (options.moving) {
-        return moveWindow(event, options);
-      } else if (options.resizeDirection !== WindowResizeDirection.None) {
-        return resizeWindow(mouseX, mouseY, options);
-      }
-      return options;
-    });
+    if (windowState.moving) {
+     updateState(windowId, moveWindow(event, windowState), 'monMouseMove');
+    } else if (windowState.resizeDirection !== WindowResizeDirection.None) {
+      updateState(windowId, resizeWindow(mouseX, mouseY, windowState), 'onMouseMove');
+    }
   };
 
   const onMouseUp = (event: MouseEvent) => {
-    setOptions(options => {
-     return stopMovingAndResizingWindow(event.clientX, event.clientY, options);
-    });
+    updateState(windowId,
+      stopMovingAndResizingWindow(event.clientX, event.clientY, windowState), 'onMouseUp');
   };
 
   const maximizeWindow = (event: any) => {
-    setOptions(options => {
-      return maximizeOrRestoreWindow(options);
-    });
+    updateState(windowId, maximizeOrRestoreWindow(windowState), 'maximizeWindow');
   };
 
   
   const moveToCustomMaximizeOptionClick = (direction: CustomMaximizeDirection) => {
-    setOptions(options => ({
-      ...options,
+    updateState(windowId, {
+      ...windowState,
       maximized: WindowMaximize.Side,
       ...getWindowOptionForCustomMaximize(direction, window.innerWidth, window.innerHeight)
-    }));
+    }, 'moveToCusomtMaximize');
   };
 
   const getClass = () => {
-    return `${styles.window} ${ options.selected ? styles.windowSelected : styles.windowUnselected}`;
+    return `${styles.window} ${ windowState.selected ? styles.windowSelected : styles.windowUnselected}`;
   };
 
   return (
     <Fragment>
       <WindowAnimationPlaceholderComponent
-        placeholderDirection={options.showMaximizePlacehodler}
-        top={options.top}
-        left={options.left}
-        width={options.width}
-        height={options.height}
+        placeholderDirection={windowState.showMaximizePlacehodler}
+        top={windowState.top}
+        left={windowState.left}
+        width={windowState.width}
+        height={windowState.height}
       />
 
       <div
         id={windowParams.windowId}
         className={getClass()}
         style={{
-          top: options.top,
-          left: options.left,
-          width: `${options.width}px`,
-          height: `${options.height}px`,
-          zIndex: options.selected ? WINDOW_SELECTED_ZINDEX : WINDOW_UNSELECTED_ZINDEX
+          top: windowState.top,
+          left: windowState.left,
+          width: `${windowState.width}px`,
+          height: `${windowState.height}px`,
+          zIndex: windowState.selected ? WINDOW_SELECTED_ZINDEX : WINDOW_UNSELECTED_ZINDEX
         }}
       >
 
         <WindowBorderComponent
-          allowResize={options.maximized !== WindowMaximize.Full && !options.moving}
-          isResizing={options.resizeDirection !== WindowResizeDirection.None}
+          allowResize={windowState.maximized !== WindowMaximize.Full && !windowState.moving}
+          isResizing={windowState.resizeDirection !== WindowResizeDirection.None}
           onBordersMouseDown={startResizing}
         >
 
           <div className={styles.centerContent}>
             <HeaderComponent
-              selected={options.selected}
+              selected={windowState.selected}
               options={windowParams.headerOptions}
-              maximized={options.maximized}
+              maximized={windowState.maximized}
               startMovingWindow={startMoving}
               maximizeWindow={maximizeWindow}
               onClose={closeWindowProcess}
