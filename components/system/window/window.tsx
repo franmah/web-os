@@ -23,16 +23,28 @@ export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
 
 const WindowComponent: FC<{
   windowParams: WindowProps,
-  startingPosition: { top: number, left: number }, // TODO: get rid of once WindowManager is used
-  children: React.ReactNode
-}> = ({ windowParams, startingPosition, children }) => {
+  children: React.ReactNode,
+  forcedPosition: any
+}> = ({ windowParams, forcedPosition, children }) => {
 
   const { closeProcess } = useContext(ProcessContext);
 
+  console.log({ forcedPosition })
   const [options, setOptions] = useState<WindowState>({
-    ...DEFAULT_WINDOW_STATE,
-    ...startingPosition
+    ...DEFAULT_WINDOW_STATE
   });
+
+  useEffect(() => {
+    updatePositionFromManager();
+  }, [forcedPosition]);
+
+  const updatePositionFromManager = () => {
+    setOptions(currentOptions => ({
+      ...currentOptions,
+      top: forcedPosition?.top || currentOptions.top,
+      left: forcedPosition?.left || currentOptions.left
+    }));
+  };
 
   const closeWindowProcess = () => {
     closeProcess(windowParams.processId);

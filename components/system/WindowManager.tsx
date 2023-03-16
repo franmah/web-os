@@ -1,50 +1,58 @@
 import { FC, useEffect, useState } from "react";
-import { DEFAULT_WINDOW_STATE } from "../../constants/system/window/WindowConsts";
 import { Processes } from "../../types/system/processes/processes";
-import { WindowState } from "../../types/system/window/WindowState";
 import WindowComponent from "./window/window";
 
-type WindowManagerState = {
-  [windowId: string]: WindowState
-}
+export type WindowForcedPositions = {
+  [windowId: string]: {
+    top: number,
+    left: number,
+    width: number,
+    height: number
+  }
+};
 
 export const WindowManagerComponent: FC<{ processes: Processes }> = ({ processes }) => {
 
-  const [windowProps, setWindowProps] = useState<WindowManagerState>({});
+  const [windowForcedPositions, setForcedPositions] = useState<WindowForcedPositions>({});
 
   useEffect(() => {
-    setWindowProps(currentState => {
-      return Object.entries(processes).reduce((updatedState, [_, process] ) => {
-        const windowId = process.windowParams?.windowId || '';
-        
-        if (currentState[windowId]) {
-          return {
-            ...updatedState,
-            [windowId]: {
-              ...currentState[windowId]
-            }
-          }
-        } else {
-          return {
-            ...updatedState,
-            [windowId]: DEFAULT_WINDOW_STATE 
-          };
-        }
-      }, {} as WindowManagerState);
-
-    });
+   setNewWindowPosition();
   }, [processes]);
+  
+  const setNewWindowPosition = () => {
+    const currentWindowIds = Object.keys(windowForcedPositions);
+    const process = Object.values(processes).find(process => {
+      const windowId = process.windowParams?.windowId || '';
+      return !currentWindowIds.includes(windowId);
+    });
 
+    if (!process) { return; }
+
+    const newWindowId = process.windowParams?.windowId || '';
+
+    setForcedPositions(positions => {
+      return {
+        ...positions,
+        [newWindowId]: {
+          top: Math.random() * 150,
+          left: Math.random() * 150,
+          height: Math.random() * 400,
+          width: Math.random() * 400
+        }
+      }
+    });
+  }
+  
   return (
     <>
       {
         Object.entries(processes)
           .map(([id, process]) => {
-
+            const windowId = process.windowParams?.windowId || '';
             return (
               <WindowComponent
                 key={id}
-                startingPosition={{ top: 100, left: 100 }}
+                forcedPosition={windowForcedPositions[windowId]}
                 windowParams={process.windowParams}
               >
                 <process.Component 
@@ -57,4 +65,4 @@ export const WindowManagerComponent: FC<{ processes: Processes }> = ({ processes
       }
     </>
   )
-}
+};

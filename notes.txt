@@ -1,4 +1,11 @@
 - Use the code in processRendererComponent to create a window Manager. The window manager should only pass a starting position to the window for now.
+    - Not Working when manager has complete control over window's useState
+    - Try :
+          - Window has its own state with position and everything.
+          - Manager passes props "forcing" window to use. 
+              - basically a use context that updates the window on props update
+- Window need to be optimized
+
 - BUG: Fix error message in processRendererComponent for windowsParams
 - BUG: because the window will use mouseY as top when moving, the window will shift when start moving.
     - Don't use mouse as top but rather find the offset.
