@@ -10,8 +10,6 @@ import { areItemsTheSame } from '../../../services/DesktopItemService';
 export const ItemTestComponentMemo = memo((props: any) => {
   const item = props?.props?.item;
 
-  console.log('render item: ' + item.name)
-
   const onClick = () => {
     props.props.onClick(item.id)
   }

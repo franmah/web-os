@@ -29,7 +29,6 @@ const WindowComponent: FC<{
 
   const { closeProcess } = useContext(ProcessContext);
 
-  console.log({ forcedPosition })
   const [options, setOptions] = useState<WindowState>({
     ...DEFAULT_WINDOW_STATE
   });
