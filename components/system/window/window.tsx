@@ -1,5 +1,4 @@
-import { FC, Fragment, useContext, useEffect, useState } from "react";
-import { DEFAULT_WINDOW_STATE } from "../../../constants/system/window/WindowConsts";
+import { FC, Fragment, useContext, useEffect, useRef, useState } from "react";
 import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeEnum";
 import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
 import { WINDOW_SELECTED_ZINDEX, WINDOW_UNSELECTED_ZINDEX } from "../../../constants/Zindex";
@@ -23,27 +22,19 @@ export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
 
 const WindowComponent: FC<{
   windowParams: WindowProps,
+  options: WindowState,
+  setOptions: (windowId: string, options: WindowState) => void
   children: React.ReactNode,
-  forcedPosition: any
-}> = ({ windowParams, forcedPosition, children }) => {
+}> = ({ windowParams, options, setOptions, children }) => {
+
+  // Needed to so that event listeners can have an up to date reference to the props.
+  // Without this, they access the props from the context when the listeners are created which won't be updated.
+  // Decided to not completely lift the state up to the window manager so that the logic mainly stays here.
+  // Can get rid of useRef by moving the logic in the manager and passing functions as props.
+  const latestOptions = useRef<WindowState>(options);
+  useEffect(() => { latestOptions.current = options }, [options]);
 
   const { closeProcess } = useContext(ProcessContext);
-
-  const [options, setOptions] = useState<WindowState>({
-    ...DEFAULT_WINDOW_STATE
-  });
-
-  useEffect(() => {
-    updatePositionFromManager();
-  }, [forcedPosition]);
-
-  const updatePositionFromManager = () => {
-    setOptions(currentOptions => ({
-      ...currentOptions,
-      top: forcedPosition?.top || currentOptions.top,
-      left: forcedPosition?.left || currentOptions.left
-    }));
-  };
 
   const closeWindowProcess = () => {
     closeProcess(windowParams.processId);
@@ -64,69 +55,77 @@ const WindowComponent: FC<{
 
   const onDocumentMouseDown = (event: MouseEvent) => {
     const isClickInWindow = isEventOriginatedFromWithinTargetIdSubtree(event, windowParams.windowId);
-    setOptions(currentOptions => ({
-      ...currentOptions,
+    const updatedOptions = {
+      ...latestOptions.current,
       selected: isClickInWindow
-    }));
-  };
+    };
 
-  const startMoving = (event: any) => {
-    setOptions(state => {     
-      return {
-        ...state,
-        moving: true,
-        previousClientX: event.clientX,
-        previousClientY: event.clientY
-      };
-    });
-  };
-
-  const startResizing = (event: any, direction: WindowResizeDirection) => {
-    setOptions(state => ({
-      ...state,
-      previousClientX: event.clientX,
-      previousClientY: event.clientY,
-      resizeDirection: direction
-    }));
+    setOptions(windowParams.windowId, updatedOptions);
   };
 
   const onMouseMove = (event: MouseEvent) => {
     const mouseX = event.clientX;
     const mouseY = event.clientY;
 
-    setOptions(options => {
-      if (options.moving) {
-        return moveWindow(event, options);
-      } else if (options.resizeDirection !== WindowResizeDirection.None) {
-        return resizeWindow(mouseX, mouseY, options);
-      }
-      return options;
+    if (latestOptions.current.moving) {
+      return setOptions(windowParams.windowId,
+        {
+          ...latestOptions.current,
+          ...moveWindow(event, latestOptions.current)
+        }
+      );
+    } else if (latestOptions.current.resizeDirection !== WindowResizeDirection.None) {
+      return setOptions(windowParams.windowId,
+        {
+          ...latestOptions.current,
+          ...resizeWindow(mouseX, mouseY, latestOptions.current)
+        }
+      );
+    }
+  };
+
+  const startMoving = (event: any) => {
+    setOptions(windowParams.windowId, {
+        ...latestOptions.current,
+        moving: true,
+        previousClientX: event.clientX,
+        previousClientY: event.clientY
+    });
+  };
+
+  const startResizing = (event: any, direction: WindowResizeDirection) => {
+    setOptions(windowParams.windowId, {
+      ...options,
+      previousClientX: event.clientX,
+      previousClientY: event.clientY,
+      resizeDirection: direction
     });
   };
 
   const onMouseUp = (event: MouseEvent) => {
-    setOptions(options => {
-     return stopMovingAndResizingWindow(event.clientX, event.clientY, options);
+    setOptions(windowParams.windowId, {
+      ...latestOptions.current,
+      ...stopMovingAndResizingWindow(event.clientX, event.clientY, latestOptions.current)
     });
   };
 
   const maximizeWindow = (event: any) => {
-    setOptions(options => {
-      return maximizeOrRestoreWindow(options);
+    setOptions(windowParams.windowId, {
+      ...latestOptions.current,
+      ...maximizeOrRestoreWindow(latestOptions.current)
+    });
+  };
+  
+  const moveToCustomMaximizeOptionClick = (direction: CustomMaximizeDirection) => {
+    setOptions(windowParams.windowId, {
+      ...latestOptions.current,
+      maximized: WindowMaximize.Side,
+      ...getWindowOptionForCustomMaximize(direction, window.innerWidth, window.innerHeight)
     });
   };
 
-  
-  const moveToCustomMaximizeOptionClick = (direction: CustomMaximizeDirection) => {
-    setOptions(options => ({
-      ...options,
-      maximized: WindowMaximize.Side,
-      ...getWindowOptionForCustomMaximize(direction, window.innerWidth, window.innerHeight)
-    }));
-  };
-
   const getClass = () => {
-    return `${styles.window} ${ options.selected ? styles.windowSelected : styles.windowUnselected}`;
+    return `${styles.window} ${ latestOptions.current.selected ? styles.windowSelected : styles.windowUnselected}`;
   };
 
   return (

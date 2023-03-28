@@ -1,39 +1,66 @@
 import { FC, useEffect, useState } from "react";
-import { getEveryWindowPositions, getNewWindowPosition } from "../../services/system/window-manager/WindowManagerService";
-import { Processes } from "../../types/system/processes/processes";
+import { v4 } from "uuid";
+import { DEFAULT_WINDOW_STATE } from "../../constants/system/window/WindowConsts";
+import { Process, Processes } from "../../types/system/processes/processes";
+import { WindowState } from "../../types/system/window/WindowState";
 import WindowComponent from "./window/window";
 
-export type WindowForcedPositions = {
+type WindowManagerState = {
   [windowId: string]: {
-    top: number,
-    left: number,
-    width: number,
-    height: number
+    state: WindowState,
+    process: Process
   }
 };
 
 export const WindowManagerComponent: FC<{ processes: Processes }> = ({ processes }) => {
 
-  const [windowForcedPositions, setForcedPositions] = useState<WindowForcedPositions>({});
+  const [windows, setWindows] = useState<WindowManagerState>({});
 
-  // TODO: Remove once whole window state is lifted up in manager.
+  // update windows (state) by adding or removing new/old processes
   useEffect(() => {
-    setForcedPositions(positions => {
-      return getNewWindowPosition(processes, positions);
+    setWindows(currentStates => {
+      const windowStates: WindowManagerState = {};
+
+      for (let processId in processes) {
+        const process = processes[processId];
+        const windowId = process.windowParams?.windowId || v4();
+  
+        windowStates[windowId] = {
+          process,
+          state: {
+            ...(currentStates[windowId]?.state || DEFAULT_WINDOW_STATE),
+          }
+        }
+      }
+
+      return windowStates;
     });
   }, [processes]);
-    
+
+  const setWindowState = (windowId: string, state: WindowState) => {
+    setWindows(windows => ({
+      ...windows,
+      [windowId]: {
+        process: windows[windowId].process,
+        state: { 
+          ...windows[windowId].state,
+          ...state
+        }
+      }
+    }));
+  };
+
   return (
     <>
       {
-        Object.entries(processes)
-          .map(([id, process]) => {
-            const windowId = process.windowParams?.windowId || '';
+        Object.entries(windows)
+          .map(([windowId, { process, state }]) => {
             return (
               <WindowComponent
-                key={id}
-                forcedPosition={windowForcedPositions[windowId]}
+                key={windowId}
                 windowParams={process.windowParams}
+                options={state}
+                setOptions={setWindowState}
               >
                 <process.Component 
                   params={process.params}
