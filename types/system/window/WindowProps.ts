@@ -1,6 +1,6 @@
 import { WindowHeaderOptions } from "./WindowHeaderOptions";
 
-export type WindowProps = {
+export type WindowParams = {
   windowId: string,
   headerOptions?: WindowHeaderOptions,
 };

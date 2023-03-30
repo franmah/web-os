@@ -7,7 +7,7 @@ import { moveWindow } from "../../../services/system/window/MoveWindowService";
 import { getWindowOptionForCustomMaximize } from "../../../services/system/window/WindowCustomMaximizeOptionService.ts";
 import { resizeWindow } from "../../../services/system/window/WindowResizeService";
 import { stopMovingAndResizingWindow } from "../../../services/system/window/WindowService";
-import { WindowProps } from "../../../types/system/window/WindowProps";
+import { WindowParams } from "../../../types/system/window/WindowProps";
 import { WindowState } from "../../../types/system/window/WindowState";
 import { CustomMaximizeDirection } from "./maximizeOptionsModal/maximizeOptionsModal";
 import styles from './window.module.scss';
@@ -20,7 +20,7 @@ export const WINDOW_MIN_HEIGH = 200; // TODO: move into styles component
 export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
 
 const WindowComponent: FC<{
-  windowParams: WindowProps,
+  windowParams: WindowParams,
   options: WindowState,
   setOptions: (windowId: string, options: WindowState) => void,
   closeWindow: (windowId: string) => void,

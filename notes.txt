@@ -1,5 +1,3 @@
-- Window need to be optimized with memo
-
 - Fix the whole Process parameters mess. The Directory could have a process component and default parameters. A Loaded Process could have a more defined model (with an id...)
   - BUG: Fix error message in processRendererComponent for windowsParams
 
@@ -47,3 +45,5 @@
   - when passed as props it should be named onSomething...
   - rename event to 'e', example: onClick={e => doSomething(e)}. Don't rename it in the function, example: const doSomething(event) => ...
   - Add e.preventDefault(). This will avoid side effect such as triggering a new render when clicking a page. (make sure to test after doing so)
+
+- look into using classes for services and having indepency injection

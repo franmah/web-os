@@ -1,21 +1,29 @@
-import { WindowProps } from "../window/WindowProps";
+import { WindowParams } from "../window/WindowProps";
 
-export type Process = {
+export interface Process {
   name: string;
   Component: React.ComponentType<{ params: any }>;
   params: any | null;
-  windowParams: Partial<WindowProps> | null;
   hasWindow: boolean;
   isUnique: boolean;
-  id: string;
+  processId: string;
+};
+
+export interface WindowedProcess extends Process  {
+  hasWindow: true;
+  windowParams: WindowParams
 };
 
 export type Processes = {
   [id: string]: Process;
 };
 
+export type WindowedProcesses = {
+  [id: string]: WindowedProcess;
+};
+
 export type ProcessContextType = {
   processes: Processes,
-  openProcess: (processName: string, params?: any, windowParams?: Partial<WindowProps>) => void,
+  openProcess: (processName: string, params?: any, windowParams?: Partial<WindowParams>) => void,
   closeProcess: (processId: string) => void,
 };

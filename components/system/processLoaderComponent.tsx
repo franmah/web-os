@@ -1,9 +1,10 @@
 import { FC, Fragment, useContext, useEffect } from "react";
 import { ProcessContext } from "../../contexts/processContext";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../services/EventService";
-import { Processes } from "../../types/system/processes/processes";
+import { Processes, WindowedProcesses } from "../../types/system/processes/processes";
 import { CONTEXT_MENU_ROOT_ID } from "./contextMenu/ContextMenuRootComponent";
 import { WindowManagerComponent } from "./WindowManager";
+import { startingProccesses } from "../../System/process/StartingProccesses";
 
 export const ProcessLoaderComponent: FC<{}> = () => {
 
@@ -12,11 +13,18 @@ export const ProcessLoaderComponent: FC<{}> = () => {
   const windowedProcesses: Processes = {};
   const nonWindowedProceses: Processes = {};
 
+  // Load starting processes
+  useEffect(() => {
+    for (let processName in startingProccesses) {
+      processContext.openProcess(processName);
+    }
+  }, []);
+
   Object.entries(processContext.processes).forEach(([id, process]) => {
     if (process.hasWindow)
       windowedProcesses[id] = process;
     else
-      nonWindowedProceses[id] = process
+      nonWindowedProceses[id] = process;
   });
 
   const closeContextMenu = (event: MouseEvent) => {
@@ -51,7 +59,7 @@ export const ProcessLoaderComponent: FC<{}> = () => {
       }
       {
         <WindowManagerComponent 
-          processes={windowedProcesses}
+          processes={windowedProcesses as WindowedProcesses}
         />
       }
     </Fragment>

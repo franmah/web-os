@@ -1,41 +1,49 @@
 import dynamic from "next/dynamic";
-import { Process } from "../../types/system/processes/processes";
+import { WindowParams } from "../../types/system/window/WindowProps";
 
-export const ProcessDirectory:  { [name: string]: Process } = {
+export type ProcessDirectoryEntry = {
+  name: string;
+  Component: React.ComponentType<{ params: any }>;
+  defaultParams?: any;
+  isUnique: boolean;
+  hasWindow: boolean;
+  windowParams?: Partial<WindowParams>;
+};
+
+export type ProcessDirectoryType = {
+  [processName: string]: ProcessDirectoryEntry;
+};
+
+export const ProcessDirectory: ProcessDirectoryType = {
   'contextMenu': {
     name: 'contextMenu',
     Component: dynamic<{ params: any }>(() => import('../../components/system/contextMenu/ContextMenuRootComponent')),
-    params: null,
-    windowParams: null,
     hasWindow: false,
-    isUnique: true,
-    id: ''
+    isUnique: true
   },
   'desktop': {
     name: 'desktop',
     Component: dynamic<{ params: any }>(() => import('../../components/desktop/desktop/DesktopComponent')),
-    params: null,
-    windowParams: null,
+    defaultParams: null,
     hasWindow: false,
-    isUnique: true,
-    id: ''
+    isUnique: true
   },
   'taskbar': {
     name: 'taskbar',
     Component: dynamic<{ params: any }>(() => import('../../components/taskbar-component/taskbar/Taskbar')),
-    params: null,
-    windowParams: null,
     hasWindow: false,
-    isUnique: true,
-    id: ''
+    isUnique: true
   },
   'hello': {
     name: 'hello',
     Component: dynamic<{ params: any }>(() => import('../../components/hello/helloComponent')),
-    params: null,
-    windowParams: { headerOptions: { icon: '/icons/youtube-logo.png',text: 'Youtube Player' } },
+    windowParams: {
+      headerOptions: {
+        icon: '/icons/youtube-logo.png',
+        text: 'Youtube Player'
+      }
+    },
     hasWindow: true,
-    isUnique: false,
-    id: ''
+    isUnique: false
   }
 };

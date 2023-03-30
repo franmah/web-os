@@ -1,12 +1,12 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { ProcessContext } from "../../contexts/processContext";
 import { updateWindowStatesOnNewProcess } from "../../services/system/window-manager/WindowManagerService";
-import { Processes } from "../../types/system/processes/processes";
+import { WindowedProcesses } from "../../types/system/processes/processes";
 import { WindowManagerState } from "../../types/system/window-manager/WindowManagerState";
 import { WindowState } from "../../types/system/window/WindowState";
 import WindowComponent from "./window/window";
 
-export const WindowManagerComponent: FC<{ processes: Processes }> = ({ processes }) => {
+export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ processes }) => {
 
   const { closeProcess } = useContext(ProcessContext);
 
@@ -34,7 +34,7 @@ export const WindowManagerComponent: FC<{ processes: Processes }> = ({ processes
   };
 
   const closeWindow = (windowId: string) => {
-    const processId = windows[windowId]?.process?.id;
+    const processId = windows[windowId]?.process?.processId;
 
     if (!processId) {
       console.warn(`Error trying to close window, processId not found (windowId: ${windowId})`)

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { v4 } from "uuid";
 import { ProcessDirectory } from "../System/process/ProcessDirectory";
-import { startingProccesses } from "../System/process/StartingProccesses";
-import { ProcessContextType, Processes } from "../types/system/processes/processes";
+import { Process, ProcessContextType, Processes, WindowedProcess } from "../types/system/processes/processes";
 
 const _useProcessContextState = (): ProcessContextType => {
-  const [processes, setProcesses] = useState<Processes>(startingProccesses);
+  
+  const [processes, setProcesses] = useState<Processes>({});
 
   const closeProcess = (processId: string) => {
     setProcesses(currentProcesses => {
@@ -15,32 +15,38 @@ const _useProcessContextState = (): ProcessContextType => {
           id === processId ? processes : { ...processes, [id]: process }
           , {}
         )
-    })
+    });
   };
 
   const openProcess = (processName: string, params: any = null, windowParams: any = null) => {
     if (!ProcessDirectory[processName]) {
+      console.error(`Process name: ${processName} not found in directory.`);
       return;
     }
 
-    const newProcessId =  ProcessDirectory[processName].isUnique ?
-      ProcessDirectory[processName].name :
+    const processDirectoryEntry = ProcessDirectory[processName];
+
+    const newProcessId =  processDirectoryEntry.isUnique ?
+      processDirectoryEntry.name :
       v4();
 
-    const newProcess = {
-      ...ProcessDirectory[processName],
+    const newProcess: Process = {
+      ...processDirectoryEntry,
       params: {
-        ...ProcessDirectory[processName].params,
+        ...processDirectoryEntry.defaultParams,
         ...params,
         processId: newProcessId
       },
-      windowParams: {
-        ...ProcessDirectory[processName].windowParams,
+      processId: newProcessId
+    };
+
+    if (processDirectoryEntry.hasWindow) {
+      (newProcess as WindowedProcess).windowParams = {
+        ...processDirectoryEntry.windowParams,
         ...windowParams,
         windowId: v4()
-      },
-      id: newProcessId
-    };
+      };
+    }
 
     setProcesses(currentProcesses => {
       return {
