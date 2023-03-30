@@ -1,7 +1,6 @@
-import { FC, Fragment, useEffect, useRef } from "react";
+import { FC, Fragment, memo, useEffect, useRef } from "react";
 import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeEnum";
 import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
-import { WINDOW_SELECTED_ZINDEX, WINDOW_UNSELECTED_ZINDEX } from "../../../constants/Zindex";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/EventService";
 import { maximizeOrRestoreWindow } from "../../../services/system/window/MaximizeRestoreWindowService";
 import { moveWindow } from "../../../services/system/window/MoveWindowService";
@@ -10,11 +9,12 @@ import { resizeWindow } from "../../../services/system/window/WindowResizeServic
 import { stopMovingAndResizingWindow } from "../../../services/system/window/WindowService";
 import { WindowProps } from "../../../types/system/window/WindowProps";
 import { WindowState } from "../../../types/system/window/WindowState";
-import WindowAnimationPlaceholderComponent from "./animationPlaceholder/animationPlaceholder";
-import WindowBorderComponent from "./border/windowBorder";
-import HeaderComponent from "./header/header";
 import { CustomMaximizeDirection } from "./maximizeOptionsModal/maximizeOptionsModal";
 import styles from './window.module.scss';
+import WindowAnimationPlaceholderComponent from "./animationPlaceholder/animationPlaceholder";
+import WindowBorderComponent from "./border/windowBorder";
+import { WINDOW_SELECTED_ZINDEX, WINDOW_UNSELECTED_ZINDEX } from "../../../constants/Zindex";
+import HeaderComponent from "./header/header";
 
 export const WINDOW_MIN_HEIGH = 200; // TODO: move into styles component
 export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
@@ -25,7 +25,7 @@ const WindowComponent: FC<{
   setOptions: (windowId: string, options: WindowState) => void,
   closeWindow: (windowId: string) => void,
   children: React.ReactNode,
-}> = ({ windowParams, options, setOptions, closeWindow, children }) => {
+}> = memo(({ windowParams, options, setOptions, closeWindow, children }) => {
 
   // Needed to so that event listeners can have an up to date reference to the props.
   // Without this, they access the props from the context when the listeners are created which won't be updated.
@@ -173,6 +173,15 @@ const WindowComponent: FC<{
       </div>
     </Fragment>
   );
-};
+}, (state1, state2) => {
+  try {
+    const state1Data = { ...state1.windowParams, ...state1.options };
+    const state2Data = { ...state2.windowParams, ...state2.options };
+    return JSON.stringify(state1Data) === JSON.stringify(state2Data);
+  } catch (error) {
+    console.error(`Error with memo() while comparing window ${state1.windowParams.windowId}'s state: ${error}`);
+    return false;
+  }
+});
 
 export default WindowComponent;

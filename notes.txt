@@ -1,9 +1,3 @@
-- Look into using a reducer for window states.  https://react.dev/reference/react/useReducer
-    - create a reducerDispatches folder
-    - lift up the window state completely (move functions)
-    - pass the dispatch function to the window instead of passing every function.
-      You could even pre pass the window id so the the window doesn't have to worry about it
-
 - Window need to be optimized with memo
 
 - Fix the whole Process parameters mess. The Directory could have a process component and default parameters. A Loaded Process could have a more defined model (with an id...)

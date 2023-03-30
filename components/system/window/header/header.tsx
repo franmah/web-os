@@ -119,11 +119,13 @@ const HeaderComponent: FC<WindowHeaderProps> = memo(({
 
     </header>
   )
-}, (state1, state2) => 
-  state1.selected === state2.selected &&
-  state1.options?.icon === state2.options?.icon &&
-  state1.options?.text === state2.options?.text &&
-  state1.maximized === state2.maximized
-);
+}, (state1, state2) => {
+  try {
+    return JSON.stringify(state1) === JSON.stringify(state2);
+  } catch (error) {
+    console.error(`Error with memo while comparing header state for window: ${error}`);
+    return false;
+  }
+});
 
 export default HeaderComponent;
