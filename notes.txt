@@ -1,4 +1,4 @@
-- Window should not know about the process it contains (remove processId in window params)
+
 - Remove unused processloader (not actual process loader but one of those components)
   - and remove getEveryWindowPositions in WindowManagerSerrvice
 - BUG: because the window will use mouseY as top when moving, the window will shift when start moving.

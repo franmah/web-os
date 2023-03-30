@@ -27,8 +27,6 @@ const _useProcessContextState = (): ProcessContextType => {
       ProcessDirectory[processName].name :
       v4();
 
-      console.log(newProcessId);
-
     const newProcess = {
       ...ProcessDirectory[processName],
       params: {
@@ -39,7 +37,6 @@ const _useProcessContextState = (): ProcessContextType => {
       windowParams: {
         ...ProcessDirectory[processName].windowParams,
         ...windowParams,
-        processId: newProcessId,
         windowId: v4()
       },
       id: newProcessId

@@ -35,7 +35,12 @@ export const WindowManagerComponent: FC<{ processes: Processes }> = ({ processes
 
   const closeWindow = (windowId: string) => {
     const processId = windows[windowId]?.process?.id;
-    closeProcess(processId);
+
+    if (!processId) {
+      console.warn(`Error trying to close window, processId not found (windowId: ${windowId})`)
+    } else {
+      closeProcess(processId);
+    }
   }
 
   return (
