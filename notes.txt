@@ -6,6 +6,8 @@
 - BUG: when unselected, header text should change color. 
     already tried fixing it (Maybe lifting up the state completely will fix it
 
+- BUG: open two windows. Click the first one. It should show up in front. Click on the desktop, the other window will show in front
+  - window last clicked should show in front
 
 // Final steps
 - test everything

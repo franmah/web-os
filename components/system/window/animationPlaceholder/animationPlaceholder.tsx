@@ -65,7 +65,7 @@ const WindowAnimationPlaceholderComponent: FC<{
 }, (oldProps, newProps) => {
   return (
     oldProps.placeholderDirection === newProps.placeholderDirection
-  )
+  );
 });
 
 export default WindowAnimationPlaceholderComponent;
