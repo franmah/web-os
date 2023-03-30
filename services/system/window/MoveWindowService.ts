@@ -17,9 +17,11 @@ export  const moveWindow = (event: any, options: WindowState): WindowState => {
   const changeX = isMouseLeftOfScreen(mouseX) || isMouseRightOfScreen(mouseX) ?
     0 :
     mouseX - options.previousClientX;
-  const changeY = isMouseOverTopOfScreen(mouseY) ?
+
+  const changeY = mouseY - options.previousClientY;
+  const newYPosition = isMouseOverTopOfScreen(mouseY) ?
     0 :
-    mouseY - options.previousClientY;
+    options.top + changeY; // Force position to be at the top to avoid window slowly going down because of lag
 
   const showMaximizePlacehodler =
     isMouseOverTopOfScreen(mouseY) ? MaximizePlaceholderDirection.Full :
@@ -30,8 +32,7 @@ export  const moveWindow = (event: any, options: WindowState): WindowState => {
   return {
     ...options,
     showMaximizePlacehodler,
-    maximized: WindowMaximize.None,
-    top: Math.max(0, options.top + changeY),
+    top: Math.max(0, newYPosition),
     left: options.left + changeX,
     previousClientX: mouseX,
     previousClientY: mouseY,
