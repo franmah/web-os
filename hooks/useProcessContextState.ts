@@ -30,22 +30,26 @@ const _useProcessContextState = (): ProcessContextType => {
       processDirectoryEntry.name :
       v4();
 
-    const newProcess: Process = {
-      ...processDirectoryEntry,
-      params: {
-        ...processDirectoryEntry.defaultParams,
-        ...params,
-        processId: newProcessId
-      },
+    const finalParams: any = {
+      ...processDirectoryEntry.defaultParams,
+      ...params,
       processId: newProcessId
     };
 
+    let newProcess: Process;
+
     if (processDirectoryEntry.hasWindow) {
-      (newProcess as WindowedProcess).windowParams = {
+      const finalWindowParams = {
         ...processDirectoryEntry.windowParams,
         ...windowParams,
         windowId: v4()
       };
+
+      newProcess = new WindowedProcess(processName,processDirectoryEntry.Component,
+        finalParams, true, processDirectoryEntry.isUnique, newProcessId, finalWindowParams
+      );
+    } else {
+      newProcess = new Process(processName, processDirectoryEntry.Component, finalParams, false, processDirectoryEntry.isUnique, newProcessId);
     }
 
     setProcesses(currentProcesses => {

@@ -1,18 +1,5 @@
 import dynamic from "next/dynamic";
-import { WindowParams } from "../../types/system/window/WindowProps";
-
-export type ProcessDirectoryEntry = {
-  name: string;
-  Component: React.ComponentType<{ params: any }>;
-  defaultParams?: any;
-  isUnique: boolean;
-  hasWindow: boolean;
-  windowParams?: Partial<WindowParams>;
-};
-
-export type ProcessDirectoryType = {
-  [processName: string]: ProcessDirectoryEntry;
-};
+import { ProcessDirectoryType } from "../../types/system/processes/processes";
 
 export const ProcessDirectory: ProcessDirectoryType = {
   'contextMenu': {

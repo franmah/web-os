@@ -1,7 +1,7 @@
 import { FC, Fragment, useContext, useEffect } from "react";
 import { ProcessContext } from "../../contexts/processContext";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../services/EventService";
-import { Processes, WindowedProcesses } from "../../types/system/processes/processes";
+import { Processes, WindowedProcess, WindowedProcesses } from "../../types/system/processes/processes";
 import { CONTEXT_MENU_ROOT_ID } from "./contextMenu/ContextMenuRootComponent";
 import { WindowManagerComponent } from "./WindowManager";
 import { startingProccesses } from "../../System/process/StartingProccesses";
@@ -10,7 +10,7 @@ export const ProcessLoaderComponent: FC<{}> = () => {
 
   const processContext = useContext(ProcessContext);
 
-  const windowedProcesses: Processes = {};
+  const windowedProcesses: WindowedProcesses = {};
   const nonWindowedProceses: Processes = {};
 
   // Load starting processes
@@ -21,7 +21,7 @@ export const ProcessLoaderComponent: FC<{}> = () => {
   }, []);
 
   Object.entries(processContext.processes).forEach(([id, process]) => {
-    if (process.hasWindow)
+    if (process instanceof WindowedProcess)
       windowedProcesses[id] = process;
     else
       nonWindowedProceses[id] = process;
@@ -59,7 +59,7 @@ export const ProcessLoaderComponent: FC<{}> = () => {
       }
       {
         <WindowManagerComponent 
-          processes={windowedProcesses as WindowedProcesses}
+          processes={windowedProcesses}
         />
       }
     </Fragment>
