@@ -7,8 +7,9 @@ const WindowBorderComponent: FC<{
   allowResize: boolean,
   isResizing: boolean,
   onBordersMouseDown: (event: any, direction: WindowResizeDirection) => void,
+  onTopResizeDoubleClick: (event: any) => void,
   children: React.ReactNode,
-}> = memo(({ allowResize, isResizing, onBordersMouseDown, children }) => {
+}> = memo(({ allowResize, isResizing, onBordersMouseDown, onTopResizeDoubleClick, children }) => {
 
   const getClass = (direction: string) => {
     if (!allowResize){
@@ -51,7 +52,8 @@ const WindowBorderComponent: FC<{
         
         <div 
           className={getClass('top')}
-          onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Top)}>
+          onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Top)}
+          onDoubleClick={onTopResizeDoubleClick}>
         </div>
 
         <div

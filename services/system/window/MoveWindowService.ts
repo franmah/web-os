@@ -1,5 +1,6 @@
 import { MaximizePlaceholderDirection } from "../../../constants/system/window/MaximizePlaceholderDirectionEnum";
 import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeEnum";
+import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
 import { TASKBAR_HEIGHT } from "../../../constants/TaskbarConsts";
 import { WindowState } from "../../../types/system/window/WindowState";
 import { getRestoredWindowOptionsRelativeToMouse } from "./MaximizeRestoreWindowService";
@@ -16,6 +17,7 @@ export  const moveWindow = (event: any, options: WindowState): WindowState => {
   const changeX = isMouseLeftOfScreen(mouseX) || isMouseRightOfScreen(mouseX) ?
     0 :
     mouseX - options.previousClientX;
+  const changeY = mouseY - options.previousClientY;
 
   const showMaximizePlacehodler =
     isMouseOverTopOfScreen(mouseY) ? MaximizePlaceholderDirection.Full :
@@ -27,7 +29,7 @@ export  const moveWindow = (event: any, options: WindowState): WindowState => {
     ...options,
     showMaximizePlacehodler,
     maximized: WindowMaximize.None,
-    top: Math.max(0, mouseY),
+    top: Math.max(0, options.top + changeY),
     left: options.left + changeX,
     previousClientX: mouseX,
     previousClientY: mouseY,
@@ -40,14 +42,7 @@ export const finishMovingWindow = (mouseX: number, mouseY: number, options: Wind
   const outsideRight = mouseX >= window.innerWidth;
 
   if (outsideTop) {
-    return {
-      ...options,
-      maximized: WindowMaximize.Full,
-      top: 0,
-      left: 0,
-      height: window.innerHeight - TASKBAR_HEIGHT,
-      width: window.innerWidth
-    }
+    return maximizeWindow(options);
   } else if (outsideLeft) {
     return {
       ...options,
@@ -70,5 +65,18 @@ export const finishMovingWindow = (mouseX: number, mouseY: number, options: Wind
 
   return {
     ...options
+  }
+};
+
+export const maximizeWindow = (options: WindowState): WindowState => {
+  return {
+    ...options,
+    moving: false,
+    resizeDirection: WindowResizeDirection.None,
+    maximized: WindowMaximize.Full,
+    top: 0,
+    left: 0,
+    height: window.innerHeight - TASKBAR_HEIGHT,
+    width: window.innerWidth
   }
 };

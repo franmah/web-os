@@ -28,10 +28,10 @@ const HeaderComponent: FC<WindowHeaderProps> = memo(({
   };
 
   useEffect(() => {
-    const cleanup = setMaximizeMenuListeners(`${MAXIMIZE_DIV_ID}_${headerId}`, setShowMaximizeMenu);
+    const cleanupFunction = setMaximizeMenuListeners(`${MAXIMIZE_DIV_ID}_${headerId}`, setShowMaximizeMenu);
     return () => {
-      if (cleanup) 
-        cleanup();
+      if (cleanupFunction) 
+        cleanupFunction();
     }
   });
 

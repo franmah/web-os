@@ -19,7 +19,7 @@ export const stopMovingAndResizingWindow = (mouseX:number, mouseY: number, optio
   document.body.style.cursor = 'default';
   
   // Prevent save position when clicking header and window is maximized
-  if (options.maximized === WindowMaximize.Full|| options.maximized === WindowMaximize.Side) {
+  if (options.maximized === WindowMaximize.Full || options.maximized === WindowMaximize.Side) {
     return {
       ...options,
       moving: false,

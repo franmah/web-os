@@ -152,6 +152,7 @@ const WindowComponent: FC<{
           allowResize={options.maximized !== WindowMaximize.Full && !options.moving}
           isResizing={options.resizeDirection !== WindowResizeDirection.None}
           onBordersMouseDown={startResizing}
+          onTopResizeDoubleClick={maximizeWindow}
         >
 
           <div className={styles.centerContent}>

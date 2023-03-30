@@ -43,12 +43,10 @@ const _useProcessContextState = (): ProcessContextType => {
     };
 
     setProcesses(currentProcesses => {
-      const state = {
+      return {
         ... currentProcesses,
         [newProcessId]: newProcess
       };
-      console.log({ afterOpening: state})
-      return state;
     });
   };
 
