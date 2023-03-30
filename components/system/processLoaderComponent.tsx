@@ -3,7 +3,6 @@ import { ProcessContext } from "../../contexts/processContext";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../services/EventService";
 import { Processes } from "../../types/system/processes/processes";
 import { CONTEXT_MENU_ROOT_ID } from "./contextMenu/ContextMenuRootComponent";
-import ProcessRenderer from "./processRendererComponent";
 import { WindowManagerComponent } from "./WindowManager";
 
 export const ProcessLoaderComponent: FC<{}> = () => {
@@ -46,13 +45,8 @@ export const ProcessLoaderComponent: FC<{}> = () => {
       {
         Object
           .entries(nonWindowedProceses)
-          .map(([id, process]) =>
-
-            <ProcessRenderer
-              key={id}
-              id={id}
-              process={process}
-            />
+          .map(([processId, { Component, params }]) =>
+            <Component key={processId} params={params}></Component>
           )
       }
       {

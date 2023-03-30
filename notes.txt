@@ -1,10 +1,8 @@
 
-- Remove unused processloader (not actual process loader but one of those components)
-  - and remove getEveryWindowPositions in WindowManagerSerrvice
 - BUG: because the window will use mouseY as top when moving, the window will shift when start moving.
     - Don't use mouse as top but rather find the offset.
 - BUG: when unselected, header text should change color.
-
+- double clicking top of window (resize cursor) should height maximize
 
 - BUG: Fix error message in processRendererComponent for windowsParams
 - Fix any contradiction and redundancy in WindowState 

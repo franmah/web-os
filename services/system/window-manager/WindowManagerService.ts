@@ -5,19 +5,6 @@ import { Processes } from "../../../types/system/processes/processes";
 import { WindowManagerState } from "../../../types/system/window-manager/WindowManagerState";
 import { WindowState } from "../../../types/system/window/WindowState";
 
-export const getEveryWindowPositions = (windowedProcesses: Processes) => {
-  return Object.entries(windowedProcesses)
-      .filter(([_, process]) => process.hasWindow)
-      .map(([_, process]) => process.windowParams?.windowId || '')
-      .map(id => {
-        const element = document.getElementById(id);
-        return {
-          top: Math.floor(element?.offsetTop || 0),
-          left: Math.floor(element?.offsetLeft || 0)
-        }
-      });
-};
-
 export const updateWindowStatesOnNewProcess = (processes: Processes, currentStates: WindowManagerState): WindowManagerState => {
   
   const windowStates: WindowManagerState = {};
