@@ -1,10 +1,4 @@
-
-- Fix any contradiction and redundancy in WindowState 
-    For example, merge moving and resizing since it's one or the other but never both at the same time?
-- Check if useEffect in WindowManager should be removed: https://react.dev/learn/escape-hatches#you-might-not-need-an-effect
-    - because the manager uses a state, it will render over and over again. You might not want to put the code outside of the useEffect
-
-- Look into using a reducer for window states.
+- Look into using a reducer for window states.  https://react.dev/reference/react/useReducer
     - create a reducerDispatches folder
     - lift up the window state completely (move functions)
     - pass the dispatch function to the window instead of passing every function.
@@ -18,12 +12,15 @@
 - BUG: when unselected, header text should change color. 
     already tried fixing it (Maybe lifting up the state completely will fix it
 
+
 // Final steps
 - test everything
 - run npm outdate
 - test again
 
-// TODO in another branch
+// TODO: OTHER
+
+- Check typescript 5.0 and run npm update
 
 - Look into moving <style> with animations to metadata (https://developer.mozilla.org/en-US/docs/Web/HTML/Element#document_metadata) and loading all animation in the same tag. If it's goog practice
   
