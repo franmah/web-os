@@ -1,39 +1,22 @@
 - Use the code in processRendererComponent to create a window Manager. The window manager should only pass a starting position to the window for now.
-    - Remove processRendererComponent
-
-    Lifting up the state to the Window manager:
-    Solution 1:
-      The window manager pass functions as props, such as handleWindowMove, handleWindowDoneMoving, handleMaximize.
-      Pros: only one state, the one in the window manager.
-      Cons: the window manager is doing the heavy lifting. I think I'd prefer if the window can handle itsefl?
-      Questions:
-        - What should the window and the window manager be responsible for?
-          Should the window move on its own or tell parent that it should be moved.
-          If the window was to be resuable, with this solution every parent/manager will have to know how to move the window.
-          That's a lot of logic, but maybe they need to do that to bound the window itself. Maybe the window shouldn't know
-          its own bound, or when to maximize (meaning it shouldn't know when it hit a border, the manager should)
-
-    Solution 2
-      useRef works and will update the local position. But when calling the service, you'll need to juggle between using the local useRef and the state
-      Example: When moving window, pass the local updated position (useRef) to the service and update the actual lifted state in window manager.
-      - The service could be changed to a class that takes in parameters like bounding variables.
-
-      Pros: easier solution, not much to change.
-      Cons: two "copies" of the state (even though they're technically synced)
-
-
-
+- Window should not know about process context, closign process shoud be done by window manager
+- Window should not know about the process it contains (remove processId in window params)
+- Remove unused processloader (not actual process loader but one of those components)
+  - and remove getEveryWindowPositions in WindowManagerSerrvice
 - BUG: because the window will use mouseY as top when moving, the window will shift when start moving.
     - Don't use mouse as top but rather find the offset.
 - BUG: when unselected, header text should change color.
 
-- Window need to be optimized with memo
-- Window should not know about process context, closign process shoud be done by window manager
-- Window should not know about the process it contains (remove processId in window params)
 
 - BUG: Fix error message in processRendererComponent for windowsParams
-
+- Fix any contradiction and redundancy in WindowState 
+    For example, merge moving and resizing since it's one or the other but never both at the same time?
+- Make sure that selecting a window unselect the others.
+- Check if useEffect in WindowManager should be removed: https://react.dev/learn/escape-hatches#you-might-not-need-an-effect
+    - because the manager uses a state, it will render over and over again. You might not want to put the code outside of the useEffect
 - Should I use useReducer to manage the window's state?
+
+- Window need to be optimized with memo
 
 // Final steps
 - test everything

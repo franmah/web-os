@@ -1,16 +1,10 @@
 import { FC, useEffect, useState } from "react";
-import { v4 } from "uuid";
-import { DEFAULT_WINDOW_STATE } from "../../constants/system/window/WindowConsts";
-import { Process, Processes } from "../../types/system/processes/processes";
+import { updateWindowStatesOnNewProcess } from "../../services/system/window-manager/WindowManagerService";
+import { Processes } from "../../types/system/processes/processes";
+import { WindowManagerState } from "../../types/system/window-manager/WindowManagerState";
 import { WindowState } from "../../types/system/window/WindowState";
 import WindowComponent from "./window/window";
 
-type WindowManagerState = {
-  [windowId: string]: {
-    state: WindowState,
-    process: Process
-  }
-};
 
 export const WindowManagerComponent: FC<{ processes: Processes }> = ({ processes }) => {
 
@@ -19,21 +13,7 @@ export const WindowManagerComponent: FC<{ processes: Processes }> = ({ processes
   // update windows (state) by adding or removing new/old processes
   useEffect(() => {
     setWindows(currentStates => {
-      const windowStates: WindowManagerState = {};
-
-      for (let processId in processes) {
-        const process = processes[processId];
-        const windowId = process.windowParams?.windowId || v4();
-  
-        windowStates[windowId] = {
-          process,
-          state: {
-            ...(currentStates[windowId]?.state || DEFAULT_WINDOW_STATE),
-          }
-        }
-      }
-
-      return windowStates;
+      return updateWindowStatesOnNewProcess(processes, currentStates);
     });
   }, [processes]);
 

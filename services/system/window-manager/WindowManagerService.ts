@@ -1,4 +1,9 @@
-import { Process, Processes } from "../../../types/system/processes/processes";
+import { v4 } from "uuid";
+import { WINDOW_STARTING_POSITION_OFFSET_PX } from "../../../constants/system/window-manager/WindowManagerConsts";
+import { DEFAULT_WINDOW_STATE } from "../../../constants/system/window/WindowConsts";
+import { Processes } from "../../../types/system/processes/processes";
+import { WindowManagerState } from "../../../types/system/window-manager/WindowManagerState";
+import { WindowState } from "../../../types/system/window/WindowState";
 
 export const getEveryWindowPositions = (windowedProcesses: Processes) => {
   return Object.entries(windowedProcesses)
@@ -13,36 +18,48 @@ export const getEveryWindowPositions = (windowedProcesses: Processes) => {
       });
 };
 
-// TODO: REMOVE IF NOT USED
-export const getNewProcess = (processes: Processes, currentWindowIds: string[]): Process | undefined => {
-  return Object.values(processes).find(process => {
-    const windowId = process.windowParams?.windowId || '';
-    return !currentWindowIds.includes(windowId);
-  });
+export const updateWindowStatesOnNewProcess = (processes: Processes, currentStates: WindowManagerState): WindowManagerState => {
+  
+  const windowStates: WindowManagerState = {};
+
+  for (let processId in processes) {
+    const process = processes[processId];
+    const windowId = process.windowParams?.windowId || v4(); // TODO: remove v4() once process type is fixed.
+
+    const isNewProcess = !!currentStates[windowId];
+
+    const state = isNewProcess ?
+      {
+        ...currentStates[windowId].state
+      } :
+      { 
+        ...DEFAULT_WINDOW_STATE,
+        ...getWindowStartingPosition(Object.values(windowStates).map(ws => ws.state))
+      };
+
+    windowStates[windowId] = {
+      process,
+      state
+    };
+  }
+
+  return windowStates;
 }
 
-// export const getNewWindowPosition = (processes: Processes, currentForcedPositions: WindowForcedPositions) 
-// : WindowForcedPositions => {
-//   const currentWindowIds = Object.keys(currentForcedPositions);
-//   const process = Object.values(processes).find(process => {
-//     const windowId = process.windowParams?.windowId || '';
-//     return !currentWindowIds.includes(windowId);
-//   });
+// TODO: not 100% correct: only checks in one pass.
+const getWindowStartingPosition = (currentWindows: WindowState[]): { top: number, left: number } => {
+  let startingTop = DEFAULT_WINDOW_STATE.top;
+  let startingLeft = DEFAULT_WINDOW_STATE.left;
 
-//   if (!process) { return currentForcedPositions }
+  for (let { top, left } of currentWindows) {
+    if (startingLeft === left && startingTop === top) {
+      startingTop += WINDOW_STARTING_POSITION_OFFSET_PX;
+      startingLeft += WINDOW_STARTING_POSITION_OFFSET_PX;
+    }
+  }
 
-//   const newWindowId = process.windowParams?.windowId || '';
-//   const everyWindowPositions = getEveryWindowPositions(processes);
-
-//   console.log({everyWindowPositions})
-
-//   return {
-//     ...currentForcedPositions,
-//     [newWindowId]: {
-//         top: Math.random() * 150,
-//         left: Math.random() * 150,
-//         height: Math.random() * 400,
-//         width: Math.random() * 400
-//       }
-//   }
-// }
+  return {
+    top: startingTop,
+    left: startingLeft
+  };
+}

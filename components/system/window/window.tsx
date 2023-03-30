@@ -30,7 +30,7 @@ const WindowComponent: FC<{
   // Needed to so that event listeners can have an up to date reference to the props.
   // Without this, they access the props from the context when the listeners are created which won't be updated.
   // Decided to not completely lift the state up to the window manager so that the logic mainly stays here.
-  // Can get rid of useRef by moving the logic in the manager and passing functions as props.
+  // Can get rid of useRef by moving the startMoving and other function in the manager and passing them as props.
   const latestOptions = useRef<WindowState>(options);
   useEffect(() => { latestOptions.current = options }, [options]);
 
