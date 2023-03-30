@@ -1,5 +1,4 @@
 
-- BUG: Fix error message in processRendererComponent for windowsParams
 - Fix any contradiction and redundancy in WindowState 
     For example, merge moving and resizing since it's one or the other but never both at the same time?
 - Check if useEffect in WindowManager should be removed: https://react.dev/learn/escape-hatches#you-might-not-need-an-effect
@@ -13,6 +12,8 @@
 
 - Window need to be optimized with memo
 
+- Fix the whole Process parameters mess. The Directory could have a process component and default parameters. A Loaded Process could have a more defined model (with an id...)
+  - BUG: Fix error message in processRendererComponent for windowsParams
 
 - BUG: when unselected, header text should change color. 
     already tried fixing it (Maybe lifting up the state completely will fix it
@@ -45,7 +46,6 @@
 - Minimize should be done later (needs shortcut bar to work)
   could be done either hiding window or tell processLoader not to render because it's minimized (add minimize function to useProcessContextState)
 
-- Fix the whole Process parameters mess. The Directory could have a process component and default parameters. A Loaded Process could have a more defined model (with an id...)
 
 - Folders on desktop should be like windows (meaning have their own move state)
 
