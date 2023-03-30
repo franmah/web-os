@@ -4,8 +4,8 @@ import { WindowMaximize } from "./WindowMaximizeEnum";
 import { WindowResizeDirection } from "./WindowResizeDirectionEnum";
 
 export const DEFAULT_WINDOW_STATE: WindowState = {
-  top: 100,
-  left: 400,
+  top: 50,
+  left: 100,
   width: 1000,
   height: 600,
   previousClientX: 0,

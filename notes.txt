@@ -1,5 +1,3 @@
-- Use the code in processRendererComponent to create a window Manager. The window manager should only pass a starting position to the window for now.
-- Window should not know about process context, closign process shoud be done by window manager
 - Window should not know about the process it contains (remove processId in window params)
 - Remove unused processloader (not actual process loader but one of those components)
   - and remove getEveryWindowPositions in WindowManagerSerrvice
@@ -11,7 +9,6 @@
 - BUG: Fix error message in processRendererComponent for windowsParams
 - Fix any contradiction and redundancy in WindowState 
     For example, merge moving and resizing since it's one or the other but never both at the same time?
-- Make sure that selecting a window unselect the others.
 - Check if useEffect in WindowManager should be removed: https://react.dev/learn/escape-hatches#you-might-not-need-an-effect
     - because the manager uses a state, it will render over and over again. You might not want to put the code outside of the useEffect
 - Should I use useReducer to manage the window's state?

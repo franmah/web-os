@@ -25,7 +25,6 @@ export const updateWindowStatesOnNewProcess = (processes: Processes, currentStat
   for (let processId in processes) {
     const process = processes[processId];
     const windowId = process.windowParams?.windowId || v4(); // TODO: remove v4() once process type is fixed.
-
     const isNewProcess = !!currentStates[windowId];
 
     const state = isNewProcess ?

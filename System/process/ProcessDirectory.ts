@@ -8,7 +8,8 @@ export const ProcessDirectory:  { [name: string]: Process } = {
     params: null,
     windowParams: null,
     hasWindow: false,
-    isUnique: true
+    isUnique: true,
+    id: ''
   },
   'desktop': {
     name: 'desktop',
@@ -16,7 +17,8 @@ export const ProcessDirectory:  { [name: string]: Process } = {
     params: null,
     windowParams: null,
     hasWindow: false,
-    isUnique: true
+    isUnique: true,
+    id: ''
   },
   'taskbar': {
     name: 'taskbar',
@@ -24,7 +26,8 @@ export const ProcessDirectory:  { [name: string]: Process } = {
     params: null,
     windowParams: null,
     hasWindow: false,
-    isUnique: true
+    isUnique: true,
+    id: ''
   },
   'hello': {
     name: 'hello',
@@ -32,6 +35,7 @@ export const ProcessDirectory:  { [name: string]: Process } = {
     params: null,
     windowParams: { headerOptions: { icon: '/icons/youtube-logo.png',text: 'Youtube Player' } },
     hasWindow: true,
-    isUnique: false
+    isUnique: false,
+    id: ''
   }
 };

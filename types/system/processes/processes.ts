@@ -7,6 +7,7 @@ export type Process = {
   windowParams: Partial<WindowProps> | null;
   hasWindow: boolean;
   isUnique: boolean;
+  id: string;
 };
 
 export type Processes = {

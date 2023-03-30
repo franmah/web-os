@@ -1,19 +1,22 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
+import { ProcessContext } from "../../contexts/processContext";
 import { updateWindowStatesOnNewProcess } from "../../services/system/window-manager/WindowManagerService";
 import { Processes } from "../../types/system/processes/processes";
 import { WindowManagerState } from "../../types/system/window-manager/WindowManagerState";
 import { WindowState } from "../../types/system/window/WindowState";
 import WindowComponent from "./window/window";
 
-
 export const WindowManagerComponent: FC<{ processes: Processes }> = ({ processes }) => {
+
+  const { closeProcess } = useContext(ProcessContext);
 
   const [windows, setWindows] = useState<WindowManagerState>({});
 
   // update windows (state) by adding or removing new/old processes
   useEffect(() => {
     setWindows(currentStates => {
-      return updateWindowStatesOnNewProcess(processes, currentStates);
+      const state = updateWindowStatesOnNewProcess(processes, currentStates);
+      return state;
     });
   }, [processes]);
 
@@ -30,6 +33,11 @@ export const WindowManagerComponent: FC<{ processes: Processes }> = ({ processes
     }));
   };
 
+  const closeWindow = (windowId: string) => {
+    const processId = windows[windowId]?.process?.id;
+    closeProcess(processId);
+  }
+
   return (
     <>
       {
@@ -41,6 +49,7 @@ export const WindowManagerComponent: FC<{ processes: Processes }> = ({ processes
                 windowParams={process.windowParams}
                 options={state}
                 setOptions={setWindowState}
+                closeWindow={closeWindow}
               >
                 <process.Component 
                   params={process.params}

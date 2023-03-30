@@ -4,7 +4,7 @@ import { ProcessDirectory } from "../System/process/ProcessDirectory";
 import { startingProccesses } from "../System/process/StartingProccesses";
 import { ProcessContextType, Processes } from "../types/system/processes/processes";
 
-const useProcessContextState = (): ProcessContextType => {
+const _useProcessContextState = (): ProcessContextType => {
   const [processes, setProcesses] = useState<Processes>(startingProccesses);
 
   const closeProcess = (processId: string) => {
@@ -27,6 +27,8 @@ const useProcessContextState = (): ProcessContextType => {
       ProcessDirectory[processName].name :
       v4();
 
+      console.log(newProcessId);
+
     const newProcess = {
       ...ProcessDirectory[processName],
       params: {
@@ -39,18 +41,21 @@ const useProcessContextState = (): ProcessContextType => {
         ...windowParams,
         processId: newProcessId,
         windowId: v4()
-      }
+      },
+      id: newProcessId
     };
 
     setProcesses(currentProcesses => {
-      return {
+      const state = {
         ... currentProcesses,
         [newProcessId]: newProcess
       };
+      console.log({ afterOpening: state})
+      return state;
     });
   };
 
   return { processes, openProcess, closeProcess };
 };
 
-export default useProcessContextState;
+export default _useProcessContextState;

@@ -1,8 +1,7 @@
-import { FC, Fragment, useContext, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useRef } from "react";
 import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeEnum";
 import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
 import { WINDOW_SELECTED_ZINDEX, WINDOW_UNSELECTED_ZINDEX } from "../../../constants/Zindex";
-import { ProcessContext } from "../../../contexts/processContext";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/EventService";
 import { maximizeOrRestoreWindow } from "../../../services/system/window/MaximizeRestoreWindowService";
 import { moveWindow } from "../../../services/system/window/MoveWindowService";
@@ -23,9 +22,10 @@ export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
 const WindowComponent: FC<{
   windowParams: WindowProps,
   options: WindowState,
-  setOptions: (windowId: string, options: WindowState) => void
+  setOptions: (windowId: string, options: WindowState) => void,
+  closeWindow: (windowId: string) => void,
   children: React.ReactNode,
-}> = ({ windowParams, options, setOptions, children }) => {
+}> = ({ windowParams, options, setOptions, closeWindow, children }) => {
 
   // Needed to so that event listeners can have an up to date reference to the props.
   // Without this, they access the props from the context when the listeners are created which won't be updated.
@@ -34,10 +34,8 @@ const WindowComponent: FC<{
   const latestOptions = useRef<WindowState>(options);
   useEffect(() => { latestOptions.current = options }, [options]);
 
-  const { closeProcess } = useContext(ProcessContext);
-
-  const closeWindowProcess = () => {
-    closeProcess(windowParams.processId);
+  const handleCloseWindow = () => {
+    closeWindow(windowParams.windowId);
   };
 
   useEffect(() => {
@@ -163,7 +161,7 @@ const WindowComponent: FC<{
               maximized={options.maximized}
               startMovingWindow={startMoving}
               maximizeWindow={maximizeWindow}
-              onClose={closeWindowProcess}
+              onClose={handleCloseWindow}
               moveToCustomMaximizeOptionClick={(direction) => moveToCustomMaximizeOptionClick(direction)}
             />
 
