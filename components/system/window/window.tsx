@@ -31,8 +31,8 @@ const WindowComponent: FC<{
   // Without this, they access the props from the context when the listeners are created which won't be updated.
   // Decided to not completely lift the state up to the window manager so that the logic mainly stays here.
   // Can get rid of useRef by moving the startMoving and other function in the manager and passing them as props.
-  const latestOptions = useRef<WindowState>(options);
-  useEffect(() => { latestOptions.current = options }, [options]);
+  const optionsRef = useRef<WindowState>(options);
+  useEffect(() => { optionsRef.current = options }, [options]);
 
   const handleCloseWindow = () => {
     closeWindow(windowParams.windowId);
@@ -54,7 +54,7 @@ const WindowComponent: FC<{
   const onDocumentMouseDown = (event: MouseEvent) => {
     const isClickInWindow = isEventOriginatedFromWithinTargetIdSubtree(event, windowParams.windowId);
     const updatedOptions = {
-      ...latestOptions.current,
+      ...optionsRef.current,
       selected: isClickInWindow
     };
 
@@ -65,18 +65,18 @@ const WindowComponent: FC<{
     const mouseX = event.clientX;
     const mouseY = event.clientY;
 
-    if (latestOptions.current.moving) {
+    if (optionsRef.current.moving) {
       return setOptions(windowParams.windowId,
         {
-          ...latestOptions.current,
-          ...moveWindow(event, latestOptions.current)
+          ...optionsRef.current,
+          ...moveWindow(event, optionsRef.current)
         }
       );
-    } else if (latestOptions.current.resizeDirection !== WindowResizeDirection.None) {
+    } else if (optionsRef.current.resizeDirection !== WindowResizeDirection.None) {
       return setOptions(windowParams.windowId,
         {
-          ...latestOptions.current,
-          ...resizeWindow(mouseX, mouseY, latestOptions.current)
+          ...optionsRef.current,
+          ...resizeWindow(mouseX, mouseY, optionsRef.current)
         }
       );
     }
@@ -84,7 +84,7 @@ const WindowComponent: FC<{
 
   const startMoving = (event: any) => {
     setOptions(windowParams.windowId, {
-        ...latestOptions.current,
+        ...optionsRef.current,
         moving: true,
         previousClientX: event.clientX,
         previousClientY: event.clientY
@@ -102,28 +102,28 @@ const WindowComponent: FC<{
 
   const onMouseUp = (event: MouseEvent) => {
     setOptions(windowParams.windowId, {
-      ...latestOptions.current,
-      ...stopMovingAndResizingWindow(event.clientX, event.clientY, latestOptions.current)
+      ...optionsRef.current,
+      ...stopMovingAndResizingWindow(event.clientX, event.clientY, optionsRef.current)
     });
   };
 
   const maximizeWindow = (event: any) => {
     setOptions(windowParams.windowId, {
-      ...latestOptions.current,
-      ...maximizeOrRestoreWindow(latestOptions.current)
+      ...optionsRef.current,
+      ...maximizeOrRestoreWindow(optionsRef.current)
     });
   };
   
   const moveToCustomMaximizeOptionClick = (direction: CustomMaximizeDirection) => {
     setOptions(windowParams.windowId, {
-      ...latestOptions.current,
+      ...optionsRef.current,
       maximized: WindowMaximize.Side,
       ...getWindowOptionForCustomMaximize(direction, window.innerWidth, window.innerHeight)
     });
   };
 
   const getClass = () => {
-    return `${styles.window} ${ latestOptions.current.selected ? styles.windowSelected : styles.windowUnselected}`;
+    return `${styles.window} ${ options.selected ? styles.windowSelected : styles.windowUnselected}`;
   };
 
   return (
