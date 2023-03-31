@@ -1,12 +1,6 @@
-import { FC, Fragment, memo, useEffect, useRef } from "react";
+import { FC, Fragment, memo, useEffect } from "react";
 import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeEnum";
 import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
-import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/EventService";
-import { maximizeOrRestoreWindow } from "../../../services/system/window/MaximizeRestoreWindowService";
-import { moveWindow } from "../../../services/system/window/MoveWindowService";
-import { getWindowOptionForCustomMaximize } from "../../../services/system/window/WindowCustomMaximizeOptionService.ts";
-import { resizeWindow } from "../../../services/system/window/WindowResizeService";
-import { stopMovingAndResizingWindow } from "../../../services/system/window/WindowService";
 import { WindowParams } from "../../../types/system/window/WindowProps";
 import { WindowState } from "../../../types/system/window/WindowState";
 import { CustomMaximizeDirection } from "./maximizeOptionsModal/maximizeOptionsModal";
@@ -22,17 +16,28 @@ export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
 const WindowComponent: FC<{
   windowParams: WindowParams,
   options: WindowState,
-  setOptions: (windowId: string, options: WindowState) => void,
   closeWindow: (windowId: string) => void,
-  children: React.ReactNode,
-}> = memo(({ windowParams, options, setOptions, closeWindow, children }) => {
-
-  // Needed to so that event listeners can have an up to date reference to the props.
-  // Without this, they access the props from the context when the listeners are created which won't be updated.
-  // Decided to not completely lift the state up to the window manager so that the logic mainly stays here.
-  // Can get rid of useRef by moving the startMoving and other function in the manager and passing them as props.
-  const optionsRef = useRef<WindowState>(options);
-  useEffect(() => { optionsRef.current = options }, [options]);
+  handleDocumentMouseDown : (windowId: string, event: MouseEvent) => void,
+  hanldeMouseMove : (windowId: string, event: MouseEvent) => void,
+  handleStartMoving : (windowId: string, event: MouseEvent) => void,
+  handleStartResizing : (windowId: string, event: MouseEvent, direction: WindowResizeDirection) => void,
+  handleMouseUp : (windowId: string, event: MouseEvent) => void,
+  handleMaximize : (windowId: string, event: MouseEvent) => void,
+  handleMoveToCustomMaximizeOptionClick : (windowId: string, direction: CustomMaximizeDirection) => void, 
+  children: React.ReactNode
+}> = memo(({
+  windowParams,
+  options,
+  closeWindow,
+  handleDocumentMouseDown,
+  hanldeMouseMove,
+  handleStartMoving,
+  handleStartResizing,
+  handleMouseUp,
+  handleMaximize,
+  handleMoveToCustomMaximizeOptionClick,
+  children
+}) => {
 
   const handleCloseWindow = () => {
     closeWindow(windowParams.windowId);
@@ -52,74 +57,16 @@ const WindowComponent: FC<{
   }, []);
 
   const onDocumentMouseDown = (event: MouseEvent) => {
-    const isClickInWindow = isEventOriginatedFromWithinTargetIdSubtree(event, windowParams.windowId);
-    const updatedOptions = {
-      ...optionsRef.current,
-      selected: isClickInWindow
-    };
-
-    setOptions(windowParams.windowId, updatedOptions);
+   handleDocumentMouseDown(windowParams.windowId, event);
   };
 
   const onMouseMove = (event: MouseEvent) => {
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
-
-    if (optionsRef.current.moving) {
-      return setOptions(windowParams.windowId,
-        {
-          ...optionsRef.current,
-          ...moveWindow(event, optionsRef.current)
-        }
-      );
-    } else if (optionsRef.current.resizeDirection !== WindowResizeDirection.None) {
-      return setOptions(windowParams.windowId,
-        {
-          ...optionsRef.current,
-          ...resizeWindow(mouseX, mouseY, optionsRef.current)
-        }
-      );
-    }
-  };
-
-  const startMoving = (event: any) => {
-    setOptions(windowParams.windowId, {
-        ...optionsRef.current,
-        moving: true,
-        previousClientX: event.clientX,
-        previousClientY: event.clientY
-    });
-  };
-
-  const startResizing = (event: any, direction: WindowResizeDirection) => {
-    setOptions(windowParams.windowId, {
-      ...options,
-      previousClientX: event.clientX,
-      previousClientY: event.clientY,
-      resizeDirection: direction
-    });
+    hanldeMouseMove(windowParams.windowId, event);
+    
   };
 
   const onMouseUp = (event: MouseEvent) => {
-    setOptions(windowParams.windowId, {
-      ...optionsRef.current,
-      ...stopMovingAndResizingWindow(event.clientX, event.clientY, optionsRef.current)
-    });
-  };
-
-  const maximizeWindow = (event: any) => {
-    setOptions(windowParams.windowId, {
-      ...optionsRef.current,
-      ...maximizeOrRestoreWindow(optionsRef.current)
-    });
-  };
-  
-  const moveToCustomMaximizeOptionClick = (direction: CustomMaximizeDirection) => {
-    setOptions(windowParams.windowId, {
-      ...optionsRef.current,
-      maximized: WindowMaximize.Side,
-      ...getWindowOptionForCustomMaximize(direction, window.innerWidth, window.innerHeight)
-    });
+    handleMouseUp(windowParams.windowId, event);
   };
 
   const getClass = () => {
@@ -151,8 +98,8 @@ const WindowComponent: FC<{
         <WindowBorderComponent
           allowResize={options.maximized !== WindowMaximize.Full && !options.moving}
           isResizing={options.resizeDirection !== WindowResizeDirection.None}
-          onBordersMouseDown={startResizing}
-          onTopResizeDoubleClick={maximizeWindow}
+          onBordersMouseDown={(e, direction) => handleStartResizing(windowParams.windowId, e, direction)}
+          onTopResizeDoubleClick={(e) => handleMaximize(windowParams.windowId, e)}
         >
 
           <div className={styles.centerContent}>
@@ -160,10 +107,10 @@ const WindowComponent: FC<{
               selected={options.selected}
               options={windowParams.headerOptions}
               maximized={options.maximized}
-              startMovingWindow={startMoving}
-              maximizeWindow={maximizeWindow}
+              startMovingWindow={(e) => handleStartMoving(windowParams.windowId, e)}
+              maximizeWindow={(e) => handleMaximize(windowParams.windowId, e)}
               onClose={handleCloseWindow}
-              moveToCustomMaximizeOptionClick={(direction) => moveToCustomMaximizeOptionClick(direction)}
+              moveToCustomMaximizeOptionClick={(direction) => handleMoveToCustomMaximizeOptionClick(windowParams.windowId, direction)}
             />
 
             { children }
