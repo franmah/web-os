@@ -1,17 +1,17 @@
 import { v4 } from "uuid";
 import { WINDOW_STARTING_POSITION_OFFSET_PX } from "../../../constants/system/window-manager/WindowManagerConsts";
 import { DEFAULT_WINDOW_STATE } from "../../../constants/system/window/WindowConsts";
-import { Processes } from "../../../types/system/processes/processes";
+import { WindowedProcesses } from "../../../types/system/processes/processes";
 import { WindowManagerState } from "../../../types/system/window-manager/WindowManagerState";
 import { WindowState } from "../../../types/system/window/WindowState";
 
-export const updateWindowStatesOnNewProcess = (processes: Processes, currentStates: WindowManagerState): WindowManagerState => {
+export const updateWindowStatesOnNewProcess = (processes: WindowedProcesses, currentStates: WindowManagerState): WindowManagerState => {
   
   const windowStates: WindowManagerState = {};
 
   for (let processId in processes) {
     const process = processes[processId];
-    const windowId = process.windowParams?.windowId || v4(); // TODO: remove v4() once process type is fixed.
+    const windowId = process.windowParams.windowId || v4(); // TODO: remove v4() once process type is fixed.
     const isNewProcess = !!currentStates[windowId];
 
     const state = isNewProcess ?

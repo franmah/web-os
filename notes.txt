@@ -14,8 +14,10 @@
 
 - Check typescript 5.0 and run npm update
 
-- Look into moving <style> with animations to metadata (https://developer.mozilla.org/en-US/docs/Web/HTML/Element#document_metadata) and loading all animation in the same tag. If it's goog practice
-  
+- Bug: desktop image doesn't load right away. Maybe the background image should be it's own process?
+  - also need a loading screen while starting processes load.
+  The loading animation leaves the screen once everything is loaded.
+
 - Look at next's documentation (like react)
 
 - Use semantic html tags instead of div wherever possible + USE FRAGMENT wherever possible to reduce nujmber of container divs
