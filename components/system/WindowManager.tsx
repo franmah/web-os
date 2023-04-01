@@ -1,6 +1,6 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { ProcessContext } from "../../contexts/processContext";
-import { WindowManagerZindex, updateWindowStatesOnNewProcess, updateZindexesOnWindowSelected } from "../../services/system/window-manager/WindowManagerService";
+import { WindowManagerZindex, updateWindowStatesOnNewProcess } from "../../services/system/window-manager/WindowManagerService";
 import { WindowedProcesses } from "../../types/system/processes/processes";
 import { WindowManagerState } from "../../types/system/window-manager/WindowManagerState";
 import WindowComponent from "./window/window";
@@ -12,6 +12,7 @@ import { stopMovingAndResizingWindow } from "../../services/system/window/Window
 import { maximizeOrRestoreWindow } from "../../services/system/window/MaximizeRestoreWindowService";
 import { getWindowOptionForCustomMaximize } from "../../services/system/window/WindowCustomMaximizeOptionService.ts";
 import { CustomMaximizeDirection } from "./window/maximizeOptionsModal/maximizeOptionsModal";
+import { updateZindexesOnWindowClicked, updateZindexesOnWindowCloses } from "../../services/system/window-manager/WindowZindexService";
 
 export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ processes }) => {
 
@@ -22,8 +23,7 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
   // update windows (state) by adding or removing new/old processes
   useEffect(() => {
     setWindows(currentStates => {
-      const state = updateWindowStatesOnNewProcess(processes, currentStates);
-      return state;
+      return updateWindowStatesOnNewProcess(processes, currentStates);
     });
   }, [processes]);
 
@@ -31,11 +31,35 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
   // Reset event listeners when number of windows changes.
   useEffect(() => {
     document.addEventListener('mousedown', unfocusWindowsOnDocumentMouseDown);
-
     return (() => {
       document.removeEventListener('mousedown', unfocusWindowsOnDocumentMouseDown);
     });
   }, [Object.keys(windows).length]);
+  
+  
+  const closeWindow = (windowId: string) => {
+    const processId = windows[windowId]?.process?.processId;
+
+    // Update zIndexes of other windows
+    setWindows(currentWindows => {
+      const currentZindexes: WindowManagerZindex[] = Object
+        .entries(windows)
+        .map(([windowId, { state }]) => ({ windowId, zIndex: state.zIndex }));
+      const updatedZindexes = updateZindexesOnWindowCloses(currentZindexes, windowId);
+
+      for (const updatedZindex of updatedZindexes) {
+        windows[updatedZindex.windowId].state.zIndex = updatedZindex.zIndex;
+      }
+
+      return { ...currentWindows };
+    });
+
+    if (!processId) {
+      console.warn(`Error trying to close window, processId not found (windowId: ${windowId})`)
+    } else {
+      closeProcess(processId);
+    }
+  };
 
   const unfocusWindowsOnDocumentMouseDown = (event: MouseEvent) => {
     const noWindowComponentClicked = Object
@@ -58,7 +82,7 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
       const currentZindexes: WindowManagerZindex[] = Object
         .entries(windows)
         .map(([windowId, { state }]) => ({ windowId, zIndex: state.zIndex }));
-      const updatedZindexByWindowId = updateZindexesOnWindowSelected(currentZindexes, clickedWindowId);
+      const updatedZindexByWindowId = updateZindexesOnWindowClicked(currentZindexes, clickedWindowId);
 
       for (const update of updatedZindexByWindowId) {
         const windowId = update.windowId;
@@ -170,16 +194,6 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
       }
     }));
   };
-
-  const closeWindow = (windowId: string) => {
-    const processId = windows[windowId]?.process?.processId;
-
-    if (!processId) {
-      console.warn(`Error trying to close window, processId not found (windowId: ${windowId})`)
-    } else {
-      closeProcess(processId);
-    }
-  }
 
   return (
     <>
