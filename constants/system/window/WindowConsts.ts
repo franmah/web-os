@@ -6,8 +6,8 @@ import { WindowResizeDirection } from "./WindowResizeDirectionEnum";
 export const DEFAULT_WINDOW_STATE: WindowState = {
   top: 50,
   left: 100,
-  width: 1000,
-  height: 600,
+  width: 600,
+  height: 200,
   previousClientX: 0,
   previousClientY: 0,
   previousTop: 100,
@@ -18,5 +18,6 @@ export const DEFAULT_WINDOW_STATE: WindowState = {
   maximized: WindowMaximize.None,
   resizeDirection: WindowResizeDirection.None,
   showMaximizePlacehodler: MaximizePlaceholderDirection.None,
-  selected: true
+  selected: true,
+  zIndex: 100
 };

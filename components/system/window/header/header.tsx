@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { FC, memo, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from './header.module.scss';
 import {VscChromeMinimize,  VscChromeRestore, VscChromeMaximize, VscClose } from 'react-icons/vsc';
 import globalStyles from '../../../../styles/global.module.scss';
@@ -10,7 +10,7 @@ import { WindowMaximize } from '../../../../constants/system/window/WindowMaximi
 import { WindowHeaderProps } from '../../../../types/system/window/WindowHeaderProps';
 import { CONTROL_ICON_SIZE, MAXIMIZE_DIV_ID } from '../../../../constants/system/window/WindowHeaderConts';
 
-const HeaderComponent: FC<WindowHeaderProps> = memo(({
+const HeaderComponent: FC<WindowHeaderProps> = ({
   selected,
   options, 
   maximized,
@@ -119,13 +119,6 @@ const HeaderComponent: FC<WindowHeaderProps> = memo(({
 
     </header>
   )
-}, (state1, state2) => {
-  try {
-    return JSON.stringify(state1) === JSON.stringify(state2);
-  } catch (error) {
-    console.error(`Error with memo while comparing header state for window: ${error}`);
-    return false;
-  }
-});
+};
 
 export default HeaderComponent;

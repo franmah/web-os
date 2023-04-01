@@ -1,7 +1,7 @@
 import { FC, Fragment, memo } from "react";
 import { heightMaximizeAnimation, leftMaximizeAnimation, maximizeAnimation, rightMaximizeAnimation } from "../../../../animations/windowMaximizeAnimations";
 import { MaximizePlaceholderDirection } from "../../../../constants/system/window/MaximizePlaceholderDirectionEnum";
-import { WINDOW_ANIMATION_PLACEHOLDER_ZINDEX } from "../../../../constants/Zindex";
+import { WINDOW_COMPONENT_ANIMATION_PLACEHOLDER_ZINDEX } from "../../../../constants/Zindex";
 import styles from './animationPlaceholder.module.scss';
 
 const WindowAnimationPlaceholderComponent: FC<{
@@ -42,7 +42,7 @@ const WindowAnimationPlaceholderComponent: FC<{
         <div
           style={{ 
             animationName: getAnimation()?.name,
-            zIndex: WINDOW_ANIMATION_PLACEHOLDER_ZINDEX
+            zIndex: WINDOW_COMPONENT_ANIMATION_PLACEHOLDER_ZINDEX
           }}
           className={getClass()}
         ></div>
@@ -52,7 +52,7 @@ const WindowAnimationPlaceholderComponent: FC<{
         <div 
           style={{ 
             animationName: heightMaximizeAnimation.name,
-            zIndex: WINDOW_ANIMATION_PLACEHOLDER_ZINDEX,
+            zIndex: WINDOW_COMPONENT_ANIMATION_PLACEHOLDER_ZINDEX,
             width,
             left
           }}

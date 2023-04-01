@@ -1,14 +1,23 @@
 
 
 - BUG: open two windows. Click the first one. It should show up in front. Click on the desktop, the other window will show in front
-  - window last clicked should show in front
+  - on new Window opened
+  - on window clicked
+  - on window closed
+  - (check windows 11) maximize placeholders should show behind window but in front of other windows
+      - Idea: instead of increasing zIndex by 1 for each window, do it by an offset (like 10), so that each window can set different z-index in its children
+
+- change 'selected' to 'focused'
 
 - double clicking resize top should height maximize
+
+- use memo on window.tsx. I know it caused bugs in the past, but since it has every state there shouldn't be any problem
 
 // Final steps
 - test everything
 - run npm outdate
 - test again
+- refactor (window.tsx and windowManager.tsx)
 
 // TODO: OTHER
 
@@ -25,14 +34,11 @@
   - https://developer.mozilla.org/en-US/docs/Web/HTML/Element
   - Lists should use <ul><li><ul/>
 
+- add tests. Especially for services
   
 - Change to styled components so that variables are not defined multiple times
   - Fix the z-index madness
   - (update to fit styled components) window border radius size should be a global style and applied to header, hello and window
-
-- Finish performance improved new Desktop item component (memo). AS WELL AS OTHER IMPROVEMENTS AND OTHER COMPONENTS (useMemo, memo and useCallback)
-  - window header should be memo()
-  - try useCallback without memo's second argument (areItemsSame)
 
 - Minimize should be done later (needs shortcut bar to work)
   could be done either hiding window or tell processLoader not to render because it's minimized (add minimize function to useProcessContextState)

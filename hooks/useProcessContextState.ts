@@ -6,6 +6,7 @@ import { Process, ProcessContextType, Processes, WindowedProcess } from "../type
 const _useProcessContextState = (): ProcessContextType => {
   
   const [processes, setProcesses] = useState<Processes>({});
+  const [windowIdCount, setWindowIdCount] = useState(0);
 
   const closeProcess = (processId: string) => {
     setProcesses(currentProcesses => {
@@ -42,7 +43,7 @@ const _useProcessContextState = (): ProcessContextType => {
       const finalWindowParams = {
         ...processDirectoryEntry.windowParams,
         ...windowParams,
-        windowId: v4()
+        windowId: `${windowIdCount}`
       };
 
       newProcess = new WindowedProcess(processName,processDirectoryEntry.Component,
@@ -58,6 +59,8 @@ const _useProcessContextState = (): ProcessContextType => {
         [newProcessId]: newProcess
       };
     });
+
+    setWindowIdCount(windowIdCount + 1);
   };
 
   return { processes, openProcess, closeProcess };

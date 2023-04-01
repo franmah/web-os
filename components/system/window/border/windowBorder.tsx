@@ -1,6 +1,6 @@
-import { FC, memo } from "react";
+import { FC } from "react";
 import { WindowResizeDirection } from "../../../../constants/system/window/WindowResizeDirectionEnum";
-import { WINDOW_BORDER_ZINDEX } from "../../../../constants/Zindex";
+import { WINDOW_COMPONENT_BORDER_ZINDEX } from "../../../../constants/Zindex";
 import styles from './border.module.scss';
 
 const WindowBorderComponent: FC<{
@@ -9,7 +9,7 @@ const WindowBorderComponent: FC<{
   onBordersMouseDown: (event: any, direction: WindowResizeDirection) => void,
   onTopResizeDoubleClick: (event: any) => void,
   children: React.ReactNode,
-}> = memo(({ allowResize, isResizing, onBordersMouseDown, onTopResizeDoubleClick, children }) => {
+}> = ({ allowResize, isResizing, onBordersMouseDown, onTopResizeDoubleClick, children }) => {
 
   const getClass = (direction: string) => {
     if (!allowResize){
@@ -43,7 +43,7 @@ const WindowBorderComponent: FC<{
       {/*  TOP BORDER */}
       <div
         className={styles.topBorderHeader}
-        style={{ zIndex: WINDOW_BORDER_ZINDEX }}
+        style={{ zIndex: WINDOW_COMPONENT_BORDER_ZINDEX }}
       >
         <div
           className={getClass('topLeft')}
@@ -65,7 +65,7 @@ const WindowBorderComponent: FC<{
       {/*  LEFT + RIGHT BORDERS + CONTENT */}
       <div
         className={styles.centerLeft}
-        style={{ zIndex: WINDOW_BORDER_ZINDEX }}
+        style={{ zIndex: WINDOW_COMPONENT_BORDER_ZINDEX }}
       >
           <div className={getClass('leftCenterTop')} 
             onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopLeft)}
@@ -83,7 +83,7 @@ const WindowBorderComponent: FC<{
 
       <div
         className={styles.centerRight}
-        style={{ zIndex: WINDOW_BORDER_ZINDEX }}
+        style={{ zIndex: WINDOW_COMPONENT_BORDER_ZINDEX }}
       >
         <div className={getClass('rightCenterTop')}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopRight)}
@@ -99,7 +99,7 @@ const WindowBorderComponent: FC<{
       {/*  BOTTOM BORDER */}
       <div
         className={styles.bottomBorder}
-        style={{ zIndex: WINDOW_BORDER_ZINDEX }}
+        style={{ zIndex: WINDOW_COMPONENT_BORDER_ZINDEX }}
       >
         
         <div
@@ -118,11 +118,6 @@ const WindowBorderComponent: FC<{
     </div>
       
   );
-}, (oldProps, newProps) => {
-  return (
-    oldProps.allowResize === newProps.allowResize &&
-    oldProps.isResizing === newProps.isResizing
-  );
-});
+};
 
 export default WindowBorderComponent;

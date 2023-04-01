@@ -1,6 +1,6 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { ProcessContext } from "../../contexts/processContext";
-import { updateWindowStatesOnNewProcess } from "../../services/system/window-manager/WindowManagerService";
+import { WindowManagerZindex, updateWindowStatesOnNewProcess, updateZindexesOnWindowSelected } from "../../services/system/window-manager/WindowManagerService";
 import { WindowedProcesses } from "../../types/system/processes/processes";
 import { WindowManagerState } from "../../types/system/window-manager/WindowManagerState";
 import WindowComponent from "./window/window";
@@ -27,18 +27,47 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
     });
   }, [processes]);
 
-  const handleDocumentMouseDown = (windowId: string, event: MouseEvent) => {
-    const isClickInWindow = isEventOriginatedFromWithinTargetIdSubtree(event, windowId);
-    setWindows(windows => ({
-      ...windows,
-      [windowId]: {
-        process: windows[windowId].process,
-        state: { 
-          ...windows[windowId].state,
-          selected: isClickInWindow
-        }
+  // Unselect all windows when there is a click outside a window.
+  // Reset event listeners when number of windows changes.
+  useEffect(() => {
+    document.addEventListener('mousedown', unfocusWindowsOnDocumentMouseDown);
+
+    return (() => {
+      document.removeEventListener('mousedown', unfocusWindowsOnDocumentMouseDown);
+    });
+  }, [Object.keys(windows).length]);
+
+  const unfocusWindowsOnDocumentMouseDown = (event: MouseEvent) => {
+    const noWindowComponentClicked = Object
+      .keys(windows)
+      .every(windowId => !isEventOriginatedFromWithinTargetIdSubtree(event, windowId));
+
+    if (noWindowComponentClicked) {
+      setWindows(currentWindows => {
+        Object.values(currentWindows)
+          .forEach(w => w.state.selected = false);
+        return { ...currentWindows };
+      });
+    }
+  };
+
+  const handleWindowMouseDown = (clickedWindowId: string) => {
+    setWindows(windows => {
+      const updatedWindows = { ...windows };
+
+      const currentZindexes: WindowManagerZindex[] = Object
+        .entries(windows)
+        .map(([windowId, { state }]) => ({ windowId, zIndex: state.zIndex }));
+      const updatedZindexByWindowId = updateZindexesOnWindowSelected(currentZindexes, clickedWindowId);
+
+      for (const update of updatedZindexByWindowId) {
+        const windowId = update.windowId;
+        updatedWindows[windowId].state.selected = windowId === clickedWindowId;
+        updatedWindows[windowId].state.zIndex = update.zIndex;
       }
-    }));
+
+      return { ...updatedWindows };
+    });
   };
 
   const hanldeMouseMove = (windowId: string, event: MouseEvent) => {
@@ -55,7 +84,7 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
               ...moveWindow(event, windows[windowId].state)
             }
           }
-        }
+        };
       } else if (windowState.state.resizeDirection !== WindowResizeDirection.None) {
         return {
           ...windows,
@@ -66,12 +95,11 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
               ...resizeWindow(event.clientX, event.clientY, windows[windowId].state)
             }
           }
-        }
+        };
       }
 
       return windows;
-
-    })
+    });
   };
 
   const handleStartMoving = (windowId: string, event: MouseEvent) => {
@@ -164,7 +192,7 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
                 windowParams={process.windowParams}
                 options={state}
                 closeWindow={closeWindow}
-                handleDocumentMouseDown={handleDocumentMouseDown}
+                handleWindowMouseDown={handleWindowMouseDown}
                 hanldeMouseMove={hanldeMouseMove}
                 handleStartMoving={handleStartMoving}
                 handleStartResizing={handleStartResizing}
@@ -176,8 +204,7 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
                   params={process.params}
                 />
               </WindowComponent>
-             
-            )
+            );
           })
       }
     </>

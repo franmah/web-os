@@ -7,7 +7,6 @@ import { CustomMaximizeDirection } from "./maximizeOptionsModal/maximizeOptionsM
 import styles from './window.module.scss';
 import WindowAnimationPlaceholderComponent from "./animationPlaceholder/animationPlaceholder";
 import WindowBorderComponent from "./border/windowBorder";
-import { WINDOW_SELECTED_ZINDEX, WINDOW_UNSELECTED_ZINDEX } from "../../../constants/Zindex";
 import HeaderComponent from "./header/header";
 
 export const WINDOW_MIN_HEIGH = 200; // TODO: move into styles component
@@ -17,7 +16,7 @@ const WindowComponent: FC<{
   windowParams: WindowParams,
   options: WindowState,
   closeWindow: (windowId: string) => void,
-  handleDocumentMouseDown : (windowId: string, event: MouseEvent) => void,
+  handleWindowMouseDown : (windowId: string) => void,
   hanldeMouseMove : (windowId: string, event: MouseEvent) => void,
   handleStartMoving : (windowId: string, event: MouseEvent) => void,
   handleStartResizing : (windowId: string, event: MouseEvent, direction: WindowResizeDirection) => void,
@@ -25,11 +24,11 @@ const WindowComponent: FC<{
   handleMaximize : (windowId: string, event: MouseEvent) => void,
   handleMoveToCustomMaximizeOptionClick : (windowId: string, direction: CustomMaximizeDirection) => void, 
   children: React.ReactNode
-}> = memo(({
+}> = ({
   windowParams,
   options,
   closeWindow,
-  handleDocumentMouseDown,
+  handleWindowMouseDown,
   hanldeMouseMove,
   handleStartMoving,
   handleStartResizing,
@@ -47,18 +46,12 @@ const WindowComponent: FC<{
     // Listener on document otherwise window stops updating if mouse moves out of it (if user moves mouse too fast)
     document.addEventListener('mouseup', onMouseUp);
     document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mousedown', onDocumentMouseDown);
 
     return () => {
       document.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mousedown', onDocumentMouseDown);
     }
   }, []);
-
-  const onDocumentMouseDown = (event: MouseEvent) => {
-   handleDocumentMouseDown(windowParams.windowId, event);
-  };
 
   const onMouseMove = (event: MouseEvent) => {
     hanldeMouseMove(windowParams.windowId, event);
@@ -86,12 +79,13 @@ const WindowComponent: FC<{
       <div
         id={windowParams.windowId}
         className={getClass()}
+        onMouseDown={() => handleWindowMouseDown(windowParams.windowId)}
         style={{
           top: options.top,
           left: options.left,
           width: `${options.width}px`,
           height: `${options.height}px`,
-          zIndex: options.selected ? WINDOW_SELECTED_ZINDEX : WINDOW_UNSELECTED_ZINDEX
+          zIndex: options.zIndex
         }}
       >
 
@@ -113,22 +107,20 @@ const WindowComponent: FC<{
               moveToCustomMaximizeOptionClick={(direction) => handleMoveToCustomMaximizeOptionClick(windowParams.windowId, direction)}
             />
 
+            {/* TODO: remove */}
+            <div style={{ height: 20}}>
+              selected: { `${options.selected} ` }
+              zIndex: { `${options.zIndex} `}
+            </div>
+
             { children }
+            
           </div>
 
         </WindowBorderComponent>    
       </div>
     </Fragment>
   );
-}, (state1, state2) => {
-  try {
-    const state1Data = { ...state1.windowParams, ...state1.options };
-    const state2Data = { ...state2.windowParams, ...state2.options };
-    return JSON.stringify(state1Data) === JSON.stringify(state2Data);
-  } catch (error) {
-    console.error(`Error with memo() while comparing window ${state1.windowParams.windowId}'s state: ${error}`);
-    return false;
-  }
-});
+};
 
 export default WindowComponent;
