@@ -74,6 +74,7 @@ const WindowComponent: FC<{
         left={options.left}
         width={options.width}
         height={options.height}
+        zIndex={options.zIndex}
       />
 
       <div

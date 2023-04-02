@@ -3,7 +3,7 @@ import { DEFAULT_WINDOW_STATE } from "../../../constants/system/window/WindowCon
 import { WindowedProcesses } from "../../../types/system/processes/processes";
 import { WindowManagerState } from "../../../types/system/window-manager/WindowManagerState";
 import { WindowState } from "../../../types/system/window/WindowState";
-import { getStartingZindes } from "./WindowZindexService";
+import { getStartingZindex } from "./WindowZindexService";
 
 
 export const updateWindowStatesOnNewProcess = (processes: WindowedProcesses, currentStates: WindowManagerState): WindowManagerState => {
@@ -22,7 +22,7 @@ export const updateWindowStatesOnNewProcess = (processes: WindowedProcesses, cur
       { 
         ...DEFAULT_WINDOW_STATE,
         ...getWindowStartingPosition(Object.values(windowStates).map(ws => ws.state)),
-        zIndex: getStartingZindes(Object.keys(windowStates).length)
+        zIndex: getStartingZindex(Object.keys(windowStates).length)
       };
 
     windowStates[windowId] = {

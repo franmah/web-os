@@ -1,16 +1,12 @@
-import { FC, Fragment, memo } from "react";
+import { FC, memo } from "react";
 import { heightMaximizeAnimation, leftMaximizeAnimation, maximizeAnimation, rightMaximizeAnimation } from "../../../../animations/windowMaximizeAnimations";
 import { MaximizePlaceholderDirection } from "../../../../constants/system/window/MaximizePlaceholderDirectionEnum";
-import { WINDOW_COMPONENT_ANIMATION_PLACEHOLDER_ZINDEX } from "../../../../constants/Zindex";
+import { WINDOW_COMPONENT_ANIMATION_PLACEHOLDER_ZINDEX_OFFSET } from "../../../../constants/Zindex";
 import styles from './animationPlaceholder.module.scss';
+import { WindowMaximizePlaceholderProps } from "../../../../types/system/window/WindowAnimationPlaceholder";
 
-const WindowAnimationPlaceholderComponent: FC<{
-  placeholderDirection: MaximizePlaceholderDirection,
-  top: number,
-  left: number,
-  width: number,
-  height: number
-}> = memo(({ placeholderDirection, top, left, width, height }) => {
+const WindowAnimationPlaceholderComponent: FC<WindowMaximizePlaceholderProps> =
+memo(({ placeholderDirection, top, left, width, height, zIndex }) => {
 
   const getClass = () => {
     switch (placeholderDirection) {
@@ -30,29 +26,31 @@ const WindowAnimationPlaceholderComponent: FC<{
   };
 
   return (
-    <Fragment>
-      <style children={`
-        ${maximizeAnimation.animation(left, width, height)} 
-        ${leftMaximizeAnimation.animation(top, height)} 
-        ${rightMaximizeAnimation.animation(top, height)} 
-        ${heightMaximizeAnimation.animation(left, width, height)}
-      `}/>
+    <>
+      <style
+        children={`
+          ${maximizeAnimation.animation(left, width, height)}
+          ${leftMaximizeAnimation.animation(top, height)}
+          ${rightMaximizeAnimation.animation(top, height)}
+          ${heightMaximizeAnimation.animation(left, width, height)}
+        `}
+      />
 
-      {
-        <div
-          style={{ 
-            animationName: getAnimation()?.name,
-            zIndex: WINDOW_COMPONENT_ANIMATION_PLACEHOLDER_ZINDEX
-          }}
-          className={getClass()}
-        ></div>
-      }
+      <div
+        style={{ 
+          animationName: getAnimation()?.name,
+          zIndex: zIndex - WINDOW_COMPONENT_ANIMATION_PLACEHOLDER_ZINDEX_OFFSET
+        }}
+        className={getClass()}
+      ></div>
+
+      {/* TODO: once styled components are used, try moving it with the code above. Right now the css needs to know width and left for the final placeholder position. */}
       { 
         placeholderDirection === MaximizePlaceholderDirection.Height &&
         <div 
           style={{ 
             animationName: heightMaximizeAnimation.name,
-            zIndex: WINDOW_COMPONENT_ANIMATION_PLACEHOLDER_ZINDEX,
+            zIndex: zIndex - WINDOW_COMPONENT_ANIMATION_PLACEHOLDER_ZINDEX_OFFSET,
             width,
             left
           }}
@@ -60,7 +58,7 @@ const WindowAnimationPlaceholderComponent: FC<{
         >
         </div>
       }
-    </Fragment>
+    </>
   );
 }, (oldProps, newProps) => {
   return (
