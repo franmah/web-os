@@ -4,12 +4,11 @@ import styles from './header.module.scss';
 import {VscChromeMinimize, VscClose } from 'react-icons/vsc';
 import globalStyles from '../../../../styles/global.module.scss';
 import { v4 } from 'uuid';
-import { WindowMaximize } from '../../../../constants/system/window/WindowMaximizeEnum';
 import { WindowHeaderProps } from '../../../../types/system/window/WindowHeaderProps';
 import { CONTROL_ICON_SIZE, MAXIMIZE_DIV_ID } from '../../../../constants/system/window/WindowHeaderConts';
 import { HeaderMaximizeButtonComponent } from '../headerMaximizeButton/headerMaximizeButtonComponent';
 
-const HeaderComponent: FC<WindowHeaderProps> = ({
+const WindowHeaderComponent: FC<WindowHeaderProps> = ({
   focused,
   options, 
   maximized,
@@ -87,4 +86,4 @@ const HeaderComponent: FC<WindowHeaderProps> = ({
   )
 };
 
-export default HeaderComponent;
+export default WindowHeaderComponent;

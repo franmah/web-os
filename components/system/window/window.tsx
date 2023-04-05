@@ -7,7 +7,7 @@ import { CustomMaximizeDirection } from "./maximizeOptionsModal/maximizeOptionsM
 import styles from './window.module.scss';
 import WindowAnimationPlaceholderComponent from "./animationPlaceholder/animationPlaceholder";
 import WindowBorderComponent from "./border/windowBorder";
-import HeaderComponent from "./header/header";
+import WindowHeaderComponent from "./header/header";
 
 export const WINDOW_MIN_HEIGH = 200; // TODO: move into styles component
 export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
@@ -99,7 +99,7 @@ const WindowComponent: FC<{
         >
 
           <div className={styles.centerContent}>
-            <HeaderComponent
+            <WindowHeaderComponent
               focused={options.focused}
               options={windowParams.headerOptions}
               maximized={options.maximized}
