@@ -1,3 +1,3 @@
 export enum WindowMaximize {
-  Full, Side, Height, None
+  Full, Side, Height, Custom, None
 };

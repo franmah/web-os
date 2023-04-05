@@ -18,6 +18,7 @@ const WindowHeaderComponent: FC<WindowHeaderProps> = ({
   moveToCustomMaximizeOptionClick
 }) => {
 
+  console.log(maximized)
   const [headerId] = useState<string>(v4());
 
   const maximizeButtonDivID = MAXIMIZE_DIV_PRE_ID + '_' + headerId;

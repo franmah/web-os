@@ -1,6 +1,7 @@
 import { CustomMaximizeDirection } from "../../../components/system/window/maximizeOptionsModal/maximizeOptionsModal";
 import { WINDOW_STARTING_POSITION_OFFSET_PX } from "../../../constants/system/window-manager/WindowManagerConsts";
 import { DEFAULT_WINDOW_STATE } from "../../../constants/system/window/WindowConsts";
+import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeEnum";
 import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
 import { WindowedProcesses } from "../../../types/system/processes/processes";
 import { WindowManagerState } from "../../../types/system/window-manager/WindowManagerState";
@@ -205,7 +206,8 @@ export const updateWindowOnCustomMaximize = (windowId: string, windows: WindowMa
       process: windows[windowId].process,
       state: { 
         ...windows[windowId].state,
-        ...getWindowStateForCustomMaximize(direction, window.innerWidth, window.innerHeight)
+        ...getWindowStateForCustomMaximize(direction, window.innerWidth, window.innerHeight),
+        maximized: WindowMaximize.Custom
       }
     }
   };
