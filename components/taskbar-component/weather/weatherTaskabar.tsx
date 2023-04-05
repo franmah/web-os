@@ -1,9 +1,10 @@
 import { FC, useEffect, useState } from "react";
-import { getWeatherInformation, Weather } from "../../../services/WeatherService";
+import { getWeatherInformation } from "../../../services/WeatherService";
 import { BiFoodMenu } from 'react-icons/bi';
 import styles from './weather.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
 import Image from 'next/image';
+import { Weather } from "../../../types/taskbar/weather";
 
 const WeatherComponent: FC<{}> = () => {
 

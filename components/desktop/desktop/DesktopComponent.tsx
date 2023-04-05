@@ -13,7 +13,7 @@ import { FOLDER_ICON_PATH } from '../../../constants/FileSystemConsts';
 
 const Desktop: FC = () => {
   const { getDesktop, addFile } = useContext(FileSystemContext);
-  const processContext = useContext(ProcessContext);
+  const  { openProcess } = useContext(ProcessContext);
 
   const handleItemContextMenuClick = (event: MouseEvent) => {
     event.preventDefault();
@@ -24,11 +24,15 @@ const Desktop: FC = () => {
     event.preventDefault();
     event.stopPropagation();
 
-    processContext.openProcess('contextMenu', {
+    openProcess('contextMenu', {
       top: event.clientY,
       left: event.clientX,
       commands
     });
+  };
+
+  const openItemProcess = (item: DesktopItem) => {
+    openProcess('hello');
   };
 
   const handleFileChange = (newItem: DesktopItem) => {
@@ -54,6 +58,7 @@ const Desktop: FC = () => {
           onDesktopContextMenuClick={handleDesktopContextMenuClick}
           onItemContextMenuClick={handleItemContextMenuClick}
           onFileChange={handleFileChange}
+          onItemDoubleClick={openItemProcess}
         />
       </div>
     </Fragment>

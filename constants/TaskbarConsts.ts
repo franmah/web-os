@@ -1,1 +1,1 @@
-export const TASKBAR_HEIGHT = 60;
+export const TASKBAR_HEIGHT = 48;

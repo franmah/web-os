@@ -1,12 +1,12 @@
 import { useState } from "react";
+import { v4 } from "uuid";
 import { ProcessDirectory } from "../System/process/ProcessDirectory";
-import { startingProccesses } from "../System/process/StartingProccesses";
-import { ProcessContextType, Processes } from "../types/system/processes/processes";
+import { Process, ProcessContextType, Processes, WindowedProcess } from "../types/system/processes/processes";
 
-// In its own file because more functions (with logic) will be added (close, open...)
-// Should only be accessed by ProcessContextProvider
-const useProcessContextState = (): ProcessContextType => {
-  const [processes, setProcesses] = useState<Processes>(startingProccesses);
+const _useProcessContextState = (): ProcessContextType => {
+  
+  const [processes, setProcesses] = useState<Processes>({});
+  const [windowIdCount, setWindowIdCount] = useState(0);
 
   const closeProcess = (processId: string) => {
     setProcesses(currentProcesses => {
@@ -16,26 +16,54 @@ const useProcessContextState = (): ProcessContextType => {
           id === processId ? processes : { ...processes, [id]: process }
           , {}
         )
-    })
+    });
   };
 
-  const openProcess = (processName: string, params: any = null) => {
+  const openProcess = (processName: string, params: any = null, windowParams: any = null) => {
     if (!ProcessDirectory[processName]) {
+      console.error(`Process name: ${processName} not found in directory.`);
       return;
     }
 
-    setProcesses(currentProcesses => 
-      ({
+    const processDirectoryEntry = ProcessDirectory[processName];
+
+    const newProcessId =  processDirectoryEntry.isUnique ?
+      processDirectoryEntry.name :
+      v4();
+
+    const finalParams: any = {
+      ...processDirectoryEntry.defaultParams,
+      ...params,
+      processId: newProcessId
+    };
+
+    let newProcess: Process;
+
+    if (processDirectoryEntry.hasWindow) {
+      const finalWindowParams = {
+        ...processDirectoryEntry.windowParams,
+        ...windowParams,
+        windowId: `${windowIdCount}`
+      };
+
+      newProcess = new WindowedProcess(processName,processDirectoryEntry.Component,
+        finalParams, true, processDirectoryEntry.isUnique, newProcessId, finalWindowParams
+      );
+    } else {
+      newProcess = new Process(processName, processDirectoryEntry.Component, finalParams, false, processDirectoryEntry.isUnique, newProcessId);
+    }
+
+    setProcesses(currentProcesses => {
+      return {
         ... currentProcesses,
-        [processName]: {
-          ...ProcessDirectory[processName],
-          params
-        }
-      })
-    )
+        [newProcessId]: newProcess
+      };
+    });
+
+    setWindowIdCount(windowIdCount + 1);
   };
 
   return { processes, openProcess, closeProcess };
-}
+};
 
-export default useProcessContextState;
+export default _useProcessContextState;

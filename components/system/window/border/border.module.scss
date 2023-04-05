@@ -1,0 +1,129 @@
+$border-size: 6px;
+$corner-length: 8px;
+$corner-radius: 8px;
+$border-offset: -4px;
+
+.children {
+  width: 100%;
+  height: 100%;
+
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.topBorderHover:hover { cursor: n-resize; }
+.topLeftHover:hover { cursor: se-resize; }
+.topRightHover:hover { cursor: ne-resize; }
+.bottomHover:hover { cursor: n-resize; }
+.bottomLeftHover:hover { cursor: ne-resize; }
+.bottomRightHover:hover { cursor: se-resize; }
+.leftCenterTopHover:hover { cursor: se-resize; }
+.leftCenterMiddleHover:hover { cursor: e-resize; }
+.leftCenterBottomHover:hover { cursor: ne-resize; }
+.rightCenterTopHover:hover { cursor: ne-resize; }
+.rightCenterMiddleHover:hover { cursor: e-resize; }
+.rightCenterBottomHover:hover { cursor: se-resize; }
+
+.topBorderHeader {
+  position: absolute;
+  top: $border-offset;
+  left: 0px;
+
+  display: flex;
+  width: calc(100% + 2px);
+  height: $border-size;
+  
+  .topBorder {
+    flex: 1;
+  }
+
+  .topLeft, .topRight {
+    width: $corner-length;
+  }
+
+  .topLeft {
+    border-top-left-radius: $corner-radius;
+  }
+
+  .topRight {
+    border-top-right-radius: $corner-radius;
+  }
+}
+
+.centerLeft {
+  position: absolute;
+  top: 0px;
+  left: $border-offset;
+  height: calc(100% + 2px);
+  width: $border-size;
+
+  display: flex;
+  flex-direction: column;
+
+  .leftCenterTop {
+    height: $corner-length;
+    border-top-left-radius: $corner-radius;
+  }
+
+  .leftCenterMiddle {
+    flex: 1;
+  }
+
+  .leftCenterBottom {
+    height: $corner-length;
+    border-bottom-left-radius: $corner-radius;
+  }
+}
+
+.centerRight {
+  position: absolute;
+  top: 0px;
+  left: calc(100% - 2px);
+  height: calc(100%);
+
+  display: flex;
+  flex-direction: column;
+  width: $border-size;
+
+  .rightCenterTop {
+    height:$corner-length;
+    border-top-right-radius: $corner-radius;
+  }
+
+  .rightCenterMiddle {
+    flex: 1;
+  }
+
+  .rightCenterBottom {
+    height: $corner-length;
+    border-bottom-right-radius: $corner-radius;
+  }
+}
+
+.bottomBorder {
+  position: absolute;
+  bottom: $border-offset;
+  left: 0px;
+  
+  display: flex; 
+  width: calc(100% + 2px);
+  height: $border-size;
+
+  .bottom {
+    flex: 1;
+  }
+
+  .bottomLeft, .bottomRight {
+    width: $corner-length;
+  }
+
+  .bottomLeft {
+    border-bottom-left-radius: $corner-radius;
+  }
+
+  .bottomRight {
+    border-bottom-right-radius: $corner-radius;
+  }
+
+}

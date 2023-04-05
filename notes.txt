@@ -1,0 +1,39 @@
+
+
+// TODO: in other
+- Finish looking at react documentation.
+
+- Look at next's documentation
+  
+- Use semantic html tags instead of div wherever possible + USE FRAGMENT wherever possible to reduce nujmber of container divs
+  - https://developer.mozilla.org/en-US/docs/Web/HTML/Element
+  - https://developer.mozilla.org/en-US/docs/Web/HTML/Element
+  - Lists should use <ul><li><ul/> wherever possible (only if they're in a div, not if they're in a Fragment)
+
+- Change to styled components so that variables are not defined multiple times
+  - Fix the z-index madness (if possible)
+  - (update to fit styled components) window border radius size should be a global style and applied to header, hello and window
+  - use consts as much as possible
+      - color for window header text and buttons should be the setMaximizeMenuListeners
+      
+- add tests. Especially for services
+
+- move to webstorm
+
+- Bug: desktop image doesn't load right away. Maybe the background image should be it's own process?
+  - also need a loading screen while starting processes load.
+  The loading animation leaves the screen once everything is loaded.
+
+- Minimize should be done later (needs shortcut bar to work)
+  could be done either hiding window or tell processLoader not to render because it's minimized (add minimize function to useProcessContextState)
+
+
+- Folders on desktop should be like windows (meaning have their own move state)
+
+- Use convention name for event listeners and event listener handlers passed as prop https://react.dev/learn/responding-to-events:
+  - Rename event function by handle... 
+  - when passed as props it should be named onSomething...
+  - rename event to 'e', example: onClick={e => doSomething(e)}. Don't rename it in the function, example: const doSomething(event) => ...
+  - Add e.preventDefault(). This will avoid side effect such as triggering a new render when clicking a page. (make sure to test after doing so)
+
+- look into using classes for services and having indepency injection

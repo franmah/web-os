@@ -11,15 +11,16 @@ import { isEventOriginatedFromWithinTargetIdSubtree } from '../../../services/Ev
 import { DesktopSortOptions, setItemPositions } from '../../../services/DesktopItemPlacementService';
 import { v4 } from 'uuid';
 import { ContextMenuCommandList } from '../../../types/system/contextMenu/contextMenu';
-import DesktopItemComponent from '../item/DesktopItemComponent';
+import DesktopItemComponent, { ItemTestComponentMemo } from '../item/DesktopItemComponent';
 import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxComponent';
 
 const DesktopItemContainerComponent: FC<{
   files: ExplorerFile[],
   onDesktopContextMenuClick: (event: MouseEvent, commands: ContextMenuCommandList) => void,
   onItemContextMenuClick: (event: MouseEvent) => void,
-  onFileChange: (newItem: DesktopItem) => void
-}> = ({ files, onDesktopContextMenuClick, onItemContextMenuClick, onFileChange }) => {
+  onFileChange: (newItem: DesktopItem) => void,
+  onItemDoubleClick: (item: DesktopItem) => void
+}> = ({ files, onDesktopContextMenuClick, onItemContextMenuClick, onFileChange, onItemDoubleClick }) => {
 
   const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
 
@@ -165,8 +166,8 @@ const DesktopItemContainerComponent: FC<{
     });
   }
 
-  const handleItemDoubleClick = (itemId: string) => { 
-    console.log('double click');
+  const handleItemDoubleClick = (item: DesktopItem) => { 
+    onItemDoubleClick(item);
   };
   
   const handleSelectionBoxUpdates = (elements: HTMLElement[], previousElementInBox: HTMLElement[], ctrlKey: boolean) => {
@@ -206,6 +207,11 @@ const DesktopItemContainerComponent: FC<{
             handleItemRenamed={onItemRenamed}
             startRenaming={handleItemRenaming}
           />
+
+          // TODO: replace desktop item component by this: 
+          // <ItemTestComponentMemo 
+          //   props={{ item, onClick: selectItems }}
+          // />
         )
       }
 

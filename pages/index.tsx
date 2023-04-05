@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import ProcessContextProvider from '../contexts/processContext';
 import { ProcessLoaderComponent } from '../components/system/processLoaderComponent';
-import FileSystemContextProvider, { FileSystemContext } from '../contexts/FileSystemContext';
+import FileSystemContextProvider from '../contexts/FileSystemContext';
 
 const Home: NextPage = () => (
   <div>

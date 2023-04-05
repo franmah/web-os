@@ -1,11 +1,31 @@
-import { Fragment, useContext, useEffect } from "react";
+import { FC, Fragment, useContext, useEffect } from "react";
 import { ProcessContext } from "../../contexts/processContext";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../services/EventService";
+import { Processes, WindowedProcess, WindowedProcesses } from "../../types/system/processes/processes";
 import { CONTEXT_MENU_ROOT_ID } from "./contextMenu/ContextMenuRootComponent";
+import { WindowManagerComponent } from "./WindowManager";
+import { startingProccesses } from "../../System/process/StartingProccesses";
 
-export function ProcessLoaderComponent() {
+export const ProcessLoaderComponent: FC<{}> = () => {
 
   const processContext = useContext(ProcessContext);
+
+  const windowedProcesses: WindowedProcesses = {};
+  const nonWindowedProceses: Processes = {};
+
+  // Load starting processes
+  useEffect(() => {
+    for (let processName in startingProccesses) {
+      processContext.openProcess(processName);
+    }
+  }, []);
+
+  Object.entries(processContext.processes).forEach(([id, process]) => {
+    if (process instanceof WindowedProcess)
+      windowedProcesses[id] = process;
+    else
+      nonWindowedProceses[id] = process;
+  });
 
   const closeContextMenu = (event: MouseEvent) => {
     const isContextProcessOpen = !!processContext.processes['contextMenu'];
@@ -32,10 +52,15 @@ export function ProcessLoaderComponent() {
     <Fragment>
       {
         Object
-          .entries(processContext.processes)
-          .map(([id, { Component, params }]) => 
-            <Component key={id} params={params}></Component>
+          .entries(nonWindowedProceses)
+          .map(([processId, { Component, params }]) =>
+            <Component key={processId} params={params}></Component>
           )
+      }
+      {
+        <WindowManagerComponent 
+          processes={windowedProcesses}
+        />
       }
     </Fragment>
   );
