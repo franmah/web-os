@@ -15,22 +15,6 @@ $unfocused-color: rgb(121, 118, 118);
   height: 25px;
   display: flex;
   align-items: center;
-  
-  .icon {
-    margin-right: 4px;
-  }
-
-  .textContainer {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    min-width: 50px;
-    font-size: small;
-    overflow: hidden;
-    white-space: nowrap;
-  }
 
   .maximizeContainer, .minimizeIcon, .closeIcon {
     height: 100%;
@@ -56,11 +40,7 @@ $unfocused-color: rgb(121, 118, 118);
 }
 
 .windowUnfocusedHeader {
-
-  .textContainer {
-    color: $unfocused-color;
-  }
-
+  
   .maximizeContainer, .minimizeIcon, .closeIcon {
     color: $unfocused-color;
 

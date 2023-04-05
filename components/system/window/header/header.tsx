@@ -7,6 +7,7 @@ import { v4 } from 'uuid';
 import { WindowHeaderProps } from '../../../../types/system/window/WindowHeaderProps';
 import { CONTROL_ICON_SIZE, MAXIMIZE_DIV_ID } from '../../../../constants/system/window/WindowHeaderConts';
 import { HeaderMaximizeButtonComponent } from '../headerMaximizeButton/headerMaximizeButtonComponent';
+import { WindowHeaderInformationComponent } from '../headerInformation/headerInformation';
 
 const WindowHeaderComponent: FC<WindowHeaderProps> = ({
   focused,
@@ -24,7 +25,6 @@ const WindowHeaderComponent: FC<WindowHeaderProps> = ({
     console.log('minimize');
   };
 
-
   const getClass = () => {
     return `
       ${styles.header} 
@@ -37,25 +37,13 @@ const WindowHeaderComponent: FC<WindowHeaderProps> = ({
     <header
       className={getClass()}
     >
-      {
-        options?.icon &&
-          <Image
-            className={styles.icon}
-            src={options?.icon} 
-            alt={'window name'} 
-            width={24} 
-            height={24}
-          />
-      }
+      <WindowHeaderInformationComponent
+        options={options}
+        focused={focused}
+        startMovingWindow={startMovingWindow}
+        maximizeWindow={maximizeWindow}
+      />
 
-      <div 
-        className={styles.textContainer}
-        onMouseDown={startMovingWindow}
-        onDoubleClick={maximizeWindow}
-      >
-        { options?.text }
-      </div>
-         
       <div 
         className={styles.minimizeIcon}
         onClick={onMinimize}
@@ -83,7 +71,7 @@ const WindowHeaderComponent: FC<WindowHeaderProps> = ({
       </div>
 
     </header>
-  )
+  );
 };
 
 export default WindowHeaderComponent;

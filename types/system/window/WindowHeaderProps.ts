@@ -4,7 +4,7 @@ import { WindowHeaderOptions } from "./WindowHeaderOptions";
 
 export type WindowHeaderProps = {
   focused: boolean,
-  options: WindowHeaderOptions | undefined,
+  options: WindowHeaderOptions,
   maximized: WindowMaximize,
   startMovingWindow: (event: any) => void,
   maximizeWindow: (event: any) => void,
