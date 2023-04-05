@@ -69,7 +69,7 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
     if (noWindowComponentClicked) {
       setWindows(currentWindows => {
         Object.values(currentWindows)
-          .forEach(w => w.state.selected = false);
+          .forEach(w => w.state.focused = false);
         return { ...currentWindows };
       });
     }
@@ -86,7 +86,7 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
 
       for (const update of updatedZindexByWindowId) {
         const windowId = update.windowId;
-        updatedWindows[windowId].state.selected = windowId === clickedWindowId;
+        updatedWindows[windowId].state.focused = windowId === clickedWindowId;
         updatedWindows[windowId].state.zIndex = update.zIndex;
       }
 

@@ -11,7 +11,7 @@ import { WindowHeaderProps } from '../../../../types/system/window/WindowHeaderP
 import { CONTROL_ICON_SIZE, MAXIMIZE_DIV_ID } from '../../../../constants/system/window/WindowHeaderConts';
 
 const HeaderComponent: FC<WindowHeaderProps> = ({
-  selected,
+  focused,
   options, 
   maximized,
   startMovingWindow,
@@ -48,7 +48,7 @@ const HeaderComponent: FC<WindowHeaderProps> = ({
   const getClass = () => {
     return `
       ${styles.header} 
-      ${!selected ? styles.windowUnselectedHeader : ''} 
+      ${!focused ? styles.windowUnfocusedHeader : ''} 
       ${globalStyles.unselectableText}
     `;
   };

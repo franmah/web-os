@@ -17,6 +17,6 @@ export type WindowState = {
   previousHeight: number,
   maximized: WindowMaximize,
   showMaximizePlacehodler: MaximizePlaceholderDirection,
-  selected: boolean,
+  focused: boolean,
   zIndex: number
 };

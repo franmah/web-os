@@ -1,12 +1,6 @@
 
-
-- BUG: open two windows. Click the first one. It should show up in front. Click on the desktop, the other window will show in front
-  - (check windows 11) maximize placeholders should show behind window but in front of other windows
-    - Idea: instead of increasing zIndex by 1 for each window, do it by an offset (like 10), so that each window can set different z-index in its children
-
 - change 'selected' to 'focused'
 - when window is not focused, header text should go gray (should work now that memo has been removed)
-- double clicking resize top should height maximize
 
 - When maximizing on the sides, other window components should show on the other side and be clickable.
 

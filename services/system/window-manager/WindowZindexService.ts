@@ -22,20 +22,20 @@ export const getStartingZindex = (numWindowedProcesses: number): number => {
 export const updateZindexesOnWindowClicked = (indexes: WindowManagerZindex[], clickedWindowId: string): WindowManagerZindex[] => {
   const sortedIndexes = [...indexes].sort((w1, w2) => w1.zIndex - w2.zIndex);
   
-  const selectedWindowZindex = sortedIndexes.find(index => index.windowId === clickedWindowId);
-  if (!selectedWindowZindex || !selectedWindowZindex.zIndex) {
+  const focusedWindowZindex = sortedIndexes.find(index => index.windowId === clickedWindowId);
+  if (!focusedWindowZindex || !focusedWindowZindex.zIndex) {
     console.error(`Error updating windows Zindexes: window ${clickedWindowId} not found.`);
     return indexes;
   }
 
-  // Update every index that is higher than the selected's window old index to be lower.
+  // Update every index that is higher than the focus' window old index to be lower.
   sortedIndexes.forEach(i => {
-    i.zIndex = i.zIndex > selectedWindowZindex.zIndex ?
+    i.zIndex = i.zIndex > focusedWindowZindex.zIndex ?
       i.zIndex - NEW_WINDOW_COMPONENT_ZINDEX_OFFSET :
       i.zIndex;
   });
 
-  selectedWindowZindex.zIndex = STARTING_WINDOW_COMPONENT_ZINDEX + (indexes.length - 1) * NEW_WINDOW_COMPONENT_ZINDEX_OFFSET;
+  focusedWindowZindex.zIndex = STARTING_WINDOW_COMPONENT_ZINDEX + (indexes.length - 1) * NEW_WINDOW_COMPONENT_ZINDEX_OFFSET;
   
   return sortedIndexes;
 };

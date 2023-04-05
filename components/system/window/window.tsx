@@ -57,7 +57,6 @@ const WindowComponent: FC<{
 
   const onMouseMove = (event: MouseEvent) => {
     hanldeMouseMove(windowParams.windowId, event);
-    
   };
 
   const onMouseUp = (event: MouseEvent) => {
@@ -65,7 +64,7 @@ const WindowComponent: FC<{
   };
 
   const getClass = () => {
-    return `${styles.window} ${ options.selected ? styles.windowSelected : styles.windowUnselected}`;
+    return `${styles.window} ${ options.focused ? styles.windowFocused : styles.windowUnfocused}`;
   };
 
   return (
@@ -101,7 +100,7 @@ const WindowComponent: FC<{
 
           <div className={styles.centerContent}>
             <HeaderComponent
-              selected={options.selected}
+              focused={options.focused}
               options={windowParams.headerOptions}
               maximized={options.maximized}
               startMovingWindow={(e) => handleStartMoving(windowParams.windowId, e)}
@@ -109,6 +108,12 @@ const WindowComponent: FC<{
               onClose={handleCloseWindow}
               moveToCustomMaximizeOptionClick={(direction) => handleMoveToCustomMaximizeOptionClick(windowParams.windowId, direction)}
             />
+
+            {/* TODO: remove */}
+            <div style={{ height: 20}}>
+              selected: { `${options.focused} ` }
+              zIndex: { `${options.zIndex} `}
+            </div>
 
             { children }
             

@@ -1,4 +1,4 @@
-$unselected-color: rgb(121, 118, 118);
+$unfocused-color: rgb(121, 118, 118);
 
 .maximizeOptionModal {
   position: absolute;
@@ -63,14 +63,14 @@ $unselected-color: rgb(121, 118, 118);
   }
 }
 
-.windowUnselectedHeader {
+.windowUnfocusedHeader {
 
   .text {
-    color: $unselected-color;
+    color: $unfocused-color;
   }
 
   .maximizeIcon, .minimizeIcon, .closeIcon {
-    color: $unselected-color;
+    color: $unfocused-color;
 
     &:hover {
       color: black;

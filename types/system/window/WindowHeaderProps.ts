@@ -3,7 +3,7 @@ import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeE
 import { WindowHeaderOptions } from "./WindowHeaderOptions";
 
 export type WindowHeaderProps = {
-  selected: boolean,
+  focused: boolean,
   options: WindowHeaderOptions | undefined,
   maximized: WindowMaximize,
   startMovingWindow: (event: any) => void,
