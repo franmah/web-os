@@ -110,12 +110,6 @@ const WindowComponent: FC<{
               moveToCustomMaximizeOptionClick={(direction) => handleMoveToCustomMaximizeOptionClick(windowParams.windowId, direction)}
             />
 
-            {/* TODO: remove */}
-            <div style={{ height: 20}}>
-              selected: { `${options.selected} ` }
-              zIndex: { `${options.zIndex} `}
-            </div>
-
             { children }
             
           </div>
