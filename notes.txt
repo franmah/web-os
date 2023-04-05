@@ -1,9 +1,6 @@
-
-- when window is not focused, header text should go gray (should work now that memo has been removed)
 - header component is too complicated
 - When maximizing on the sides, other window components should show on the other side and be clickable.
 
-- use memo on window.tsx. I know it caused bugs in the past, but since it has every state there shouldn't be any problem
 
 // Final steps
 - test everything

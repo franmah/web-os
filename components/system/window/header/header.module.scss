@@ -46,14 +46,6 @@ $unfocused-color: rgb(121, 118, 118);
     }
   }
 
-  .maximizeIcon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-  }
-
   .closeIcon {
     border-top-right-radius: 8px;
   }
@@ -69,7 +61,7 @@ $unfocused-color: rgb(121, 118, 118);
     color: $unfocused-color;
   }
 
-  .maximizeIcon, .minimizeIcon, .closeIcon {
+  .maximizeContainer, .minimizeIcon, .closeIcon {
     color: $unfocused-color;
 
     &:hover {
