@@ -1,15 +1,13 @@
-- header component is too complicated
-- When maximizing on the sides, other window components should show on the other side and be clickable.
+- refactor (window.tsx and windowManager.tsx)
+    - what about having a service for each component that would be in charge of updating the state (receive the setState function as argument)
+    - and multiple other services for the logic
+    // Would make it clear what is happening in the code instead of seeing setState(.....) and having to read it to know what's happening.
 
 
 // Final steps
 - test everything
 - run npm outdate
 - test again
-- refactor (window.tsx and windowManager.tsx)
-    - what about having a service for each component that would be in charge of updating the state (receive the setState function as argument)
-    - and multiple other services for the logic
-    // Would make it clear what is happening in the code instead of seeing setState(.....) and having to read it to know what's happening.
 
 // TODO: OTHER
 

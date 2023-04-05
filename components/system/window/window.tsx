@@ -21,7 +21,7 @@ const WindowComponent: FC<{
   handleStartMoving : (windowId: string, event: MouseEvent) => void,
   handleStartResizing : (windowId: string, event: MouseEvent, direction: WindowResizeDirection) => void,
   handleMouseUp : (windowId: string, event: MouseEvent) => void,
-  handleMaximize : (windowId: string, event: MouseEvent) => void,
+  handleMaximize : (windowId: string) => void,
   handleMoveToCustomMaximizeOptionClick : (windowId: string, direction: CustomMaximizeDirection) => void,
   handleHeightMaximize: (windowId: string) => void,
   children: React.ReactNode
@@ -104,7 +104,7 @@ const WindowComponent: FC<{
               options={windowParams.headerOptions}
               maximized={options.maximized}
               startMovingWindow={(e) => handleStartMoving(windowParams.windowId, e)}
-              maximizeWindow={(e) => handleMaximize(windowParams.windowId, e)}
+              maximizeWindow={() => handleMaximize(windowParams.windowId)}
               onClose={handleCloseWindow}
               moveToCustomMaximizeOptionClick={(direction) => handleMoveToCustomMaximizeOptionClick(windowParams.windowId, direction)}
             />

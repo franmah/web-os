@@ -1,18 +1,12 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { ProcessContext } from "../../contexts/processContext";
-import { WindowManagerZindex, updateWindowStatesOnNewProcess } from "../../services/system/window-manager/WindowManagerService";
+import { handleZindexesUpdateOnCloseWindow, setWindowAsMoving, setWindowAsResizing, updateWindowOnCustomMaximize, updateWindowOnHeightMaximize, updateWindowStatesOnNewProcess, updateWindowsOnMaximize, updateWindowsOnMouseDown, updateWindowsOnMouseMove, updateWindowsOnMouseUp } from "../../services/system/window-manager/WindowManagerService";
 import { WindowedProcesses } from "../../types/system/processes/processes";
 import { WindowManagerState } from "../../types/system/window-manager/WindowManagerState";
 import WindowComponent from "./window/window";
 import { WindowResizeDirection } from "../../constants/system/window/WindowResizeDirectionEnum";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../services/EventService";
-import { moveWindow } from "../../services/system/window/MoveWindowService";
-import { resizeWindow } from "../../services/system/window/WindowResizeService";
-import { stopMovingAndResizingWindow } from "../../services/system/window/WindowService";
-import { heightMaximizeWindow, maximizeOrRestoreWindow } from "../../services/system/window/MaximizeRestoreWindowService";
-import { getWindowOptionForCustomMaximize } from "../../services/system/window/WindowCustomMaximizeOptionService.ts";
 import { CustomMaximizeDirection } from "./window/maximizeOptionsModal/maximizeOptionsModal";
-import { updateZindexesOnWindowClicked, updateZindexesOnWindowCloses } from "../../services/system/window-manager/WindowZindexService";
 
 export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ processes }) => {
 
@@ -40,23 +34,12 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
   const closeWindow = (windowId: string) => {
     const processId = windows[windowId]?.process?.processId;
 
-    // Update zIndexes of other windows
-    setWindows(currentWindows => {
-      const currentZindexes: WindowManagerZindex[] = Object
-        .entries(windows)
-        .map(([windowId, { state }]) => ({ windowId, zIndex: state.zIndex }));
-      const updatedZindexes = updateZindexesOnWindowCloses(currentZindexes, windowId);
-
-      for (const updatedZindex of updatedZindexes) {
-        windows[updatedZindex.windowId].state.zIndex = updatedZindex.zIndex;
-      }
-
-      return { ...currentWindows };
-    });
-
     if (!processId) {
-      console.warn(`Error trying to close window, processId not found (windowId: ${windowId})`)
+      console.warn(`Error trying to close window, processId not found (windowId: ${windowId})`);
     } else {
+      setWindows(currentWindows => {
+        return handleZindexesUpdateOnCloseWindow(windowId, currentWindows);
+      });
       closeProcess(processId);
     }
   };
@@ -76,143 +59,51 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
   };
 
   const handleWindowMouseDown = (clickedWindowId: string) => {
-    setWindows(windows => {
-      const updatedWindows = { ...windows };
-
-      const currentZindexes: WindowManagerZindex[] = Object
-        .entries(windows)
-        .map(([windowId, { state }]) => ({ windowId, zIndex: state.zIndex }));
-      const updatedZindexByWindowId = updateZindexesOnWindowClicked(currentZindexes, clickedWindowId);
-
-      for (const update of updatedZindexByWindowId) {
-        const windowId = update.windowId;
-        updatedWindows[windowId].state.focused = windowId === clickedWindowId;
-        updatedWindows[windowId].state.zIndex = update.zIndex;
-      }
-
-      return { ...updatedWindows };
+    setWindows(currentWindows => {
+      return updateWindowsOnMouseDown(clickedWindowId, currentWindows);
     });
   };
 
   const hanldeMouseMove = (windowId: string, event: MouseEvent) => {
-    setWindows(windows => {
-      const windowState = windows[windowId];
-
-      if (!windowState) {
-        console.error(`Error handling mouse move: Window ${windowId} not in WindowStates`);
-        return windows;
-      }
-
-      if (windowState.state.moving) {
-        return {
-          ...windows,
-          [windowId]: {
-            process: windows[windowId].process,
-            state: { 
-              ...windows[windowId].state,
-              ...moveWindow(event, windows[windowId].state)
-            }
-          }
-        };
-      } else if (windowState.state.resizeDirection !== WindowResizeDirection.None) {
-        return {
-          ...windows,
-          [windowId]: {
-            process: windows[windowId].process,
-            state: { 
-              ...windows[windowId].state,
-              ...resizeWindow(event.clientX, event.clientY, windows[windowId].state)
-            }
-          }
-        };
-      }
-
-      return windows;
+    setWindows(currentWindows => {
+      return updateWindowsOnMouseMove(windowId, currentWindows, event);
     });
   };
 
   const handleStartMoving = (windowId: string, event: MouseEvent) => {
-    setWindows(windows => ({
-      ...windows,
-      [windowId]: {
-        process: windows[windowId].process,
-        state: { 
-          ...windows[windowId].state,
-          moving: true,
-          previousClientX: event.clientX,
-          previousClientY: event.clientY
-        }
-      }
-    }));
+    setWindows(currentWindows => {
+      return setWindowAsMoving(windowId, currentWindows, event);
+    });
   };
 
   const handleStartResizing = (windowId: string, event: MouseEvent, direction: WindowResizeDirection) => {
-    setWindows(windows => ({
-      ...windows,
-      [windowId]: {
-        process: windows[windowId].process,
-        state: { 
-          ...windows[windowId].state,
-          previousClientX: event.clientX,
-          previousClientY: event.clientY,
-          resizeDirection: direction
-        }
-      }
-    }));
+    setWindows(currentWindows => {
+      return setWindowAsResizing(windowId, currentWindows, event, direction);
+    });
   };
 
   const handleMouseUp = (windowId: string, event: MouseEvent) => {
-    setWindows(windows => ({
-      ...windows,
-      [windowId]: {
-        process: windows[windowId].process,
-        state: { 
-          ...windows[windowId].state,
-          ...stopMovingAndResizingWindow(event.clientX, event.clientY, windows[windowId].state)
-        }
-      }
-    }));
+    setWindows(currentWindows => {
+      return updateWindowsOnMouseUp(windowId, currentWindows, event);
+    });
   };
 
-  const handleMaximize = (windowId: string, event: MouseEvent) => {
-    setWindows(windows => ({
-      ...windows,
-      [windowId]: {
-        process: windows[windowId].process,
-        state: { 
-          ...windows[windowId].state,
-          ...maximizeOrRestoreWindow(windows[windowId].state)
-        }
-      }
-    }));
+  const handleMaximize = (windowId: string) => {
+    setWindows(currentWindows => {
+      return updateWindowsOnMaximize(windowId, currentWindows);
+    });
   };
 
   const handleHeightMaximize = (windowId: string) => {
-    setWindows(window => {
-      return {
-        ...windows,
-        [windowId]: {
-          process: windows[windowId].process,
-          state: {
-            ...windows[windowId].state,
-            ...heightMaximizeWindow(window[windowId].state)
-          }
-        }
-      };
+    setWindows(currentWindows => {
+      return updateWindowOnHeightMaximize(windowId, currentWindows);
     });
   }
 
   const handleMoveToCustomMaximizeOptionClick = (windowId: string, direction: CustomMaximizeDirection) => {
-    setWindows(windows => ({
-      ...windows,
-      [windowId]: {
-        process: windows[windowId].process,
-        state: { 
-          ...windows[windowId].state,
-          ...getWindowOptionForCustomMaximize(direction, window.innerWidth, window.innerHeight)
-        }
-      }
-    }));
+    setWindows(currentWindows => {
+      return updateWindowOnCustomMaximize(windowId, currentWindows, direction);
+    });
   };
 
   return (
