@@ -1,19 +1,14 @@
 
-// Final steps
-- test everything
-- run npm outdate
-- test again
 
-// TODO: OTHER
+// TODO: in other
+- Finish looking at react documentation.
 
-- Check typescript 5.0 and run npm update
-
-- Look at next's documentation (like react)
+- Look at next's documentation
   
 - Use semantic html tags instead of div wherever possible + USE FRAGMENT wherever possible to reduce nujmber of container divs
   - https://developer.mozilla.org/en-US/docs/Web/HTML/Element
   - https://developer.mozilla.org/en-US/docs/Web/HTML/Element
-  - Lists should use <ul><li><ul/>
+  - Lists should use <ul><li><ul/> wherever possible (only if they're in a div, not if they're in a Fragment)
 
 - Change to styled components so that variables are not defined multiple times
   - Fix the z-index madness (if possible)
