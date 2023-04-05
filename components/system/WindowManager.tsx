@@ -9,7 +9,7 @@ import { isEventOriginatedFromWithinTargetIdSubtree } from "../../services/Event
 import { moveWindow } from "../../services/system/window/MoveWindowService";
 import { resizeWindow } from "../../services/system/window/WindowResizeService";
 import { stopMovingAndResizingWindow } from "../../services/system/window/WindowService";
-import { maximizeOrRestoreWindow } from "../../services/system/window/MaximizeRestoreWindowService";
+import { heightMaximizeWindow, maximizeOrRestoreWindow } from "../../services/system/window/MaximizeRestoreWindowService";
 import { getWindowOptionForCustomMaximize } from "../../services/system/window/WindowCustomMaximizeOptionService.ts";
 import { CustomMaximizeDirection } from "./window/maximizeOptionsModal/maximizeOptionsModal";
 import { updateZindexesOnWindowClicked, updateZindexesOnWindowCloses } from "../../services/system/window-manager/WindowZindexService";
@@ -182,6 +182,21 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
     }));
   };
 
+  const handleHeightMaximize = (windowId: string) => {
+    setWindows(window => {
+      return {
+        ...windows,
+        [windowId]: {
+          process: windows[windowId].process,
+          state: {
+            ...windows[windowId].state,
+            ...heightMaximizeWindow(window[windowId].state)
+          }
+        }
+      };
+    });
+  }
+
   const handleMoveToCustomMaximizeOptionClick = (windowId: string, direction: CustomMaximizeDirection) => {
     setWindows(windows => ({
       ...windows,
@@ -213,6 +228,7 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
                 handleMouseUp={handleMouseUp}
                 handleMaximize={handleMaximize}
                 handleMoveToCustomMaximizeOptionClick={handleMoveToCustomMaximizeOptionClick}
+                handleHeightMaximize={handleHeightMaximize}
               >
                 <process.Component 
                   params={process.params}

@@ -1,4 +1,4 @@
-import { FC, Fragment, memo, useEffect } from "react";
+import { FC, Fragment, useEffect } from "react";
 import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeEnum";
 import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
 import { WindowParams } from "../../../types/system/window/WindowProps";
@@ -22,7 +22,8 @@ const WindowComponent: FC<{
   handleStartResizing : (windowId: string, event: MouseEvent, direction: WindowResizeDirection) => void,
   handleMouseUp : (windowId: string, event: MouseEvent) => void,
   handleMaximize : (windowId: string, event: MouseEvent) => void,
-  handleMoveToCustomMaximizeOptionClick : (windowId: string, direction: CustomMaximizeDirection) => void, 
+  handleMoveToCustomMaximizeOptionClick : (windowId: string, direction: CustomMaximizeDirection) => void,
+  handleHeightMaximize: (windowId: string) => void,
   children: React.ReactNode
 }> = ({
   windowParams,
@@ -35,6 +36,7 @@ const WindowComponent: FC<{
   handleMouseUp,
   handleMaximize,
   handleMoveToCustomMaximizeOptionClick,
+  handleHeightMaximize,
   children
 }) => {
 
@@ -94,7 +96,7 @@ const WindowComponent: FC<{
           allowResize={options.maximized !== WindowMaximize.Full && !options.moving}
           isResizing={options.resizeDirection !== WindowResizeDirection.None}
           onBordersMouseDown={(e, direction) => handleStartResizing(windowParams.windowId, e, direction)}
-          onTopResizeDoubleClick={(e) => handleMaximize(windowParams.windowId, e)}
+          onTopResizeDoubleClick={() => handleHeightMaximize(windowParams.windowId)}
         >
 
           <div className={styles.centerContent}>

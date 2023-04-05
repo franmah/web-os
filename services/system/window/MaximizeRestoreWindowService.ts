@@ -33,3 +33,12 @@ export const maximizeOrRestoreWindow = (options: WindowState): WindowState => {
     maximized: options.maximized === WindowMaximize.Full ? WindowMaximize.None : WindowMaximize.Full,
   }
 };
+
+export const heightMaximizeWindow = (state: WindowState): WindowState => {
+  return {
+    ...state,
+    top: 0,
+    height: window.innerHeight - TASKBAR_HEIGHT,
+    maximized: WindowMaximize.Height,
+  }
+};
