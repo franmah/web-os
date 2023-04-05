@@ -98,6 +98,11 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
     setWindows(windows => {
       const windowState = windows[windowId];
 
+      if (!windowState) {
+        console.error(`Error handling mouse move: Window ${windowId} not in WindowStates`);
+        return windows;
+      }
+
       if (windowState.state.moving) {
         return {
           ...windows,
