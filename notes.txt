@@ -1,7 +1,6 @@
 
-- change 'selected' to 'focused'
 - when window is not focused, header text should go gray (should work now that memo has been removed)
-
+- header component is too complicated
 - When maximizing on the sides, other window components should show on the other side and be clickable.
 
 - use memo on window.tsx. I know it caused bugs in the past, but since it has every state there shouldn't be any problem
@@ -20,17 +19,19 @@
 - Check typescript 5.0 and run npm update
 
 - Look at next's documentation (like react)
-
-- add tests. Especially for services
   
-- Change to styled components so that variables are not defined multiple times
-  - Fix the z-index madness
-  - (update to fit styled components) window border radius size should be a global style and applied to header, hello and window
-
 - Use semantic html tags instead of div wherever possible + USE FRAGMENT wherever possible to reduce nujmber of container divs
   - https://developer.mozilla.org/en-US/docs/Web/HTML/Element
   - https://developer.mozilla.org/en-US/docs/Web/HTML/Element
   - Lists should use <ul><li><ul/>
+
+- Change to styled components so that variables are not defined multiple times
+  - Fix the z-index madness (if possible)
+  - (update to fit styled components) window border radius size should be a global style and applied to header, hello and window
+  - use consts as much as possible
+      - color for window header text and buttons should be the setMaximizeMenuListeners
+      
+- add tests. Especially for services
 
 - move to webstorm
 
