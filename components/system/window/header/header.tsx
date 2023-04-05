@@ -1,11 +1,10 @@
-import Image from 'next/image';
 import { FC, useState } from "react";
 import styles from './header.module.scss';
 import {VscChromeMinimize, VscClose } from 'react-icons/vsc';
 import globalStyles from '../../../../styles/global.module.scss';
 import { v4 } from 'uuid';
 import { WindowHeaderProps } from '../../../../types/system/window/WindowHeaderProps';
-import { CONTROL_ICON_SIZE, MAXIMIZE_DIV_ID } from '../../../../constants/system/window/WindowHeaderConts';
+import { CONTROL_ICON_SIZE, MAXIMIZE_DIV_PRE_ID } from '../../../../constants/system/window/WindowHeaderConts';
 import { HeaderMaximizeButtonComponent } from '../headerMaximizeButton/headerMaximizeButtonComponent';
 import { WindowHeaderInformationComponent } from '../headerInformation/headerInformation';
 
@@ -20,8 +19,10 @@ const WindowHeaderComponent: FC<WindowHeaderProps> = ({
 }) => {
 
   const [headerId] = useState<string>(v4());
+
+  const maximizeButtonDivID = MAXIMIZE_DIV_PRE_ID + '_' + headerId;
   
-  const onMinimize = (event: any) => {
+  const onMinimize = () => {
     console.log('minimize');
   };
 
@@ -51,13 +52,14 @@ const WindowHeaderComponent: FC<WindowHeaderProps> = ({
         <VscChromeMinimize size={CONTROL_ICON_SIZE}/>
       </div>
 
+      {/* MAXIMIZE ICON BUTTON */}
       <div 
         className={styles.maximizeContainer}
-        id={MAXIMIZE_DIV_ID + '_' + headerId}
+        id={maximizeButtonDivID}
       >
         <HeaderMaximizeButtonComponent
           maximized={maximized}
-          maximizeButtonHtmlId={MAXIMIZE_DIV_ID + '_' + headerId}
+          maximizeButtonHtmlId={maximizeButtonDivID}
           moveToCustomMaximizeOptionClick={moveToCustomMaximizeOptionClick}
           maximizeWindow={maximizeWindow}   
         />

@@ -2,7 +2,7 @@ import { CustomMaximizeDirection } from "../../../components/system/window/maxim
 import { TASKBAR_HEIGHT } from "../../../constants/TaskbarConsts";
 import { WindowState } from "../../../types/system/window/WindowState";
 
-export const getWindowOptionForCustomMaximize = (direction: CustomMaximizeDirection,
+export const getWindowStateForCustomMaximize = (direction: CustomMaximizeDirection,
 windowWidth: number, windowHeight: number): Partial<WindowState> => {
   switch (direction) {
     case CustomMaximizeDirection.Left: return left(windowWidth, windowHeight);

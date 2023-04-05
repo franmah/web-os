@@ -7,11 +7,10 @@ import { WindowManagerState } from "../../../types/system/window-manager/WindowM
 import { WindowState } from "../../../types/system/window/WindowState";
 import { heightMaximizeWindow, maximizeOrRestoreWindow } from "../window/MaximizeRestoreWindowService";
 import { moveWindow } from "../window/MoveWindowService";
-import { getWindowOptionForCustomMaximize } from "../window/WindowCustomMaximizeOptionService.ts";
+import { getWindowStateForCustomMaximize } from "../window/WindowCustomMaximizeOptionService.ts";
 import { resizeWindow } from "../window/WindowResizeService";
 import { stopMovingAndResizingWindow } from "../window/WindowService";
 import { getStartingZindex, updateZindexesOnWindowClicked, updateZindexesOnWindowCloses } from "./WindowZindexService";
-
 
 export const updateWindowStatesOnNewProcess = (processes: WindowedProcesses, currentStates: WindowManagerState): WindowManagerState => {
 
@@ -206,7 +205,7 @@ export const updateWindowOnCustomMaximize = (windowId: string, windows: WindowMa
       process: windows[windowId].process,
       state: { 
         ...windows[windowId].state,
-        ...getWindowOptionForCustomMaximize(direction, window.innerWidth, window.innerHeight)
+        ...getWindowStateForCustomMaximize(direction, window.innerWidth, window.innerHeight)
       }
     }
   };

@@ -14,7 +14,7 @@ export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
 
 const WindowComponent: FC<{
   windowParams: WindowParams,
-  options: WindowState,
+  state: WindowState,
   closeWindow: (windowId: string) => void,
   handleWindowMouseDown : (windowId: string) => void,
   hanldeMouseMove : (windowId: string, event: MouseEvent) => void,
@@ -27,7 +27,7 @@ const WindowComponent: FC<{
   children: React.ReactNode
 }> = ({
   windowParams,
-  options,
+  state,
   closeWindow,
   handleWindowMouseDown,
   hanldeMouseMove,
@@ -64,18 +64,18 @@ const WindowComponent: FC<{
   };
 
   const getClass = () => {
-    return `${styles.window} ${ options.focused ? styles.windowFocused : styles.windowUnfocused}`;
+    return `${styles.window} ${ state.focused ? styles.windowFocused : styles.windowUnfocused}`;
   };
 
   return (
     <Fragment>
       <WindowAnimationPlaceholderComponent
-        placeholderDirection={options.showMaximizePlacehodler}
-        top={options.top}
-        left={options.left}
-        width={options.width}
-        height={options.height}
-        zIndex={options.zIndex}
+        placeholderDirection={state.showMaximizePlacehodler}
+        top={state.top}
+        left={state.left}
+        width={state.width}
+        height={state.height}
+        zIndex={state.zIndex}
       />
 
       <div
@@ -83,26 +83,26 @@ const WindowComponent: FC<{
         className={getClass()}
         onMouseDown={() => handleWindowMouseDown(windowParams.windowId)}
         style={{
-          top: options.top,
-          left: options.left,
-          width: `${options.width}px`,
-          height: `${options.height}px`,
-          zIndex: options.zIndex
+          top: state.top,
+          left: state.left,
+          width: `${state.width}px`,
+          height: `${state.height}px`,
+          zIndex: state.zIndex
         }}
       >
 
         <WindowBorderComponent
-          allowResize={options.maximized !== WindowMaximize.Full && !options.moving}
-          isResizing={options.resizeDirection !== WindowResizeDirection.None}
+          allowResize={state.maximized !== WindowMaximize.Full && !state.moving}
+          isResizing={state.resizeDirection !== WindowResizeDirection.None}
           onBordersMouseDown={(e, direction) => handleStartResizing(windowParams.windowId, e, direction)}
           onTopResizeDoubleClick={() => handleHeightMaximize(windowParams.windowId)}
         >
 
           <div className={styles.centerContent}>
             <WindowHeaderComponent
-              focused={options.focused}
+              focused={state.focused}
               options={windowParams.headerOptions}
-              maximized={options.maximized}
+              maximized={state.maximized}
               startMovingWindow={(e) => handleStartMoving(windowParams.windowId, e)}
               maximizeWindow={() => handleMaximize(windowParams.windowId)}
               onClose={handleCloseWindow}
@@ -111,8 +111,8 @@ const WindowComponent: FC<{
 
             {/* TODO: remove */}
             <div style={{ height: 20}}>
-              selected: { `${options.focused} ` }
-              zIndex: { `${options.zIndex} `}
+              selected: { `${state.focused} ` }
+              zIndex: { `${state.zIndex} `}
             </div>
 
             { children }

@@ -115,7 +115,7 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
               <WindowComponent
                 key={windowId}
                 windowParams={process.windowParams}
-                options={state}
+                state={state}
                 closeWindow={closeWindow}
                 handleWindowMouseDown={handleWindowMouseDown}
                 hanldeMouseMove={hanldeMouseMove}
