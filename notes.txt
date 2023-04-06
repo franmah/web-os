@@ -1,13 +1,11 @@
-
+- Move unfocused text color in StyledHEaderInformationH1 to a const file.
+  - Create a general theme file that has everything.
 
 // TODO: in other
+- BUG: when a new window open, other windows should be unfocused
 - Finish looking at react documentation.
 
 - Look at next's documentation
-  
-- Use semantic html tags instead of div wherever possible + USE FRAGMENT wherever possible to reduce nujmber of container divs
-  - https://developer.mozilla.org/en-US/docs/Web/HTML/Element
-  - Lists should use <ul><li><ul/> wherever possible (only if they're in a div, not if they're in a Fragment)
 
 - Change to styled components so that variables are not defined multiple times
   - Fix the z-index madness (if possible)
@@ -37,3 +35,25 @@
   - Add e.preventDefault(). This will avoid side effect such as triggering a new render when clicking a page. (make sure to test after doing so)
 
 - look into using classes for services and having indepency injection
+
+///////////////      MVP      ///////////////
+
+- Apps:
+  - Explorer app (with files)
+  - Youtube player (accept a link and then play a video)
+  - Text editor
+  - Video player (plays .mp4, .mkv.... videos)
+  - Maybe Diablo I?
+
+- Files
+  - copy/cut/pasted
+
+- Taskbar
+  - pin app
+  - see opened app
+  - click app to start it
+  - click opened app to show it
+  - minimize and maximize work with windows.
+
+- Taskbar Windows icon
+  works
