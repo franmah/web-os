@@ -3,11 +3,11 @@ import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeE
 import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
 import { WindowParams } from "../../../types/system/window/WindowProps";
 import { WindowState } from "../../../types/system/window/WindowState";
-import { CustomMaximizeDirection } from "./maximizeOptionsModal/maximizeOptionsModal";
 import styles from './window.module.scss';
 import WindowAnimationPlaceholderComponent from "./animationPlaceholder/animationPlaceholder";
 import WindowBorderComponent from "./border/windowBorder";
 import WindowHeaderComponent from "./header/header";
+import { CustomMaximizeDirection } from "../../../constants/system/window/CustomMaximizeDirectionEnum";
 
 export const WINDOW_MIN_HEIGH = 200; // TODO: move into styles component
 export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component

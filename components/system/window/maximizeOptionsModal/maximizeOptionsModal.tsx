@@ -1,64 +1,60 @@
 import { FC, memo } from "react";
-import styles from './maximize-options.module.scss';
-
-export enum CustomMaximizeDirection {
-  Left, Right, LargerLeft, SmallerRight, TopRight, TopLeft, BottomRight, BottomLeft
-};
+import { CustomMaximizeDirection } from "../../../../constants/system/window/CustomMaximizeDirectionEnum";
+import { StyledMaximizeOptionsModalMain } from "../../../../styled-components/system/window/StyledMaximizeOptionsModalMain";
 
 const MaximizeOptionsModalComponent: FC<{
   onCustomMaximizeClick: (direction: CustomMaximizeDirection) => void
 }> = memo(({ onCustomMaximizeClick }) => {
 
   return (
-    <div className={styles.main}>
+    <StyledMaximizeOptionsModalMain>
 
-      <div className={styles.topLeft}>
-        <div className={`${styles.left} ${styles.item}`}
+      <div className='topLeft'>
+        <div className='left item'
           onClick={() => onCustomMaximizeClick(CustomMaximizeDirection.Left)}>
         </div>
-        <div className={`${styles.right} ${styles.item}`}
+        <div className='right item'
           onClick={() => onCustomMaximizeClick(CustomMaximizeDirection.Right)}>
         </div>
       </div>
 
-      <div className={styles.topRight}>
-        <div className={`${styles.left} ${styles.item}`}
+      <div className='topRight'>
+        <div className='left item'
           onClick={() => onCustomMaximizeClick(CustomMaximizeDirection.LargerLeft)}>
         </div>
-        <div className={`${styles.right} ${styles.item}`}
+        <div className='right item'
           onClick={() => onCustomMaximizeClick(CustomMaximizeDirection.SmallerRight)}>
         </div>
       </div>
 
-      
-      <div className={styles.bottomLeft}>
-        <div className={`${styles.left} ${styles.item}`}
+      <div className='bottomLeft'>
+        <div className='left item'
           onClick={() => onCustomMaximizeClick(CustomMaximizeDirection.Left)}>
         </div>
-        <div className={`${styles.top} ${styles.item}`}
+        <div className='top item'
           onClick={() => onCustomMaximizeClick(CustomMaximizeDirection.TopRight)}>
         </div>
-        <div className={`${styles.bottom} ${styles.item}`}
+        <div className='bottom item'
           onClick={() => onCustomMaximizeClick(CustomMaximizeDirection.BottomRight)}>
         </div>
       </div>
 
-      <div className={styles.bottomRight}>
-        <div className={`${styles.topLeft} ${styles.item}`}
+      <div className='bottomRight'>
+        <div className='topLeft item'
           onClick={() => onCustomMaximizeClick(CustomMaximizeDirection.TopLeft)}>
         </div>
-        <div className={`${styles.topRight} ${styles.item}`}
+        <div className='topRight item'
         onClick={() => onCustomMaximizeClick(CustomMaximizeDirection.TopRight)}>
-      </div>
-        <div className={`${styles.bottomLeft} ${styles.item}`}
-        onClick={() => onCustomMaximizeClick(CustomMaximizeDirection.BottomLeft)}>
-      </div>
-        <div className={`${styles.bottomRight} ${styles.item}`}
-        onClick={() => onCustomMaximizeClick(CustomMaximizeDirection.BottomRight)}>
-      </div>
+        </div>
+          <div className='bottomLeft item'
+          onClick={() => onCustomMaximizeClick(CustomMaximizeDirection.BottomLeft)}>
+        </div>
+          <div className='bottomRight item'
+          onClick={() => onCustomMaximizeClick(CustomMaximizeDirection.BottomRight)}>
+        </div>
       </div>
     
-    </div>
+    </StyledMaximizeOptionsModalMain>
   );
 }, () => true);
 

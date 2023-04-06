@@ -2,10 +2,11 @@ import { FC, useEffect, useState } from "react";
 import { WindowMaximize } from "../../../../constants/system/window/WindowMaximizeEnum";
 import { VscChromeMaximize, VscChromeRestore } from "react-icons/vsc";
 import { CONTROL_ICON_SIZE } from "../../../../constants/system/window/WindowHeaderConts";
-import MaximizeOptionsModalComponent, { CustomMaximizeDirection } from "../maximizeOptionsModal/maximizeOptionsModal";
+import MaximizeOptionsModalComponent from "../maximizeOptionsModal/maximizeOptionsModal";
 import { setMaximizeMenuListeners } from '../../../../services/system/window/WindowHeaderService';
 import { StyledHeaderMaximizedIconContainer } from "../../../../styled-components/system/window/StyledHeaderMaximizedIconContainer";
 import { StyledHeaderMaximizeOptionsModalContainer } from "../../../../styled-components/system/window/StyledMaximizeOptionsModalContainer";
+import { CustomMaximizeDirection } from "../../../../constants/system/window/CustomMaximizeDirectionEnum";
 
 export const HeaderMaximizeButtonComponent: FC<{
   maximized: WindowMaximize,

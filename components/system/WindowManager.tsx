@@ -6,7 +6,7 @@ import { WindowManagerState } from "../../types/system/window-manager/WindowMana
 import WindowComponent from "./window/window";
 import { WindowResizeDirection } from "../../constants/system/window/WindowResizeDirectionEnum";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../services/EventService";
-import { CustomMaximizeDirection } from "./window/maximizeOptionsModal/maximizeOptionsModal";
+import { CustomMaximizeDirection } from "../../constants/system/window/CustomMaximizeDirectionEnum";
 
 export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ processes }) => {
 

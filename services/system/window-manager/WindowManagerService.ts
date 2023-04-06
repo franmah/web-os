@@ -1,5 +1,5 @@
-import { CustomMaximizeDirection } from "../../../components/system/window/maximizeOptionsModal/maximizeOptionsModal";
 import { WINDOW_STARTING_POSITION_OFFSET_PX } from "../../../constants/system/window-manager/WindowManagerConsts";
+import { CustomMaximizeDirection } from "../../../constants/system/window/CustomMaximizeDirectionEnum";
 import { DEFAULT_WINDOW_STATE } from "../../../constants/system/window/WindowConsts";
 import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeEnum";
 import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
