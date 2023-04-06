@@ -4,7 +4,8 @@ import { VscChromeMaximize, VscChromeRestore } from "react-icons/vsc";
 import { CONTROL_ICON_SIZE } from "../../../../constants/system/window/WindowHeaderConts";
 import MaximizeOptionsModalComponent, { CustomMaximizeDirection } from "../maximizeOptionsModal/maximizeOptionsModal";
 import { setMaximizeMenuListeners } from '../../../../services/system/window/WindowHeaderService';
-import styles from './headerMaximizeButton.module.scss';
+import { StyledHeaderMaximizedIconContainer } from "../../../../styled-components/system/window/StyledHeaderMaximizedIconContainer";
+import { StyledHeaderMaximizeOptionsModalContainer } from "../../../../styled-components/system/window/StyledMaximizeOptionsModalContainer";
 
 export const HeaderMaximizeButtonComponent: FC<{
   maximized: WindowMaximize,
@@ -40,26 +41,23 @@ export const HeaderMaximizeButtonComponent: FC<{
 
   return (
     <>
-      <div
+      <StyledHeaderMaximizedIconContainer
         onClick={onMaximizeIconClick}
-        className={styles.maximizeIcon}
       >
         { 
           maximized === WindowMaximize.Full ? 
           <VscChromeRestore size={CONTROL_ICON_SIZE}/> :
           <VscChromeMaximize size={CONTROL_ICON_SIZE}/>
         }
-      </div>
+      </StyledHeaderMaximizedIconContainer>
 
       { 
         showMaximizeMenu && 
-        <div
-          className={styles.maximizeOptionModal}
-        > 
+        <StyledHeaderMaximizeOptionsModalContainer> 
           <MaximizeOptionsModalComponent
             onCustomMaximizeClick={onCustomMaximizeClick}
           />
-        </div> 
+        </StyledHeaderMaximizeOptionsModalContainer> 
       }
     </>
   );
