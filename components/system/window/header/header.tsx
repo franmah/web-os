@@ -1,5 +1,4 @@
 import { FC, useState } from "react";
-import styles from './header.module.scss';
 import {VscChromeMinimize, VscClose } from 'react-icons/vsc';
 import globalStyles from '../../../../styles/global.module.scss';
 import { v4 } from 'uuid';
@@ -7,6 +6,7 @@ import { WindowHeaderProps } from '../../../../types/system/window/WindowHeaderP
 import { CONTROL_ICON_SIZE, MAXIMIZE_DIV_PRE_ID } from '../../../../constants/system/window/WindowHeaderConts';
 import { HeaderMaximizeButtonComponent } from '../headerMaximizeButton/headerMaximizeButtonComponent';
 import { WindowHeaderInformationComponent } from '../headerInformation/headerInformation';
+import { StyledWindowHeader } from "../../../../styled-components/system/window/StyledWindowHeader";
 
 const WindowHeaderComponent: FC<WindowHeaderProps> = ({
   focused,
@@ -26,17 +26,10 @@ const WindowHeaderComponent: FC<WindowHeaderProps> = ({
     console.log('minimize');
   };
 
-  const getClass = () => {
-    return `
-      ${styles.header} 
-      ${!focused ? styles.windowUnfocusedHeader : ''} 
-      ${globalStyles.unselectableText}
-    `;
-  };
-
   return (
-    <header
-      className={getClass()}
+    <StyledWindowHeader
+      focused={focused}
+      className={globalStyles.unselectableText}
     >
       <WindowHeaderInformationComponent
         options={options}
@@ -46,7 +39,7 @@ const WindowHeaderComponent: FC<WindowHeaderProps> = ({
       />
 
       <div 
-        className={styles.minimizeIcon}
+        className='minimizeIcon'
         onClick={onMinimize}
       > 
         <VscChromeMinimize size={CONTROL_ICON_SIZE}/>
@@ -54,7 +47,7 @@ const WindowHeaderComponent: FC<WindowHeaderProps> = ({
 
       {/* MAXIMIZE ICON BUTTON */}
       <div 
-        className={styles.maximizeContainer}
+        className='maximizeContainer'
         id={maximizeButtonDivID}
       >
         <HeaderMaximizeButtonComponent
@@ -66,13 +59,13 @@ const WindowHeaderComponent: FC<WindowHeaderProps> = ({
       </div>
 
       <div
-        className={styles.closeIcon}
+        className='closeIcon'
         onClick={onClose}
       > 
         <VscClose size={CONTROL_ICON_SIZE}/> 
       </div>
 
-    </header>
+    </StyledWindowHeader>
   );
 };
 

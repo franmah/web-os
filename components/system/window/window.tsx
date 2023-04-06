@@ -99,15 +99,26 @@ const WindowComponent: FC<{
         >
 
           <div className={styles.centerContent}>
-            <WindowHeaderComponent
-              focused={state.focused}
-              options={windowParams.headerOptions}
-              maximized={state.maximized}
-              startMovingWindow={(e) => handleStartMoving(windowParams.windowId, e)}
-              maximizeWindow={() => handleMaximize(windowParams.windowId)}
-              onClose={handleCloseWindow}
-              moveToCustomMaximizeOptionClick={(direction) => handleMoveToCustomMaximizeOptionClick(windowParams.windowId, direction)}
-            />
+
+            {/* Header container */}
+            {/* Either move that div into StyledComponentContainer, or Create the styled component directly? */}
+            <div
+              style={{
+                width: '100%',
+                height: '25px'
+              }}
+            >
+              <WindowHeaderComponent
+                focused={state.focused}
+                options={windowParams.headerOptions}
+                maximized={state.maximized}
+                startMovingWindow={(e) => handleStartMoving(windowParams.windowId, e)}
+                maximizeWindow={() => handleMaximize(windowParams.windowId)}
+                onClose={handleCloseWindow}
+                moveToCustomMaximizeOptionClick={(direction) => handleMoveToCustomMaximizeOptionClick(windowParams.windowId, direction)}
+              />
+            </div>
+            
 
             { children }
             
