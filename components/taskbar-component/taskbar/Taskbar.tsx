@@ -7,7 +7,7 @@ import WeatherComponent from '../weather/weatherTaskabar';
 const Taskbar: FC<{}> = () => {
 
   return (
-    <section className={styles.taskbarMain}>
+    <nav className={styles.taskbarMain}>
       
       <WeatherComponent />
 
@@ -15,7 +15,7 @@ const Taskbar: FC<{}> = () => {
 
       <TaskbarClock />
 
-    </section>
+    </nav>
   );
 };
 

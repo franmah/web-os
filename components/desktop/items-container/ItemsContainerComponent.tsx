@@ -11,7 +11,7 @@ import { isEventOriginatedFromWithinTargetIdSubtree } from '../../../services/Ev
 import { DesktopSortOptions, setItemPositions } from '../../../services/DesktopItemPlacementService';
 import { v4 } from 'uuid';
 import { ContextMenuCommandList } from '../../../types/system/contextMenu/contextMenu';
-import DesktopItemComponent, { ItemTestComponentMemo } from '../item/DesktopItemComponent';
+import DesktopItemComponent from '../item/DesktopItemComponent';
 import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxComponent';
 
 const DesktopItemContainerComponent: FC<{
@@ -207,11 +207,6 @@ const DesktopItemContainerComponent: FC<{
             handleItemRenamed={onItemRenamed}
             startRenaming={handleItemRenaming}
           />
-
-          // TODO: replace desktop item component by this: 
-          // <ItemTestComponentMemo 
-          //   props={{ item, onClick: selectItems }}
-          // />
         )
       }
 

@@ -13,7 +13,7 @@ export const WindowHeaderInformationComponent: FC<{
   const getTextClassName = () => {
     return `
       ${styles.textContainer} 
-      ${focused ? styles.unfocusedText : ''}
+      ${focused ? '' : styles.unfocusedText }
     `;
   }
   return (
@@ -29,13 +29,13 @@ export const WindowHeaderInformationComponent: FC<{
         />
       }
 
-      <div 
+      <h1
         className={getTextClassName()}
         onMouseDown={startMovingWindow}
         onDoubleClick={maximizeWindow}
       >
         { options?.text }
-      </div>
+      </h1>
     </>
   );
 }

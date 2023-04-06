@@ -7,7 +7,6 @@
   
 - Use semantic html tags instead of div wherever possible + USE FRAGMENT wherever possible to reduce nujmber of container divs
   - https://developer.mozilla.org/en-US/docs/Web/HTML/Element
-  - https://developer.mozilla.org/en-US/docs/Web/HTML/Element
   - Lists should use <ul><li><ul/> wherever possible (only if they're in a div, not if they're in a Fragment)
 
 - Change to styled components so that variables are not defined multiple times
@@ -16,6 +15,7 @@
   - use consts as much as possible
       - color for window header text and buttons should be the setMaximizeMenuListeners
       
+- Try to replace calls to getElementById to useRefs 
 - add tests. Especially for services
 
 - move to webstorm
