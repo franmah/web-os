@@ -3,12 +3,12 @@ import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeE
 import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
 import { WindowParams } from "../../../types/system/window/WindowProps";
 import { WindowState } from "../../../types/system/window/WindowState";
-import styles from './window.module.scss';
 import WindowAnimationPlaceholderComponent from "./animationPlaceholder/animationPlaceholder";
 import WindowBorderComponent from "./border/windowBorder";
 import WindowHeaderComponent from "./header/header";
 import { CustomMaximizeDirection } from "../../../constants/system/window/CustomMaximizeDirectionEnum";
 import { zIndexConsts } from "../../../constants/Zindex";
+import { StyledWindow } from "../../../styled-components/system/window/StyledWindow";
 
 export const WINDOW_MIN_HEIGH = 200; // TODO: move into styles component
 export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
@@ -64,10 +64,6 @@ const WindowComponent: FC<{
     handleMouseUp(windowParams.windowId, event);
   };
 
-  const getClass = () => {
-    return `${styles.window} ${ state.focused ? styles.windowFocused : styles.windowUnfocused}`;
-  };
-
   return (
     <Fragment>
       <WindowAnimationPlaceholderComponent
@@ -79,17 +75,15 @@ const WindowComponent: FC<{
         zIndex={state.zIndex - zIndexConsts.windowComponent.animationPlaceholderOffset}
       />
 
-      <div
+      <StyledWindow
         id={windowParams.windowId}
-        className={getClass()}
         onMouseDown={() => handleWindowMouseDown(windowParams.windowId)}
-        style={{
-          top: state.top,
-          left: state.left,
-          width: `${state.width}px`,
-          height: `${state.height}px`,
-          zIndex: state.zIndex
-        }}
+        focused={state.focused}
+        top={state.top}
+        left={state.left}
+        width={state.width}
+        height={state.height}
+        zIndex={state.zIndex}
       >
 
         <WindowBorderComponent
@@ -100,7 +94,7 @@ const WindowComponent: FC<{
           zIndex={state.zIndex + zIndexConsts.windowComponent.borderComponentOffset}
         >
 
-          <div className={styles.centerContent}>
+          <div className={'centerContent'}>
 
             {/* Header container */}
             {/* Either move that div into StyledComponentContainer, or Create the styled component directly? */}
@@ -127,7 +121,7 @@ const WindowComponent: FC<{
           </div>
 
         </WindowBorderComponent>    
-      </div>
+      </StyledWindow>
     </Fragment>
   );
 };
