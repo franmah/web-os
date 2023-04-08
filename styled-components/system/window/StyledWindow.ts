@@ -16,7 +16,7 @@ export const StyledWindow = styled.div<{
   left: ${({ left }) => `${left}px`};
   width: ${({ width }) => `${width}px`};
   height: ${({ height }) => `${height}px`};
-  z-index: ${({ zIndex }) => `${zIndex}px`};
+  z-index: ${({ zIndex }) => zIndex};
 
   min-width: ${() => WINDOW_MIN_WIDTH};
   min-height: ${() => WINDOW_MIN_HEIGH};
