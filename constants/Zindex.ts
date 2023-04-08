@@ -1,4 +1,8 @@
-export const WINDOW_COMPONENT_ANIMATION_PLACEHOLDER_ZINDEX_OFFSET = 1;
-export const NEW_WINDOW_COMPONENT_ZINDEX_OFFSET = 10;
-export const WINDOW_COMPONENT_BORDER_ZINDEX = 200;
-export const STARTING_WINDOW_COMPONENT_ZINDEX = 100;
+export const zIndexConsts = {
+  windowComponent: {
+    borderComponentOffset: 2,
+    animationPlaceholderOffset: 1,
+    newWindowComponentZindexOffset: 10,
+    startingWindowComponentZindex: 100,
+  }
+};

@@ -1,122 +1,93 @@
 import { FC } from "react";
 import { WindowResizeDirection } from "../../../../constants/system/window/WindowResizeDirectionEnum";
-import { WINDOW_COMPONENT_BORDER_ZINDEX } from "../../../../constants/Zindex";
-import styles from './border.module.scss';
+import { StyledWindowBorderComponent } from "../../../../styled-components/system/window/StyledWindowBorderComponentContainer";
 
 const WindowBorderComponent: FC<{
   allowResize: boolean,
   isResizing: boolean,
+  zIndex: number,
   onBordersMouseDown: (event: any, direction: WindowResizeDirection) => void,
   onTopResizeDoubleClick: (event: any) => void,
   children: React.ReactNode,
-}> = ({ allowResize, isResizing, onBordersMouseDown, onTopResizeDoubleClick, children }) => {
-
-  const getClass = (direction: string) => {
-    if (!allowResize){
-      return '';
-    }
-
-    switch (direction) {
-      case 'top': return styles.topBorder + ' ' + (!isResizing && styles.topBorderHover);
-      case 'topLeft': return styles.topLeft + ' ' + (!isResizing && styles.topLeftHover);
-      case 'topRight': return styles.topRight + ' ' + (!isResizing && styles.topRightHover);
-      case 'bottom': return styles.bottom + ' ' + (!isResizing && styles.bottomHover);
-      case 'bottomLeft': return styles.bottomLeft + ' ' + (!isResizing && styles.bottomLeftHover);
-      case 'bottomRight': return styles.bottomRight + ' ' + (!isResizing && styles.bottomRightHover);
-      case 'leftCenterTop': return styles.leftCenterTop + ' ' + (!isResizing && styles.leftCenterTopHover);
-      case 'leftCenterMiddle': return styles.leftCenterMiddle + ' ' + (!isResizing && styles.leftCenterMiddleHover);
-      case 'leftCenterBottom': return styles.leftCenterBottom + ' ' + (!isResizing && styles.leftCenterBottomHover);
-      case 'rightCenterTop' : return styles.rightCenterTop + ' ' + (!isResizing && styles.rightCenterTopHover);
-      case 'rightCenterMiddle' : return styles.rightCenterMiddle + ' ' + (!isResizing && styles.rightCenterMiddleHover);
-      case 'rightCenterBottom' : return styles.rightCenterBottom + ' ' + (!isResizing && styles.rightCenterBottomHover);
-      default: return '';
-    }
-  };
+}> = ({ allowResize, isResizing, onBordersMouseDown, onTopResizeDoubleClick, children, zIndex }) => {
 
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-      }}
+    <StyledWindowBorderComponent
+      resizing={isResizing}
+      zIndex={zIndex}
     >
       {/*  TOP BORDER */}
       <div
-        className={styles.topBorderHeader}
-        style={{ zIndex: WINDOW_COMPONENT_BORDER_ZINDEX }}
+        className={allowResize ? 'topBorder' : ''}
       >
         <div
-          className={getClass('topLeft')}
+          className={'topLeft'}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopLeft)}>
         </div>
         
         <div 
-          className={getClass('top')}
+          className={'top'}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Top)}
           onDoubleClick={onTopResizeDoubleClick}>
         </div>
 
         <div
-          className={getClass('topRight')}
+          className={'topRight'}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopRight)}>
         </div>
       </div>
 
       {/*  LEFT + RIGHT BORDERS + CONTENT */}
       <div
-        className={styles.centerLeft}
-        style={{ zIndex: WINDOW_COMPONENT_BORDER_ZINDEX }}
+        className={allowResize ? 'centerLeft' : ''}
       >
-          <div className={getClass('leftCenterTop')} 
+          <div className={'leftCenterTop'} 
             onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopLeft)}
           ></div>
-          <div className={getClass('leftCenterMiddle')}
+          <div className={'leftCenterMiddle'}
             onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Left)}
           ></div>
-          <div className={getClass('leftCenterBottom')}
+          <div className={'leftCenterBottom'}
             onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.BottomLeft)}
           ></div>
       </div>
 
       {/* CHILDREN */}
-      <div className={styles.children}>{ children }</div>
+      <div className={'children'}>{ children }</div>
 
       <div
-        className={styles.centerRight}
-        style={{ zIndex: WINDOW_COMPONENT_BORDER_ZINDEX }}
+        className={allowResize ? 'centerRight' : ''}
       >
-        <div className={getClass('rightCenterTop')}
+        <div className={'rightCenterTop'}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopRight)}
         ></div>
-        <div className={getClass('rightCenterMiddle')}
+        <div className={'rightCenterMiddle'}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Right)}
         ></div>
-        <div className={getClass('rightCenterBottom')}
+        <div className={'rightCenterBottom'}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.BottomRight)}
         ></div>
       </div>
 
       {/*  BOTTOM BORDER */}
       <div
-        className={styles.bottomBorder}
-        style={{ zIndex: WINDOW_COMPONENT_BORDER_ZINDEX }}
+        className={allowResize ? 'bottomBorder' : ''}
       >
         
         <div
-          className={getClass('bottomLeft')}
+          className={'bottomLeft'}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.BottomLeft)}>
         </div>
         <div
-          className={getClass('bottom')}
+          className={'bottom'}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Bottom)}>
         </div>
         <div
-          className={getClass('bottomRight')}
+          className={'bottomRight'}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.BottomRight)}>
         </div>
       </div>
-    </div>
-      
+    </StyledWindowBorderComponent>
   );
 };
 

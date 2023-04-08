@@ -1,4 +1,4 @@
-import { NEW_WINDOW_COMPONENT_ZINDEX_OFFSET, STARTING_WINDOW_COMPONENT_ZINDEX } from "../../../constants/Zindex";
+import { zIndexConsts } from "../../../constants/Zindex";
 import { WindowManagerZindex } from "./WindowManagerService";
 
 /**
@@ -7,7 +7,8 @@ import { WindowManagerZindex } from "./WindowManagerService";
  * @returns 
  */
 export const getStartingZindex = (numWindowedProcesses: number): number => {
-  return STARTING_WINDOW_COMPONENT_ZINDEX + (numWindowedProcesses * NEW_WINDOW_COMPONENT_ZINDEX_OFFSET);
+  return zIndexConsts.windowComponent.startingWindowComponentZindex + 
+    (numWindowedProcesses * zIndexConsts.windowComponent.newWindowComponentZindexOffset);
 };
 
 /**
@@ -31,11 +32,12 @@ export const updateZindexesOnWindowClicked = (indexes: WindowManagerZindex[], cl
   // Update every index that is higher than the focus' window old index to be lower.
   sortedIndexes.forEach(i => {
     i.zIndex = i.zIndex > focusedWindowZindex.zIndex ?
-      i.zIndex - NEW_WINDOW_COMPONENT_ZINDEX_OFFSET :
+      i.zIndex - zIndexConsts.windowComponent.newWindowComponentZindexOffset :
       i.zIndex;
   });
 
-  focusedWindowZindex.zIndex = STARTING_WINDOW_COMPONENT_ZINDEX + (indexes.length - 1) * NEW_WINDOW_COMPONENT_ZINDEX_OFFSET;
+  focusedWindowZindex.zIndex = zIndexConsts.windowComponent.startingWindowComponentZindex + (indexes.length - 1)
+    * zIndexConsts.windowComponent.newWindowComponentZindexOffset;
   
   return sortedIndexes;
 };
@@ -49,6 +51,7 @@ export const updateZindexesOnWindowCloses = (indexes: WindowManagerZindex[], clo
     .filter(w => w.windowId !== closingWindowId)
     .sort((w1, w2) => w1.zIndex - w2.zIndex);
 
-  sortedZindexes.forEach((zIndex, arrIndex) => zIndex.zIndex = STARTING_WINDOW_COMPONENT_ZINDEX + (arrIndex * NEW_WINDOW_COMPONENT_ZINDEX_OFFSET));
+  sortedZindexes.forEach((zIndex, arrIndex) => zIndex.zIndex = zIndexConsts.windowComponent.startingWindowComponentZindex +
+    (arrIndex * zIndexConsts.windowComponent.newWindowComponentZindexOffset));
   return sortedZindexes;
 };

@@ -8,6 +8,7 @@ import WindowAnimationPlaceholderComponent from "./animationPlaceholder/animatio
 import WindowBorderComponent from "./border/windowBorder";
 import WindowHeaderComponent from "./header/header";
 import { CustomMaximizeDirection } from "../../../constants/system/window/CustomMaximizeDirectionEnum";
+import { zIndexConsts } from "../../../constants/Zindex";
 
 export const WINDOW_MIN_HEIGH = 200; // TODO: move into styles component
 export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
@@ -75,7 +76,7 @@ const WindowComponent: FC<{
         left={state.left}
         width={state.width}
         height={state.height}
-        zIndex={state.zIndex}
+        zIndex={state.zIndex - zIndexConsts.windowComponent.animationPlaceholderOffset}
       />
 
       <div
@@ -96,6 +97,7 @@ const WindowComponent: FC<{
           isResizing={state.resizeDirection !== WindowResizeDirection.None}
           onBordersMouseDown={(e, direction) => handleStartResizing(windowParams.windowId, e, direction)}
           onTopResizeDoubleClick={() => handleHeightMaximize(windowParams.windowId)}
+          zIndex={state.zIndex + zIndexConsts.windowComponent.borderComponentOffset}
         >
 
           <div className={styles.centerContent}>
