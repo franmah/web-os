@@ -1,15 +1,8 @@
-$border-radius-size: 6px;
+import styled from "styled-components";
 
-.item {
-  background-color: #cfd8e1;
-  border: 1px solid #7d868f;
+const BORDER_RADIUS = '6px';
 
-  &:hover {
-    background-color: #0067C0;
-  }
-}
-
-.main {
+export const StyledMaximizeOptionsModalMain = styled.div`
   height: 100%;
   display: grid;
   padding: 8px;
@@ -18,6 +11,15 @@ $border-radius-size: 6px;
   grid-template-rows: 1fr 1fr;
   gap: 12px;
 
+  .item {
+    background-color: #cfd8e1;
+    border: 1px solid #7d868f;
+
+    &:hover {
+      background-color: #0067C0;
+    }
+  }
+  
   .topLeft {
     display: flex;
     justify-content: space-between;
@@ -26,13 +28,13 @@ $border-radius-size: 6px;
       height: 100%;
       flex: 1;
       margin-right: 4px;
-      border-radius: $border-radius-size 0px 0px $border-radius-size;
+      border-radius: ${BORDER_RADIUS} 0px 0px ${BORDER_RADIUS};
     }
 
     .right {
       flex: 1;
       height: 100%;
-      border-radius: 0px $border-radius-size $border-radius-size 0px;
+      border-radius: 0px ${BORDER_RADIUS} ${BORDER_RADIUS} 0px;
     }
   }
 
@@ -44,13 +46,13 @@ $border-radius-size: 6px;
       height: 100%;
       flex: 3;
       margin-right: 4px;
-      border-radius: $border-radius-size 0px 0px $border-radius-size;
+      border-radius: ${BORDER_RADIUS} 0px 0px ${BORDER_RADIUS};
     }
 
     .right {
       flex: 2;
       height: 100%;
-      border-radius: 0px $border-radius-size $border-radius-size 0px;
+      border-radius: 0px ${BORDER_RADIUS} ${BORDER_RADIUS} 0px;
     }
   }
 
@@ -65,18 +67,18 @@ $border-radius-size: 6px;
       height: 100%;
       flex: 3;
       margin-right: 4px;
-      border-radius: $border-radius-size 0px 0px $border-radius-size;
+      border-radius: ${BORDER_RADIUS} 0px 0px ${BORDER_RADIUS};
     }
 
     .top {
       grid-area: top;
-      border-radius: 0px $border-radius-size 0px 0px;
+      border-radius: 0px ${BORDER_RADIUS} 0px 0px;
       margin-bottom: 4px;
     }
 
     .bottom {
       grid-area: bottom;
-      border-radius: 0px 0px $border-radius-size 0px;
+      border-radius: 0px 0px ${BORDER_RADIUS} 0px;
     }
   }
 
@@ -88,19 +90,19 @@ $border-radius-size: 6px;
 
     .topLeft {
       height: 100%;
-      border-radius: $border-radius-size 0px 0px 0px;
+      border-radius: ${BORDER_RADIUS} 0px 0px 0px;
     }
 
     .topRight {
-      border-radius: 0px $border-radius-size 0px 0px;
+      border-radius: 0px ${BORDER_RADIUS} 0px 0px;
     }
 
     .bottomLeft {
-      border-radius: 0px 0px 0px $border-radius-size;
+      border-radius: 0px 0px 0px ${BORDER_RADIUS};
     }
 
     .bottomRight {
-      border-radius:0px 0px $border-radius-size 0px;
+      border-radius:0px 0px ${BORDER_RADIUS} 0px;
     }
   }
-}
+`;

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import Image from 'next/image';
 import { WindowHeaderOptions } from "../../../../types/system/window/WindowHeaderOptions";
-import styles from './headerInformation.module.scss';
+import { StyledHeaderInformationH1 } from "../../../../styled-components/system/window/StyledHeaderInformationH1";
 
 export const WindowHeaderInformationComponent: FC<{
   options: WindowHeaderOptions,
@@ -10,18 +10,12 @@ export const WindowHeaderInformationComponent: FC<{
   maximizeWindow: (event: any) => void
 }> = ({ options, focused, startMovingWindow, maximizeWindow }) => {
 
-  const getTextClassName = () => {
-    return `
-      ${styles.textContainer} 
-      ${focused ? '' : styles.unfocusedText }
-    `;
-  }
   return (
     <>
       {
         options?.icon &&
         <Image
-          className={styles.icon}
+          style={{ marginRight: '4px' }}
           src={options?.icon} 
           alt={'window name'} 
           width={24} 
@@ -29,13 +23,14 @@ export const WindowHeaderInformationComponent: FC<{
         />
       }
 
-      <h1
-        className={getTextClassName()}
+      <StyledHeaderInformationH1
+        focused={focused}
         onMouseDown={startMovingWindow}
         onDoubleClick={maximizeWindow}
       >
         { options?.text }
-      </h1>
+
+      </StyledHeaderInformationH1>
     </>
   );
 }

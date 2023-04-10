@@ -1,5 +1,5 @@
-import { CustomMaximizeDirection } from "../../../components/system/window/maximizeOptionsModal/maximizeOptionsModal";
 import { WINDOW_STARTING_POSITION_OFFSET_PX } from "../../../constants/system/window-manager/WindowManagerConsts";
+import { CustomMaximizeDirection } from "../../../constants/system/window/CustomMaximizeDirectionEnum";
 import { DEFAULT_WINDOW_STATE } from "../../../constants/system/window/WindowConsts";
 import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeEnum";
 import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
@@ -14,22 +14,23 @@ import { stopMovingAndResizingWindow } from "../window/WindowService";
 import { getStartingZindex, updateZindexesOnWindowClicked, updateZindexesOnWindowCloses } from "./WindowZindexService";
 
 export const updateWindowStatesOnNewProcess = (processes: WindowedProcesses, currentStates: WindowManagerState): WindowManagerState => {
-
+  const hasNewProcess = Object.keys(processes).length > Object.keys(currentStates).length;
   const windowStates: WindowManagerState = {};
 
   for (let processId in processes) {
     const process = processes[processId];
     const windowId = process.windowParams.windowId;
-    const isNewProcess = !!currentStates[windowId];
+    const isNewProcess = !currentStates[windowId];
 
     const state: WindowState = isNewProcess ?
       {
-        ...currentStates[windowId].state
-      } :
-      { 
         ...DEFAULT_WINDOW_STATE,
         ...getWindowStartingPosition(Object.values(windowStates).map(ws => ws.state)),
         zIndex: getStartingZindex(Object.keys(windowStates).length)
+      } :
+      { 
+        ...currentStates[windowId].state,
+        focused: hasNewProcess ? false : currentStates[windowId].state.focused // Unfocus previous windows if there is a new one
       };
 
     windowStates[windowId] = {

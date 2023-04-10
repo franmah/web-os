@@ -1,4 +1,4 @@
-import { CustomMaximizeDirection } from "../../../components/system/window/maximizeOptionsModal/maximizeOptionsModal";
+import { CustomMaximizeDirection } from "../../../constants/system/window/CustomMaximizeDirectionEnum";
 import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeEnum";
 import { WindowHeaderOptions } from "./WindowHeaderOptions";
 

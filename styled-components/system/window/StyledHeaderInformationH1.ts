@@ -1,10 +1,6 @@
-$unfocused-color: rgb(121, 118, 118);
+import styled from "styled-components";
 
-.icon {
-  margin-right: 4px;
-}
-
-.textContainer {
+export const StyledHeaderInformationH1 = styled.h1<{ focused: boolean }>`
   flex: 1;
   display: flex;
   align-items: center;
@@ -16,8 +12,5 @@ $unfocused-color: rgb(121, 118, 118);
   white-space: nowrap;
   font-size: 12;
   font-weight: normal;
-}
-
-.unfocusedText {
-  color: $unfocused-color;
-}
+  color: ${({ focused }) => focused ? 'black' : 'rgb(121, 118, 118);' }; 
+`;
