@@ -1,8 +1,5 @@
-- Move unfocused text color in StyledHEaderInformationH1 to a const file.
-  - Create a general theme file that has everything.
 
 // TODO: in other
-- BUG: when a new window open, other windows should be unfocused
 - Finish looking at react documentation.
 
 - Look at next's documentation
@@ -37,6 +34,8 @@
 - look into using classes for services and having indepency injection
 
 ///////////////      MVP      ///////////////
+
+- README.md udpated
 
 - Apps:
   - Explorer app (with files)

@@ -14,22 +14,23 @@ import { stopMovingAndResizingWindow } from "../window/WindowService";
 import { getStartingZindex, updateZindexesOnWindowClicked, updateZindexesOnWindowCloses } from "./WindowZindexService";
 
 export const updateWindowStatesOnNewProcess = (processes: WindowedProcesses, currentStates: WindowManagerState): WindowManagerState => {
-
+  const hasNewProcess = Object.keys(processes).length > Object.keys(currentStates).length;
   const windowStates: WindowManagerState = {};
 
   for (let processId in processes) {
     const process = processes[processId];
     const windowId = process.windowParams.windowId;
-    const isNewProcess = !!currentStates[windowId];
+    const isNewProcess = !currentStates[windowId];
 
     const state: WindowState = isNewProcess ?
       {
-        ...currentStates[windowId].state
-      } :
-      { 
         ...DEFAULT_WINDOW_STATE,
         ...getWindowStartingPosition(Object.values(windowStates).map(ws => ws.state)),
         zIndex: getStartingZindex(Object.keys(windowStates).length)
+      } :
+      { 
+        ...currentStates[windowId].state,
+        focused: hasNewProcess ? false : currentStates[windowId].state.focused // Unfocus previous windows if there is a new one
       };
 
     windowStates[windowId] = {
