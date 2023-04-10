@@ -1,26 +1,19 @@
 import { FC, memo } from "react";
 import { heightMaximizeAnimation, leftMaximizeAnimation, maximizeAnimation, rightMaximizeAnimation } from "../../../../animations/windowMaximizeAnimations";
 import { MaximizePlaceholderDirection } from "../../../../constants/system/window/MaximizePlaceholderDirectionEnum";
-import styles from './animationPlaceholder.module.scss';
 import { WindowMaximizePlaceholderProps } from "../../../../types/system/window/WindowAnimationPlaceholder";
+import { StyledAnimationMaximizePlaceholder } from "../../../../styled-components/system/window/StyledAnimationMaximizePlaceholder";
 
-const WindowAnimationPlaceholderComponent: FC<WindowMaximizePlaceholderProps> =
+const WindowAnimationMaximizePlaceholderComponent: FC<WindowMaximizePlaceholderProps> =
 memo(({ placeholderDirection, top, left, width, height, zIndex }) => {
-
-  const getClass = () => {
-    switch (placeholderDirection) {
-      case MaximizePlaceholderDirection.Full: return styles.maximizePlaceholderModal;
-      case MaximizePlaceholderDirection.Left: return styles.leftSideMaximizePlaceholderModal;
-      case MaximizePlaceholderDirection.Right: return styles.rightSideMaximizePlaceholderModal;
-      default: return styles.hideModal;
-    };
-  };
 
   const getAnimation = () => {
     switch (placeholderDirection) {
       case MaximizePlaceholderDirection.Full: return maximizeAnimation;
       case MaximizePlaceholderDirection.Left: return leftMaximizeAnimation;
       case MaximizePlaceholderDirection.Right: return rightMaximizeAnimation;
+      case MaximizePlaceholderDirection.Height: return heightMaximizeAnimation;
+      default: return { name: '' };
     }
   };
 
@@ -35,28 +28,13 @@ memo(({ placeholderDirection, top, left, width, height, zIndex }) => {
         `}
       />
 
-      <div
-        style={{ 
-          animationName: getAnimation()?.name,
-          zIndex: zIndex
-        }}
-        className={getClass()}
-      ></div>
-
-      {/* TODO: once styled components are used, try moving it with the code above. Right now the css needs to know width and left for the final placeholder position. */}
-      { 
-        placeholderDirection === MaximizePlaceholderDirection.Height &&
-        <div 
-          style={{ 
-            animationName: heightMaximizeAnimation.name,
-            zIndex: zIndex,
-            width,
-            left
-          }}
-          className={styles.heightMaximizePlaceholderModal}
-        >
-        </div>
-      }
+      <StyledAnimationMaximizePlaceholder
+        direction={placeholderDirection}
+        zIndex={zIndex}
+        animationName={getAnimation().name}
+        left={`${left}px`}
+        width={`${width}px`}
+      />
     </>
   );
 }, (oldProps, newProps) => {
@@ -65,4 +43,4 @@ memo(({ placeholderDirection, top, left, width, height, zIndex }) => {
   );
 });
 
-export default WindowAnimationPlaceholderComponent;
+export default WindowAnimationMaximizePlaceholderComponent;

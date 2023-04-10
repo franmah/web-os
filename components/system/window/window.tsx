@@ -3,7 +3,7 @@ import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeE
 import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
 import { WindowParams } from "../../../types/system/window/WindowProps";
 import { WindowState } from "../../../types/system/window/WindowState";
-import WindowAnimationPlaceholderComponent from "./animationPlaceholder/animationPlaceholder";
+import WindowAnimationMaximizePlaceholderComponent from "./animationPlaceholder/animationPlaceholder";
 import WindowBorderComponent from "./border/windowBorder";
 import WindowHeaderComponent from "./header/header";
 import { CustomMaximizeDirection } from "../../../constants/system/window/CustomMaximizeDirectionEnum";
@@ -66,7 +66,7 @@ const WindowComponent: FC<{
 
   return (
     <Fragment>
-      <WindowAnimationPlaceholderComponent
+      <WindowAnimationMaximizePlaceholderComponent
         placeholderDirection={state.showMaximizePlacehodler}
         top={state.top}
         left={state.left}
