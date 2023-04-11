@@ -1,5 +1,9 @@
 
 // TODO: in other
+
+- explore idea of window manager having a windowFocused state.
+    - Since only one window can be focused at a time
+
 - Finish looking at react documentation.
 
 - Look at next's documentation
