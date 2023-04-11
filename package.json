@@ -15,6 +15,8 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.3.1",
     "styled-components": "^5.3.9",
+    "suneditor": "^2.44.8",
+    "suneditor-react": "^3.4.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

@@ -32,5 +32,16 @@ export const ProcessDirectory: ProcessDirectoryType = {
     },
     hasWindow: true,
     isUnique: false
+  },
+  'textEditor': {
+    name: 'text-editor',
+    Component: dynamic<{ params: any }>(() => import('../../components/text-editor-app/textEditor')),
+    windowParams: {
+      headerOptions: {
+        text: 'Text Editor'
+      }
+    },
+    hasWindow: true,
+    isUnique: false
   }
 };
