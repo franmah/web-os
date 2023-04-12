@@ -1,3 +1,58 @@
+Text editor
+
+- WindowedProcess should know
+  - the exact dimensions they're contained in
+  - Their process id.
+  - a way to let the window know if process should close (in case of unsaved work for example)
+    - Requirement: if process tells window not to close a message should popup. User should still be able to exit app.
+    - Create an interface/class that component can inherit and that has a close function?
+Bug: when resizing window other things get selected (like text)
+Bug: scroll cursor should be !important when resizing
+Bug: Editor doesn't scroll down when pressing enter
+Bug: Window header text is too close to left border when there is no icon
+Notepad
+
+- Add option to have no window header (still should have minimize... icons)
+  - Decide if there is a header of if the header accept children? Maybe accepting children would be easier. but how do they communicate with the process?
+  - If no header then just reuse Component for icons
+  - Nothing should go behind or over the icons
+
+Requirements for TextEditor:
+ - Accept file
+ - save formatted
+  - different color theme?
+  - smaller buttons
+  - have options similar to microsoft doc
+
+
+Requirement for Notepad:
+
+- should open files with text
+- should save text
+- can be opened by textEditor but show loss of format error message popup
+
+- header
+  - icon
+  - multiple pages
+  - add page buttons
+  - pages have remove buttons
+  - (text in) pages are independent
+  
+- second header
+  - File, edit, view buttons
+  - settings page and icon
+
+- Settings page
+  - information on the right
+  - App theme
+  - Font
+  - Opening files button disabled (with comment // TODO later)
+
+- footer
+  - Make it a window component? (like header) controlled by process?
+  - show ln, col, and other things if possible
+
+
 
 // TODO: in other
 
