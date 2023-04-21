@@ -1,8 +1,4 @@
-Text editor
-
 - WindowedProcess should know
-  - the exact dimensions they're contained in
-  - Their process id.
   - a way to let the window know if process should close (in case of unsaved work for example)
     - Requirement: if process tells window not to close a message should popup. User should still be able to exit app.
     - Create an interface/class that component can inherit and that has a close function?
@@ -10,48 +6,22 @@ Bug: when resizing window other things get selected (like text)
 Bug: scroll cursor should be !important when resizing
 Bug: Editor doesn't scroll down when pressing enter
 Bug: Window header text is too close to left border when there is no icon
-Notepad
 
-- Add option to have no window header (still should have minimize... icons)
-  - Decide if there is a header of if the header accept children? Maybe accepting children would be easier. but how do they communicate with the process?
-  - If no header then just reuse Component for icons
-  - Nothing should go behind or over the icons
+WindowManager shows an errror for canProcessClose.
 
-Requirements for TextEditor:
- - Accept file
- - save formatted
-  - different color theme?
-  - smaller buttons
-  - have options similar to microsoft doc
-
-
-Requirement for Notepad:
-
-- should open files with text
-- should save text
-- can be opened by textEditor but show loss of format error message popup
-
-- header
-  - icon
-  - multiple pages
-  - add page buttons
-  - pages have remove buttons
-  - (text in) pages are independent
-  
-- second header
-  - File, edit, view buttons
-  - settings page and icon
-
-- Settings page
-  - information on the right
-  - App theme
-  - Font
-  - Opening files button disabled (with comment // TODO later)
-
-- footer
-  - Make it a window component? (like header) controlled by process?
-  - show ln, col, and other things if possible
-
+Files
+    Requirements
+  - Files other than folder on desktop
+  - create new text file in right click menu context.
+  - extension system (in the name and in the file object)
+  - add files (save to localStorage in base 64)
+  - changes to a file in suneditor should be saved
+    - update file content in local storage
+    - read files (convert from base 64 and make sure it's readable.)
+  - Save Files from computer by dropping them onto desktop
+    - https://stackoverflow.com/questions/19119040/how-do-i-save-and-restore-a-file-object-in-local-storage
+    - Store a whole object, not just content. This way if people save things it can be retrieved. The object should have a name, type, content, path
+    - Set limit to how long to store objects in local storage.
 
 
 // TODO: in other
@@ -82,8 +52,6 @@ Requirement for Notepad:
   could be done either hiding window or tell processLoader not to render because it's minimized (add minimize function to useProcessContextState)
 
 
-- Folders on desktop should be like windows (meaning have their own move state)
-
 - Use convention name for event listeners and event listener handlers passed as prop https://react.dev/learn/responding-to-events:
   - Rename event function by handle... 
   - when passed as props it should be named onSomething...
@@ -91,6 +59,41 @@ Requirement for Notepad:
   - Add e.preventDefault(). This will avoid side effect such as triggering a new render when clicking a page. (make sure to test after doing so)
 
 - look into using classes for services and having indepency injection
+
+- Add option to have no window header (still should have minimize... icons)
+  - Decide if there is a header of if the header accept children? Maybe accepting children would be easier. but how do they communicate with the process?
+  - If no header then just reuse Component for icons
+  - Nothing should go behind or over the icons
+
+Requirement for Notepad:
+
+- should open files with text
+- should save text
+- can be opened by textEditor but show loss of format error message popup
+
+- header
+  - icon
+  - multiple pages
+  - add page buttons
+  - pages have remove buttons
+  - (text in) pages are independent
+  
+- second header
+  - File, edit, view buttons
+  - settings page and icon
+
+- Settings page
+  - information on the right
+  - App theme
+  - Font
+  - Opening files button disabled (with comment // TODO later)
+
+- footer
+  - Make it a window component? (like header) controlled by process?
+  - show ln, col, and other things if possible
+
+
+
 
 ///////////////      MVP      ///////////////
 

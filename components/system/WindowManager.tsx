@@ -30,7 +30,6 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
     });
   }, [Object.keys(windows).length]);
   
-  
   const closeWindow = (windowId: string) => {
     const processId = windows[windowId]?.process?.processId;
 
@@ -106,6 +105,26 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
     });
   };
 
+  const updateWarnBeforeProcessCloses = (processId: string, warn: boolean) => {
+    setWindows(currentWindows => {
+      const window = Object.entries(currentWindows).find(([windowId, state]) => state.process.processId === processId);
+      if (!window) {
+        console.error(`Error updating warn before close state. Process ${processId} not found.`);
+        return currentWindows;
+      }
+
+      const windowId = window[0];
+
+      return {
+        ...currentWindows,
+        [windowId]: {
+          ...window[1],
+          warnBeforeClosing: warn          
+        }
+      }
+    });
+  };
+
   return (
     <>
       {
@@ -126,7 +145,8 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
                 handleMoveToCustomMaximizeOptionClick={handleMoveToCustomMaximizeOptionClick}
                 handleHeightMaximize={handleHeightMaximize}
               >
-                <process.Component 
+                <process.Component
+                  updateWarnUserBeforeClose={updateWarnBeforeProcessCloses}
                   params={process.params}
                 />
               </WindowComponent>

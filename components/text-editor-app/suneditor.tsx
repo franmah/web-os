@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
 import { FC, useRef } from "react";
 import styled from "styled-components";
-import { buttonList } from "suneditor-react";
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 
 import SunEditorCore from "suneditor/src/lib/core";
@@ -28,7 +27,10 @@ export const StyledSunEditorContainer = styled.div`
  * @returns 
  */
 // TODO: rename to SunEditor component. Change the name in Process Directory (There can be multiple text editor)
-const TextEditorComponent: FC<{ params: any }> = () => {
+const TextEditorComponent: FC<{ params: any, updateWarnUserBeforeClose: (processId: string, canClose: boolean) => void }> = ({
+  params,
+  updateWarnUserBeforeClose
+}) => {
   const editor = useRef<SunEditorCore>();
 
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {

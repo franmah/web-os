@@ -4,6 +4,7 @@ import { WindowState } from "../window/WindowState";
 export type WindowManagerState = {
   [windowId: string]: {
     state: WindowState,
-    process: WindowedProcess
+    process: WindowedProcess,
+    warnBeforeClosing: boolean
   }
 };
