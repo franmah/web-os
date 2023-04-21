@@ -1,4 +1,4 @@
-import { FC, Fragment, useContext } from 'react';
+import { DragEventHandler, FC, Fragment, useContext } from 'react';
 import DesktopItemContainerComponent from '../items-container/ItemsContainerComponent';
 import styles from './desktop.module.scss';
 import background from '../../../assets/background_image_light.jpg';
@@ -43,6 +43,61 @@ const Desktop: FC = () => {
     }
   };
 
+  const handleUserComputerFileDrop: DragEventHandler<HTMLDivElement> = (event) => {
+    event.preventDefault();
+    // Prevent file from being opened
+    // console.log({ file: event.dataTransfer });
+
+    if (event.dataTransfer.items) {
+      Array.from(event.dataTransfer.items).forEach(item => {
+
+        console.log({ item })
+        const f: any = item.webkitGetAsEntry();
+
+
+        if (!f) { return; }
+        console.log({ f })
+
+        if (f.isDirectory) {
+          const dirReader = f.createReader();
+
+          // Read subfiles/subfolder
+          dirReader.readEntries(entries => {
+            // console.log({ entries: entries })
+
+            entries.forEach(entry => {
+
+              // Read a file
+              if (entry.isFile) {
+                entry.file(file => {
+                  console.log({ file })
+
+                  // // Read content
+                  // // For some reason the type of the file doesn't work
+                  // file.text().then(text => console.log({ text }))
+
+
+                  const reader = new FileReader();
+        
+                  reader.onload = function(event) {
+                    const blob = new Blob([event.target.result], { type: file.type });
+                    console.log(`Blob for ${file.name}:`, blob);
+                    
+                    // Do something with the Blob object
+                  };
+                  
+                  reader.readAsArrayBuffer(file);
+                });
+              }
+            })
+
+          })
+
+        }
+      })
+    }
+  }
+
   return (
     <Fragment>
       <img
@@ -52,7 +107,10 @@ const Desktop: FC = () => {
         srcSet={`${background_1080.src} 1920w, ${background_1440.src} 3440w, ${background_2400.src} 3840w`}
       />
       
-      <div className={styles.background} id='desktop'>
+      <div className={styles.background} id='desktop'
+        onDrop={handleUserComputerFileDrop}
+        onDragOver={(e) => e.preventDefault() } // Needed to prevent browser from opening file on drop
+      >
         <DesktopItemContainerComponent 
           files={getDesktop().children}
           onDesktopContextMenuClick={handleDesktopContextMenuClick}
