@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useRef, useState } from "react";
 import { ProcessContext } from "../../contexts/processContext";
 import { handleZindexesUpdateOnCloseWindow, setWindowAsMoving, setWindowAsResizing, updateWindowOnCustomMaximize, updateWindowOnHeightMaximize, updateWindowStatesOnNewProcess, updateWindowWarnBeforeProcessCloses, updateWindowsOnMaximize, updateWindowsOnMouseDown, updateWindowsOnMouseMove, updateWindowsOnMouseUp } from "../../services/system/window-manager/WindowManagerService";
 import { WindowedProcesses } from "../../types/system/processes/processes";
@@ -7,10 +7,12 @@ import WindowComponent from "./window/window";
 import { WindowResizeDirection } from "../../constants/system/window/WindowResizeDirectionEnum";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../services/EventService";
 import { CustomMaximizeDirection } from "../../constants/system/window/CustomMaximizeDirectionEnum";
+import { ModalComponent, ModalComponentRef } from "./modal/modalComponent";
 
 export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ processes }) => {
 
   const { closeProcess } = useContext(ProcessContext);
+  const modalComponentRef = useRef<ModalComponentRef>(null);
 
   const [windows, setWindows] = useState<WindowManagerState>({});
 
@@ -31,16 +33,18 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
   }, [Object.keys(windows).length]);
   
   const closeWindow = (windowId: string) => {
-    const processId = windows[windowId]?.process?.processId;
 
-    if (!processId) {
-      console.warn(`Error trying to close window, processId not found (windowId: ${windowId})`);
-    } else {
-      setWindows(currentWindows => {
-        return handleZindexesUpdateOnCloseWindow(windowId, currentWindows);
-      });
-      closeProcess(processId);
-    }
+    modalComponentRef?.current?.showModal(true);
+    // const processId = windows[windowId]?.process?.processId;
+
+    // if (!processId) {
+    //   console.warn(`Error trying to close window, processId not found (windowId: ${windowId})`);
+    // } else {
+    //   setWindows(currentWindows => {
+    //     return handleZindexesUpdateOnCloseWindow(windowId, currentWindows);
+    //   });
+    //   closeProcess(processId);
+    // }
   };
 
   const unfocusWindowsOnDocumentMouseDown = (event: MouseEvent) => {
@@ -106,7 +110,6 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
   };
 
   const updateWarnBeforeProcessCloses = (processId: string, warn: boolean) => {
-    console.log('should warn: ' + warn)
     setWindows(currentWindows => {
      return updateWindowWarnBeforeProcessCloses(currentWindows, processId, warn);
     });
@@ -139,6 +142,8 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
           );
         })
       }
+
+      <ModalComponent ref={modalComponentRef}></ModalComponent>
     </>
   )
 };
