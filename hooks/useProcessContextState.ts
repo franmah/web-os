@@ -6,6 +6,8 @@ import { Process, ProcessContextType, Processes, WindowedProcess } from "../type
 const _useProcessContextState = (): ProcessContextType => {
   
   const [processes, setProcesses] = useState<Processes>({});
+
+  // Make it easier to track windows by id instead of using uuid.
   const [windowIdCount, setWindowIdCount] = useState(0);
 
   const closeProcess = (processId: string) => {
@@ -31,7 +33,7 @@ const _useProcessContextState = (): ProcessContextType => {
       processDirectoryEntry.name :
       v4();
 
-    const finalParams: any = {
+    const processParams: any = {
       ...processDirectoryEntry.defaultParams,
       ...params,
       processId: newProcessId
@@ -47,10 +49,17 @@ const _useProcessContextState = (): ProcessContextType => {
       };
 
       newProcess = new WindowedProcess(processName,processDirectoryEntry.Component,
-        finalParams, true, processDirectoryEntry.isUnique, newProcessId, finalWindowParams
+        processParams, true, processDirectoryEntry.isUnique, newProcessId, finalWindowParams
       );
     } else {
-      newProcess = new Process(processName, processDirectoryEntry.Component, finalParams, false, processDirectoryEntry.isUnique, newProcessId);
+      newProcess = new Process(
+        processName,
+        processDirectoryEntry.Component,
+        processParams,
+        false,
+        processDirectoryEntry.isUnique,
+        newProcessId
+      );
     }
 
     setProcesses(currentProcesses => {

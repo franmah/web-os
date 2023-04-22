@@ -32,5 +32,16 @@ export const ProcessDirectory: ProcessDirectoryType = {
     },
     hasWindow: true,
     isUnique: false
+  },
+  'sunTextEditor': {
+    name: 'text-editor',
+    Component: dynamic<{ params: { originalContent: string } }>(() => import('../../components/text-editor-app/suneditor')),
+    windowParams: {
+      headerOptions: {
+        text: 'Text Editor'
+      }
+    },
+    hasWindow: true,
+    isUnique: false
   }
 };

@@ -35,7 +35,8 @@ export const updateWindowStatesOnNewProcess = (processes: WindowedProcesses, cur
 
     windowStates[windowId] = {
       process,
-      state
+      state,
+      warnBeforeClosing: false
     };
   }
 
@@ -108,7 +109,7 @@ export const updateWindowsOnMouseMove = (windowId: string, windows: WindowManage
         return {
           ...windows,
           [windowId]: {
-            process: windows[windowId].process,
+            ...windows[windowId],
             state: { 
               ...windows[windowId].state,
               ...moveWindow(event, windows[windowId].state)
@@ -119,7 +120,7 @@ export const updateWindowsOnMouseMove = (windowId: string, windows: WindowManage
         return {
           ...windows,
           [windowId]: {
-            process: windows[windowId].process,
+            ...windows[windowId],
             state: { 
               ...windows[windowId].state,
               ...resizeWindow(event.clientX, event.clientY, windows[windowId].state)
@@ -135,7 +136,7 @@ export const setWindowAsMoving = (windowId: string, windows: WindowManagerState,
   return {
     ...windows,
     [windowId]: {
-      process: windows[windowId].process,
+      ...windows[windowId],
       state: { 
         ...windows[windowId].state,
         moving: true,
@@ -150,7 +151,7 @@ export const setWindowAsResizing = (windowId: string, windows: WindowManagerStat
   return {
     ...windows,
     [windowId]: {
-      process: windows[windowId].process,
+      ...windows[windowId],
       state: { 
         ...windows[windowId].state,
         previousClientX: event.clientX,
@@ -165,7 +166,7 @@ export const updateWindowsOnMouseUp = (windowId: string, windows: WindowManagerS
   return {
     ...windows,
     [windowId]: {
-      process: windows[windowId].process,
+      ...windows[windowId],
       state: { 
         ...windows[windowId].state,
         ...stopMovingAndResizingWindow(event.clientX, event.clientY, windows[windowId].state)
@@ -178,7 +179,7 @@ export const updateWindowsOnMaximize = (windowId: string, windows: WindowManager
   return {
     ...windows,
     [windowId]: {
-      process: windows[windowId].process,
+      ...windows[windowId],
       state: { 
         ...windows[windowId].state,
         ...maximizeOrRestoreWindow(windows[windowId].state)
@@ -191,7 +192,7 @@ export const updateWindowOnHeightMaximize = (windowId: string, windows: WindowMa
   return {
     ...windows,
     [windowId]: {
-      process: windows[windowId].process,
+      ...windows[windowId],
       state: {
         ...windows[windowId].state,
         ...heightMaximizeWindow(windows[windowId].state)
@@ -204,7 +205,7 @@ export const updateWindowOnCustomMaximize = (windowId: string, windows: WindowMa
   return {
     ...windows,
     [windowId]: {
-      process: windows[windowId].process,
+      ...windows[windowId],
       state: { 
         ...windows[windowId].state,
         ...getWindowStateForCustomMaximize(direction, window.innerWidth, window.innerHeight),
@@ -212,4 +213,22 @@ export const updateWindowOnCustomMaximize = (windowId: string, windows: WindowMa
       }
     }
   };
+};
+
+export const updateWindowWarnBeforeProcessCloses = (windows: WindowManagerState, processId: string, warn: boolean) => {
+ const window = Object.entries(windows).find(([windowId, state]) => state.process.processId === processId);
+  if (!window) {
+    console.error(`Error updating warn before close state. Process ${processId} not found.`);
+    return windows;
+  }
+
+  const windowId = window[0];
+
+  return {
+    ...windows,
+    [windowId]: {
+      ...window[1],
+      warnBeforeClosing: warn          
+    }
+  }
 };

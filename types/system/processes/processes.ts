@@ -19,7 +19,7 @@ export class Process {
 };
 
 export class WindowedProcess extends Process  {
-  windowParams: WindowParams
+  windowParams: WindowParams;
 
   constructor(name: string, Component: React.ComponentType<{ params: any}>, params: any, hasWindow: boolean, isUnique: boolean, processId: string, windowParams: WindowParams) {
     super(name, Component, params, hasWindow, isUnique, processId);

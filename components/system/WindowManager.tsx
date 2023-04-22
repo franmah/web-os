@@ -1,6 +1,6 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { ProcessContext } from "../../contexts/processContext";
-import { handleZindexesUpdateOnCloseWindow, setWindowAsMoving, setWindowAsResizing, updateWindowOnCustomMaximize, updateWindowOnHeightMaximize, updateWindowStatesOnNewProcess, updateWindowsOnMaximize, updateWindowsOnMouseDown, updateWindowsOnMouseMove, updateWindowsOnMouseUp } from "../../services/system/window-manager/WindowManagerService";
+import { handleZindexesUpdateOnCloseWindow, setWindowAsMoving, setWindowAsResizing, updateWindowOnCustomMaximize, updateWindowOnHeightMaximize, updateWindowStatesOnNewProcess, updateWindowWarnBeforeProcessCloses, updateWindowsOnMaximize, updateWindowsOnMouseDown, updateWindowsOnMouseMove, updateWindowsOnMouseUp } from "../../services/system/window-manager/WindowManagerService";
 import { WindowedProcesses } from "../../types/system/processes/processes";
 import { WindowManagerState } from "../../types/system/window-manager/WindowManagerState";
 import WindowComponent from "./window/window";
@@ -29,7 +29,6 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
       document.removeEventListener('mousedown', unfocusWindowsOnDocumentMouseDown);
     });
   }, [Object.keys(windows).length]);
-  
   
   const closeWindow = (windowId: string) => {
     const processId = windows[windowId]?.process?.processId;
@@ -106,32 +105,39 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
     });
   };
 
+  const updateWarnBeforeProcessCloses = (processId: string, warn: boolean) => {
+    console.log('should warn: ' + warn)
+    setWindows(currentWindows => {
+     return updateWindowWarnBeforeProcessCloses(currentWindows, processId, warn);
+    });
+  };
+
   return (
     <>
       {
-        Object.entries(windows)
-          .map(([windowId, { process, state }]) => {
-            return (
-              <WindowComponent
-                key={windowId}
-                windowParams={process.windowParams}
-                state={state}
-                closeWindow={closeWindow}
-                handleWindowMouseDown={handleWindowMouseDown}
-                hanldeMouseMove={hanldeMouseMove}
-                handleStartMoving={handleStartMoving}
-                handleStartResizing={handleStartResizing}
-                handleMouseUp={handleMouseUp}
-                handleMaximize={handleMaximize}
-                handleMoveToCustomMaximizeOptionClick={handleMoveToCustomMaximizeOptionClick}
-                handleHeightMaximize={handleHeightMaximize}
-              >
-                <process.Component 
-                  params={process.params}
-                />
-              </WindowComponent>
-            );
-          })
+        Object.entries(windows).map(([windowId, { process, state }]) => {
+          return (
+            <WindowComponent
+              key={windowId}
+              windowParams={process.windowParams}
+              state={state}
+              closeWindow={closeWindow}
+              handleWindowMouseDown={handleWindowMouseDown}
+              hanldeMouseMove={hanldeMouseMove}
+              handleStartMoving={handleStartMoving}
+              handleStartResizing={handleStartResizing}
+              handleMouseUp={handleMouseUp}
+              handleMaximize={handleMaximize}
+              handleMoveToCustomMaximizeOptionClick={handleMoveToCustomMaximizeOptionClick}
+              handleHeightMaximize={handleHeightMaximize}
+            >
+              <process.Component
+                updateWarnUserBeforeClose={updateWarnBeforeProcessCloses}
+                params={process.params}
+              />
+            </WindowComponent>
+          );
+        })
       }
     </>
   )
