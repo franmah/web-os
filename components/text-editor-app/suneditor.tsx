@@ -1,8 +1,7 @@
 import dynamic from "next/dynamic";
-import { FC, useRef } from "react";
+import { FC, useRef, useState } from "react";
 import styled from "styled-components";
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
-
 import SunEditorCore from "suneditor/src/lib/core";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
@@ -10,6 +9,11 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
 });
 
 export const StyledSunEditorContainer = styled.div`
+
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  overflow: scroll;
 
   // Make suneditor toolbar buttons smaller 
   .se-toolbar li button {
@@ -27,34 +31,45 @@ export const StyledSunEditorContainer = styled.div`
  * @returns 
  */
 // TODO: rename to SunEditor component. Change the name in Process Directory (There can be multiple text editor)
-const TextEditorComponent: FC<{ params: any, updateWarnUserBeforeClose: (processId: string, canClose: boolean) => void }> = ({
-  params,
+const TextEditorComponent: FC<{
+  params: { processId: string, originalContent: string},
+  updateWarnUserBeforeClose: (processId: string, canClose: boolean) => void
+}> = ({
+  params: { processId, originalContent },
   updateWarnUserBeforeClose
 }) => {
+
+  const [savedContent, saveContent] = useState<String>(originalContent || '');
+
   const editor = useRef<SunEditorCore>();
 
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
   }
 
-  const handleEditorChange = (content: string) => {
-    console.log(content) // TODO: save in useRef?
+  const handleSave = (content: string) => {
+    updateWarnUserBeforeClose(processId, false);
+    saveContent(content);
+  }
+
+  const handleChange = (content: string) => {
+    updateWarnUserBeforeClose(processId, true);
   }
 
   return (
-    <StyledSunEditorContainer id='test-text-editor-container'  // Should be the process id.
-      style={{ width: '100%', height: '100%', backgroundColor: 'white', overflow: 'scroll' }}
+    <StyledSunEditorContainer
+      id={processId}
     >
-
       <SunEditor
         getSunEditorInstance={getSunEditorInstance}
         lang='en'
-        setContents={'default value'}
+        setContents={originalContent || ''}
         width="100%"
         height={`${window.innerHeight}px`}
         autoFocus={true}
+        onSave={handleSave}
+        onChange={handleChange}
         setDefaultStyle="cursor: text"
-        onChange={handleEditorChange}
         setOptions={{
           buttonList: [
             ['undo', 'redo',
@@ -66,9 +81,8 @@ const TextEditorComponent: FC<{ params: any, updateWarnUserBeforeClose: (process
             'save',]
           ],
           resizingBar: false,
-          resizingBarContainer: document.getElementById('test-text-editor-container') as HTMLElement
+          resizingBarContainer: document.getElementById(processId) as HTMLElement
         }}
-        
        />
     </StyledSunEditorContainer>
   )

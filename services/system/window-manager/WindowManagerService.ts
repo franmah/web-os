@@ -214,3 +214,21 @@ export const updateWindowOnCustomMaximize = (windowId: string, windows: WindowMa
     }
   };
 };
+
+export const updateWindowWarnBeforeProcessCloses = (windows: WindowManagerState, processId: string, warn: boolean) => {
+ const window = Object.entries(windows).find(([windowId, state]) => state.process.processId === processId);
+  if (!window) {
+    console.error(`Error updating warn before close state. Process ${processId} not found.`);
+    return windows;
+  }
+
+  const windowId = window[0];
+
+  return {
+    ...windows,
+    [windowId]: {
+      ...window[1],
+      warnBeforeClosing: warn          
+    }
+  }
+};

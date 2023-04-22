@@ -32,7 +32,7 @@ const Desktop: FC = () => {
   };
 
   const openItemProcess = (item: DesktopItem) => {
-    openProcess('textEditor');
+    openProcess('textEditor', { originalContent: 'start content' });
   };
 
   const handleFileChange = (newItem: DesktopItem) => {
