@@ -1,7 +1,12 @@
-- WindowedProcess should know
-  - a way to let the window know if process should close (in case of unsaved work for example)
-    - Requirement: if process tells window not to close a message should popup. User should still be able to exit app.
-    - Create an interface/class that component can inherit and that has a close function?
+- Popup service (like angular popup service)
+  - look for library
+  - or make one:
+    - should take any component and show it in popup at the center of the screen
+    - should be able to return a result on close.
+    (make it re-usable as much as possible to turn it into a third-party library?)
+
+
+
 Bug: when resizing window other things get selected (like text)
 Bug: scroll cursor should be !important when resizing
 Bug: Editor doesn't scroll down when pressing enter
@@ -9,22 +14,9 @@ Bug: Window header text is too close to left border when there is no icon
 
 WindowManager shows an errror for canProcessClose.
 
-Files
-    Requirements
-  - Files other than folder on desktop
-  - create new text file in right click menu context.
-  - extension system (in the name and in the file object)
-  - add files (save to localStorage in base 64)
-  - changes to a file in suneditor should be saved
-    - update file content in local storage
-    - read files (convert from base 64 and make sure it's readable.)
-  - Save Files from computer by dropping them onto desktop
-    - https://stackoverflow.com/questions/19119040/how-do-i-save-and-restore-a-file-object-in-local-storage
-    - Store a whole object, not just content. This way if people save things it can be retrieved. The object should have a name, type, content, path
-    - Set limit to how long to store objects in local storage.
-
 
 // TODO: in other
+
 
 - explore idea of window manager having a windowFocused state.
     - Since only one window can be focused at a time
@@ -48,10 +40,6 @@ Files
   - also need a loading screen while starting processes load.
   The loading animation leaves the screen once everything is loaded.
 
-- Minimize should be done later (needs shortcut bar to work)
-  could be done either hiding window or tell processLoader not to render because it's minimized (add minimize function to useProcessContextState)
-
-
 - Use convention name for event listeners and event listener handlers passed as prop https://react.dev/learn/responding-to-events:
   - Rename event function by handle... 
   - when passed as props it should be named onSomething...
@@ -66,38 +54,38 @@ Files
   - Nothing should go behind or over the icons
 
 Requirement for Notepad:
+    - should open files with text
+    - should save text
+    - can be opened by textEditor but show loss of format error message popup
 
-- should open files with text
-- should save text
-- can be opened by textEditor but show loss of format error message popup
+    - header
+      - icon
+      - multiple pages
+      - add page buttons
+      - pages have remove buttons
+      - (text in) pages are independent
+      
+    - second header
+      - File, edit, view buttons
+      - settings page and icon
 
-- header
-  - icon
-  - multiple pages
-  - add page buttons
-  - pages have remove buttons
-  - (text in) pages are independent
-  
-- second header
-  - File, edit, view buttons
-  - settings page and icon
+    - Settings page
+      - information on the right
+      - App theme
+      - Font
+      - Opening files button disabled (with comment // TODO later)
 
-- Settings page
-  - information on the right
-  - App theme
-  - Font
-  - Opening files button disabled (with comment // TODO later)
-
-- footer
-  - Make it a window component? (like header) controlled by process?
-  - show ln, col, and other things if possible
-
-
+    - footer
+      - Make it a window component? (like header) controlled by process?
+      - show ln, col, and other things if possible
 
 
 ///////////////      MVP      ///////////////
 
 - README.md udpated
+
+- Desktop & Explorer:
+  - create new text file in right click menu context.
 
 - Apps:
   - Explorer app (with files)
@@ -106,8 +94,20 @@ Requirement for Notepad:
   - Video player (plays .mp4, .mkv.... videos)
   - Maybe Diablo I?
 
-- Files
-  - copy/cut/pasted
+- Files:
+  - exe files.
+  - shortcut (create and use)
+  - extension (.txt, .doc, .youtube...)
+
+- FileSystem
+  - Files other than folder on desktop
+  - extension system (in the name and in the file object)
+  - add files (save to localStorage in base 64)
+  - read files (convert from base 64 and make sure it's readable.)
+  - Save Files from computer by dropping them onto desktop
+    - https://stackoverflow.com/questions/19119040/how-do-i-save-and-restore-a-file-object-in-local-storage
+    - Store a whole object, not just content. This way if people save things it can be retrieved. The object should have a name, type, content, path
+    - Set limit to how long to store objects in local storage.
 
 - Taskbar
   - pin app
