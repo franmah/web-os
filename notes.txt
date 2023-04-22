@@ -17,6 +17,7 @@ WindowManager shows an errror for canProcessClose.
 
 // TODO: in other
 
+- convert from nextjs to react app.
 
 - explore idea of window manager having a windowFocused state.
     - Since only one window can be focused at a time
