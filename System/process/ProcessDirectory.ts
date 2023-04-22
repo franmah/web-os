@@ -33,7 +33,7 @@ export const ProcessDirectory: ProcessDirectoryType = {
     hasWindow: true,
     isUnique: false
   },
-  'textEditor': {
+  'sunTextEditor': {
     name: 'text-editor',
     Component: dynamic<{ params: { originalContent: string } }>(() => import('../../components/text-editor-app/suneditor')),
     windowParams: {

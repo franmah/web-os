@@ -6,6 +6,8 @@ import { Process, ProcessContextType, Processes, WindowedProcess } from "../type
 const _useProcessContextState = (): ProcessContextType => {
   
   const [processes, setProcesses] = useState<Processes>({});
+
+  // Make it easier to track windows by id instead of using uuid.
   const [windowIdCount, setWindowIdCount] = useState(0);
 
   const closeProcess = (processId: string) => {

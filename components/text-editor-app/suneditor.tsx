@@ -30,8 +30,7 @@ export const StyledSunEditorContainer = styled.div`
  * fixed by using reactStrictMode = false in next.config.js
  * @returns 
  */
-// TODO: rename to SunEditor component. Change the name in Process Directory (There can be multiple text editor)
-const TextEditorComponent: FC<{
+const SunTextEditorComponent: FC<{
   params: { processId: string, originalContent: string},
   updateWarnUserBeforeClose: (processId: string, canClose: boolean) => void
 }> = ({
@@ -88,4 +87,4 @@ const TextEditorComponent: FC<{
   )
 };
 
-export default TextEditorComponent;
+export default SunTextEditorComponent;

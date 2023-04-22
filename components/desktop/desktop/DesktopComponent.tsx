@@ -32,7 +32,7 @@ const Desktop: FC = () => {
   };
 
   const openItemProcess = (item: DesktopItem) => {
-    openProcess('textEditor', { originalContent: 'start content' });
+    openProcess('sunTextEditor', { originalContent: 'start content' });
   };
 
   const handleFileChange = (newItem: DesktopItem) => {
