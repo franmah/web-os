@@ -1,5 +1,4 @@
 import { FC, Ref, forwardRef, useImperativeHandle, useState } from "react";
-import Modal from 'react-modal';
 
 export interface ModalComponentRef {
   showModal: (show: boolean) => void;
@@ -27,12 +26,6 @@ export const ModalComponent = forwardRef((props, ref: Ref<ModalComponentRef>) =>
   }
 
   return (
-    <Modal
-      isOpen={modalIsOpen}
-      style={style}
-    >
-      <div> HELLO</div>
-      <button onClick={() => setIsOpen(false)}>CLOSE</button>
-    </Modal>
+    <></>
   );
 });

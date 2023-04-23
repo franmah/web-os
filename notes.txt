@@ -1,10 +1,5 @@
-- Popup service (like angular popup service)
-  - look for library
-  - or make one:
-    - should take any component and show it in popup at the center of the screen
-    - should be able to return a result on close.
-    (make it re-usable as much as possible to turn it into a third-party library?)
-
+- Popup:
+  - show a generic message
 
 
 Bug: when resizing window other things get selected (like text)
