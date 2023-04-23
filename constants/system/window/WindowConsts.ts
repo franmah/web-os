@@ -19,5 +19,6 @@ export const DEFAULT_WINDOW_STATE: WindowState = {
   resizeDirection: WindowResizeDirection.None,
   showMaximizePlacehodler: MaximizePlaceholderDirection.None,
   focused: true,
-  zIndex: 100
+  zIndex: 100,
+  showClosingModal: false
 };

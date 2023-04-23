@@ -1,4 +1,4 @@
-import { FC, Fragment, useEffect } from "react";
+import { FC, Fragment, useEffect, useRef } from "react";
 import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeEnum";
 import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
 import { WindowParams } from "../../../types/system/window/WindowProps";
@@ -9,6 +9,7 @@ import WindowHeaderComponent from "./header/header";
 import { CustomMaximizeDirection } from "../../../constants/system/window/CustomMaximizeDirectionEnum";
 import { zIndexConsts } from "../../../constants/Zindex";
 import { StyledWindow } from "../../../styled-components/system/window/StyledWindow";
+import { ModalComponent } from "../modal/modalComponent";
 
 export const WINDOW_MIN_HEIGH = 200; // TODO: move into styles component
 export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
@@ -16,7 +17,7 @@ export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
 const WindowComponent: FC<{
   windowParams: WindowParams,
   state: WindowState,
-  closeWindow: (windowId: string) => void,
+  closeWindow: (windowId: string, forceClose: boolean) => void,
   handleWindowMouseDown : (windowId: string) => void,
   hanldeMouseMove : (windowId: string, event: MouseEvent) => void,
   handleStartMoving : (windowId: string, event: MouseEvent) => void,
@@ -40,9 +41,9 @@ const WindowComponent: FC<{
   handleHeightMaximize,
   children
 }) => {
-
+  
   const handleCloseWindow = () => {
-    closeWindow(windowParams.windowId);
+    closeWindow(windowParams.windowId, false);
   };
 
   useEffect(() => {
@@ -64,8 +65,27 @@ const WindowComponent: FC<{
     handleMouseUp(windowParams.windowId, event);
   };
 
+  const getModalLeft = () => {
+    const right = state.left + state.width;
+    const middleOfWindow = (right - state.left) / 2;
+    return state.left + middleOfWindow;
+  }
+
+  const getModalTop = () => {
+    const bottom = state.top + state.height;
+    const middleOfWindow = (bottom - state.top) / 2;
+    return state.top + middleOfWindow;
+  }
+
   return (
     <Fragment>
+      
+      <ModalComponent
+        top={getModalTop()}
+        left={getModalLeft()}
+        showModal={state.showClosingModal}
+      />
+
       <WindowAnimationMaximizePlaceholderComponent
         placeholderDirection={state.showMaximizePlacehodler}
         top={state.top}
@@ -115,13 +135,13 @@ const WindowComponent: FC<{
               />
             </div>
             
-
             { children }
             
           </div>
 
         </WindowBorderComponent>    
       </StyledWindow>
+
     </Fragment>
   );
 };

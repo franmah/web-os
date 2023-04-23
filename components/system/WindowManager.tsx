@@ -7,12 +7,10 @@ import WindowComponent from "./window/window";
 import { WindowResizeDirection } from "../../constants/system/window/WindowResizeDirectionEnum";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../services/EventService";
 import { CustomMaximizeDirection } from "../../constants/system/window/CustomMaximizeDirectionEnum";
-import { ModalComponent, ModalComponentRef } from "./modal/modalComponent";
 
 export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ processes }) => {
 
   const { closeProcess } = useContext(ProcessContext);
-  const modalComponentRef = useRef<ModalComponentRef>(null);
 
   const [windows, setWindows] = useState<WindowManagerState>({});
 
@@ -32,19 +30,42 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
     });
   }, [Object.keys(windows).length]);
   
-  const closeWindow = (windowId: string) => {
+  /**
+   * @param forceClose if true then will close the process without showing warning modal.
+   */
+  const closeWindow = (windowId: string, forceClose: boolean) => {
+    const processId = windows[windowId]?.process?.processId;
 
-    modalComponentRef?.current?.showModal(true);
-    // const processId = windows[windowId]?.process?.processId;
+    if (!processId) {
+      console.warn(`Error trying to close window, processId not found (windowId: ${windowId})`);
+      return;
+    }
 
-    // if (!processId) {
-    //   console.warn(`Error trying to close window, processId not found (windowId: ${windowId})`);
-    // } else {
-    //   setWindows(currentWindows => {
-    //     return handleZindexesUpdateOnCloseWindow(windowId, currentWindows);
-    //   });
-    //   closeProcess(processId);
-    // }
+    let shouldCloseProcess = false;
+
+    setWindows(currentWindows => {
+      const showWarningModal = currentWindows[windowId].warnBeforeClosing;
+
+      if (!showWarningModal || forceClose) {
+        shouldCloseProcess = true;
+        return handleZindexesUpdateOnCloseWindow(windowId, currentWindows);
+      }
+
+      return {
+        ...currentWindows,
+        [windowId]: {
+          ...currentWindows[windowId],
+          state: {
+            ...currentWindows[windowId].state,
+            showClosingModal: true
+          }
+        }
+      };
+    });
+
+    if (shouldCloseProcess) {
+      closeProcess(processId);
+    }
   };
 
   const unfocusWindowsOnDocumentMouseDown = (event: MouseEvent) => {
@@ -142,8 +163,6 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
           );
         })
       }
-
-      <ModalComponent ref={modalComponentRef}></ModalComponent>
     </>
   )
 };
