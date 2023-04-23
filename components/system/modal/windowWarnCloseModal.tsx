@@ -1,17 +1,21 @@
-import { FC, Ref, forwardRef, useImperativeHandle, useState } from "react";
+import { FC } from "react";
 
 export interface ModalComponentRef {
   showModal: (show: boolean) => void;
 }
 
-export const ModalComponent: FC<{
+export const WindowWarnCloseModalComponent: FC<{
   top: number,
   left: number,
-  showModal: number
+  showModal: boolean,
+  onClose: () => void,
+  onCancel: () => void
 }> = ({
   top,
   left,
-  showModal
+  showModal,
+  onClose,
+  onCancel
 }) => {
 
   return (
@@ -27,7 +31,8 @@ export const ModalComponent: FC<{
         zIndex: 100000
       }}
     >
-      hello
+      <button onClick={onClose}>Exit</button>
+      <button onClick={onCancel}>Cancel</button>
     </div>
   );
 };

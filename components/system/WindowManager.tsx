@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useRef, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { ProcessContext } from "../../contexts/processContext";
 import { handleZindexesUpdateOnCloseWindow, setWindowAsMoving, setWindowAsResizing, updateWindowOnCustomMaximize, updateWindowOnHeightMaximize, updateWindowStatesOnNewProcess, updateWindowWarnBeforeProcessCloses, updateWindowsOnMaximize, updateWindowsOnMouseDown, updateWindowsOnMouseMove, updateWindowsOnMouseUp } from "../../services/system/window-manager/WindowManagerService";
 import { WindowedProcesses } from "../../types/system/processes/processes";
@@ -30,6 +30,7 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
     });
   }, [Object.keys(windows).length]);
   
+  // TODO: move logic to service
   /**
    * @param forceClose if true then will close the process without showing warning modal.
    */
@@ -41,13 +42,10 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
       return;
     }
 
-    let shouldCloseProcess = false;
-
     setWindows(currentWindows => {
       const showWarningModal = currentWindows[windowId].warnBeforeClosing;
-
       if (!showWarningModal || forceClose) {
-        shouldCloseProcess = true;
+        closeProcess(processId);
         return handleZindexesUpdateOnCloseWindow(windowId, currentWindows);
       }
 
@@ -62,10 +60,6 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
         }
       };
     });
-
-    if (shouldCloseProcess) {
-      closeProcess(processId);
-    }
   };
 
   const unfocusWindowsOnDocumentMouseDown = (event: MouseEvent) => {
@@ -136,6 +130,22 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
     });
   };
 
+  // TODO: move logic to service
+  const hideCloseModal = (windowId: string) => {
+    setWindows(currentWindows => {
+      return {
+        ...currentWindows,
+        [windowId]: {
+          ...currentWindows[windowId],
+          state: {
+            ...currentWindows[windowId].state,
+            showClosingModal: false
+          }
+        }
+      }
+    });
+  }
+
   return (
     <>
       {
@@ -154,6 +164,7 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
               handleMaximize={handleMaximize}
               handleMoveToCustomMaximizeOptionClick={handleMoveToCustomMaximizeOptionClick}
               handleHeightMaximize={handleHeightMaximize}
+              hideModal={hideCloseModal}
             >
               <process.Component
                 updateWarnUserBeforeClose={updateWarnBeforeProcessCloses}

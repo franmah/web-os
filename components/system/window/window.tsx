@@ -9,7 +9,7 @@ import WindowHeaderComponent from "./header/header";
 import { CustomMaximizeDirection } from "../../../constants/system/window/CustomMaximizeDirectionEnum";
 import { zIndexConsts } from "../../../constants/Zindex";
 import { StyledWindow } from "../../../styled-components/system/window/StyledWindow";
-import { ModalComponent } from "../modal/modalComponent";
+import { WindowWarnCloseModalComponent } from "../modal/windowWarnCloseModal";
 
 export const WINDOW_MIN_HEIGH = 200; // TODO: move into styles component
 export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
@@ -26,6 +26,7 @@ const WindowComponent: FC<{
   handleMaximize : (windowId: string) => void,
   handleMoveToCustomMaximizeOptionClick : (windowId: string, direction: CustomMaximizeDirection) => void,
   handleHeightMaximize: (windowId: string) => void,
+  hideModal: (windowId: string) => void,
   children: React.ReactNode
 }> = ({
   windowParams,
@@ -39,6 +40,7 @@ const WindowComponent: FC<{
   handleMaximize,
   handleMoveToCustomMaximizeOptionClick,
   handleHeightMaximize,
+  hideModal,
   children
 }) => {
   
@@ -80,10 +82,12 @@ const WindowComponent: FC<{
   return (
     <Fragment>
       
-      <ModalComponent
+      <WindowWarnCloseModalComponent
         top={getModalTop()}
         left={getModalLeft()}
         showModal={state.showClosingModal}
+        onClose={() => closeWindow(windowParams.windowId, true)}
+        onCancel={() => hideModal(windowParams.windowId)}
       />
 
       <WindowAnimationMaximizePlaceholderComponent
@@ -117,7 +121,7 @@ const WindowComponent: FC<{
           <div className={'centerContent'}>
 
             {/* Header container */}
-            {/* Either move that div into StyledComponentContainer, or Create the styled component directly? */}
+            {/* TODO: Either move that div into StyledComponentContainer, or Create the styled component directly? */}
             <div
               style={{
                 width: '100%',
