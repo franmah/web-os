@@ -1,4 +1,4 @@
-import { DragEventHandler, FC, Fragment, useContext } from 'react';
+import { DragEventHandler, FC, Fragment, useContext, useEffect } from 'react';
 import DesktopItemContainerComponent from '../items-container/ItemsContainerComponent';
 import styles from './desktop.module.scss';
 import background from '../../../assets/background_image_light.jpg';

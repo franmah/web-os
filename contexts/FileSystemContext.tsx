@@ -6,10 +6,10 @@ export const FileSystemContext = createContext<FileSystemContextType>(null as an
 
 const FileSystemContextProvider: FC = ({ children }) => {
   
-  const { root, addFile, getDesktop } = useFileSystemContextState();
+  const { getRoot, addFile, getDesktop } = useFileSystemContextState();
 
   return (
-    <FileSystemContext.Provider value={{ root, addFile, getDesktop }}>
+    <FileSystemContext.Provider value={{ getRoot, addFile, getDesktop }}>
       { children }
     </FileSystemContext.Provider>
   );

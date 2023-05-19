@@ -1,36 +1,20 @@
 import { useState } from "react";
 import { v4 } from "uuid";
-import { getExampleDesktopChildren } from "../services/FileSystemService";
+import { getRootAtSystemStart } from "../services/FileSystemService";
 import { ExplorerFile } from "../types/system/file/ExplorerElement";
 
 export const useFileSystemContextState = () => {
-  const rootFile: ExplorerFile = {
-    name: 'root',
-    id: 'root',
-    children: [],
-    parent: null
-  };
 
-  rootFile.children.push({
-    name: 'Deskop',
-    id: 'desktop',
-    children: [],
-    parent: rootFile
-  });
+  const rootFile: ExplorerFile = getRootAtSystemStart();
 
-  rootFile.children.push({
-    name: 'Document',
-    id: 'document',
-    children: [],
-    parent: rootFile
-  });
+  const [getRoot, setRoot] = useState<() => ExplorerFile>(() => () => rootFile);
 
-  rootFile.children[0].children = getExampleDesktopChildren(rootFile.children[0]);
-
-  const [root, setRoot] = useState<ExplorerFile>(rootFile);
+  let getDesktop = (): ExplorerFile => getRoot()?.children?.[0];
 
   const addFile = (name: string, iconPath: string, parent: ExplorerFile | null, id?: string) => {
-    setRoot(root => {
+    setRoot(getRoot => {
+
+      const root = getRoot();
 
       const file = {
         name,
@@ -43,13 +27,12 @@ export const useFileSystemContextState = () => {
       if (parent)
         parent.children.push(file);
       
-      return root;
+      getDesktop = () => root?.children?.[0];
+
+      return () => root;
     });
   };
 
-  const getDesktop = (): ExplorerFile => {
-    return root.children[0];
-  };
 
-  return { root, addFile, getDesktop };
+  return { getRoot, addFile, getDesktop };
 }

@@ -1,7 +1,34 @@
 import { FOLDER_ICON_PATH } from "../constants/FileSystemConsts";
 import { ExplorerFile } from "../types/system/file/ExplorerElement";
 
-export const getExampleDesktopChildren = (desktop: ExplorerFile): ExplorerFile[] => [
+export const getRootAtSystemStart = (): ExplorerFile => {
+  const root: ExplorerFile = {
+    name: 'root',
+    id: 'root',
+    children: [],
+    parent: null
+  };
+
+  root.children.push({
+    name: 'Deskop',
+    id: 'desktop',
+    children: [],
+    parent: root
+  });
+
+  root.children.push({
+    name: 'Document',
+    id: 'document',
+    children: [],
+    parent: root
+  });
+
+  root.children[0].children = getExampleDesktopChildren(root.children[0]);
+
+  return root;
+}
+
+const getExampleDesktopChildren = (desktop: ExplorerFile): ExplorerFile[] => [
   {
     children: [],
     iconPath: FOLDER_ICON_PATH,
