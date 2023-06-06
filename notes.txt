@@ -1,21 +1,33 @@
-- Popup service (like angular popup service)
-  - look for library
-  - or make one:
-    - should take any component and show it in popup at the center of the screen
-    - should be able to return a result on close.
-    (make it re-usable as much as possible to turn it into a third-party library?)
+
+/////////////////// PATH TO MVP ///////////////
+
+1. File system
+- For now keep file in objects (not saved to indexedDB)
+- can save to file
+- can open file using extension
+- can create/read folder
+
+2. Apps
+- can create youtube, txt and folder
+- can open youtube and txt files
+- can save txt files.
+
+3. Taskbar
+- show open app
+- pin Apps
+- slide icons
+
+4. Windows menu
+- show apps 
 
 
-
-Bug: when resizing window other things get selected (like text)
-Bug: scroll cursor should be !important when resizing
-Bug: Editor doesn't scroll down when pressing enter
-Bug: Window header text is too close to left border when there is no icon
-
-WindowManager shows an errror for canProcessClose.
+////// IN PROGRESS:
 
 
-// TODO: in other
+- create files with extension
+
+
+/////// TODO: in other
 
 
 - explore idea of window manager having a windowFocused state.
@@ -118,3 +130,4 @@ Requirement for Notepad:
 
 - Taskbar Windows icon
   works
+

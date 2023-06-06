@@ -1,4 +1,4 @@
-import { DragEventHandler, FC, Fragment, useContext, useEffect } from 'react';
+import { DragEventHandler, FC, Fragment, useContext } from 'react';
 import DesktopItemContainerComponent from '../items-container/ItemsContainerComponent';
 import styles from './desktop.module.scss';
 import background from '../../../assets/background_image_light.jpg';
@@ -12,7 +12,7 @@ import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { FOLDER_ICON_PATH } from '../../../constants/FileSystemConsts';
 
 const Desktop: FC = () => {
-  const { getDesktop, addFile } = useContext(FileSystemContext);
+  const { getDesktop, appendFile } = useContext(FileSystemContext);
   const  { openProcess } = useContext(ProcessContext);
 
   const handleItemContextMenuClick = (event: MouseEvent) => {
@@ -39,7 +39,7 @@ const Desktop: FC = () => {
     const oldFile = getDesktop().children?.find(file => file.id === newItem.id);
 
     if (!oldFile) {
-      addFile(newItem.name, FOLDER_ICON_PATH, getDesktop(), newItem.id);
+      appendFile(newItem.name, FOLDER_ICON_PATH, getDesktop(), newItem.id);
     }
   };
 

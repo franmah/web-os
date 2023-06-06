@@ -11,7 +11,7 @@ export const useFileSystemContextState = () => {
 
   let getDesktop = (): ExplorerFile => getRoot()?.children?.[0];
 
-  const addFile = (name: string, iconPath: string, parent: ExplorerFile | null, id?: string) => {
+  const appendFile = (name: string, iconPath: string, parent: ExplorerFile | null, id?: string) => {
     setRoot(getRoot => {
 
       const root = getRoot();
@@ -21,7 +21,8 @@ export const useFileSystemContextState = () => {
         iconPath,
         parent,
         children: [],
-        id: id || v4()
+        id: id || v4(),
+        isFolder: false
       };
   
       if (parent)
@@ -33,6 +34,5 @@ export const useFileSystemContextState = () => {
     });
   };
 
-
-  return { getRoot, addFile, getDesktop };
+  return { getRoot, appendFile, getDesktop };
 }
