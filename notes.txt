@@ -68,6 +68,10 @@
   - If no header then just reuse Component for icons
   - Nothing should go behind or over the icons
 
+- file system
+  - readdir should return a list of string. The deskop component should then transform those strings in DesktopItems using the files' extension
+
+//////
 Requirement for Notepad:
     - should open files with text
     - should save text
