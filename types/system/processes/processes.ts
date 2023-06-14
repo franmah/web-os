@@ -48,6 +48,7 @@ export type ProcessDirectoryEntry = {
   isUnique: boolean;
   hasWindow: boolean;
   windowParams?: Partial<WindowParams>;
+  iconPath?: string;
 };
 
 export type ProcessDirectoryType = {

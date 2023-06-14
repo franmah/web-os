@@ -13,14 +13,18 @@ import { v4 } from 'uuid';
 import { ContextMenuCommandList } from '../../../types/system/contextMenu/contextMenu';
 import DesktopItemComponent from '../item/DesktopItemComponent';
 import SelectionBoxComponent from '../../shared/selectionbox/selectionBoxComponent';
+import { NewTxtFileCommand } from '../../../System/contextMenuCommands/commands/newTxtFileCommand';
+import { defaultProcessByExtension } from '../../../System/process/ProcessDirectoryByExtension';
+import { ProcessDirectory } from '../../../System/process/ProcessDirectory';
 
 const DesktopItemContainerComponent: FC<{
   files: ExplorerFile[],
   onDesktopContextMenuClick: (event: MouseEvent, commands: ContextMenuCommandList) => void,
   onItemContextMenuClick: (event: MouseEvent) => void,
   onFileChange: (newItem: DesktopItem) => void,
+  onFolderChange: (item: DesktopItem) => void,
   onItemDoubleClick: (item: DesktopItem) => void
-}> = ({ files, onDesktopContextMenuClick, onItemContextMenuClick, onFileChange, onItemDoubleClick }) => {
+}> = ({ files, onDesktopContextMenuClick, onItemContextMenuClick, onFileChange, onFolderChange, onItemDoubleClick }) => {
 
   const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
 
@@ -48,7 +52,8 @@ const DesktopItemContainerComponent: FC<{
   const onContextMenuClick = (event: MouseEvent) => {
     const commands =  [
       new NewItemCommandContainer([
-        new NewFolderCommand(() => addFolder(event.clientY, event.clientX))
+        new NewFolderCommand(() => addItem(event.clientY, event.clientX, 'folder')),
+        new NewTxtFileCommand(() => addItem(event.clientY, event.clientX, 'Text'))
       ]),        
       new SortCommandContainer([
         new SortByNameCommand(() => setDesktopItems(currentItems => 
@@ -59,11 +64,42 @@ const DesktopItemContainerComponent: FC<{
     onDesktopContextMenuClick(event, commands);
   };
 
-  const addFolder = (top: number, left: number) => {
+  const addItem = (top: number, left: number, type: string) => {
+    // TODO:
+    // If it's an app, then get the app's icon from the app directory,
+    // Get the app's extension from the app's directory
+    // Get the item's name with format 'New APP_NAME Document.EXTENSION'
+    // Let DesktopComponent know that a new item was created.
+    if (type === 'folder') {
+      return addFolder(top, left);
+    }
 
     setDesktopItems(currentItems => {
-      const newItemName = getNewItemName(currentItems);
+      const newItemName = getNewItemName(type, currentItems);
+      let extension = '';
 
+      if (type === 'Text') {
+        extension = 'txt';
+      }
+
+      const item: DesktopItem = {
+        top,
+        left,
+        name: newItemName + '.' + extension,
+        iconPath: ProcessDirectory[defaultProcessByExtension[extension]]?.iconPath || '',
+        selected: false,
+        id: v4(),
+        renaming: true,
+      };
+
+      onFileChange(item);
+      return [...currentItems, item];
+    });
+  };
+
+  const addFolder = (top: number, left: number) => {
+    setDesktopItems(currentItems => {
+      const newItemName = getNewItemName('Folder', currentItems);
       const item: DesktopItem = {
         top,
         left,
@@ -74,9 +110,11 @@ const DesktopItemContainerComponent: FC<{
         renaming: true
       };
 
+      onFolderChange(item);      
       return [...currentItems, item];
     });
-  };
+    
+  }
 
   const onItemRenamed = (itemId: string, itemNewName: string) => {
     setDesktopItems(currentItems => {
