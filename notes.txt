@@ -1,18 +1,23 @@
+// WORKING ON:
+
+
+
 
 /////////////////// PATH TO MVP ///////////////
+1. Explorer app
+  - side menu
+  - show path in the top
+  - previous/next
+  - search
+  - can select files
+  - can open files
+  - can create files
 
-1. File system
-- For now keep file in objects (not saved to indexedDB)
-- can save to file
-- can open file using extension
-- can create/read folder
 
 2. Apps
 - can create youtube, txt and folder
 - can open youtube and txt files
 - can save txt files.
-
-2.5 Explorer app
 
 3. Taskbar
 - show open app
