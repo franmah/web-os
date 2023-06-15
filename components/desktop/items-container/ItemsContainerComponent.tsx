@@ -65,11 +65,6 @@ const DesktopItemContainerComponent: FC<{
   };
 
   const addItem = (top: number, left: number, type: string) => {
-    // TODO:
-    // If it's an app, then get the app's icon from the app directory,
-    // Get the app's extension from the app's directory
-    // Get the item's name with format 'New APP_NAME Document.EXTENSION'
-    // Let DesktopComponent know that a new item was created.
     if (type === 'folder') {
       return addFolder(top, left);
     }
