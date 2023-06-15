@@ -1,6 +1,6 @@
 export type ExplorerFile = {
   children: ExplorerFile[];
-  content?: string;
+  content?: any;
   iconPath?: string;
   isFolder: boolean;
   name: string;

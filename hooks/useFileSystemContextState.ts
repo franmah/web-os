@@ -34,7 +34,11 @@ export const useFileSystemContextState = () => {
     });
   }
 
-  const appendFile = (name: string, iconPath: string, parent: ExplorerFile | null, id?: string) => {
+  const updateFile = (file: ExplorerFile, content: any) => {
+    file.content = content;
+  }
+
+  const appendFile = (name: string, iconPath: string, parent: ExplorerFile | null, id?: string, content?: any) => {
     setRoot(getRoot => {
 
       const root = getRoot();
@@ -48,17 +52,19 @@ export const useFileSystemContextState = () => {
         parent,
         id: id || v4(),
         isFolder: false,
-        extension
+        extension,
+        content
       };
   
-      if (parent)
+      if (parent) {
         parent.children.push(file);
-      
+      }
+
       getDesktop = () => root?.children?.[0];
 
       return () => root;
     });
   };
 
-  return { getRoot, appendFile, getDesktop, mkdir };
+  return { getRoot, appendFile, getDesktop, mkdir, updateFile };
 }

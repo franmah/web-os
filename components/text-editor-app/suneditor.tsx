@@ -1,8 +1,10 @@
 import dynamic from "next/dynamic";
-import { FC, useRef, useState } from "react";
+import { FC, useContext, useRef, useState } from "react";
 import styled from "styled-components";
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import SunEditorCore from "suneditor/src/lib/core";
+import { ExplorerFile } from "../../types/system/file/ExplorerElement";
+import { FileSystemContext } from "../../contexts/FileSystemContext";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
@@ -31,16 +33,15 @@ export const StyledSunEditorContainer = styled.div`
  * @returns 
  */
 const SunTextEditorComponent: FC<{
-  params: { processId: string, originalContent: string},
+  params: { processId: string, file: ExplorerFile },
   updateWarnUserBeforeClose: (processId: string, canClose: boolean) => void
 }> = ({
-  params: { processId, originalContent },
+  params: { processId, file },
   updateWarnUserBeforeClose
 }) => {
 
-  const [savedContent, saveContent] = useState<String>(originalContent || '');
-
   const editor = useRef<SunEditorCore>();
+  const { appendFile, updateFile } = useContext(FileSystemContext);
 
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
@@ -48,7 +49,7 @@ const SunTextEditorComponent: FC<{
 
   const handleSave = (content: string) => {
     updateWarnUserBeforeClose(processId, false);
-    saveContent(content);
+    updateFile(file, content);
   }
 
   const handleChange = (content: string) => {
@@ -62,7 +63,7 @@ const SunTextEditorComponent: FC<{
       <SunEditor
         getSunEditorInstance={getSunEditorInstance}
         lang='en'
-        setContents={originalContent || ''}
+        setContents={file?.content || ''}
         width="100%"
         height={`${window.innerHeight}px`}
         autoFocus={true}

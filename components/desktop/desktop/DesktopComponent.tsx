@@ -31,7 +31,9 @@ const Desktop: FC = () => {
   };
 
   const openItemProcess = (item: DesktopItem) => {
-    openProcess('sunTextEditor', { originalContent: 'start content' });
+    const explorerItem = getDesktop().children.find(c => c.id === item.id);
+    console.log(explorerItem?.content)
+    openProcess('sunTextEditor', { file: explorerItem  });
   };
 
   const handleFileChange = (newItem: DesktopItem) => {
