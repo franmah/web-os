@@ -60,7 +60,7 @@ const Desktop: FC = () => {
       
       <div className={styles.background} id='desktop'
         // onDrop={handleUserComputerFileDrop}
-        onDragOver={(e) => e.preventDefault() } // Needed to prevent browser from opening user's file on drop
+        // onDragOver={(e) => e.preventDefault() } // Needed to prevent browser from opening user's file on drop
       >
         <DesktopItemContainerComponent 
           files={getDesktop().children}
