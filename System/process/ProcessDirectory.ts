@@ -34,7 +34,7 @@ export const ProcessDirectory: ProcessDirectoryType = {
     isUnique: false
   },
   'sunTextEditor': {
-    name: 'text-editor',
+    name: 'sunTextEditor',
     Component: dynamic<{ params: { originalContent: string } }>(() => import('../../components/text-editor-app/suneditor')),
     windowParams: {
       headerOptions: {
@@ -42,6 +42,7 @@ export const ProcessDirectory: ProcessDirectoryType = {
       }
     },
     hasWindow: true,
-    isUnique: false
+    isUnique: false,
+    iconPath: '/icons/text-icon.png'
   }
 };

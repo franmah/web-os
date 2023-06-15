@@ -1,9 +1,10 @@
 export type ExplorerFile = {
   children: ExplorerFile[];
-  // contentPath: string;
+  content?: any;
   iconPath?: string;
-  // isFolder: boolean;
+  isFolder: boolean;
   name: string;
   parent: ExplorerFile | null;
   id: string;
+  extension?: string;
 };

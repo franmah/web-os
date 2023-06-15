@@ -106,7 +106,6 @@ export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ p
   };
 
   const updateWarnBeforeProcessCloses = (processId: string, warn: boolean) => {
-    console.log('should warn: ' + warn)
     setWindows(currentWindows => {
      return updateWindowWarnBeforeProcessCloses(currentWindows, processId, warn);
     });

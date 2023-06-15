@@ -1,21 +1,36 @@
-- Popup service (like angular popup service)
-  - look for library
-  - or make one:
-    - should take any component and show it in popup at the center of the screen
-    - should be able to return a result on close.
-    (make it re-usable as much as possible to turn it into a third-party library?)
+
+/////////////////// PATH TO MVP ///////////////
+
+1. File system
+- For now keep file in objects (not saved to indexedDB)
+- can save to file
+- can open file using extension
+- can create/read folder
+
+2. Apps
+- can create youtube, txt and folder
+- can open youtube and txt files
+- can save txt files.
+
+2.5 Explorer app
+
+3. Taskbar
+- show open app
+- pin Apps
+- slide icons
+
+4. Windows menu
+- show apps 
 
 
+////// IN PROGRESS:
 
-Bug: when resizing window other things get selected (like text)
-Bug: scroll cursor should be !important when resizing
-Bug: Editor doesn't scroll down when pressing enter
-Bug: Window header text is too close to left border when there is no icon
+=> Using extensions
+  - add icons
+  - Updates ExplorerFile to have an extension
+  - ItemsContainerComponent should let DesktopComponent know that there's a new file or folder that was created.
 
-WindowManager shows an errror for canProcessClose.
-
-
-// TODO: in other
+/////// TODO: in other
 
 
 - explore idea of window manager having a windowFocused state.
@@ -53,6 +68,10 @@ WindowManager shows an errror for canProcessClose.
   - If no header then just reuse Component for icons
   - Nothing should go behind or over the icons
 
+- file system
+  - readdir should return a list of string. The deskop component should then transform those strings in DesktopItems using the files' extension
+
+//////
 Requirement for Notepad:
     - should open files with text
     - should save text
@@ -118,3 +137,4 @@ Requirement for Notepad:
 
 - Taskbar Windows icon
   works
+

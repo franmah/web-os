@@ -9,10 +9,9 @@ import { FileSystemContext } from '../../../contexts/FileSystemContext';
 import { ProcessContext } from '../../../contexts/processContext';
 import { ContextMenuCommandList } from '../../../types/system/contextMenu/contextMenu';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import { FOLDER_ICON_PATH } from '../../../constants/FileSystemConsts';
 
 const Desktop: FC = () => {
-  const { getDesktop, addFile } = useContext(FileSystemContext);
+  const { getDesktop, appendFile, mkdir } = useContext(FileSystemContext);
   const  { openProcess } = useContext(ProcessContext);
 
   const handleItemContextMenuClick = (event: MouseEvent) => {
@@ -32,71 +31,25 @@ const Desktop: FC = () => {
   };
 
   const openItemProcess = (item: DesktopItem) => {
-    openProcess('sunTextEditor', { originalContent: 'start content' });
+    const explorerItem = getDesktop().children.find(c => c.id === item.id);
+    console.log(explorerItem?.content)
+    openProcess('sunTextEditor', { file: explorerItem  });
   };
 
   const handleFileChange = (newItem: DesktopItem) => {
     const oldFile = getDesktop().children?.find(file => file.id === newItem.id);
-
     if (!oldFile) {
-      addFile(newItem.name, FOLDER_ICON_PATH, getDesktop(), newItem.id);
+      appendFile(newItem.name, newItem.iconPath, getDesktop(), newItem.id);
     }
   };
 
-  const handleUserComputerFileDrop: DragEventHandler<HTMLDivElement> = (event) => {
-    event.preventDefault();
-    // Prevent file from being opened
-    // console.log({ file: event.dataTransfer });
+  const handleFolderChange = (item: DesktopItem) => {
+    const oldFolder = getDesktop().children?.find(file => file.id === item.id);
 
-    if (event.dataTransfer.items) {
-      Array.from(event.dataTransfer.items).forEach(item => {
-
-        console.log({ item })
-        const f: any = item.webkitGetAsEntry();
-
-
-        if (!f) { return; }
-        console.log({ f })
-
-        if (f.isDirectory) {
-          const dirReader = f.createReader();
-
-          // Read subfiles/subfolder
-          dirReader.readEntries(entries => {
-            // console.log({ entries: entries })
-
-            entries.forEach(entry => {
-
-              // Read a file
-              if (entry.isFile) {
-                entry.file(file => {
-                  console.log({ file })
-
-                  // // Read content
-                  // // For some reason the type of the file doesn't work
-                  // file.text().then(text => console.log({ text }))
-
-
-                  const reader = new FileReader();
-        
-                  reader.onload = function(event) {
-                    const blob = new Blob([event.target.result], { type: file.type });
-                    console.log(`Blob for ${file.name}:`, blob);
-                    
-                    // Do something with the Blob object
-                  };
-                  
-                  reader.readAsArrayBuffer(file);
-                });
-              }
-            })
-
-          })
-
-        }
-      })
+    if (!oldFolder) {
+      mkdir(item.name, getDesktop())
     }
-  }
+  };
 
   return (
     <Fragment>
@@ -108,14 +61,15 @@ const Desktop: FC = () => {
       />
       
       <div className={styles.background} id='desktop'
-        onDrop={handleUserComputerFileDrop}
-        onDragOver={(e) => e.preventDefault() } // Needed to prevent browser from opening file on drop
+        // onDrop={handleUserComputerFileDrop}
+        // onDragOver={(e) => e.preventDefault() } // Needed to prevent browser from opening user's file on drop
       >
         <DesktopItemContainerComponent 
           files={getDesktop().children}
           onDesktopContextMenuClick={handleDesktopContextMenuClick}
           onItemContextMenuClick={handleItemContextMenuClick}
           onFileChange={handleFileChange}
+          onFolderChange={handleFolderChange}
           onItemDoubleClick={openItemProcess}
         />
       </div>
@@ -124,3 +78,60 @@ const Desktop: FC = () => {
 };
 
 export default Desktop;
+
+
+
+// const handleUserComputerFileDrop: DragEventHandler<HTMLDivElement> = (event) => {
+//   event.preventDefault();
+//   // Prevent file from being opened
+//   // console.log({ file: event.dataTransfer });
+
+//   if (event.dataTransfer.items) {
+//     Array.from(event.dataTransfer.items).forEach(item => {
+
+//       console.log({ item })
+//       const f: any = item.webkitGetAsEntry();
+
+
+//       if (!f) { return; }
+//       console.log({ f })
+
+//       if (f.isDirectory) {
+//         const dirReader = f.createReader();
+
+//         // Read subfiles/subfolder
+//         dirReader.readEntries(entries => {
+//           // console.log({ entries: entries })
+
+//           entries.forEach(entry => {
+
+//             // Read a file
+//             if (entry.isFile) {
+//               entry.file(file => {
+//                 console.log({ file })
+
+//                 // // Read content
+//                 // // For some reason the type of the file doesn't work
+//                 // file.text().then(text => console.log({ text }))
+
+
+//                 const reader = new FileReader();
+      
+//                 reader.onload = function(event) {
+//                   const blob = new Blob([event.target.result], { type: file.type });
+//                   console.log(`Blob for ${file.name}:`, blob);
+                  
+//                   // Do something with the Blob object
+//                 };
+                
+//                 reader.readAsArrayBuffer(file);
+//               });
+//             }
+//           })
+
+//         })
+
+//       }
+//     })
+//   }
+// }
