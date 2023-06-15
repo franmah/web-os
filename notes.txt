@@ -13,8 +13,9 @@
   - can open files
   - can create files
 
-1.5 EXTENSIONS they have to work!!
-
+1.5 
+EXTENSIONS they have to work!!
+and change file system to use actual FS style (use string path instead of ExplorerItem)
 2. Apps
 - can create youtube, txt and folder
 - can open youtube and txt files
