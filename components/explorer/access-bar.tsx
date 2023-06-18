@@ -1,7 +1,8 @@
-import { FC } from "react";
+import { FC, useContext, useEffect } from "react";
 import styled from "styled-components";
 import ExplorerPathBar from "./explorer-path-bar";
 import { FiArrowRight, FiArrowLeft, FiArrowUp } from 'react-icons/fi';
+import { FileSystemContext } from "../../contexts/FileSystemContext";
 
 export const StyledExplorerAccessBar = styled.nav`
   display: flex;
@@ -35,7 +36,11 @@ export const StyledExplorerAccessBar = styled.nav`
 
 const ExplorerAccessBar: FC<{ path: string }> = ({ path }) => {
 
-  
+  const { readdirV2 } = useContext(FileSystemContext);
+
+  useEffect(() => {
+    readdirV2(path).then(files => console.log(files)).catch(error => console.log(error));
+  }, [path])
 
   return (
     <StyledExplorerAccessBar>
@@ -44,7 +49,6 @@ const ExplorerAccessBar: FC<{ path: string }> = ({ path }) => {
         <FiArrowRight className="arrow-button" />
         <FiArrowUp className="arrow-button" />
       </section>
-
 
       <section className='explorer-path-bar'>
         <ExplorerPathBar

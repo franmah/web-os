@@ -5,5 +5,6 @@ export type FileSystemContextType = {
   appendFile: (name: string, iconPath: string, parent: ExplorerFile | null, id?: string, content?: any) => void,
   getDesktop: () => ExplorerFile,
   mkdir: (name: string, parent: ExplorerFile, id?: string) => void,
-  updateFile: (file: ExplorerFile, content: any) => void
+  updateFile: (file: ExplorerFile, content: any) => void,
+  readdirV2: (path: string) => Promise<string[]>
 };

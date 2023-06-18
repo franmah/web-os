@@ -33,7 +33,7 @@ const Desktop: FC = () => {
   const openItemProcess = (item: DesktopItem) => {
     // const explorerItem = getDesktop().children.find(c => c.id === item.id);
     // openProcess('sunTextEditor', { file: explorerItem  });
-    openProcess('explorer', { startPath: '/users/num1/Desktop/folder/Program Files/' });
+    openProcess('explorer', { startPath: '/Desktop/' });
   };
 
   const handleFileChange = (newItem: DesktopItem) => {
