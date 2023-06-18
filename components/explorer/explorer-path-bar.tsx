@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { MdKeyboardArrowRight } from 'react-icons/md';
+import { GrRefresh } from 'react-icons/gr';
 import { pathToFragments } from "../../services/file-system/FilePathService";
 import Image from 'next/image';
 
@@ -10,17 +11,26 @@ export const StyledExplorerPathBar = styled.div`
   height: 100%;
   border: 2px solid #ECECEC;
 
+  button {
+    outline: none;
+    background-color: white;
+    border: none;
+  }
+
   .left-icon {
     display: flex;
-    justify-content: center;
     align-items: center;
     margin-left: 4px;
+  }
+
+  .path-fragments-container {
+    flex: 1;
+    display: flex;
   }
 
   .path-fragment-container {
     display: flex;
     align-items: center;
-    justify-content: center;
     padding: 0px 4px;
     border: 1px solid transparent;
 
@@ -33,10 +43,12 @@ export const StyledExplorerPathBar = styled.div`
 
     .arrow-icon {
       display: flex;
-      align-items: center;
-      justify-content: center;
       margin-left: 8px;
     }
+  }
+
+  .refresh-icon {
+    padding: 8px;
   }
 `;
 
@@ -59,30 +71,37 @@ const [pathFragments, setPathFragments] = useState<string[]>([]);
 
   return (
     <StyledExplorerPathBar>
-      <div className="left-icon">
-        <Image src='/icons/folder-icon.png' alt='folder' height={23} width={23} />
-      </div>
 
-      <div className="path-fragment-container" onClick={() => onFolderClicked(0)}>
-        <MdKeyboardArrowRight />
-      </div>
+      <section className="path-fragments-container ">
+        <div className="left-icon">
+          <Image src='/icons/folder-icon.png' alt='folder' height={23} width={23} />
+        </div>
 
-      {
-        pathFragments
-          .map((folder, index) => 
-            <div className="path-fragment-container" key={folder} onClick={() => onFolderClicked(index)}>
-              { folder }
-              { 
-                index !== pathFragments.length - 1 ?
-                  <div className="arrow-icon">
-                    <MdKeyboardArrowRight/>
-                  </div> 
-                    :
-                  null 
-              }
-            </div>
-          )
-      }
+        <button className="path-fragment-container" onClick={() => onFolderClicked(0)}>
+          <MdKeyboardArrowRight />
+        </button>
+
+        {
+          pathFragments
+            .map((folder, index) => 
+              <button className="path-fragment-container" key={folder} onClick={() => onFolderClicked(index)}>
+                { folder }
+                { 
+                  index !== pathFragments.length - 1 ?
+                    <div className="arrow-icon">
+                      <MdKeyboardArrowRight />
+                    </div> 
+                      :
+                    null 
+                }
+              </button>
+            )
+        }
+      </section>
+
+      <button className="refresh-icon path-fragment-container" onClick={() => onFolderClicked(pathFragments.length)}>
+        <GrRefresh />
+      </button>
     </StyledExplorerPathBar>
   );
 };
