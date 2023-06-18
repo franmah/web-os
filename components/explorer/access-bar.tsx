@@ -2,15 +2,16 @@ import { FC } from "react";
 import styled from "styled-components";
 import ExplorerPathBar from "./explorer-path-bar";
 import { FiArrowRight, FiArrowLeft, FiArrowUp } from 'react-icons/fi';
+import { GrSearch } from 'react-icons/gr';
 
 export const StyledExplorerAccessBar = styled.nav`
   display: flex;
   height: 42px;
+  margin: 6px 8px;
 
   .action-section {
     display: flex;
     align-items: center;
-    padding: 8px;
 
     .arrow-button {
       width: 100%;
@@ -31,6 +32,30 @@ export const StyledExplorerAccessBar = styled.nav`
   .explorer-path-bar {
     flex: 1;
   }
+
+  .search-section {
+    min-width: 300px;
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    border: 2px solid #ECECEC;
+    padding: 0px 4px;
+
+    input {
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
+
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      padding: 0px 8px;
+      transform: rotate(90deg);
+    }
+  }
 `;
 
 const ExplorerAccessBar: FC<{ path: string }> = ({ path }) => {
@@ -49,8 +74,11 @@ const ExplorerAccessBar: FC<{ path: string }> = ({ path }) => {
         />
       </section>
       
-      <section>
-        Search
+      <section className="search-section">
+        <input placeholder="Search Program Files" />
+        <div>
+          <GrSearch />
+        </div>
       </section>
     </StyledExplorerAccessBar>
   );
