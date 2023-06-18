@@ -21,6 +21,18 @@ export const ProcessDirectory: ProcessDirectoryType = {
     hasWindow: false,
     isUnique: true
   },
+  'explorer': {
+    name: 'hello',
+    Component: dynamic<{ params: { startPath: string } }>(() => import('../../components/explorer/explorer-container')),
+    windowParams: {
+      headerOptions: {
+        icon: '/icons/youtube-logo.png',
+        text: 'Explorer'
+      }
+    },
+    hasWindow: true,
+    isUnique: false
+  },
   'hello': {
     name: 'hello',
     Component: dynamic<{ params: any }>(() => import('../../components/hello/helloComponent')),
