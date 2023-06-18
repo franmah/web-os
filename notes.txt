@@ -1,6 +1,8 @@
 // WORKING ON:
 
-
+EXPLORER
+- create a context for the path?
+- move colors and other css values into a constant file
 
 
 /////////////////// PATH TO MVP ///////////////

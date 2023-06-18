@@ -1,6 +1,7 @@
 import { FC } from "react";
 import styled from "styled-components";
 import ExplorerPathBar from "./explorer-path-bar";
+import { FiArrowRight, FiArrowLeft, FiArrowUp } from 'react-icons/fi';
 
 export const StyledExplorerAccessBar = styled.nav`
   display: flex;
@@ -8,6 +9,23 @@ export const StyledExplorerAccessBar = styled.nav`
 
   .action-section {
     display: flex;
+    align-items: center;
+    padding: 8px;
+
+    .arrow-button {
+      width: 100%;
+      height: 100%;
+      padding: 0px 8px;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      
+      &:hover {
+        cursor: default;
+        background-color: #E5F3FF;
+        border: 1px solid #D8EDFF;
+        user-select: none;
+      }
+    }
   }
 
   .explorer-path-bar {
@@ -17,11 +35,14 @@ export const StyledExplorerAccessBar = styled.nav`
 
 const ExplorerAccessBar: FC<{ path: string }> = ({ path }) => {
 
+  
+
   return (
     <StyledExplorerAccessBar>
       <section className="action-section">
-        <div>PREV</div>
-        <div>Next</div>
+        <FiArrowLeft className="arrow-button" />
+        <FiArrowRight className="arrow-button" />
+        <FiArrowUp className="arrow-button" />
       </section>
 
 
