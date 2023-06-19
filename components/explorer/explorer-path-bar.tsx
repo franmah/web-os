@@ -21,6 +21,7 @@ export const StyledExplorerPathBar = styled.div`
     display: flex;
     align-items: center;
     margin-left: 4px;
+    user-select: none;
   }
 
   .path-fragments-container {
