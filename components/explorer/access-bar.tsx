@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ExplorerPathBar from "./explorer-path-bar";
 import { FiArrowRight, FiArrowLeft, FiArrowUp } from 'react-icons/fi';
 import { GrSearch } from 'react-icons/gr';
+import { getCurrentFolderOrFileNameInPath, pathToFragments } from "../../services/file-system/FilePathService";
 
 export const StyledExplorerAccessBar = styled.nav`
   display: flex;
@@ -19,6 +20,7 @@ export const StyledExplorerAccessBar = styled.nav`
       padding: 0px 8px;
       border: 1px solid transparent;
       border-radius: 3px;
+      margin-right: 8px;
       
       &:hover {
         cursor: default;
@@ -30,11 +32,11 @@ export const StyledExplorerAccessBar = styled.nav`
   }
 
   .explorer-path-bar {
-    flex: 1;
+    flex: 3;
   }
 
   .search-section {
-    min-width: 300px;
+    flex: 1;
     margin-left: 8px;
     display: flex;
     align-items: center;
@@ -45,6 +47,10 @@ export const StyledExplorerAccessBar = styled.nav`
       border: none;
       width: 100%;
       height: 100%;
+
+      &:focus {
+        outline: none;
+      }
     }
 
     div {
@@ -75,7 +81,7 @@ const ExplorerAccessBar: FC<{ path: string }> = ({ path }) => {
       </section>
       
       <section className="search-section">
-        <input placeholder="Search Program Files" />
+        <input placeholder={'Search ' + getCurrentFolderOrFileNameInPath(path)} />
         <div>
           <GrSearch />
         </div>
