@@ -18,12 +18,11 @@ export const StyledExplorerContainer = styled.div`
     height: 100%;
 
     .quick-access {
-      background-color: #0000ff1f;
-      min-width: 150px;
+      min-width: 200px;
     }
 
     .divider {
-      border-left: 1px solid green;
+      border-left: 1px solid #F9F9F9;
     }
 
     .file-view {
@@ -35,6 +34,7 @@ export const StyledExplorerContainer = styled.div`
   .container-footer {
     padding-left: 8px;
     width: 100%;
+    user-select: none;
   }
 `;
 
@@ -58,7 +58,13 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
       
       <section className="main-content">
         <div className="quick-access">
-          <ExplorerFileQuickAccess />
+          <ExplorerFileQuickAccess
+            pinnedFolderPaths={[
+              '/Desktop',
+              '/Documents',
+              '/Desktop/num #6'
+            ]}
+          />
         </div>
 
         <div className="divider"></div>
