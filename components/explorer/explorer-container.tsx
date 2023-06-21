@@ -27,7 +27,6 @@ export const StyledExplorerContainer = styled.div`
 
     .file-view {
       flex: 1;
-      background-color: #ff000014;
     }
   }
 
@@ -45,12 +44,16 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
   const fs = useContext(FileSystemContext);
 
   const [path, setPath] = useState<string>(startPath);
-  const [numItems, setNumsItems] = useState<number | null>(null);
+  const [children, setChildren] = useState<string[]>([]);
 
   useEffect(() => {
     fs.readdirV2(path)
-      .then(files => setNumsItems(files?.length));
+      .then(files => setChildren(files || []));
   }, [path]);
+  
+  const updatePath = (newPath: string) => {
+    setPath(newPath);
+  }
 
   return (
     <StyledExplorerContainer>
@@ -70,13 +73,15 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
         <div className="divider"></div>
 
         <div className="file-view">
-          <ExplorerFileView />
+          <ExplorerFileView
+            path={path}
+            children={children}
+          />
         </div>
       </section>
 
       <footer className="container-footer">
-        {/* TODO: test with a folder that has 0 children */}
-        { numItems !== null ? `${numItems} items` : '' }
+        { children.length ? `${children.length} items` : '' }
       </footer>
     </StyledExplorerContainer>
   );

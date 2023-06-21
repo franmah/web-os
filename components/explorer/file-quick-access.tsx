@@ -30,6 +30,7 @@ export const StyledExplorerQuickAccess = styled.nav`
 
     &:hover {
       background-color: #D9D9D9;
+      cursor: pointer;
     }
   }
 `;
@@ -45,7 +46,7 @@ const ExplorerFileQuickAccess: FC<{
       <section className="pinned-folders">
         {
           pinnedFolderPaths.map(path => 
-            <div className="pinned-folder">
+            <div className="pinned-folder" key={path}>
               <Image src='/icons/folder-icon.png' alt='folder icon' height={23} width={23} />
               <div className="folder-name">{getCurrentFolderOrFileNameInPath(path)}</div>
               <BsFillPinAngleFill color="#95A0A6" />
