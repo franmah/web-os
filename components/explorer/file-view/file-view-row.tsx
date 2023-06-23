@@ -5,25 +5,26 @@ import { toDateModifedFormat } from "../../../services/date-service";
 import styled from "styled-components";
 
 export const StyledFileViewRow = styled.tr`
-  td {
-    padding: 6px 4px;
     
-    &:hover {
-      background-color: #e5f3ff;
-    }
+  &:hover {
+    background-color: #e5f3ff;
+  }
+
+  td {
+    padding: 8px 8px;
 
     &:first-child {
       padding-right: 100px
     }
-  
+  }
 
-    .first-column {
-      display: flex;
-      align-items: center;
+  .first-column {
+    display: flex;
+    align-items: center;
 
-      .icon {
-        margin-right: 2px;
-      }
+    .icon {
+      margin: 0px 6px;
+
     }
   }
 
@@ -51,23 +52,40 @@ export const ExplorerFileViewRow: FC<{
   useEffect(() => {
     const fragmentedPath = convertPathToFragments(path);
     setFileName(fragmentedPath[fragmentedPath.length - 1]);
-  })
+  });
+  
   return (
     <StyledFileViewRow
       className={isSelected ? 'selected-row' : ''}
       onClick={() => onFileSelected(path, true)}
     >
+      {/* Name */}
       <td className="first-column">
+
         <input
           type='checkbox'
           checked={isSelected}
           onChange={e => onFileSelected(path, e.target.checked)}
         />
-        <Image src='/icons/folder-icon.png' alt='folder icon' height={23} width={23} className="icon"/>
+        <Image
+          src='/icons/folder-icon.png'
+          alt='folder icon'
+          height={23}
+          width={23}
+          className="icon"
+        />
+
         { fileName }
+
       </td>
+
+      {/* DATE MODIFIED  */}
       <td>{ toDateModifedFormat(new Date()) }</td>
+
+      {/* TYPE */}
       <td>File folder</td>
+
+      {/* SIZE */}
       <td></td>
     </StyledFileViewRow>
   );

@@ -69,7 +69,7 @@ export const ExplorerFileViewHeader: FC<{
           <div
             className={'sort-icon ' + `${sortColumn === ExplorerFileViewSortFields.NAME ? 'active-sort-icon' : ''}` }
           >
-            { sortDirection === ExplorerFileViewSortDirections.ASC ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp /> }
+            { sortDirection === ExplorerFileViewSortDirections.ASC ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown /> }
           </div>
           <input
             type='checkbox'
@@ -84,7 +84,7 @@ export const ExplorerFileViewHeader: FC<{
             <div
               className={'sort-icon ' + `${sortColumn === ExplorerFileViewSortFields.DATE_MODIFIED ? 'active-sort-icon' : ''}` }
             >
-              { sortDirection === ExplorerFileViewSortDirections.ASC ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp /> }
+              { sortDirection === ExplorerFileViewSortDirections.ASC ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown /> }
             </div>
             Date modified
         </th>
@@ -94,7 +94,7 @@ export const ExplorerFileViewHeader: FC<{
           <div
             className={'sort-icon ' + `${sortColumn === ExplorerFileViewSortFields.TYPE ? 'active-sort-icon' : ''}` }
           >
-            { sortDirection === ExplorerFileViewSortDirections.ASC ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp /> }
+            { sortDirection === ExplorerFileViewSortDirections.ASC ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown /> }
           </div>
           Type
         </th>
@@ -104,7 +104,7 @@ export const ExplorerFileViewHeader: FC<{
           <div
             className={'sort-icon ' + `${sortColumn === ExplorerFileViewSortFields.SIZE ? 'active-sort-icon' : ''}` }
           >
-            { sortDirection === ExplorerFileViewSortDirections.ASC ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp /> }
+            { sortDirection === ExplorerFileViewSortDirections.ASC ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown /> }
           </div>
           Size
         </th>
