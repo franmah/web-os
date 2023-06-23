@@ -1,8 +1,6 @@
 import { FC, useState } from "react";
 import styled from "styled-components";
-import Image from 'next/image';
 import { ExplorerFileViewHeader } from "./file-view-header";
-import { toDateModifedFormat } from "../../../services/date-service";
 import { ExplorerFileViewRow } from "./file-view-row";
 
 export const StyledExplorerFileViewContainer = styled.table`
@@ -10,38 +8,8 @@ export const StyledExplorerFileViewContainer = styled.table`
   border-spacing: 0px;
   margin-left: 8px;
   margin-top: 8px;
-
-  .row {
-    &:hover {
-      background-color: #e5f3ff;
-    }
-  }
-
-  td {
-    padding: 6px 4px;
-    
-    &:first-child {
-      padding-right: 100px
-    }
-  }
-
-  .selected-row {
-    background-color: #CCE8FF;
-
-    &:hover {
-      background-color: #CCE8FF;
-    }
-  }
-
-  .first-column {
-    display: flex;
-    align-items: center;
-
-    .icon {
-      margin-right: 2px;
-    }
-  }
 `;
+
 export enum ExplorerFileViewSortDirections {
   ASC,
   DESC

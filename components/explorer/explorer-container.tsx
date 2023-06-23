@@ -48,7 +48,7 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
 
   useEffect(() => {
     fs.readdirV2(path)
-      .then(files => setChildren(files || []));
+      .then(files => setChildren(files?.map(child => path + '/' + child) || []));
   }, [path]);
   
   const updatePath = (newPath: string) => {
