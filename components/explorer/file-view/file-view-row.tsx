@@ -4,10 +4,13 @@ import { convertPathToFragments } from "../../../services/file-system/FilePathSe
 import { toDateModifedFormat } from "../../../services/date-service";
 import styled from "styled-components";
 
-export const StyledFileViewRow = styled.tr`
-    
+export const StyledFileViewRow = styled.tr<{
+  selected: boolean
+}>`
+  background-color: ${({ selected }) => selected ? '#CCE8FF' : 'white'};
+
   &:hover {
-    background-color: #e5f3ff;
+    background-color: ${({ selected }) => selected ? '#CCE8FF' : '#E5F3FF'};
   }
 
   td {
@@ -25,14 +28,6 @@ export const StyledFileViewRow = styled.tr`
     .icon {
       margin: 0px 6px;
 
-    }
-  }
-
-  .selected-row {
-    background-color: #CCE8FF;
-
-    &:hover {
-      background-color: #CCE8FF;
     }
   }
 `;
@@ -58,6 +53,7 @@ export const ExplorerFileViewRow: FC<{
     <StyledFileViewRow
       className={isSelected ? 'selected-row' : ''}
       onClick={() => onFileSelected(path, true)}
+      selected={isSelected}
     >
       {/* Name */}
       <td className="first-column">
