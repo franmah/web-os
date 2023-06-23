@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import Image from 'next/image';
 import { convertPathToFragments } from "../../../services/file-system/FilePathService";
 import { toDateModifedFormat } from "../../../services/date-service";
@@ -41,13 +41,6 @@ export const ExplorerFileViewRow: FC<{
   path,
   onFileSelected
 }) => {
-
-  const [fileName, setFileName] = useState<string>('');
-
-  useEffect(() => {
-    const fragmentedPath = convertPathToFragments(path);
-    setFileName(fragmentedPath[fragmentedPath.length - 1]);
-  });
   
   return (
     <StyledFileViewRow
@@ -71,7 +64,7 @@ export const ExplorerFileViewRow: FC<{
           className="icon"
         />
 
-        { fileName }
+        { convertPathToFragments(path)?.pop() || 'Error' }
 
       </td>
 
