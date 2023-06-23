@@ -74,7 +74,8 @@ export const ExplorerFileViewHeader: FC<{
           <input
             type='checkbox'
             checked={allFilesChecked}
-            onChange={e => { e.stopPropagation(); onSelectAllChildren(e.target.checked) }}
+            onClick={e => e.stopPropagation()} // Avoids triggering column sorting
+            onChange={e => onSelectAllChildren(e.target.checked)}
           />
           Name
         </th>
