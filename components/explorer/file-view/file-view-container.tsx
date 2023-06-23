@@ -29,9 +29,11 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
     ({ column: ExplorerFileViewSortFields.NAME, direction: ExplorerFileViewSortDirections.ASC });
   const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
 
-  const handle = (child: string, selected: boolean) => {
-    handleSelectAllChildren(false);
-    setSelectedChildren(currentlySelectedChildren => {
+  const handleFileSelected = (child: string, selected: boolean, unselectAll = false) => {
+    if (unselectAll)
+      handleSelectAllChildren(false);
+    
+      setSelectedChildren(currentlySelectedChildren => {
       if (selected)
         return [...currentlySelectedChildren, child];
       else
@@ -86,7 +88,7 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
                   key={child}
                   isSelected={isSelected}
                   path={child}
-                  onFileSelected={handle}
+                  onFileSelected={handleFileSelected}
                 />
               );
             })

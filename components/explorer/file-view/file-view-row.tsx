@@ -35,7 +35,7 @@ export const StyledFileViewRow = styled.tr<{
 export const ExplorerFileViewRow: FC<{
   isSelected: boolean,
   path: string,
-  onFileSelected: (path: string, selected: boolean) => void
+  onFileSelected: (path: string, selected: boolean, unselectAll: boolean) => void
 }> = ({
   isSelected,
   path,
@@ -45,7 +45,7 @@ export const ExplorerFileViewRow: FC<{
   return (
     <StyledFileViewRow
       className={isSelected ? 'selected-row' : ''}
-      onClick={() => onFileSelected(path, true)}
+      onClick={() => onFileSelected(path, true, true)}
       selected={isSelected}
     >
       {/* Name */}
@@ -54,8 +54,10 @@ export const ExplorerFileViewRow: FC<{
         <input
           type='checkbox'
           checked={isSelected}
-          onChange={e => onFileSelected(path, e.target.checked)}
+          onClick={e => e.stopPropagation()}
+          onChange={e => onFileSelected(path, e.target.checked, false)}
         />
+
         <Image
           src='/icons/folder-icon.png'
           alt='folder icon'
