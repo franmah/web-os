@@ -2,7 +2,7 @@ import { FC, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import ExplorerAccessBar from "./access-bar";
 import ExplorerFileQuickAccess from "./file-quick-access";
-import ExplorerFileView from "./file-view";
+import ExplorerFileViewContainer from "./file-view/file-view-container";
 import { FileSystemContext } from "../../contexts/FileSystemContext";
 
 export const StyledExplorerContainer = styled.div`
@@ -73,8 +73,7 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
         <div className="divider"></div>
 
         <div className="file-view">
-          <ExplorerFileView
-            path={path}
+          <ExplorerFileViewContainer
             children={children}
           />
         </div>

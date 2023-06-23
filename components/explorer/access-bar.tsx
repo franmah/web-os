@@ -3,7 +3,7 @@ import styled from "styled-components";
 import ExplorerPathBar from "./explorer-path-bar";
 import { FiArrowRight, FiArrowLeft, FiArrowUp } from 'react-icons/fi';
 import { GrSearch } from 'react-icons/gr';
-import { getCurrentFolderOrFileNameInPath, pathToFragments } from "../../services/file-system/FilePathService";
+import { getCurrentFolderOrFileNameInPath, convertPathToFragments } from "../../services/file-system/FilePathService";
 
 export const StyledExplorerAccessBar = styled.nav`
   display: flex;

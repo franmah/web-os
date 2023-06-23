@@ -1,10 +1,10 @@
-export const pathToFragments = (path: string): string[] => {
+export const convertPathToFragments = (path: string): string[] => {
     return path
       .split('/')
       .filter(fragment => !!fragment);
 };
 
 export const getCurrentFolderOrFileNameInPath = (path: string): string => {
-  const pathFragments = pathToFragments(path);
+  const pathFragments = convertPathToFragments(path);
   return pathFragments[pathFragments.length - 1];
 };

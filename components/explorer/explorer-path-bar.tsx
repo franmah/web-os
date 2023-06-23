@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import { GrRefresh } from 'react-icons/gr';
-import { pathToFragments } from "../../services/file-system/FilePathService";
+import { convertPathToFragments } from "../../services/file-system/FilePathService";
 import Image from 'next/image';
 
 export const StyledExplorerPathBar = styled.div`
@@ -60,14 +60,13 @@ const ExplorerPathBar: FC<{
 const [pathFragments, setPathFragments] = useState<string[]>([]);
 
   useEffect(() => {
-    console.log(pathToFragments(path))
-    setPathFragments(pathToFragments(path));
+    console.log(convertPathToFragments(path))
+    setPathFragments(convertPathToFragments(path));
   }, [path]);
 
   // TODO: move parse to fs service (findPathToFolderInPath(path: string, folderName: string))
   const onFolderClicked = (fragmentIndex: number) => {
     const pathToFolder = '/' + pathFragments.slice(0, fragmentIndex + 1).join('/') + '/';
-    console.log(pathToFolder);
   }
 
   return (
