@@ -60,7 +60,7 @@ export const ExplorerFileViewRow: FC<{
       <td className="first-column">
         <input
           type='checkbox'
-          checked={!isSelected}
+          checked={isSelected}
           onChange={e => onFileSelected(path, e.target.checked)}
         />
         <Image src='/icons/folder-icon.png' alt='folder icon' height={23} width={23} className="icon"/>
