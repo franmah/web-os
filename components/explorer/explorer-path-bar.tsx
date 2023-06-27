@@ -60,7 +60,6 @@ const ExplorerPathBar: FC<{
 const [pathFragments, setPathFragments] = useState<string[]>([]);
 
   useEffect(() => {
-    console.log(convertPathToFragments(path))
     setPathFragments(convertPathToFragments(path));
   }, [path]);
 

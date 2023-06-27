@@ -3,11 +3,15 @@ import styled from "styled-components";
 import { ExplorerFileViewHeader } from "./file-view-header";
 import { ExplorerFileViewRow } from "./file-view-row";
 
-export const StyledExplorerFileViewContainer = styled.table`
+export const StyledExplorerFileViewContainer = styled.div`
   user-select: none;
   border-spacing: 0px;
   margin-left: 8px;
   margin-top: 8px;
+
+  .content {
+    margin-top: 8px;
+  }
 `;
 
 export enum ExplorerFileViewSortDirections {
@@ -22,7 +26,13 @@ export enum ExplorerFileViewSortFields {
   SIZE
 };
 
-// TODO: children should contain full path (will be needed when doing a search and showing files from different folders)
+const COLUMN_SIZES  = {
+  name: '250px',
+  dateModified: '200px',
+  type: '50px',
+  size: '50px'
+}
+
 const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => {
 
   const [sort, setSorting] = useState<{column: ExplorerFileViewSortFields, direction: ExplorerFileViewSortDirections}>
@@ -70,6 +80,7 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
   return (
     <StyledExplorerFileViewContainer>
       <ExplorerFileViewHeader
+        columnSizes={COLUMN_SIZES}
         allFilesChecked={selectedChildren.length === children.length}
         sortColumn={sort.column}
         sortDirection={sort.direction}
@@ -77,7 +88,7 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
         onSort={handleSortChildren}
       />
 
-      <tbody>
+      <div className="content">
         {
           children
             ?.sort(sortFn)
@@ -85,6 +96,7 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
               const isSelected = !!selectedChildren.find(c => c === child);
               return (
                 <ExplorerFileViewRow
+                  columnSizes={COLUMN_SIZES}
                   key={child}
                   isSelected={isSelected}
                   path={child}
@@ -93,7 +105,7 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
               );
             })
         }
-      </tbody>
+      </div>
       
     </StyledExplorerFileViewContainer>
   )

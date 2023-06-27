@@ -3,8 +3,31 @@ import styled from "styled-components";
 import { ExplorerFileViewSortDirections, ExplorerFileViewSortFields } from "./file-view-container";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 
-export const StyledExplorerFileViewHeader = styled.thead`
-  th {
+export const StyledExplorerFileViewHeader = styled.div<{
+  columnSizes: { [column: string]: string }
+}>`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  overflow: hidden;
+
+  .name-col {
+    flex: ${({ columnSizes }) => `0 0 ${columnSizes['name']}`  };
+  }
+  
+  .date-modified-col {
+    flex: ${({ columnSizes }) => `0 0 ${columnSizes['dateModified']}`  };
+  }
+
+  .type-col {
+    flex: ${({ columnSizes }) => `0 0 ${columnSizes['type']}`  };
+  }
+
+  .size-col {
+    flex: ${({ columnSizes }) => `0 0 ${columnSizes['size']}`  };
+  }
+
+  .column {
     text-align: start;
     color: #515858;
     font-weight: normal;
@@ -35,12 +58,14 @@ export const StyledExplorerFileViewHeader = styled.thead`
 `;
 
 export const ExplorerFileViewHeader: FC<{
+  columnSizes: { [column: string]: string },
   allFilesChecked: boolean,
   sortColumn: ExplorerFileViewSortFields,
   sortDirection: ExplorerFileViewSortDirections,
   onSort: (column: ExplorerFileViewSortFields, direction: ExplorerFileViewSortDirections) => void,
   onSelectAllChildren: (selected: boolean) => void
 }> = ({
+  columnSizes,
   allFilesChecked,
   sortColumn,
   sortDirection,
@@ -61,55 +86,55 @@ export const ExplorerFileViewHeader: FC<{
   };
   
   return (
-    <StyledExplorerFileViewHeader>
+    <StyledExplorerFileViewHeader
+      columnSizes={columnSizes}
+    >
 
       {/* NAME */}
-      <tr className="header">
-        <th onClick={() => sortChildren(ExplorerFileViewSortFields.NAME)}>
+      <div className="column name-col" onClick={() => sortChildren(ExplorerFileViewSortFields.NAME)}>
+        <div
+          className={'sort-icon ' + `${sortColumn === ExplorerFileViewSortFields.NAME ? 'active-sort-icon' : ''}` }
+        >
+          { sortDirection === ExplorerFileViewSortDirections.ASC ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown /> }
+        </div>
+        <input
+          type='checkbox'
+          checked={allFilesChecked}
+          onClick={e => e.stopPropagation()} // Avoids triggering column sorting
+          onChange={e => onSelectAllChildren(e.target.checked)}
+        />
+        Name
+      </div>
+
+      {/* DATE MODIFIED */}
+      <div className="column date-modified-col" onClick={() => sortChildren(ExplorerFileViewSortFields.NAME)}>
           <div
-            className={'sort-icon ' + `${sortColumn === ExplorerFileViewSortFields.NAME ? 'active-sort-icon' : ''}` }
+            className={'sort-icon ' + `${sortColumn === ExplorerFileViewSortFields.DATE_MODIFIED ? 'active-sort-icon' : ''}` }
           >
             { sortDirection === ExplorerFileViewSortDirections.ASC ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown /> }
           </div>
-          <input
-            type='checkbox'
-            checked={allFilesChecked}
-            onClick={e => e.stopPropagation()} // Avoids triggering column sorting
-            onChange={e => onSelectAllChildren(e.target.checked)}
-          />
-          Name
-        </th>
+          Date modified
+      </div>
 
-        {/* DATE MODIFIED */}
-        <th onClick={() => sortChildren(ExplorerFileViewSortFields.NAME)}>
-            <div
-              className={'sort-icon ' + `${sortColumn === ExplorerFileViewSortFields.DATE_MODIFIED ? 'active-sort-icon' : ''}` }
-            >
-              { sortDirection === ExplorerFileViewSortDirections.ASC ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown /> }
-            </div>
-            Date modified
-        </th>
+      {/* TYPE */}
+      <div className="column type-col" onClick={() => sortChildren(ExplorerFileViewSortFields.NAME)}>
+        <div
+          className={'sort-icon ' + `${sortColumn === ExplorerFileViewSortFields.TYPE ? 'active-sort-icon' : ''}` }
+        >
+          { sortDirection === ExplorerFileViewSortDirections.ASC ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown /> }
+        </div>
+        Type
+      </div>
 
-        {/* TYPE */}
-        <th onClick={() => sortChildren(ExplorerFileViewSortFields.NAME)}>
-          <div
-            className={'sort-icon ' + `${sortColumn === ExplorerFileViewSortFields.TYPE ? 'active-sort-icon' : ''}` }
-          >
-            { sortDirection === ExplorerFileViewSortDirections.ASC ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown /> }
-          </div>
-          Type
-        </th>
-
-        {/* SIZE */}
-        <th onClick={() => sortChildren(ExplorerFileViewSortFields.NAME)}>
-          <div
-            className={'sort-icon ' + `${sortColumn === ExplorerFileViewSortFields.SIZE ? 'active-sort-icon' : ''}` }
-          >
-            { sortDirection === ExplorerFileViewSortDirections.ASC ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown /> }
-          </div>
-          Size
-        </th>
-      </tr>
+      {/* SIZE */}
+      <div className="column size-col" onClick={() => sortChildren(ExplorerFileViewSortFields.NAME)}>
+        <div
+          className={'sort-icon ' + `${sortColumn === ExplorerFileViewSortFields.SIZE ? 'active-sort-icon' : ''}` }
+        >
+          { sortDirection === ExplorerFileViewSortDirections.ASC ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown /> }
+        </div>
+        Size
+      </div>
 
     </StyledExplorerFileViewHeader>
   );
