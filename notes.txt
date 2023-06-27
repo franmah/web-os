@@ -1,4 +1,7 @@
-// WORKING ON:
+// WORKING ON
+
+- move away from <table>
+- file-view should take as much space as possible
 
 EXPLORER
 - create a context for the path?
