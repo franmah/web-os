@@ -2,6 +2,7 @@ import { FC } from "react";
 import styled from "styled-components";
 import { ExplorerFileViewSortDirections, ExplorerFileViewSortFields } from "./file-view-container";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import Draggable from "../draggable-adapter";
 
 export const StyledExplorerFileViewHeader = styled.div<{
   columnSizes: { [column: string]: string }
@@ -56,6 +57,15 @@ export const StyledExplorerFileViewHeader = styled.div<{
       background-color: #e5f3ff;
     }
   }
+
+  .header-section-divider {
+    border-left: 1px solid red;
+    padding: 0px 3px;
+
+    &:hover {
+      cursor: ew-resize;
+    }
+  }
 `;
 
 export const ExplorerFileViewHeader: FC<{
@@ -64,16 +74,18 @@ export const ExplorerFileViewHeader: FC<{
   sortColumn: ExplorerFileViewSortFields,
   sortDirection: ExplorerFileViewSortDirections,
   onSort: (column: ExplorerFileViewSortFields, direction: ExplorerFileViewSortDirections) => void,
-  onSelectAllChildren: (selected: boolean) => void
+  onSelectAllChildren: (selected: boolean) => void,
+  onResizeHeader: (newSize: string) => void
 }> = ({
   columnSizes,
   allFilesChecked,
   sortColumn,
   sortDirection,
   onSort,
-  onSelectAllChildren
+  onSelectAllChildren,
+  onResizeHeader
 }) => {
-  
+
   const sortChildren = (columnName: ExplorerFileViewSortFields) => {
     let direction = ExplorerFileViewSortDirections.ASC;
 
@@ -84,6 +96,10 @@ export const ExplorerFileViewHeader: FC<{
     }
 
     onSort(columnName, direction);
+  };
+
+  const onDrag = (newPosition: number) => {
+    onResizeHeader(`${newPosition}px`);
   };
   
   return (
@@ -106,6 +122,11 @@ export const ExplorerFileViewHeader: FC<{
         />
         Name
       </div>
+
+      <Draggable 
+        onDrag={onDrag}
+      >
+      </Draggable>
 
       {/* DATE MODIFIED */}
       <div className="column date-modified-col" onClick={() => sortChildren(ExplorerFileViewSortFields.NAME)}>

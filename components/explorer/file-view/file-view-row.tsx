@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import Image from 'next/image';
 import { convertPathToFragments } from "../../../services/file-system/FilePathService";
 import { toDateModifedFormat } from "../../../services/date-service";
@@ -71,7 +71,7 @@ export const ExplorerFileViewRow: FC<{
   path,
   onFileSelected
 }) => {
-  
+
   return (
     <StyledFileViewRow
       columnSizes={columnSizes}

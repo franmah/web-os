@@ -1,4 +1,4 @@
-import { Children, FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { ExplorerFileViewHeader } from "./file-view-header";
 import { ExplorerFileViewRow } from "./file-view-row";
@@ -41,8 +41,9 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
     ({ column: ExplorerFileViewSortFields.NAME, direction: ExplorerFileViewSortDirections.ASC });
   const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
 
-  useEffect(() => {
+  const [nameSize, setNameSize] = useState(COLUMN_SIZES.name);
 
+  useEffect(() => {
     document.addEventListener('click', (e) => onClick(e));
 
     () => {
@@ -54,7 +55,7 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
     if (!isEventOriginatedFromWithinTargetIdSubtree(event, 'file-view-container-rows')) {
       handleSelectAllChildren(false);
     }
-  }
+  };
 
   const handleFileSelected = (child: string, selected: boolean, unselectAll = false) => {
     if (unselectAll)
@@ -94,15 +95,20 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
     }
   };
 
+  const onResizeHeaderWithDraggable = (x: string) => {
+    setNameSize(x)
+  }
+
   return (
     <StyledExplorerFileViewContainer>
       <ExplorerFileViewHeader
-        columnSizes={COLUMN_SIZES}
+        columnSizes={{ ...COLUMN_SIZES, name: nameSize }}
         allFilesChecked={selectedChildren.length === children.length}
         sortColumn={sort.column}
         sortDirection={sort.direction}
         onSelectAllChildren={handleSelectAllChildren}
         onSort={handleSortChildren}
+        onResizeHeader={onResizeHeaderWithDraggable}
       />
 
       <div id="file-view-container-rows">
@@ -113,7 +119,7 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
               const isSelected = !!selectedChildren.find(c => c === child);
               return (
                 <ExplorerFileViewRow
-                  columnSizes={COLUMN_SIZES}
+                  columnSizes={{ ...COLUMN_SIZES, name: nameSize }}
                   key={child}
                   isSelected={isSelected}
                   path={child}
