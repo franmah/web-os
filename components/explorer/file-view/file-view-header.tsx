@@ -10,6 +10,7 @@ export const StyledExplorerFileViewHeader = styled.div<{
   flex-direction: row;
   justify-content: flex-start;
   overflow: hidden;
+  margin-bottom: 16px;
 
   .name-col {
     flex: ${({ columnSizes }) => `0 0 ${columnSizes['name']}`  };

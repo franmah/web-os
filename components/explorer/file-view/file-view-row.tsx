@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import Image from 'next/image';
 import { convertPathToFragments } from "../../../services/file-system/FilePathService";
 import { toDateModifedFormat } from "../../../services/date-service";
@@ -9,11 +9,11 @@ export const StyledFileViewRow = styled.div<{
   selected: boolean
 }>`
   display: flex;
-  background-color: ${({ selected }) => selected ? '#CCE8FF' : 'white'};
+  background-color: ${({ selected }) => selected ? '#CCE8FF' : ''};
   margin-bottom: 8px;
   height: 32px;
   overflow: hidden;
-
+  
   .column {
     white-space: nowrap;
     overflow: hidden;

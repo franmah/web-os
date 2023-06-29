@@ -22,7 +22,7 @@ export const StyledExplorerContainer = styled.div`
     }
 
     .divider {
-      border-left: 1px solid #F9F9F9;
+      border-left: 1px solid #F7F7F7;
     }
 
     .file-view {

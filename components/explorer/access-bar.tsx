@@ -3,7 +3,7 @@ import styled from "styled-components";
 import ExplorerPathBar from "./explorer-path-bar";
 import { FiArrowRight, FiArrowLeft, FiArrowUp } from 'react-icons/fi';
 import { GrSearch } from 'react-icons/gr';
-import { getCurrentFolderOrFileNameInPath, convertPathToFragments } from "../../services/file-system/FilePathService";
+import { getCurrentFolderOrFileNameInPath } from "../../services/file-system/FilePathService";
 
 export const StyledExplorerAccessBar = styled.nav`
   display: flex;
@@ -69,7 +69,7 @@ const ExplorerAccessBar: FC<{ path: string }> = ({ path }) => {
   return (
     <StyledExplorerAccessBar>
       <section className="action-section">
-        <FiArrowLeft className="arrow-button" color='#6A6A6A' />
+        <FiArrowLeft size={30} className="arrow-button" color='#6A6A6A' />
         <FiArrowRight className="arrow-button" color='#6A6A6A' />
         <FiArrowUp className="arrow-button" color={ path === '/' ? "#A3A3A3" : '#6A6A6A'} />
       </section>

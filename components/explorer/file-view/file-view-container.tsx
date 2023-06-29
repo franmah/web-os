@@ -1,18 +1,8 @@
-import { FC, useState } from "react";
+import { Children, FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { ExplorerFileViewHeader } from "./file-view-header";
 import { ExplorerFileViewRow } from "./file-view-row";
-
-export const StyledExplorerFileViewContainer = styled.div`
-  user-select: none;
-  border-spacing: 0px;
-  margin-left: 8px;
-  margin-top: 8px;
-
-  .content {
-    margin-top: 8px;
-  }
-`;
+import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/EventService";
 
 export enum ExplorerFileViewSortDirections {
   ASC,
@@ -33,11 +23,38 @@ const COLUMN_SIZES  = {
   size: '50px'
 }
 
+export const StyledExplorerFileViewContainer = styled.div`
+  user-select: none;
+  border-spacing: 0px;
+  margin-left: 8px;
+  margin-top: 8px;
+  height: 100%;
+
+  .content {
+    margin-top: 8px;
+  }
+`;
+
 const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => {
 
   const [sort, setSorting] = useState<{column: ExplorerFileViewSortFields, direction: ExplorerFileViewSortDirections}>
     ({ column: ExplorerFileViewSortFields.NAME, direction: ExplorerFileViewSortDirections.ASC });
   const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
+
+  useEffect(() => {
+
+    document.addEventListener('click', (e) => onClick(e));
+
+    () => {
+      document.removeEventListener('click', (e) => onClick(e))
+    }
+  }, [children]);
+  
+  const onClick = (event: MouseEvent) => {
+    if (!isEventOriginatedFromWithinTargetIdSubtree(event, 'file-view-container-rows')) {
+      handleSelectAllChildren(false);
+    }
+  }
 
   const handleFileSelected = (child: string, selected: boolean, unselectAll = false) => {
     if (unselectAll)
@@ -49,7 +66,7 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
       else
         return [...currentlySelectedChildren].filter(c => c !== child);
     });
-  }
+  };
 
   const handleSelectAllChildren = (selected: boolean) => {
     if (selected)
@@ -88,7 +105,7 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
         onSort={handleSortChildren}
       />
 
-      <div className="content">
+      <div id="file-view-container-rows">
         {
           children
             ?.sort(sortFn)
