@@ -1,47 +1,15 @@
 import { FC, useEffect, useState } from "react";
-import styled from "styled-components";
 import { ExplorerFileViewHeader } from "./file-view-header";
 import { ExplorerFileViewRow } from "./file-view-row";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/EventService";
-
-export enum ExplorerFileViewSortDirections {
-  ASC,
-  DESC
-};
-
-export enum ExplorerFileViewSortFields {
-  NAME,
-  DATE_MODIFIED,
-  TYPE,
-  SIZE
-};
-
-const COLUMN_SIZES  = {
-  name: '250px',
-  dateModified: '200px',
-  type: '50px',
-  size: '50px'
-}
-
-export const StyledExplorerFileViewContainer = styled.div`
-  user-select: none;
-  border-spacing: 0px;
-  margin-left: 8px;
-  margin-top: 8px;
-  height: 100%;
-
-  .content {
-    margin-top: 8px;
-  }
-`;
+import { StyledExplorerFileViewContainer } from "../../../styled-components/system/explorer/styled-file-view-container";
+import { ExplorerFileViewSortDirections, ExplorerFileViewSortFields, START_COLUMN_SIZES } from "../../../constants/system/explorer/explorer-consts";
 
 const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => {
 
   const [sort, setSorting] = useState<{column: ExplorerFileViewSortFields, direction: ExplorerFileViewSortDirections}>
     ({ column: ExplorerFileViewSortFields.NAME, direction: ExplorerFileViewSortDirections.ASC });
   const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
-
-  const [nameSize, setNameSize] = useState(COLUMN_SIZES.name);
 
   useEffect(() => {
     document.addEventListener('click', (e) => onClick(e));
@@ -95,20 +63,15 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
     }
   };
 
-  const onResizeHeaderWithDraggable = (x: string) => {
-    setNameSize(x)
-  }
-
   return (
     <StyledExplorerFileViewContainer>
       <ExplorerFileViewHeader
-        columnSizes={{ ...COLUMN_SIZES, name: nameSize }}
+        columnSizes={START_COLUMN_SIZES}
         allFilesChecked={selectedChildren.length === children.length}
         sortColumn={sort.column}
         sortDirection={sort.direction}
         onSelectAllChildren={handleSelectAllChildren}
         onSort={handleSortChildren}
-        onResizeHeader={onResizeHeaderWithDraggable}
       />
 
       <div id="file-view-container-rows">
@@ -119,7 +82,7 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
               const isSelected = !!selectedChildren.find(c => c === child);
               return (
                 <ExplorerFileViewRow
-                  columnSizes={{ ...COLUMN_SIZES, name: nameSize }}
+                  columnSizes={START_COLUMN_SIZES}
                   key={child}
                   isSelected={isSelected}
                   path={child}

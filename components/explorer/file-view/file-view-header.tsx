@@ -1,72 +1,7 @@
 import { FC } from "react";
-import styled from "styled-components";
-import { ExplorerFileViewSortDirections, ExplorerFileViewSortFields } from "./file-view-container";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
-import Draggable from "../draggable-adapter";
-
-export const StyledExplorerFileViewHeader = styled.div<{
-  columnSizes: { [column: string]: string }
-}>`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  overflow: hidden;
-  margin-bottom: 16px;
-
-  .name-col {
-    flex: ${({ columnSizes }) => `0 0 ${columnSizes['name']}`  };
-  }
-  
-  .date-modified-col {
-    flex: ${({ columnSizes }) => `0 0 ${columnSizes['dateModified']}`  };
-  }
-
-  .type-col {
-    flex: ${({ columnSizes }) => `0 0 ${columnSizes['type']}`  };
-  }
-
-  .size-col {
-    flex: ${({ columnSizes }) => `0 0 ${columnSizes['size']}`  };
-  }
-
-  .column {
-    text-align: start;
-    color: #515858;
-    font-weight: normal;
-    padding: 0px 8px;
-    border-right: 1px solid #d9d9d9;
-
-    &:first-child {
-      padding-right: 100px
-    }
-
-    .sort-icon {
-      position: relative;
-      top: 0px;
-      left: 50%;
-      width: 1px;
-      height: 10px;
-      visibility: hidden;
-    }
-
-    .active-sort-icon {
-      visibility: visible;
-    }
-
-    &:hover {
-      background-color: #e5f3ff;
-    }
-  }
-
-  .header-section-divider {
-    border-left: 1px solid red;
-    padding: 0px 3px;
-
-    &:hover {
-      cursor: ew-resize;
-    }
-  }
-`;
+import { ExplorerFileViewSortDirections, ExplorerFileViewSortFields } from "../../../constants/system/explorer/explorer-consts";
+import { StyledExplorerFileViewHeader } from "../../../styled-components/system/explorer/styled-file-view-header";
 
 export const ExplorerFileViewHeader: FC<{
   columnSizes: { [column: string]: string },
@@ -75,7 +10,6 @@ export const ExplorerFileViewHeader: FC<{
   sortDirection: ExplorerFileViewSortDirections,
   onSort: (column: ExplorerFileViewSortFields, direction: ExplorerFileViewSortDirections) => void,
   onSelectAllChildren: (selected: boolean) => void,
-  onResizeHeader: (newSize: string) => void
 }> = ({
   columnSizes,
   allFilesChecked,
@@ -83,7 +17,6 @@ export const ExplorerFileViewHeader: FC<{
   sortDirection,
   onSort,
   onSelectAllChildren,
-  onResizeHeader
 }) => {
 
   const sortChildren = (columnName: ExplorerFileViewSortFields) => {
@@ -96,10 +29,6 @@ export const ExplorerFileViewHeader: FC<{
     }
 
     onSort(columnName, direction);
-  };
-
-  const onDrag = (newPosition: number) => {
-    onResizeHeader(`${newPosition}px`);
   };
   
   return (
@@ -123,10 +52,12 @@ export const ExplorerFileViewHeader: FC<{
         Name
       </div>
 
-      <Draggable 
+      {/* TODO: Add column resizing */}
+      {/* <Draggable 
         onDrag={onDrag}
       >
-      </Draggable>
+        test
+      </Draggable> */}
 
       {/* DATE MODIFIED */}
       <div className="column date-modified-col" onClick={() => sortChildren(ExplorerFileViewSortFields.NAME)}>
