@@ -50,6 +50,11 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
     fs.readdirV2(path)
       .then(files => setChildren(files?.map(child => path + '/' + child) || []));
   }, [path]);
+  
+  const openFile = (path: string) => {
+    // TODO: check if folder or app
+    setPath(path);
+  }
 
   return (
     <StyledExplorerContainer>
@@ -70,7 +75,7 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
 
         <div className="file-view">
           <ExplorerFileViewContainer
-            openFile={setPath}
+            openFile={openFile}
             paths={children}
           />
         </div>
