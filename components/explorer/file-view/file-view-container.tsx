@@ -5,21 +5,23 @@ import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/Ev
 import { StyledExplorerFileViewContainer } from "../../../styled-components/system/explorer/styled-file-view-container";
 import { ExplorerFileViewSortDirections, ExplorerFileViewSortFields, START_COLUMN_SIZES } from "../../../constants/system/explorer/explorer-consts";
 
-const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => {
+const ExplorerFileViewContainer: FC<{
+  paths: string[],
+  openFile: (path: string) => void
+}> = ({ paths, openFile }) => {
 
   const [sort, setSorting] = useState<{column: ExplorerFileViewSortFields, direction: ExplorerFileViewSortDirections}>
     ({ column: ExplorerFileViewSortFields.NAME, direction: ExplorerFileViewSortDirections.ASC });
   const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
 
   useEffect(() => {
-    document.addEventListener('click', (e) => onClick(e));
-
+    document.addEventListener('click', (e) => handleUnselectOnClick(e));
     () => {
-      document.removeEventListener('click', (e) => onClick(e))
+      document.removeEventListener('click', (e) => handleUnselectOnClick(e))
     }
-  }, [children]);
+  }, [paths]);
   
-  const onClick = (event: MouseEvent) => {
+  const handleUnselectOnClick = (event: MouseEvent) => {
     if (!isEventOriginatedFromWithinTargetIdSubtree(event, 'file-view-container-rows')) {
       handleSelectAllChildren(false);
     }
@@ -39,7 +41,7 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
 
   const handleSelectAllChildren = (selected: boolean) => {
     if (selected)
-      setSelectedChildren(children);
+      setSelectedChildren(paths);
     else
       setSelectedChildren([]);
   };
@@ -67,7 +69,7 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
     <StyledExplorerFileViewContainer>
       <ExplorerFileViewHeader
         columnSizes={START_COLUMN_SIZES}
-        allFilesChecked={selectedChildren.length === children.length}
+        allFilesChecked={selectedChildren.length === paths.length && paths.length > 0}
         sortColumn={sort.column}
         sortDirection={sort.direction}
         onSelectAllChildren={handleSelectAllChildren}
@@ -76,7 +78,7 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
 
       <div id="file-view-container-rows">
         {
-          children
+          paths
             ?.sort(sortFn)
             ?.map(child => {
               const isSelected = !!selectedChildren.find(c => c === child);
@@ -87,6 +89,7 @@ const ExplorerFileViewContainer: FC<{ children: string[] }> = ({ children }) => 
                   isSelected={isSelected}
                   path={child}
                   onFileSelected={handleFileSelected}
+                  openFile={openFile}
                 />
               );
             })

@@ -8,12 +8,14 @@ export const ExplorerFileViewRow: FC<{
   columnSizes: { [column: string]: string }
   isSelected: boolean,
   path: string,
-  onFileSelected: (path: string, selected: boolean, unselectAll: boolean) => void
+  onFileSelected: (path: string, selected: boolean, unselectAll: boolean) => void,
+  openFile: (path: string) => void
 }> = ({
   columnSizes,
   isSelected,
   path,
-  onFileSelected
+  onFileSelected,
+  openFile
 }) => {
 
   return (
@@ -21,6 +23,7 @@ export const ExplorerFileViewRow: FC<{
       columnSizes={columnSizes}
       className={isSelected ? 'selected-row' : ''}
       onClick={() => onFileSelected(path, true, true)}
+      onDoubleClick={() => openFile(path)}
       selected={isSelected}
     >
       {/* Name */}

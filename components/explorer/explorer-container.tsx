@@ -50,10 +50,6 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
     fs.readdirV2(path)
       .then(files => setChildren(files?.map(child => path + '/' + child) || []));
   }, [path]);
-  
-  const updatePath = (newPath: string) => {
-    setPath(newPath);
-  }
 
   return (
     <StyledExplorerContainer>
@@ -74,7 +70,8 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
 
         <div className="file-view">
           <ExplorerFileViewContainer
-            children={children}
+            openFile={setPath}
+            paths={children}
           />
         </div>
       </section>
