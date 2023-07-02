@@ -1,41 +1,9 @@
 import { FC, useContext, useEffect, useState } from "react";
-import styled from "styled-components";
 import ExplorerAccessBar from "./access-bar";
 import ExplorerFileQuickAccess from "./file-quick-access";
 import ExplorerFileViewContainer from "./file-view/file-view-container";
 import { FileSystemContext } from "../../contexts/FileSystemContext";
-
-export const StyledExplorerContainer = styled.div`
-  background-color: white;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-
-  .main-content {
-    display: flex;
-    width: 100%;
-    height: 100%;
-
-    .quick-access {
-      min-width: 200px;
-    }
-
-    .divider {
-      border-left: 1px solid #F7F7F7;
-    }
-
-    .file-view {
-      flex: 1;
-    }
-  }
-
-  .container-footer {
-    padding-left: 8px;
-    width: 100%;
-    user-select: none;
-  }
-`;
+import { StyledExplorerContainer } from "../../styled-components/system/explorer/styled-explorer-container";
 
 const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
   params: { startPath }
@@ -43,6 +11,7 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
 
   const fs = useContext(FileSystemContext);
 
+  const [pathsFlow, setPathsFlow] = useState<string[]>([startPath]);
   const [path, setPath] = useState<string>(startPath);
   const [children, setChildren] = useState<string[]>([]);
 
@@ -51,15 +20,36 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
       .then(files => setChildren(files?.map(child => path + '/' + child) || []));
   }, [path]);
   
-  const openFile = (path: string) => {
+  const openFile = (newPath: string) => {
     // TODO: check if folder or app
-    setPath(path);
+
+    const currentPathIndexInFlow = pathsFlow.findIndex(p => p === path);
+    setPathsFlow(flow => [...flow.slice(0, currentPathIndexInFlow + 1), newPath]);
+    setPath(newPath);
+  }
+
+  const previousFolder = () => {
+    const currentPathIndexInFlow = pathsFlow.findIndex(p => p === path);
+    if (currentPathIndexInFlow - 1 >= 0)
+      setPath(pathsFlow[currentPathIndexInFlow - 1]);
+  }
+
+  const nextFolder = () => {
+    const currentPathIndexInFlow = pathsFlow.findIndex(p => p === path);
+    if (currentPathIndexInFlow + 1 < pathsFlow.length)
+      setPath(pathsFlow[currentPathIndexInFlow + 1]);
   }
 
   return (
     <StyledExplorerContainer>
-      <ExplorerAccessBar path={path} />
-      
+      <ExplorerAccessBar
+        path={path}
+        pathsFlow={pathsFlow}
+        updatePath={openFile}
+        nextFolder={nextFolder}
+        previousFolder={previousFolder}
+      />
+
       <section className="main-content">
         <div className="quick-access">
           <ExplorerFileQuickAccess

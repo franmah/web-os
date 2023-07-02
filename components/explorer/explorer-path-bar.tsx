@@ -1,61 +1,15 @@
 import { FC, useEffect, useState } from "react";
-import styled from "styled-components";
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import { GrRefresh } from 'react-icons/gr';
 import { convertPathToFragments } from "../../services/file-system/FilePathService";
 import Image from 'next/image';
+import { StyledExplorerPathBar } from "../../styled-components/system/explorer/styled-explorer-path-bar";
 
-export const StyledExplorerPathBar = styled.div`
-  display: flex;
-  width: 100%;
-  height: 100%;
-  border: 2px solid #ECECEC;
-
-  button {
-    outline: none;
-    background-color: white;
-    border: none;
-  }
-
-  .left-icon {
-    display: flex;
-    align-items: center;
-    margin-left: 4px;
-    user-select: none;
-  }
-
-  .path-fragments-container {
-    flex: 1;
-    display: flex;
-  }
-
-  .path-fragment-container {
-    display: flex;
-    align-items: center;
-    padding: 0px 4px;
-    border: 1px solid transparent;
-
-    &:hover {
-      cursor: default;
-      background-color: #E5F3FF;
-      border: 1px solid #D8EDFF;
-      user-select: none;
-    }
-
-    .arrow-icon {
-      display: flex;
-      margin-left: 8px;
-    }
-  }
-
-  .refresh-icon {
-    padding: 8px;
-  }
-`;
 
 const ExplorerPathBar: FC<{ 
   path: string,
-}> = ({ path = '' }) => {
+  updatePath: (path: string) => void
+}> = ({ path = '', updatePath }) => {
 
 const [pathFragments, setPathFragments] = useState<string[]>([]);
 
@@ -66,6 +20,7 @@ const [pathFragments, setPathFragments] = useState<string[]>([]);
   // TODO: move parse to fs service (findPathToFolderInPath(path: string, folderName: string))
   const onFolderClicked = (fragmentIndex: number) => {
     const pathToFolder = '/' + pathFragments.slice(0, fragmentIndex + 1).join('/') + '/';
+    updatePath(pathToFolder);
   }
 
   return (
@@ -101,6 +56,7 @@ const [pathFragments, setPathFragments] = useState<string[]>([]);
       <button className="refresh-icon path-fragment-container" onClick={() => onFolderClicked(pathFragments.length)}>
         <GrRefresh />
       </button>
+      
     </StyledExplorerPathBar>
   );
 };
