@@ -19,8 +19,8 @@ export const getRootAtSystemStart = (): ExplorerFile => {
   });
 
   root.children.push({
-    name: 'Document',
-    id: 'document',
+    name: 'Documents',
+    id: 'documents',
     children: [],
     parent: root,
     isFolder: true

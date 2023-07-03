@@ -83,8 +83,9 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
             pinnedFolderPaths={[
               '/Desktop',
               '/Documents',
-              '/Desktop/num #6'
+              '/Desktop/New folder (3)'
             ]}
+            updatePath={openFile}
           />
         </div>
 
