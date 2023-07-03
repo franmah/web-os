@@ -1,6 +1,11 @@
-// WORKING ON:
+// WORKING ON
 
+- move away from <table>
+- file-view should take as much space as possible
 
+EXPLORER
+- create a context for the path?
+- move colors and other css values into a constant file
 
 
 /////////////////// PATH TO MVP ///////////////
@@ -13,7 +18,9 @@
   - can open files
   - can create files
 
-
+1.5 
+EXTENSIONS they have to work!!
+and change file system to use actual FS style (use string path instead of ExplorerItem)
 2. Apps
 - can create youtube, txt and folder
 - can open youtube and txt files
@@ -36,6 +43,14 @@
   - ItemsContainerComponent should let DesktopComponent know that there's a new file or folder that was created.
 
 /////// TODO: in other
+
+Explorer
+  - previous and next button in Explorer don't work perfectly. They should keep track of the current index in the flow
+    instead of comparing the current path to the first and last position in the flow.
+    (what if someone clicks a folder shortcut that happens to be the same as the first folder in the flow. It will think it's at the begginning)
+  - implement date modifed and other columns in file view header
+  - add sorting by columns other than Name
+  - need to improve code for search bar.
 
 
 - explore idea of window manager having a windowFocused state.

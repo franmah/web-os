@@ -2,13 +2,16 @@ import { WindowParams } from "../window/WindowProps";
 
 export class Process {
   name: string;
-  Component: React.ComponentType<{ params: any }>;
+  Component: React.ComponentType<{
+    params: any,
+    updateWarnUserBeforeClose?: (processId: string, canClose: boolean) => void
+  }>;
   params: any;
   hasWindow: boolean;
   isUnique: boolean;
   processId: string;
 
-  constructor(name: string, Component: React.ComponentType<{ params: any}>, params: any, hasWindow: boolean, isUnique: boolean, processId: string) {
+  constructor(name: string, Component: React.ComponentType<{ params: any }>, params: any, hasWindow: boolean, isUnique: boolean, processId: string) {
     this.name = name;
     this.Component = Component;
     this.params = params;
@@ -21,7 +24,7 @@ export class Process {
 export class WindowedProcess extends Process  {
   windowParams: WindowParams;
 
-  constructor(name: string, Component: React.ComponentType<{ params: any}>, params: any, hasWindow: boolean, isUnique: boolean, processId: string, windowParams: WindowParams) {
+  constructor(name: string, Component: React.ComponentType<{ params: any }>, params: any, hasWindow: boolean, isUnique: boolean, processId: string, windowParams: WindowParams) {
     super(name, Component, params, hasWindow, isUnique, processId);
     this.windowParams = windowParams;
   }
@@ -43,7 +46,10 @@ export type ProcessContextType = {
 
 export type ProcessDirectoryEntry = {
   name: string;
-  Component: React.ComponentType<{ params: any }>;
+  Component: React.ComponentType<{
+    params: any,
+    updateWarnUserBeforeClose?: (processId: string, canClose: boolean) => void
+  }>;
   defaultParams?: any;
   isUnique: boolean;
   hasWindow: boolean;

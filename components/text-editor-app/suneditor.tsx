@@ -5,27 +5,11 @@ import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import SunEditorCore from "suneditor/src/lib/core";
 import { ExplorerFile } from "../../types/system/file/ExplorerElement";
 import { FileSystemContext } from "../../contexts/FileSystemContext";
+import { StyledSunEditorContainer } from "../../styled-components/styled-suneditor-container";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
-
-export const StyledSunEditorContainer = styled.div`
-
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  overflow: scroll;
-
-  // Make suneditor toolbar buttons smaller 
-  .se-toolbar li button {
-      width: 20px;
-      height: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-  }
-`;
 
 /**
  * Note about error TypeError: this._resourcesStateChange is not a function,

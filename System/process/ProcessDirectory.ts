@@ -21,6 +21,18 @@ export const ProcessDirectory: ProcessDirectoryType = {
     hasWindow: false,
     isUnique: true
   },
+  'explorer': {
+    name: 'hello',
+    Component: dynamic<{ params: { startPath: string } }>(() => import('../../components/explorer/explorer-container')),
+    windowParams: {
+      headerOptions: {
+        icon: '/icons/youtube-logo.png',
+        text: 'Explorer'
+      }
+    },
+    hasWindow: true,
+    isUnique: false
+  },
   'hello': {
     name: 'hello',
     Component: dynamic<{ params: any }>(() => import('../../components/hello/helloComponent')),
@@ -35,7 +47,9 @@ export const ProcessDirectory: ProcessDirectoryType = {
   },
   'sunTextEditor': {
     name: 'sunTextEditor',
-    Component: dynamic<{ params: { originalContent: string } }>(() => import('../../components/text-editor-app/suneditor')),
+    Component: dynamic<{ params: { originalContent: string } }>(
+      () => import('../../components/text-editor-app/suneditor') as any
+    ),
     windowParams: {
       headerOptions: {
         text: 'Text Editor'
