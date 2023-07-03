@@ -1,6 +1,6 @@
 import { ContextMenuCommand } from "../abstractCommand";
 
-export class UnpnFromQuickAccessCommand extends ContextMenuCommand {
+export class UnpinFromQuickAccessCommand extends ContextMenuCommand {
   
   private callback: () => any;
   

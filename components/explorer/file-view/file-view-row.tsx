@@ -6,7 +6,7 @@ import { StyledFileViewRow } from "../../../styled-components/system/explorer/st
 import { ProcessContext } from "../../../contexts/processContext";
 import { PinToQuickAccessCommand } from "../../../System/contextMenuCommands/commands/pinToQuickAccessCommand";
 import { ExplorerQuickAccessContext } from "../../../contexts/explorer-quick-access-context";
-import { UnpnFromQuickAccessCommand } from "../../../System/contextMenuCommands/commands/unpinFromQuickAccessCommand";
+import { UnpinFromQuickAccessCommand } from "../../../System/contextMenuCommands/commands/unpinFromQuickAccessCommand";
 
 export const ExplorerFileViewRow: FC<{
   columnSizes: { [column: string]: string }
@@ -29,9 +29,11 @@ export const ExplorerFileViewRow: FC<{
     event.preventDefault();
     event.stopPropagation();
 
+    // TODO: check if folder or file
+
     const isPinned = quickAccessContext.getQuickAccessPaths().find(p => p === path);
     const command = isPinned ?
-      new UnpnFromQuickAccessCommand(() => quickAccessContext.unpinFromQuickAccess(path)) :
+      new UnpinFromQuickAccessCommand(() => quickAccessContext.unpinFromQuickAccess(path)) :
       new PinToQuickAccessCommand(() => quickAccessContext.pinToQuickAccess(path));
 
     openProcess('contextMenu', {

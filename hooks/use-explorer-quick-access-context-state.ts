@@ -2,8 +2,7 @@ import { useState } from "react";
 
 export const QUICK_ACCESS_STATE_DEFAULT = [
   '/Desktop',
-  '/Documents',
-  '/Desktop/New folder (3)'
+  '/Documents'
 ];
 
 export const useExplorerQuickAccessContextState = () => {
