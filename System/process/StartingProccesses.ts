@@ -1,7 +1,7 @@
-import { Processes } from '../../types/system/processes/processes';
+import { Processes, WindowedProcesses } from '../../types/system/processes/processes';
 import { ProcessDirectory } from './ProcessDirectory';
 
-export const startingProccesses: Processes = {
+export const startingProccesses: any = {
   'desktop': {
     ...ProcessDirectory['desktop'],
     windowParams: null
