@@ -16,7 +16,7 @@ const ExplorerFileViewContainer: FC<{
     ({ column: ExplorerFileViewSortFields.NAME, direction: ExplorerFileViewSortDirections.ASC });
   const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
 
-  useEffect(() => setSelectedChildren([]), [paths])
+  useEffect(() => setSelectedChildren([]), [paths]);
 
   useEffect(() => {
     document.addEventListener('click', (e) => handleUnselectOnClick(e));

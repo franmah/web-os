@@ -60,7 +60,7 @@ export const StyledExplorerAccessBar = styled.nav<{
       }
     }
 
-    div {
+    .search-button {
       display: flex;
       justify-content: center;
       align-items: center;

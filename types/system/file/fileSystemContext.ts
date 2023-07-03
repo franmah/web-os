@@ -6,5 +6,6 @@ export type FileSystemContextType = {
   getDesktop: () => ExplorerFile,
   mkdir: (name: string, parent: ExplorerFile, id?: string) => void,
   updateFile: (file: ExplorerFile, content: any) => void,
-  readdirV2: (path: string) => Promise<string[]>
+  readdirV2: (path: string) => Promise<string[]>,
+  searchFolderV2: (path: string, partialName: string) => Promise<string[]>
 };

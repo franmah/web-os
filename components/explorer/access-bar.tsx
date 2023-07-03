@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useRef } from "react";
 import ExplorerPathBar from "./explorer-path-bar";
 import { FiArrowRight, FiArrowLeft, FiArrowUp } from 'react-icons/fi';
 import { GrSearch } from 'react-icons/gr';
@@ -8,10 +8,25 @@ import { StyledExplorerAccessBar } from "../../styled-components/system/explorer
 const ExplorerAccessBar: FC<{
   path: string,
   pathsFlow: string[],
+  searchView: boolean,
   previousFolder: () => void,
   nextFolder: () => void,
-  updatePath: (path: string) => void
-}> = ({ path, pathsFlow, updatePath, previousFolder, nextFolder}) => {
+  updatePath: (path: string) => void,
+  searchFolder: (searchString: string) => void
+}> = ({ path, pathsFlow, searchView, updatePath, previousFolder, nextFolder, searchFolder }) => {
+
+  const searchInput = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!searchView && searchInput.current)
+      searchInput.current.value = '';
+  }, [path, searchView]);
+
+  const handleUpdatePath = (newPath: string) => {
+    if (!searchView) {
+      updatePath(newPath);
+    }
+  };
 
   return (
     <StyledExplorerAccessBar
@@ -38,14 +53,20 @@ const ExplorerAccessBar: FC<{
       <section className='explorer-path-bar'>
         <ExplorerPathBar
           path={path}
-          updatePath={updatePath}
+          updatePath={handleUpdatePath}
         />
       </section>
       
       <section className="search-section">
-        <input placeholder={'Search ' + getCurrentFolderOrFileNameInPath(path)} />
-        <div>
-          <GrSearch />
+        <input
+          ref={searchInput}
+          placeholder={'Search ' + (getCurrentFolderOrFileNameInPath(path) || 'computer' )}
+          onChange={e => searchFolder(e.target.value)}
+        />
+        <div className="search-button">
+          <GrSearch
+            onClick={() => searchInput.current?.focus()}
+          />
         </div>
       </section>
     </StyledExplorerAccessBar>

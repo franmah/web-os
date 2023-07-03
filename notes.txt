@@ -50,6 +50,7 @@ Explorer
     (what if someone clicks a folder shortcut that happens to be the same as the first folder in the flow. It will think it's at the begginning)
   - implement date modifed and other columns in file view header
   - add sorting by columns other than Name
+  - need to improve code for search bar.
 
 
 - explore idea of window manager having a windowFocused state.

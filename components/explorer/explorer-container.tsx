@@ -4,6 +4,7 @@ import ExplorerFileQuickAccess from "./file-quick-access";
 import ExplorerFileViewContainer from "./file-view/file-view-container";
 import { FileSystemContext } from "../../contexts/FileSystemContext";
 import { StyledExplorerContainer } from "../../styled-components/system/explorer/styled-explorer-container";
+import { convertPathToFragments } from "../../services/file-system/FilePathService";
 
 const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
   params: { startPath }
@@ -13,41 +14,67 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
 
   const [pathsFlow, setPathsFlow] = useState<string[]>([startPath]);
   const [path, setPath] = useState<string>(startPath);
-  const [children, setChildren] = useState<string[]>([]);
+  const [fileViewPaths, setFileViewPaths] = useState<string[]>([]);
+  const [useSearchView, setUseSearchView] = useState<boolean>(false);
 
   useEffect(() => {
-    fs.readdirV2(path)
-      .then(files => setChildren(files?.map(child => path + '/' + child) || []));
+    resetFileViewPathsToCurrentPath();
   }, [path]);
+
+  const resetFileViewPathsToCurrentPath = () => {
+    fs.readdirV2(path)
+      .then(files => setFileViewPaths(files?.map(child => path + '/' + child) || []));
+  };
   
   const openFile = (newPath: string) => {
     // TODO: check if folder or app
 
+    setUseSearchView(false);
+    resetFileViewPathsToCurrentPath();
+
     const currentPathIndexInFlow = pathsFlow.findIndex(p => p === path);
     setPathsFlow(flow => [...flow.slice(0, currentPathIndexInFlow + 1), newPath]);
     setPath(newPath);
-  }
+  };
 
   const previousFolder = () => {
+    if (useSearchView) return;
+
     const currentPathIndexInFlow = pathsFlow.findIndex(p => p === path);
     if (currentPathIndexInFlow - 1 >= 0)
       setPath(pathsFlow[currentPathIndexInFlow - 1]);
-  }
+  };
 
   const nextFolder = () => {
+    if (useSearchView) return;
+    
     const currentPathIndexInFlow = pathsFlow.findIndex(p => p === path);
     if (currentPathIndexInFlow + 1 < pathsFlow.length)
       setPath(pathsFlow[currentPathIndexInFlow + 1]);
-  }
+  };
+
+  const searchFolder = (searchString: string) => {
+    if (!searchString || searchString.length === 0) {
+      resetFileViewPathsToCurrentPath();
+      setUseSearchView(false);
+      return;
+    }
+    
+    setUseSearchView(true);
+    fs.searchFolderV2(path, searchString)
+      .then(paths => setFileViewPaths(paths));
+  };
 
   return (
     <StyledExplorerContainer>
       <ExplorerAccessBar
-        path={path}
+        path={useSearchView ? `Search Results in ${convertPathToFragments(path).at(-1)}` : path}
         pathsFlow={pathsFlow}
         updatePath={openFile}
         nextFolder={nextFolder}
         previousFolder={previousFolder}
+        searchFolder={searchFolder}
+        searchView={useSearchView}
       />
 
       <section className="main-content">
@@ -66,13 +93,13 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
         <div className="file-view">
           <ExplorerFileViewContainer
             openFile={openFile}
-            paths={children}
+            paths={fileViewPaths}
           />
         </div>
       </section>
 
       <footer className="container-footer">
-        { children.length ? `${children.length} items` : '' }
+        { fileViewPaths.length ? `${fileViewPaths.length} items` : '' }
       </footer>
     </StyledExplorerContainer>
   );
