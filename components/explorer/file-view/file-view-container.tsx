@@ -5,6 +5,8 @@ import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/Ev
 import { StyledExplorerFileViewContainer } from "../../../styled-components/system/explorer/styled-file-view-container";
 import { ExplorerFileViewSortDirections, ExplorerFileViewSortFields, START_COLUMN_SIZES } from "../../../constants/system/explorer/explorer-consts";
 
+export const FILE_VIEW_CONTAINER_ROWS_HTML_ID = 'file-view-container-rows';
+
 const ExplorerFileViewContainer: FC<{
   paths: string[],
   openFile: (path: string) => void
@@ -14,6 +16,8 @@ const ExplorerFileViewContainer: FC<{
     ({ column: ExplorerFileViewSortFields.NAME, direction: ExplorerFileViewSortDirections.ASC });
   const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
 
+  useEffect(() => setSelectedChildren([]), [paths])
+
   useEffect(() => {
     document.addEventListener('click', (e) => handleUnselectOnClick(e));
     () => {
@@ -22,16 +26,17 @@ const ExplorerFileViewContainer: FC<{
   }, [paths]);
   
   const handleUnselectOnClick = (event: MouseEvent) => {
-    if (!isEventOriginatedFromWithinTargetIdSubtree(event, 'file-view-container-rows')) {
+    if (!isEventOriginatedFromWithinTargetIdSubtree(event, FILE_VIEW_CONTAINER_ROWS_HTML_ID)) {
       handleSelectAllChildren(false);
     }
   };
 
   const handleFileSelected = (child: string, selected: boolean, unselectAll = false) => {
-    if (unselectAll)
+    if (unselectAll) {
       handleSelectAllChildren(false);
+    }
     
-      setSelectedChildren(currentlySelectedChildren => {
+    setSelectedChildren(currentlySelectedChildren => {
       if (selected)
         return [...currentlySelectedChildren, child];
       else
@@ -76,7 +81,7 @@ const ExplorerFileViewContainer: FC<{
         onSort={handleSortChildren}
       />
 
-      <div id="file-view-container-rows">
+      <div id={FILE_VIEW_CONTAINER_ROWS_HTML_ID}>
         {
           paths
             ?.sort(sortFn)
