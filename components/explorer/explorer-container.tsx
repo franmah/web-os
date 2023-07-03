@@ -5,13 +5,15 @@ import ExplorerFileViewContainer from "./file-view/file-view-container";
 import { FileSystemContext } from "../../contexts/FileSystemContext";
 import { StyledExplorerContainer } from "../../styled-components/system/explorer/styled-explorer-container";
 import { convertPathToFragments } from "../../services/file-system/FilePathService";
+import { ExplorerQuickAccessContext } from "../../contexts/explorer-quick-access-context";
 
 const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
   params: { startPath }
 }) => {
 
   const fs = useContext(FileSystemContext);
-
+  const quickAccessContext = useContext(ExplorerQuickAccessContext);
+  
   const [pathsFlow, setPathsFlow] = useState<string[]>([startPath]);
   const [path, setPath] = useState<string>(startPath);
   const [fileViewPaths, setFileViewPaths] = useState<string[]>([]);
@@ -80,11 +82,7 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
       <section className="main-content">
         <div className="quick-access">
           <ExplorerFileQuickAccess
-            pinnedFolderPaths={[
-              '/Desktop',
-              '/Documents',
-              '/Desktop/New folder (3)'
-            ]}
+            pinnedFolderPaths={quickAccessContext.getQuickAccessPaths()}
             updatePath={openFile}
           />
         </div>

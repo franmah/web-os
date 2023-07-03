@@ -1,8 +1,12 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import Image from 'next/image';
 import { convertPathToFragments } from "../../../services/file-system/FilePathService";
 import { toDateModifedFormat } from "../../../services/date-service";
 import { StyledFileViewRow } from "../../../styled-components/system/explorer/styled-file-view-row";
+import { ProcessContext } from "../../../contexts/processContext";
+import { PinToQuickAccessCommand } from "../../../System/contextMenuCommands/commands/pinToQuickAccessCommand";
+import { ExplorerQuickAccessContext } from "../../../contexts/explorer-quick-access-context";
+import { UnpnFromQuickAccessCommand } from "../../../System/contextMenuCommands/commands/unpinFromQuickAccessCommand";
 
 export const ExplorerFileViewRow: FC<{
   columnSizes: { [column: string]: string }
@@ -18,12 +22,32 @@ export const ExplorerFileViewRow: FC<{
   openFile
 }) => {
 
+  const { openProcess } = useContext(ProcessContext);
+  const quickAccessContext = useContext(ExplorerQuickAccessContext);
+
+  const handleRightClick = (event: any) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const isPinned = quickAccessContext.getQuickAccessPaths().find(p => p === path);
+    const command = isPinned ?
+      new UnpnFromQuickAccessCommand(() => quickAccessContext.unpinFromQuickAccess(path)) :
+      new PinToQuickAccessCommand(() => quickAccessContext.pinToQuickAccess(path));
+
+    openProcess('contextMenu', {
+      top: event.clientY,
+      left: event.clientX,
+      commands: [command]
+    });
+  };
+
   return (
     <StyledFileViewRow
       columnSizes={columnSizes}
       className={isSelected ? 'selected-row' : ''}
       onClick={() => onFileSelected(path, true, true)}
       onDoubleClick={() => openFile(path)}
+      onContextMenu={e => handleRightClick(e)}
       selected={isSelected}
     >
       {/* Name */}

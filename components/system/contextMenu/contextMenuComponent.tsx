@@ -40,7 +40,8 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ params: { top
       style={{
         top,
         left,
-        width: width || DEFAULT_WIDTH_SUB_MENU
+        width: width || DEFAULT_WIDTH_SUB_MENU,
+        zIndex: 1000
       }}
     >
       {

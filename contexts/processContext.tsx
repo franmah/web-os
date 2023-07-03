@@ -10,7 +10,7 @@ const START_PROCESS_CONTEXT: ProcessContextType = {
 
 export const ProcessContext = createContext<ProcessContextType>(START_PROCESS_CONTEXT);
 
-const ProcessContextProvider: FC = ({ children }) => {
+const ProcessContextProvider: FC<{ children: React.ReactNode}> = ({ children }) => {
 
   const { processes, openProcess, closeProcess } = _useProcessContextState();
 
