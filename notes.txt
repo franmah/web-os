@@ -44,9 +44,13 @@ and change file system to use actual FS style (use string path instead of Explor
 
 /////// TODO: in other
 
-- previous and next button in Explorer don't work perfectly. They should keep track of the current index in the flow
-instead of comparing the current path to the first and last position in the flow.
-(what if someone clicks a folder shortcut that happens to be the same as the first folder in the flow. It will think it's at the begginning)
+Explorer
+  - previous and next button in Explorer don't work perfectly. They should keep track of the current index in the flow
+    instead of comparing the current path to the first and last position in the flow.
+    (what if someone clicks a folder shortcut that happens to be the same as the first folder in the flow. It will think it's at the begginning)
+  - implement date modifed and other columns in file view header
+  - add sorting by columns other than Name
+
 
 - explore idea of window manager having a windowFocused state.
     - Since only one window can be focused at a time
