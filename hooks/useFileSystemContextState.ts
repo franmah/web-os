@@ -14,13 +14,17 @@ export const useFileSystemContextState = () => {
   let getDesktop = (): ExplorerFile => getRoot()?.children?.[0];
 
   const readdirV2 = (path: string): Promise<string[]> => {
+    if (path.at(-1) === '/')
+      path = path.substring(0, path.length - 1);
+
     const fragments = convertPathToFragments(path);
     let fileNode = getRoot();
+
     for (let folder of fragments) {
-      const tmp = fileNode.children?.find(file => file.name === folder);
-      if (!tmp)
-        throw Error('Can\'t find directory.');
-      fileNode = tmp;
+      const childNode = fileNode.children?.find(file => file.name === folder);
+      if (!childNode)
+        throw Error(`Can't find directory ${folder} in path: ${path}`);
+      fileNode = childNode;
     }
 
     return Promise.resolve(fileNode.children?.map(file => file.name) || []);

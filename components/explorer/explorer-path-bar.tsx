@@ -31,7 +31,7 @@ const [pathFragments, setPathFragments] = useState<string[]>([]);
           <Image src='/icons/folder-icon.png' alt='folder' height={23} width={23} />
         </div>
 
-        <button className="path-fragment-container" onClick={() => onFolderClicked(0)}>
+        <button className="path-fragment-container">
           <MdKeyboardArrowRight />
         </button>
 

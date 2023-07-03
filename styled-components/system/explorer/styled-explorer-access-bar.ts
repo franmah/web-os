@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-export const StyledExplorerAccessBar = styled.nav`
+export const StyledExplorerAccessBar = styled.nav<{
+  previousArrowDisabled: boolean,
+  nextArrowDisabled: boolean,
+  parentArrowDisabled: boolean
+}>`
   display: flex;
   height: 42px;
   margin: 6px 8px;
@@ -16,13 +20,21 @@ export const StyledExplorerAccessBar = styled.nav`
       border: 1px solid transparent;
       border-radius: 3px;
       margin-right: 8px;
-      
+      user-select: none;
+    }
+
+    .enabled {
+      color: #6A6A6A;
+
       &:hover {
         cursor: default;
         background-color: #E5F3FF;
         border: 1px solid #D8EDFF;
-        user-select: none;
       }
+    }
+
+    .disabled {
+      color: #6A6A6A39;
     }
   }
 
