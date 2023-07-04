@@ -3,7 +3,7 @@ import { v4 } from "uuid";
 import { getRootAtSystemStart } from "../services/FileSystemService";
 import { ExplorerFile } from "../types/system/file/ExplorerElement";
 import { FOLDER_ICON_PATH } from '../constants/FileSystemConsts';
-import { convertPathToFragments } from "../services/file-system/FilePathService";
+import { convertPathToFragments, getCurrentItemNameInPath } from "../services/file-system/FilePathService";
 import { CommonFolderPaths } from "../constants/system/file-system/CommonFilePaths";
 
 export const useFileSystemContextState = () => {
@@ -16,6 +16,10 @@ export const useFileSystemContextState = () => {
 
   const renameFolderV2 = (path: string, newName: string): Promise<void> => {
     if (path === CommonFolderPaths.ROOT)
+      return Promise.resolve();
+
+    const currentName = getCurrentItemNameInPath(path);
+    if (currentName === newName)
       return Promise.resolve();
 
     const fragments = convertPathToFragments(path);

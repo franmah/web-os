@@ -40,8 +40,18 @@ export const ExplorerFileViewRow: FC<{
   useEffect(() => {
     if (editingName && inputRef.current)
       inputRef.current?.select();
-  }, [inputRef.current])
 
+    if (inputRef)
+      document.addEventListener('keyup', onInputEnterKeyPressed);
+
+    return () => document.removeEventListener('keyup', onInputEnterKeyPressed);
+  }, [inputRef.current]);
+
+  const onInputEnterKeyPressed = (e: any) => {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      handleRenameItem();
+    }
+  }
 
   const onNameClicked = () => {
     if (isSelected) {
