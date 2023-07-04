@@ -28,8 +28,8 @@ export const StyledExplorerQuickAccess = styled.nav`
       flex: 1;
 
       .folder-name {
-      margin-left: 4px;
-      flex: 0;
+        margin-left: 4px;
+        overflow: hidden;
       }
     }
 
