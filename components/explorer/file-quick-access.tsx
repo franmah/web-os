@@ -7,6 +7,7 @@ import { ExplorerQuickAccessContext } from "../../contexts/explorer-quick-access
 import { ProcessContext } from "../../contexts/processContext";
 import { UnpinFromQuickAccessCommand } from "../../System/contextMenuCommands/commands/unpinFromQuickAccessCommand";
 import { CommonFolderPaths } from "../../constants/system/file-system/CommonFilePaths";
+import { getFolderIcon } from "../../services/icon-service";
 
 
 const ExplorerFileQuickAccess: FC<{
@@ -57,7 +58,7 @@ const ExplorerFileQuickAccess: FC<{
           onBlur={() => setSelectedElementFocusedOut(CommonFolderPaths.ROOT)}
         >
           <div className="left-side">
-            <Image src='/icons/win11_home.png' alt='home icon' height={23} width={23} />
+            <Image src={getFolderIcon(CommonFolderPaths.ROOT)} alt='home icon' height={23} width={23} />
             <div className="folder-name"> Home </div>
           </div>
         </button> 
@@ -75,7 +76,7 @@ const ExplorerFileQuickAccess: FC<{
               onBlur={() => setSelectedElementFocusedOut(path)}
             >
               <div className="left-side">
-                <Image src='/icons/folder-icon.png' alt='folder icon' height={23} width={23} />
+                <Image src={getFolderIcon(path)} alt='folder icon' height={18} width={18} />
                 <div className="folder-name">{getCurrentFolderOrFileNameInPath(path)}</div>
               </div>
 

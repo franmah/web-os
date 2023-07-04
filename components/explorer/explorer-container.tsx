@@ -27,12 +27,16 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
     fs.readdirV2(path)
       .then(files => setFileViewPaths(files?.map(child => path + '/' + child) || []));
   };
-  
+
   const openFile = (newPath: string) => {
     // TODO: check if folder or app
 
     setUseSearchView(false);
     resetFileViewPathsToCurrentPath();
+
+    // TODO: fix newPath starting with // sometimes (following code removes the extra /)
+    if (newPath[1] === '/')
+      newPath = '/' + newPath.substring(3, newPath.length);
 
     const currentPathIndexInFlow = pathsFlow.findIndex(p => p === path);
     setPathsFlow(flow => [...flow.slice(0, currentPathIndexInFlow + 1), newPath]);
