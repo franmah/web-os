@@ -84,14 +84,18 @@ const ExplorerFileViewContainer: FC<{
 
   return (
     <StyledExplorerFileViewContainer>
-      <ExplorerFileViewHeader
-        columnSizes={START_COLUMN_SIZES}
-        allFilesChecked={selectedChildren.length === paths.length && paths.length > 0}
-        sortColumn={sort.column}
-        sortDirection={sort.direction}
-        onSelectAllChildren={handleSelectAllChildren}
-        onSort={handleSortChildren}
-      />
+      {
+        paths.length > 0 ?
+          <ExplorerFileViewHeader
+            columnSizes={START_COLUMN_SIZES}
+            allFilesChecked={selectedChildren.length === paths.length && paths.length > 0}
+            sortColumn={sort.column}
+            sortDirection={sort.direction}
+            onSelectAllChildren={handleSelectAllChildren}
+            onSort={handleSortChildren}
+          /> :
+          null
+      }  
 
       { 
         paths.length === 0 ? 
