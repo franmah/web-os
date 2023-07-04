@@ -26,6 +26,38 @@ export const getRootAtSystemStart = (): ExplorerFile => {
     isFolder: true
   });
 
+  root.children.push({
+    name: 'Downloads',
+    id: 'downloads',
+    children: [],
+    parent: root,
+    isFolder: true
+  });
+
+  root.children.push({
+    name: 'Pictures',
+    id: 'pictures',
+    children: [],
+    parent: root,
+    isFolder: true
+  });
+  
+  root.children.push({
+    name: 'Music',
+    id: 'music',
+    children: [],
+    parent: root,
+    isFolder: true
+  });
+
+  root.children.push({
+    name: 'Videos',
+    id: 'videos',
+    children: [],
+    parent: root,
+    isFolder: true
+  });
+
   root.children[0].children = getExampleDesktopChildren(root.children[0]);
 
   return root;
