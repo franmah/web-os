@@ -81,6 +81,12 @@ const ExplorerFileViewContainer: FC<{
         onSort={handleSortChildren}
       />
 
+      { 
+        paths.length === 0 ? 
+          <div className='empty-folder-text'>This folder is empty.</div> :
+          null
+      }
+
       <div id={FILE_VIEW_CONTAINER_ROWS_HTML_ID}>
         {
           paths
