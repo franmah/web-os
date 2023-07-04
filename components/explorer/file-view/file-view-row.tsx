@@ -8,6 +8,7 @@ import { PinToQuickAccessCommand } from "../../../System/contextMenuCommands/com
 import { ExplorerQuickAccessContext } from "../../../contexts/explorer-quick-access-context";
 import { UnpinFromQuickAccessCommand } from "../../../System/contextMenuCommands/commands/unpinFromQuickAccessCommand";
 import { getFolderIcon } from "../../../services/icon-service";
+import Checkbox from "../../system/custom-checkbox";
 
 export const ExplorerFileViewRow: FC<{
   columnSizes: { [column: string]: string }
@@ -56,12 +57,11 @@ export const ExplorerFileViewRow: FC<{
       {/* Name */}
       <div className="column name-col">
 
-        <input
+        <Checkbox
           className="select-checkbox"
-          type='checkbox'
           checked={isSelected}
           onClick={e => e.stopPropagation()}
-          onChange={e => onFileSelected(path, e.target.checked, false)}
+          onChange={checked => onFileSelected(path, checked, false)}
         />
 
         <Image

@@ -53,6 +53,7 @@ const ExplorerFileViewContainer: FC<{
   };
 
   const handleSelectAllChildren = (selected: boolean) => {
+    console.log(selected)
     if (selected) {
       setSelectedChildren(paths);
       updateNumSelectedItems(paths.length);

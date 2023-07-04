@@ -2,6 +2,25 @@ import { FC } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { ExplorerFileViewSortDirections, ExplorerFileViewSortFields } from "../../../constants/system/explorer/explorer-consts";
 import { StyledExplorerFileViewHeader } from "../../../styled-components/system/explorer/styled-file-view-header";
+import styled from "styled-components";
+import Checkbox from "../../system/custom-checkbox";
+
+export const StyledANotherTest = styled.input`
+    -webkit-appearance: none;
+  appearance: none;
+  
+  width: 1em;
+  height: 1em;
+  border-radius: 0.20em;
+  margin-right: 0.5em;
+  border: 0.1em solid #626262;
+  background-color: #EAEAEA;
+  outline: none;
+
+  &:checked {
+    background-color: #196EBF;
+  }
+`;
 
 export const ExplorerFileViewHeader: FC<{
   columnSizes: { [column: string]: string },
@@ -43,13 +62,16 @@ export const ExplorerFileViewHeader: FC<{
         >
           { sortDirection === ExplorerFileViewSortDirections.ASC ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown /> }
         </div>
-        <input
-          type='checkbox'
-          checked={allFilesChecked}
-          onClick={e => e.stopPropagation()} // Avoids triggering column sorting
-          onChange={e => onSelectAllChildren(e.target.checked)}
-        />
-        Name
+        
+        <div className="left-side">
+          <Checkbox
+            className="name-col-checkbox"
+            checked={allFilesChecked} 
+            onClick={e => e.stopPropagation()} // Avoids triggering column sorting
+            onChange={checked => onSelectAllChildren(checked)}
+          />
+          Name
+        </div>
       </div>
 
       {/* TODO: Add column resizing */}
