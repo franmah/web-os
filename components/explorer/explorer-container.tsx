@@ -6,6 +6,7 @@ import { FileSystemContext } from "../../contexts/FileSystemContext";
 import { StyledExplorerContainer } from "../../styled-components/system/explorer/styled-explorer-container";
 import { convertPathToFragments } from "../../services/file-system/FilePathService";
 import { ExplorerQuickAccessContext } from "../../contexts/explorer-quick-access-context";
+import { CommonFolderPaths } from "../../constants/system/file-system/CommonFilePaths";
 
 const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
   params: { startPath }
@@ -26,7 +27,10 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
 
   const resetFileViewPathsToCurrentPath = () => {
     fs.readdirV2(path)
-      .then(files => setFileViewPaths(files?.map(child => path + '/' + child) || []));
+      .then(files => setFileViewPaths(files?.map(child => path === CommonFolderPaths.ROOT ?
+        path + child :
+        path + '/' + child) || []
+      ));
   };
 
   const openFile = (newPath: string) => {
@@ -37,7 +41,7 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
 
     // TODO: fix newPath starting with // sometimes (following code removes the extra /)
     if (newPath[1] === '/')
-      newPath = '/' + newPath.substring(3, newPath.length);
+      newPath = '/' + newPath.substring(2, newPath.length);
 
     const currentPathIndexInFlow = pathsFlow.findIndex(p => p === path);
     setPathsFlow(flow => [...flow.slice(0, currentPathIndexInFlow + 1), newPath]);

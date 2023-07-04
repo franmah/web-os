@@ -8,7 +8,7 @@ EXPLORER
 - move colors and other css values into a constant file
 
 
-/////////////////// PATH TO MVP ///////////////
+/////////////////// MVP ///////////////
 1. Explorer app
   - side menu
   - show path in the top
@@ -45,12 +45,16 @@ and change file system to use actual FS style (use string path instead of Explor
 /////// TODO: in other
 
 Explorer
+  - explorer path doesn't work exactly like windows 11. It's not supposed to show the whole current path
+    but the path from the start (example, click on Documents in quick access will show Documents in the explorer bar.
+    Not C:\users\user\Documents\) and then push as user clicks folders.
   - previous and next button in Explorer don't work perfectly. They should keep track of the current index in the flow
     instead of comparing the current path to the first and last position in the flow.
     (what if someone clicks a folder shortcut that happens to be the same as the first folder in the flow. It will think it's at the begginning)
   - implement date modifed and other columns in file view header
   - add sorting by columns other than Name
   - need to improve code for search bar.
+  - handle long paths in explorer bar (should show '...' at the begginning)
 
 
 - explore idea of window manager having a windowFocused state.

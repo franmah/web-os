@@ -7,6 +7,7 @@ import { ProcessContext } from "../../../contexts/processContext";
 import { PinToQuickAccessCommand } from "../../../System/contextMenuCommands/commands/pinToQuickAccessCommand";
 import { ExplorerQuickAccessContext } from "../../../contexts/explorer-quick-access-context";
 import { UnpinFromQuickAccessCommand } from "../../../System/contextMenuCommands/commands/unpinFromQuickAccessCommand";
+import { getFolderIcon } from "../../../services/icon-service";
 
 export const ExplorerFileViewRow: FC<{
   columnSizes: { [column: string]: string }
@@ -64,7 +65,7 @@ export const ExplorerFileViewRow: FC<{
         />
 
         <Image
-          src='/icons/folder-icon.png'
+          src={getFolderIcon(path)}
           alt='folder icon'
           height={16}
           width={16}
