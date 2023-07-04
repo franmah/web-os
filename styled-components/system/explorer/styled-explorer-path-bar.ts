@@ -4,7 +4,7 @@ export const StyledExplorerPathBar = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
-  border: 2px solid #ECECEC;
+  border: 1px solid #D9D9D9;
 
   button {
     outline: none;

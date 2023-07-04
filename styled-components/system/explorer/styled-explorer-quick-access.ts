@@ -5,7 +5,7 @@ export const StyledExplorerQuickAccess = styled.nav`
 
   .divider {
     margin: 16px 4px;
-    border-bottom: 2px solid #D9D9D9;
+    border-bottom: 1px solid #D6D6D6;
   }
   
   /* CHANGE TO A COMMON TYPE SINCE THEY'RE ALL THE SAME */

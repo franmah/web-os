@@ -11,6 +11,10 @@ export const StyledExplorerFileViewHeader = styled.div<{
 
   .name-col {
     flex: ${({ columnSizes }) => `0 0 ${columnSizes['name']}`  };
+    
+    input {
+      margin-right: 8px;
+    }
   }
   
   .date-modified-col {
