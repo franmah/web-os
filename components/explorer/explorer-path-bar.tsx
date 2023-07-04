@@ -28,7 +28,7 @@ const [pathFragments, setPathFragments] = useState<string[]>([]);
 
       <section className="path-fragments-container ">
         <div className="left-icon">
-          <Image src={getFolderIcon(path)} alt='folder' height={23} width={23} />
+          <Image src={getFolderIcon(path)} alt='folder' height={18} width={18} />
         </div>
 
         <button className="path-fragment-container">
