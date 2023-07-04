@@ -8,8 +8,9 @@ import { getFolderIcon } from "../../services/icon-service";
 
 const ExplorerPathBar: FC<{ 
   path: string,
-  updatePath: (path: string) => void
-}> = ({ path = '', updatePath }) => {
+  updatePath: (path: string) => void,
+  refreshFileViewPaths: () => void
+}> = ({ path = '', updatePath, refreshFileViewPaths }) => {
 
 const [pathFragments, setPathFragments] = useState<string[]>([]);
 
@@ -54,7 +55,7 @@ const [pathFragments, setPathFragments] = useState<string[]>([]);
       </section>
 
       <button className="refresh-icon path-fragment-container" onClick={() => onFolderClicked(pathFragments.length)}>
-        <GrRefresh />
+        <GrRefresh onClick={refreshFileViewPaths}/>
       </button>
       
     </StyledExplorerPathBar>

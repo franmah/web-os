@@ -86,6 +86,7 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
         previousFolder={previousFolder}
         searchFolder={searchFolder}
         searchView={useSearchView}
+        refreshFileViewPaths={resetFileViewPathsToCurrentPath}
       />
 
       <section className="main-content">

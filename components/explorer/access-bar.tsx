@@ -12,8 +12,18 @@ const ExplorerAccessBar: FC<{
   previousFolder: () => void,
   nextFolder: () => void,
   updatePath: (path: string) => void,
-  searchFolder: (searchString: string) => void
-}> = ({ path, pathsFlow, searchView, updatePath, previousFolder, nextFolder, searchFolder }) => {
+  searchFolder: (searchString: string) => void,
+  refreshFileViewPaths: () => void
+}> = ({
+  path,
+  pathsFlow,
+  searchView,
+  updatePath,
+  previousFolder,
+  nextFolder,
+  searchFolder,
+  refreshFileViewPaths
+}) => {
 
   const searchInput = useRef<HTMLInputElement>(null);
 
@@ -52,6 +62,7 @@ const ExplorerAccessBar: FC<{
 
       <section className='explorer-path-bar'>
         <ExplorerPathBar
+          refreshFileViewPaths={refreshFileViewPaths}
           path={path}
           updatePath={handleUpdatePath}
         />
