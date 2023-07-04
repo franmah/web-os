@@ -1,6 +1,6 @@
-import { FC, useContext } from "react";
+import { FC, LegacyRef, useContext, useEffect, useRef, useState } from "react";
 import Image from 'next/image';
-import { convertPathToFragments } from "../../../services/file-system/FilePathService";
+import { convertPathToFragments, getCurrentItemNameInPath } from "../../../services/file-system/FilePathService";
 import { toDateModifedFormat } from "../../../services/date-service";
 import { StyledFileViewRow } from "../../../styled-components/system/explorer/styled-file-view-row";
 import { ProcessContext } from "../../../contexts/processContext";
@@ -15,17 +15,51 @@ export const ExplorerFileViewRow: FC<{
   isSelected: boolean,
   path: string,
   onFileSelected: (path: string, selected: boolean, unselectAll: boolean) => void,
-  openFile: (path: string) => void
+  openFile: (path: string) => void,
+  onRenameItem: (path: string, newName: string) => Promise<void>
 }> = ({
   columnSizes,
   isSelected,
   path,
   onFileSelected,
-  openFile
+  openFile,
+  onRenameItem
 }) => {
+
+  const fileName = getCurrentItemNameInPath(path);
 
   const { openProcess } = useContext(ProcessContext);
   const quickAccessContext = useContext(ExplorerQuickAccessContext);
+
+  const [editingName, setEditingName] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>(getCurrentItemNameInPath(path));
+
+  const inputRef = useRef<any>(null);
+
+  // Select whole name when editing item name
+  useEffect(() => {
+    if (editingName && inputRef.current)
+      inputRef.current?.select();
+  }, [inputRef.current])
+
+
+  const onNameClicked = () => {
+    if (isSelected) {
+      setEditingName(true);
+    }
+  };
+
+  const handleRenameItem = () => {
+    
+    if (!inputRef.current) {
+      console.error('Error renaming item. inputRef.current is null: unable to get input value.');
+      return;
+    }
+
+    const newName = inputRef.current?.value || fileName;
+    onRenameItem(path, newName)
+      .then(() => setEditingName(false));
+  }
 
   const handleRightClick = (event: any) => {
     event.preventDefault();
@@ -55,7 +89,7 @@ export const ExplorerFileViewRow: FC<{
       selected={isSelected}
     >
       {/* Name */}
-      <div className="column name-col">
+      <div className="column name-col" onClick={onNameClicked}>
 
         <Checkbox
           className="select-checkbox"
@@ -72,8 +106,17 @@ export const ExplorerFileViewRow: FC<{
           className="icon"
         />
 
-        { convertPathToFragments(path)?.pop() || 'Error' }
-
+        { 
+          editingName ?
+            <input
+              className="name-input"
+              ref={inputRef}
+              value={inputValue}
+              onBlur={() => handleRenameItem()}
+              onChange={e => setInputValue(e.target.value)}
+            /> :
+            fileName
+        }
       </div>
 
       {/* DATE MODIFIED  */}

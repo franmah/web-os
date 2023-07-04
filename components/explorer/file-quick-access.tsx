@@ -1,5 +1,5 @@
 import { FC, useContext, useState } from "react";
-import { getCurrentFolderOrFileNameInPath } from "../../services/file-system/FilePathService";
+import { getCurrentItemNameInPath } from "../../services/file-system/FilePathService";
 import { BsFillPinAngleFill } from 'react-icons/bs';
 import Image from 'next/image';
 import { StyledExplorerQuickAccess } from "../../styled-components/system/explorer/styled-explorer-quick-access";
@@ -77,7 +77,7 @@ const ExplorerFileQuickAccess: FC<{
             >
               <div className="left-side">
                 <Image src={getFolderIcon(path)} alt='folder icon' height={18} width={18} />
-                <div className="folder-name">{getCurrentFolderOrFileNameInPath(path)}</div>
+                <div className="folder-name">{getCurrentItemNameInPath(path)}</div>
               </div>
 
               <BsFillPinAngleFill color="#95A0A6" />

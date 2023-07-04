@@ -4,7 +4,7 @@ export const convertPathToFragments = (path: string): string[] => {
       .filter(fragment => !!fragment);
 };
 
-export const getCurrentFolderOrFileNameInPath = (path: string): string => {
+export const getCurrentItemNameInPath = (path: string): string => {
   const pathFragments = convertPathToFragments(path);
   return pathFragments[pathFragments.length - 1];
 };

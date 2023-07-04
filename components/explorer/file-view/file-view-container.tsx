@@ -1,18 +1,21 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { ExplorerFileViewHeader } from "./file-view-header";
 import { ExplorerFileViewRow } from "./file-view-row";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/EventService";
 import { StyledExplorerFileViewContainer } from "../../../styled-components/system/explorer/styled-file-view-container";
 import { ExplorerFileViewSortDirections, ExplorerFileViewSortFields, START_COLUMN_SIZES } from "../../../constants/system/explorer/explorer-consts";
+import { FileSystemContext } from "../../../contexts/FileSystemContext";
 
 export const FILE_VIEW_CONTAINER_ROWS_HTML_ID = 'file-view-container-rows';
 
 const ExplorerFileViewContainer: FC<{
   paths: string[],
   openFile: (path: string) => void,
-  updateNumSelectedItems: (number: number) => void
-}> = ({ paths, openFile, updateNumSelectedItems }) => {
+  updateNumSelectedItems: (number: number) => void,
+  onRenameItem: (path: string, newName: string) => Promise<void>
+}> = ({ paths, openFile, updateNumSelectedItems, onRenameItem }) => {
 
+  
   const [sort, setSorting] = useState<{column: ExplorerFileViewSortFields, direction: ExplorerFileViewSortDirections}>
     ({ column: ExplorerFileViewSortFields.NAME, direction: ExplorerFileViewSortDirections.ASC });
   const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
@@ -116,6 +119,7 @@ const ExplorerFileViewContainer: FC<{
                   path={child}
                   onFileSelected={handleFileSelected}
                   openFile={openFile}
+                  onRenameItem={onRenameItem}
                 />
               );
             })

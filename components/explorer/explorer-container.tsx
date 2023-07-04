@@ -76,6 +76,24 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
       .then(paths => setFileViewPaths(paths));
   };
 
+  // TODO: once file tree updates automatically: move it back to file-view-row
+  const handleRenameItem = (path: string, newName: string): Promise<void> => {
+    return fs.renameFolderV2(path, newName)
+      .then(() => {
+
+        // TODO: remove one file tree updates automatically.
+        setFileViewPaths(paths => {
+          const fragments = convertPathToFragments(path);
+          fragments[fragments.length - 1] = newName;
+          const updatedPath = '/' + fragments.join('/');
+          paths = paths.map(p => p === path ? updatedPath : p);
+          return [...paths];
+        });
+        
+        return Promise.resolve();
+      });
+  };
+
   return (
     <StyledExplorerContainer>
       <ExplorerAccessBar
@@ -102,6 +120,7 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
 
         <div className="file-view">
           <ExplorerFileViewContainer
+            onRenameItem={handleRenameItem}
             openFile={openFile}
             updateNumSelectedItems={setNumItemsSelected}
             paths={fileViewPaths}

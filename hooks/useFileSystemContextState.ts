@@ -4,6 +4,7 @@ import { getRootAtSystemStart } from "../services/FileSystemService";
 import { ExplorerFile } from "../types/system/file/ExplorerElement";
 import { FOLDER_ICON_PATH } from '../constants/FileSystemConsts';
 import { convertPathToFragments } from "../services/file-system/FilePathService";
+import { CommonFolderPaths } from "../constants/system/file-system/CommonFilePaths";
 
 export const useFileSystemContextState = () => {
 
@@ -12,6 +13,34 @@ export const useFileSystemContextState = () => {
   const [getRoot, setRoot] = useState<() => ExplorerFile>(() => () => rootFile);
 
   let getDesktop = (): ExplorerFile => getRoot()?.children?.[0];
+
+  const renameFolderV2 = (path: string, newName: string): Promise<void> => {
+    if (path === CommonFolderPaths.ROOT)
+      return Promise.resolve();
+
+    const fragments = convertPathToFragments(path);
+    const parentPath = fragments.at(-2);
+
+    const parentNode = !parentPath ?
+      getRoot() :
+      _getNodeFromPath(parentPath);
+    
+    const nameAlreadyUsed = parentNode.children.find(child => child.name === newName);
+    if (nameAlreadyUsed) {
+      console.error(`Error changing name, name already used in parent node's children. New name: ${newName}, path: '${path}'.`);
+      return Promise.reject();
+    }
+    
+    const nodeName = fragments.at(-1) as string;
+    const node = parentNode.children.find(child => child.name === nodeName);
+
+    if (!node) {
+      console.error(`Error changing name, can't find node. New name: ${newName}, path: '${path}'.`);
+      return Promise.reject();
+    }
+    node.name = newName;
+    return Promise.resolve();
+  };
 
   const searchFolderV2 = (path: string, partialName: string): Promise<string[]> => {
     const fileNode = _getNodeFromPath(path);
@@ -123,6 +152,7 @@ export const useFileSystemContextState = () => {
     mkdir,
     updateFile,
     readdirV2,
-    searchFolderV2
+    searchFolderV2,
+    renameFolderV2
   };
 }

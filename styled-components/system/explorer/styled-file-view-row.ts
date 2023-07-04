@@ -33,6 +33,10 @@ export const StyledFileViewRow = styled.div<{
     .icon {
       margin: 0px 6px;
     }
+
+    .name-input {
+      outline: none;
+    }    
   }
 
   .date-modified-col {
