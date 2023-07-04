@@ -5,6 +5,8 @@ export const StyledWindowHeader = styled.header<{ focused: boolean }>`
   height: 100%;
   display: flex;
   align-items: center;
+  background-image: linear-gradient(to right,  #D4DBE6, #D5DBE2);
+  border-radius: 8px;
 
   .maximizeContainer,
   .minimizeIcon,
