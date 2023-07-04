@@ -82,6 +82,7 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
       <section className="main-content">
         <div className="quick-access">
           <ExplorerFileQuickAccess
+            currentPath={path}
             pinnedFolderPaths={quickAccessContext.getQuickAccessPaths()}
             updatePath={openFile}
           />

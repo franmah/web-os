@@ -1,4 +1,4 @@
-import { FC, useContext } from "react";
+import { FC, useContext, useState } from "react";
 import { getCurrentFolderOrFileNameInPath } from "../../services/file-system/FilePathService";
 import { BsFillPinAngleFill } from 'react-icons/bs';
 import Image from 'next/image';
@@ -9,15 +9,19 @@ import { UnpinFromQuickAccessCommand } from "../../System/contextMenuCommands/co
 
 
 const ExplorerFileQuickAccess: FC<{
+  currentPath: string,
   pinnedFolderPaths: string[],
   updatePath: (path: string) => void
 }> = ({
+  currentPath,
   pinnedFolderPaths,
   updatePath
 }) => {
 
   const { openProcess } = useContext(ProcessContext);
   const { unpinFromQuickAccess } = useContext(ExplorerQuickAccessContext);
+
+  const [selectedElementFocusedOut, setSelectedElementFocusedOut] = useState<string>('');
 
   const handleContextMenuClick = (event: any, path: string) => {
     // TODO: check if file or folder (should be folder but still check)
@@ -39,18 +43,22 @@ const ExplorerFileQuickAccess: FC<{
       <section className="pinned-folders">
         {
           pinnedFolderPaths.map(path => 
-            <div
-              className="pinned-folder"
+            <button
+              className={`pinned-folder ${path === currentPath ? selectedElementFocusedOut === path ? 'blured' : 'focused' : ''}`}
               key={path}
-              onDoubleClick={() => updatePath(path)}
+              onClick={() => updatePath(path)}
               onContextMenu={e => handleContextMenuClick(e, path)}
+              onFocus={() => setSelectedElementFocusedOut('')}
+              onBlur={() => setSelectedElementFocusedOut(path)}
             >
+              <div className="left-side">
+                <Image src='/icons/folder-icon.png' alt='folder icon' height={23} width={23} />
+                <div className="folder-name">{getCurrentFolderOrFileNameInPath(path)}</div>
+              </div>
 
-              <Image src='/icons/folder-icon.png' alt='folder icon' height={23} width={23} />
-              <div className="folder-name">{getCurrentFolderOrFileNameInPath(path)}</div>
               <BsFillPinAngleFill color="#95A0A6" />
 
-            </div> 
+            </button> 
           )
         }
       </section>
