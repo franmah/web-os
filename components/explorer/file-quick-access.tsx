@@ -41,6 +41,24 @@ const ExplorerFileQuickAccess: FC<{
     <StyledExplorerQuickAccess>
 
       <section className="pinned-folders">
+
+        {/* HOME BUTTON */}
+        <button
+          className={`pinned-folder ${'/' === currentPath ? selectedElementFocusedOut === '/' ? 'blured' : 'focused' : ''}`}
+          key={'/'}
+          onClick={() => updatePath('/')}
+          onContextMenu={e => handleContextMenuClick(e, '/')}
+          onFocus={() => setSelectedElementFocusedOut('')}
+          onBlur={() => setSelectedElementFocusedOut('/')}
+        >
+          <div className="left-side">
+            <Image src='/icons/win11_home.png' alt='home icon' height={23} width={23} />
+            <div className="folder-name"> Home </div>
+          </div>
+        </button> 
+
+        <div className="divider"></div>
+
         {
           pinnedFolderPaths.map(path => 
             <button

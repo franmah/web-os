@@ -23,12 +23,21 @@ const [pathFragments, setPathFragments] = useState<string[]>([]);
     updatePath(pathToFolder);
   }
 
+  const getLeftIcon = (): string => {
+    switch (path) {
+      case '/':
+        return '/icons/win11_home.png'
+      default:
+        return '/icons/folder-icon.png'
+    }
+  }
+
   return (
     <StyledExplorerPathBar>
 
       <section className="path-fragments-container ">
         <div className="left-icon">
-          <Image src='/icons/folder-icon.png' alt='folder' height={23} width={23} />
+          <Image src={getLeftIcon()} alt='folder' height={23} width={23} />
         </div>
 
         <button className="path-fragment-container">
