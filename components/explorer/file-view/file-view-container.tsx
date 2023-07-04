@@ -9,14 +9,18 @@ export const FILE_VIEW_CONTAINER_ROWS_HTML_ID = 'file-view-container-rows';
 
 const ExplorerFileViewContainer: FC<{
   paths: string[],
-  openFile: (path: string) => void
-}> = ({ paths, openFile }) => {
+  openFile: (path: string) => void,
+  updateNumSelectedItems: (number: number) => void
+}> = ({ paths, openFile, updateNumSelectedItems }) => {
 
   const [sort, setSorting] = useState<{column: ExplorerFileViewSortFields, direction: ExplorerFileViewSortDirections}>
     ({ column: ExplorerFileViewSortFields.NAME, direction: ExplorerFileViewSortDirections.ASC });
   const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
 
-  useEffect(() => setSelectedChildren([]), [paths]);
+  useEffect(() => {
+    setSelectedChildren([]);
+    updateNumSelectedItems(0);    
+  }, [paths]);
 
   useEffect(() => {
     document.addEventListener('click', (e) => handleUnselectOnClick(e));
@@ -37,18 +41,25 @@ const ExplorerFileViewContainer: FC<{
     }
     
     setSelectedChildren(currentlySelectedChildren => {
-      if (selected)
+      if (selected) {
+        updateNumSelectedItems(currentlySelectedChildren.length + 1)
         return [...currentlySelectedChildren, child];
-      else
-        return [...currentlySelectedChildren].filter(c => c !== child);
+      } else {
+        const selectedChildren = [...currentlySelectedChildren].filter(c => c !== child);
+        updateNumSelectedItems(selectedChildren.length)
+        return selectedChildren;
+      }
     });
   };
 
   const handleSelectAllChildren = (selected: boolean) => {
-    if (selected)
+    if (selected) {
       setSelectedChildren(paths);
-    else
+      updateNumSelectedItems(paths.length);
+    } else {
       setSelectedChildren([]);
+      updateNumSelectedItems(0);
+    }
   };
 
   const handleSortChildren = (column: ExplorerFileViewSortFields, direction: ExplorerFileViewSortDirections) => {

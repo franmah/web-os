@@ -18,6 +18,7 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
   const [path, setPath] = useState<string>(startPath);
   const [fileViewPaths, setFileViewPaths] = useState<string[]>([]);
   const [useSearchView, setUseSearchView] = useState<boolean>(false);
+  const [numItemsSelected, setNumItemsSelected] = useState<number>(0);
 
   useEffect(() => {
     resetFileViewPathsToCurrentPath();
@@ -97,13 +98,15 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
         <div className="file-view">
           <ExplorerFileViewContainer
             openFile={openFile}
+            updateNumSelectedItems={setNumItemsSelected}
             paths={fileViewPaths}
           />
         </div>
       </section>
 
       <footer className="container-footer">
-        { fileViewPaths.length ? `${fileViewPaths.length} items` : '' }
+        <span>{ fileViewPaths.length ? `${fileViewPaths.length} items` : null }</span>
+        <span>{ numItemsSelected > 0 ? `${numItemsSelected} items selected` : null }</span>
       </footer>
     </StyledExplorerContainer>
   );
