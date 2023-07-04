@@ -6,6 +6,7 @@ import { StyledExplorerQuickAccess } from "../../styled-components/system/explor
 import { ExplorerQuickAccessContext } from "../../contexts/explorer-quick-access-context";
 import { ProcessContext } from "../../contexts/processContext";
 import { UnpinFromQuickAccessCommand } from "../../System/contextMenuCommands/commands/unpinFromQuickAccessCommand";
+import { CommonFolderPaths } from "../../constants/system/file-system/CommonFilePaths";
 
 
 const ExplorerFileQuickAccess: FC<{
@@ -44,12 +45,16 @@ const ExplorerFileQuickAccess: FC<{
 
         {/* HOME BUTTON */}
         <button
-          className={`pinned-folder ${'/' === currentPath ? selectedElementFocusedOut === '/' ? 'blured' : 'focused' : ''}`}
-          key={'/'}
-          onClick={() => updatePath('/')}
-          onContextMenu={e => handleContextMenuClick(e, '/')}
+          className={`pinned-folder ${
+            currentPath === CommonFolderPaths.ROOT ? 
+              selectedElementFocusedOut === '/' ? 'blured' : 'focused' : ''
+            }`
+          }
+          key={CommonFolderPaths.ROOT}
+          onClick={() => updatePath(CommonFolderPaths.ROOT)}
+          onContextMenu={e => handleContextMenuClick(e, CommonFolderPaths.ROOT)}
           onFocus={() => setSelectedElementFocusedOut('')}
-          onBlur={() => setSelectedElementFocusedOut('/')}
+          onBlur={() => setSelectedElementFocusedOut(CommonFolderPaths.ROOT)}
         >
           <div className="left-side">
             <Image src='/icons/win11_home.png' alt='home icon' height={23} width={23} />

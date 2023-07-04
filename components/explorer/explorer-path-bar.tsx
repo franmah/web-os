@@ -4,7 +4,7 @@ import { GrRefresh } from 'react-icons/gr';
 import { convertPathToFragments } from "../../services/file-system/FilePathService";
 import Image from 'next/image';
 import { StyledExplorerPathBar } from "../../styled-components/system/explorer/styled-explorer-path-bar";
-
+import { CommonFolderPaths } from "../../constants/system/file-system/CommonFilePaths";
 
 const ExplorerPathBar: FC<{ 
   path: string,
@@ -25,7 +25,7 @@ const [pathFragments, setPathFragments] = useState<string[]>([]);
 
   const getLeftIcon = (): string => {
     switch (path) {
-      case '/':
+      case CommonFolderPaths.ROOT:
         return '/icons/win11_home.png'
       default:
         return '/icons/folder-icon.png'
