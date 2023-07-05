@@ -5,8 +5,10 @@ export const StyledWindowHeader = styled.header<{ focused: boolean }>`
   height: 100%;
   display: flex;
   align-items: center;
-  background-image: linear-gradient(to right,  #D4DBE6, #D5DBE2);
-  border-radius: 8px;
+  /* background-image: linear-gradient(to right,  #D4DBE6, #D5DBE2); */
+  background-color: ${({ focused }) => focused ? '#D4DBE6' : '#E8E8E8'};
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
 
   .maximizeContainer,
   .minimizeIcon,
