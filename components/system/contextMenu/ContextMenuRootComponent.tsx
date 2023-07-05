@@ -13,13 +13,13 @@ const ContextMenuRootComponent: FC<{ params: ContextMenuParams }> = ({ params })
     <section
       id={CONTEXT_MENU_ROOT_ID}
     >
-
       <ContextMenuComponent
         params={{
           top,
           left,
           width: DEFAULT_WIDTH_SUB_MENU,
-          commands
+          commands,
+          shortcutCommands: params.shortcutCommands
         }}
       />
 

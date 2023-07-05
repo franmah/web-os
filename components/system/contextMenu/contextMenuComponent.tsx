@@ -4,6 +4,7 @@ import { ContextMenuParams } from '../../../types/system/contextMenu/contextMenu
 import styles from './contextMenu.module.scss';
 import ContextMenuItemCommandContainerComponent from './contextMenuContainer/contextMenuItemContainerComponent';
 import ContextMenuItemComponent from './contextMenuItem/contextMenuItemComponent';
+import { ContextMenuShortcutCommandsComponent } from './context-menu-shortcut-commands-component';
 
 export const SMALL_WIDTH_SUB_MENU = 100;
 export const MEDIUM_WIDTH_SUB_MENU = 250;
@@ -12,7 +13,9 @@ export const CONTEXT_MENU_ITEM_HEIGHT = 21;
 
 const HOVERING_TIMEOUT = 300;
 
-const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ params: { top, left, width, commands } }) => {
+const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({
+  params: { top, left, width, commands, shortcutCommands = [] }
+}) => {
 
   let closeSubMenuTimeout: NodeJS.Timeout;
 
@@ -41,9 +44,17 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({ params: { top
         top,
         left,
         width: width || DEFAULT_WIDTH_SUB_MENU,
-        zIndex: 1000
+        zIndex: 10000
       }}
     >
+      { 
+        shortcutCommands.length > 0 ?
+          <ContextMenuShortcutCommandsComponent
+            shortcutCommands={shortcutCommands}
+          /> :
+          null
+      }
+      
       {
         commands.map((command, index) =>
           command instanceof ContextMenuCommandContainer ?

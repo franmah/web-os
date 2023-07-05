@@ -1,6 +1,6 @@
-import { FC, LegacyRef, useContext, useEffect, useRef, useState } from "react";
+import { FC, useContext, useEffect, useRef, useState } from "react";
 import Image from 'next/image';
-import { convertPathToFragments, getCurrentItemNameInPath } from "../../../services/file-system/FilePathService";
+import { getCurrentItemNameInPath } from "../../../services/file-system/FilePathService";
 import { toDateModifedFormat } from "../../../services/date-service";
 import { StyledFileViewRow } from "../../../styled-components/system/explorer/styled-file-view-row";
 import { ProcessContext } from "../../../contexts/processContext";
@@ -9,6 +9,7 @@ import { ExplorerQuickAccessContext } from "../../../contexts/explorer-quick-acc
 import { UnpinFromQuickAccessCommand } from "../../../System/contextMenuCommands/commands/unpinFromQuickAccessCommand";
 import { getFolderIcon } from "../../../services/icon-service";
 import Checkbox from "../../system/custom-checkbox";
+import { ShortcutCommandNames, getShorcutCommand } from "../../../System/contextMenuCommands/shortcut-command-factory";
 
 export const ExplorerFileViewRow: FC<{
   columnSizes: { [column: string]: string }
@@ -77,6 +78,11 @@ export const ExplorerFileViewRow: FC<{
 
     // TODO: check if folder or file
 
+    const shortcutCommands = isSelected ? [
+      getShorcutCommand(ShortcutCommandNames.DELETE, () => console.log('delete'), 'delete'),
+      getShorcutCommand(ShortcutCommandNames.RENAME, () => setEditingName(true), 'rename')
+    ] : [];
+
     const isPinned = quickAccessContext.getQuickAccessPaths().find(p => p === path);
     const command = isPinned ?
       new UnpinFromQuickAccessCommand(() => quickAccessContext.unpinFromQuickAccess(path)) :
@@ -85,7 +91,8 @@ export const ExplorerFileViewRow: FC<{
     openProcess('contextMenu', {
       top: event.clientY,
       left: event.clientX,
-      commands: [command]
+      commands: [command],
+      shortcutCommands
     });
   };
 
