@@ -22,6 +22,15 @@ const Draggable: FC<{
   }, [isMoving]);
 
   const handleDragStart = (e: any) => {
+    /*
+    TODO: TRY THIS
+    draggingEle = e.target;
+
+    // Calculate the mouse position
+    const rect = draggingEle.getBoundingClientRect();
+    x = e.pageX - rect.left;
+    y = e.pageY - rect.top;
+    */
     const xPosition = e.clientX - e.currentTarget.offsetLeft;
     setStartDragPosition(xPosition);
     setStartDragMousePosition(e.clientX);
