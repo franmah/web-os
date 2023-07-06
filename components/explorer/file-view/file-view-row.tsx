@@ -78,12 +78,14 @@ export const ExplorerFileViewRow: FC<{
     event.preventDefault();
     event.stopPropagation();
 
+    onFileSelected(path, true, true);
+
     // TODO: check if folder or file
 
-    const shortcutCommands = isSelected ? [
+    const shortcutCommands = [
       getShorcutCommand(ShortcutCommandNames.RENAME, () => setEditingName(true), 'rename'),
       getShorcutCommand(ShortcutCommandNames.DELETE, () => onDeleteItem(path), 'delete')
-    ] : [];
+    ];
 
     const isPinned = quickAccessContext.getQuickAccessPaths().find(p => p === path);
     const command = isPinned ?
