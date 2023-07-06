@@ -6,10 +6,13 @@ export const FileSystemContext = createContext<FileSystemContextType>(null as an
 
 const FileSystemContextProvider: FC<{ children: React.ReactNode }> = ({ children }) => {
   
-  const { getRoot, appendFile, getDesktop, mkdir, updateFile, readdirV2, searchFolderV2, renameFolderV2 } = useFileSystemContextState();
+  const { getRoot, appendFile, getDesktop, mkdir, updateFile, readdirV2,
+    searchFolderV2, renameFolderV2, deleteFolderV2 } = useFileSystemContextState();
 
   return (
-    <FileSystemContext.Provider value={{ getRoot, appendFile, getDesktop, mkdir, updateFile, readdirV2, searchFolderV2, renameFolderV2 }}>
+    <FileSystemContext.Provider 
+      value={{ getRoot, appendFile, getDesktop, mkdir, updateFile,
+        readdirV2, searchFolderV2, renameFolderV2, deleteFolderV2 }}>
       { children }
     </FileSystemContext.Provider>
   );

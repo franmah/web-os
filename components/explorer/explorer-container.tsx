@@ -94,6 +94,11 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
       });
   };
 
+  const handleDeleteItem = (pathToDelete: string) => {
+    fs.deleteFolderV2(pathToDelete)
+      .then(() => resetFileViewPathsToCurrentPath());
+  };
+
   return (
     <StyledExplorerContainer>
       <ExplorerAccessBar
@@ -124,6 +129,7 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
             openFile={openFile}
             updateNumSelectedItems={setNumItemsSelected}
             paths={fileViewPaths}
+            onDeleteItem={handleDeleteItem}
           />
         </div>
       </section>

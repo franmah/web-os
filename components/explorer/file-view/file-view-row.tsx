@@ -17,14 +17,16 @@ export const ExplorerFileViewRow: FC<{
   path: string,
   onFileSelected: (path: string, selected: boolean, unselectAll: boolean) => void,
   openFile: (path: string) => void,
-  onRenameItem: (path: string, newName: string) => Promise<void>
+  onRenameItem: (path: string, newName: string) => Promise<void>,
+  onDeleteItem: (path: string) => void
 }> = ({
   columnSizes,
   isSelected,
   path,
   onFileSelected,
   openFile,
-  onRenameItem
+  onRenameItem,
+  onDeleteItem
 }) => {
 
   const fileName = getCurrentItemNameInPath(path);
@@ -79,8 +81,8 @@ export const ExplorerFileViewRow: FC<{
     // TODO: check if folder or file
 
     const shortcutCommands = isSelected ? [
-      getShorcutCommand(ShortcutCommandNames.DELETE, () => console.log('delete'), 'delete'),
-      getShorcutCommand(ShortcutCommandNames.RENAME, () => setEditingName(true), 'rename')
+      getShorcutCommand(ShortcutCommandNames.RENAME, () => setEditingName(true), 'rename'),
+      getShorcutCommand(ShortcutCommandNames.DELETE, () => onDeleteItem(path), 'delete')
     ] : [];
 
     const isPinned = quickAccessContext.getQuickAccessPaths().find(p => p === path);

@@ -3,7 +3,7 @@ import { v4 } from "uuid";
 import { getRootAtSystemStart } from "../services/FileSystemService";
 import { ExplorerFile } from "../types/system/file/ExplorerElement";
 import { FOLDER_ICON_PATH } from '../constants/FileSystemConsts';
-import { convertPathToFragments, getCurrentItemNameInPath } from "../services/file-system/FilePathService";
+import { convertPathToFragments, getCurrentItemNameInPath, getParentPath } from "../services/file-system/FilePathService";
 import { CommonFolderPaths } from "../constants/system/file-system/CommonFilePaths";
 
 export const useFileSystemContextState = () => {
@@ -13,6 +13,21 @@ export const useFileSystemContextState = () => {
   const [getRoot, setRoot] = useState<() => ExplorerFile>(() => () => rootFile);
 
   let getDesktop = (): ExplorerFile => getRoot()?.children?.[0];
+
+  const deleteFolderV2 = (path: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      if (path === CommonFolderPaths.ROOT)
+        reject();
+
+      const parent = getParentPath(path);
+      const parentNode = _getNodeFromPath(parent);
+      const itemName = getCurrentItemNameInPath(path);
+
+      parentNode.children = parentNode.children.filter(child => child.name !== itemName);
+
+      resolve();
+    });
+  };
 
   const renameFolderV2 = (path: string, newName: string): Promise<void> => {
     if (path === CommonFolderPaths.ROOT)
@@ -157,6 +172,7 @@ export const useFileSystemContextState = () => {
     updateFile,
     readdirV2,
     searchFolderV2,
-    renameFolderV2
+    renameFolderV2,
+    deleteFolderV2
   };
 }

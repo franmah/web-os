@@ -1,10 +1,9 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { ExplorerFileViewHeader } from "./file-view-header";
 import { ExplorerFileViewRow } from "./file-view-row";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/EventService";
 import { StyledExplorerFileViewContainer } from "../../../styled-components/system/explorer/styled-file-view-container";
 import { ExplorerFileViewSortDirections, ExplorerFileViewSortFields, START_COLUMN_SIZES } from "../../../constants/system/explorer/explorer-consts";
-import { FileSystemContext } from "../../../contexts/FileSystemContext";
 
 export const FILE_VIEW_CONTAINER_ROWS_HTML_ID = 'file-view-container-rows';
 
@@ -12,9 +11,9 @@ const ExplorerFileViewContainer: FC<{
   paths: string[],
   openFile: (path: string) => void,
   updateNumSelectedItems: (number: number) => void,
-  onRenameItem: (path: string, newName: string) => Promise<void>
-}> = ({ paths, openFile, updateNumSelectedItems, onRenameItem }) => {
-
+  onRenameItem: (path: string, newName: string) => Promise<void>,
+  onDeleteItem: (path: string) => void
+}> = ({ paths, openFile, updateNumSelectedItems, onRenameItem, onDeleteItem }) => {
   
   const [sort, setSorting] = useState<{column: ExplorerFileViewSortFields, direction: ExplorerFileViewSortDirections}>
     ({ column: ExplorerFileViewSortFields.NAME, direction: ExplorerFileViewSortDirections.ASC });
@@ -120,6 +119,7 @@ const ExplorerFileViewContainer: FC<{
                   onFileSelected={handleFileSelected}
                   openFile={openFile}
                   onRenameItem={onRenameItem}
+                  onDeleteItem={onDeleteItem}
                 />
               );
             })
