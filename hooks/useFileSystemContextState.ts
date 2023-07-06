@@ -62,35 +62,44 @@ export const useFileSystemContextState = () => {
   };
 
   const searchFolderV2 = (path: string, partialName: string): Promise<string[]> => {
-    const fileNode = _getNodeFromPath(path);
-    const filePaths: string[] = [];
-    const MAX_SEARCH_DEPTH = 20; // How far down the file tree to search.
-    partialName = partialName.toLowerCase();
+    try {
+      const fileNode = _getNodeFromPath(path);
+      const filePaths: string[] = [];
+      const MAX_SEARCH_DEPTH = 20; // How far down the file tree to search.
+      partialName = partialName.toLowerCase();
 
-    const searchNode = (node: ExplorerFile, level: number, currentPath: string) => {
-      if (!node)
-        return;
+      const searchNode = (node: ExplorerFile, level: number, currentPath: string) => {
+        if (!node)
+          return;
 
-      if (level === MAX_SEARCH_DEPTH)
-        return;
+        if (level === MAX_SEARCH_DEPTH)
+          return;
 
-      if (node.name.toLowerCase().includes(partialName))
-        filePaths.push(currentPath);
+        if (node.name.toLowerCase().includes(partialName))
+          filePaths.push(currentPath);
 
-      for (let child of node.children) {
-        const childPath = currentPath + '/' + child.name;
-        searchNode(child, level + 1, childPath);
+        for (let child of node.children) {
+          const childPath = currentPath + '/' + child.name;
+          searchNode(child, level + 1, childPath);
+        }
       }
+
+      searchNode(fileNode, 0, path);
+
+      return Promise.resolve(filePaths);
+    
+    } catch (error) {
+      return Promise.reject(error);
     }
-
-    searchNode(fileNode, 0, path);
-
-    return Promise.resolve(filePaths);
   }
 
   const readdirV2 = (path: string): Promise<string[]> => {
-    const fileNode = _getNodeFromPath(path);
-    return Promise.resolve(fileNode.children?.map(file => file.name) || []);
+    try {
+      const fileNode = _getNodeFromPath(path);
+      return Promise.resolve(fileNode.children?.map(file => file.name) || []);
+    } catch (error) {
+      return Promise.reject(error);
+    }
   };
 
   const mkdir = (name: string, parent: ExplorerFile, id?: string) => {

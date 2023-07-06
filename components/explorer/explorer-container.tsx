@@ -30,7 +30,11 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
       .then(files => setFileViewPaths(files?.map(child => path === CommonFolderPaths.ROOT ?
         path + child :
         path + '/' + child) || []
-      ));
+      ))
+      .catch(error => {
+        console.error('Error reading files: ' + error);
+        setPath(CommonFolderPaths.ROOT);
+      });
   };
 
   const openFile = (newPath: string) => {
@@ -96,6 +100,7 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
 
   const handleDeleteItem = (pathToDelete: string) => {
     fs.deleteFolderV2(pathToDelete)
+      .then(() => quickAccessContext.unpinFromQuickAccess(pathToDelete))
       .then(() => resetFileViewPathsToCurrentPath());
   };
 
