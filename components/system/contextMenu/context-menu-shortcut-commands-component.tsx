@@ -1,27 +1,8 @@
 import { FC, useContext } from "react";
 import { ShortcutCommand } from "../../../System/contextMenuCommands/shortcut-command";
 import Image from 'next/image';
-import styled from "styled-components";
 import { ProcessContext } from "../../../contexts/processContext";
-
-export const StyledContextMenuShortcutCommands = styled.section`
-  width: 100%;
-  display: flex;
-  padding: .5em;
-
-  .command {
-    padding: 4px;
-    margin-right: .5em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    
-    &:hover {
-      background-color: #EFEFEF;
-    }
-  }
-`;
+import { StyledContextMenuShortcutCommands } from "../../../styled-components/system/context-menu/styled-context-menu-shortcut-commands";
 
 export const ContextMenuShortcutCommandsComponent: FC<{
   shortcutCommands: ShortcutCommand[]
