@@ -7,6 +7,8 @@ EXPLORER
 - create a context for the path?
 - move colors and other css values into a constant file
 
+- move away from <table>
+- file-view should take as much space as possible
 
 /////////////////// MVP ///////////////
 1. Explorer app
