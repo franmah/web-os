@@ -53,7 +53,6 @@ const ExplorerFileQuickAccess: FC<{
           }
           key={CommonFolderPaths.ROOT}
           onClick={() => updatePath(CommonFolderPaths.ROOT)}
-          onContextMenu={e => handleContextMenuClick(e, CommonFolderPaths.ROOT)}
           onFocus={() => setSelectedElementFocusedOut('')}
           onBlur={() => setSelectedElementFocusedOut(CommonFolderPaths.ROOT)}
         >
