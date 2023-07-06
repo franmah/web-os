@@ -29,5 +29,11 @@ export const StyledExplorerContainer = styled.div`
     padding-left: 8px;
     width: 100%;
     user-select: none;
+    color: #1e395b;
+    margin-bottom: 4px;
+
+    span:first-of-type {
+      margin-right: 16px;
+    }    
   }
 `;

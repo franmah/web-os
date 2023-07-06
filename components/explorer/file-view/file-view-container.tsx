@@ -9,14 +9,20 @@ export const FILE_VIEW_CONTAINER_ROWS_HTML_ID = 'file-view-container-rows';
 
 const ExplorerFileViewContainer: FC<{
   paths: string[],
-  openFile: (path: string) => void
-}> = ({ paths, openFile }) => {
-
+  openFile: (path: string) => void,
+  updateNumSelectedItems: (number: number) => void,
+  onRenameItem: (path: string, newName: string) => Promise<void>,
+  onDeleteItem: (path: string) => void
+}> = ({ paths, openFile, updateNumSelectedItems, onRenameItem, onDeleteItem }) => {
+  
   const [sort, setSorting] = useState<{column: ExplorerFileViewSortFields, direction: ExplorerFileViewSortDirections}>
     ({ column: ExplorerFileViewSortFields.NAME, direction: ExplorerFileViewSortDirections.ASC });
   const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
 
-  useEffect(() => setSelectedChildren([]), [paths]);
+  useEffect(() => {
+    setSelectedChildren([]);
+    updateNumSelectedItems(0);    
+  }, [paths]);
 
   useEffect(() => {
     document.addEventListener('click', (e) => handleUnselectOnClick(e));
@@ -37,18 +43,25 @@ const ExplorerFileViewContainer: FC<{
     }
     
     setSelectedChildren(currentlySelectedChildren => {
-      if (selected)
+      if (selected) {
+        updateNumSelectedItems(currentlySelectedChildren.length + 1)
         return [...currentlySelectedChildren, child];
-      else
-        return [...currentlySelectedChildren].filter(c => c !== child);
+      } else {
+        const selectedChildren = [...currentlySelectedChildren].filter(c => c !== child);
+        updateNumSelectedItems(selectedChildren.length)
+        return selectedChildren;
+      }
     });
   };
 
   const handleSelectAllChildren = (selected: boolean) => {
-    if (selected)
+    if (selected) {
       setSelectedChildren(paths);
-    else
+      updateNumSelectedItems(paths.length);
+    } else {
       setSelectedChildren([]);
+      updateNumSelectedItems(0);
+    }
   };
 
   const handleSortChildren = (column: ExplorerFileViewSortFields, direction: ExplorerFileViewSortDirections) => {
@@ -72,14 +85,24 @@ const ExplorerFileViewContainer: FC<{
 
   return (
     <StyledExplorerFileViewContainer>
-      <ExplorerFileViewHeader
-        columnSizes={START_COLUMN_SIZES}
-        allFilesChecked={selectedChildren.length === paths.length && paths.length > 0}
-        sortColumn={sort.column}
-        sortDirection={sort.direction}
-        onSelectAllChildren={handleSelectAllChildren}
-        onSort={handleSortChildren}
-      />
+      {
+        paths.length > 0 ?
+          <ExplorerFileViewHeader
+            columnSizes={START_COLUMN_SIZES}
+            allFilesChecked={selectedChildren.length === paths.length && paths.length > 0}
+            sortColumn={sort.column}
+            sortDirection={sort.direction}
+            onSelectAllChildren={handleSelectAllChildren}
+            onSort={handleSortChildren}
+          /> :
+          null
+      }  
+
+      { 
+        paths.length === 0 ? 
+          <div className='empty-folder-text'>This folder is empty.</div> :
+          null
+      }
 
       <div id={FILE_VIEW_CONTAINER_ROWS_HTML_ID}>
         {
@@ -95,6 +118,8 @@ const ExplorerFileViewContainer: FC<{
                   path={child}
                   onFileSelected={handleFileSelected}
                   openFile={openFile}
+                  onRenameItem={onRenameItem}
+                  onDeleteItem={onDeleteItem}
                 />
               );
             })

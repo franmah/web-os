@@ -26,10 +26,10 @@ export const StyledWindow = styled.div<{
     '0px 0px 16px 2px #0000003a' : '0px 0px 4px 2px #0000002a'};
 
   .centerContent {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      height: 100%;
-      border-radius: 8px;
-    }
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+  }
 `;

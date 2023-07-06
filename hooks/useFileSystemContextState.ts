@@ -3,7 +3,8 @@ import { v4 } from "uuid";
 import { getRootAtSystemStart } from "../services/FileSystemService";
 import { ExplorerFile } from "../types/system/file/ExplorerElement";
 import { FOLDER_ICON_PATH } from '../constants/FileSystemConsts';
-import { convertPathToFragments } from "../services/file-system/FilePathService";
+import { convertPathToFragments, getCurrentItemNameInPath, getParentPath } from "../services/file-system/FilePathService";
+import { CommonFolderPaths } from "../constants/system/file-system/CommonFilePaths";
 
 export const useFileSystemContextState = () => {
 
@@ -13,36 +14,92 @@ export const useFileSystemContextState = () => {
 
   let getDesktop = (): ExplorerFile => getRoot()?.children?.[0];
 
-  const searchFolderV2 = (path: string, partialName: string): Promise<string[]> => {
-    const fileNode = _getNodeFromPath(path);
-    const filePaths: string[] = [];
-    const MAX_SEARCH_DEPTH = 20; // How far down the file tree to search.
-    partialName = partialName.toLowerCase();
+  const deleteFolderV2 = (path: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      if (path === CommonFolderPaths.ROOT)
+        reject();
 
-    const searchNode = (node: ExplorerFile, level: number, currentPath: string) => {
-      if (!node)
-        return;
+      const parent = getParentPath(path);
+      const parentNode = _getNodeFromPath(parent);
+      const itemName = getCurrentItemNameInPath(path);
 
-      if (level === MAX_SEARCH_DEPTH)
-        return;
+      parentNode.children = parentNode.children.filter(child => child.name !== itemName);
 
-      if (node.name.toLowerCase().includes(partialName))
-        filePaths.push(currentPath);
+      resolve();
+    });
+  };
 
-      for (let child of node.children) {
-        const childPath = currentPath + '/' + child.name;
-        searchNode(child, level + 1, childPath);
-      }
+  const renameFolderV2 = (path: string, newName: string): Promise<void> => {
+    if (path === CommonFolderPaths.ROOT)
+      return Promise.resolve();
+
+    const currentName = getCurrentItemNameInPath(path);
+    if (currentName === newName)
+      return Promise.resolve();
+
+    const fragments = convertPathToFragments(path);
+    const parentPath = fragments.at(-2);
+
+    const parentNode = !parentPath ?
+      getRoot() :
+      _getNodeFromPath(parentPath);
+    
+    const nameAlreadyUsed = parentNode.children.find(child => child.name === newName);
+    if (nameAlreadyUsed) {
+      console.error(`Error changing name, name already used in parent node's children. New name: ${newName}, path: '${path}'.`);
+      return Promise.reject();
     }
+    
+    const nodeName = fragments.at(-1) as string;
+    const node = parentNode.children.find(child => child.name === nodeName);
 
-    searchNode(fileNode, 0, path);
+    if (!node) {
+      console.error(`Error changing name, can't find node. New name: ${newName}, path: '${path}'.`);
+      return Promise.reject();
+    }
+    node.name = newName;
+    return Promise.resolve();
+  };
 
-    return Promise.resolve(filePaths);
+  const searchFolderV2 = (path: string, partialName: string): Promise<string[]> => {
+    try {
+      const fileNode = _getNodeFromPath(path);
+      const filePaths: string[] = [];
+      const MAX_SEARCH_DEPTH = 20; // How far down the file tree to search.
+      partialName = partialName.toLowerCase();
+
+      const searchNode = (node: ExplorerFile, level: number, currentPath: string) => {
+        if (!node)
+          return;
+
+        if (level === MAX_SEARCH_DEPTH)
+          return;
+
+        if (node.name.toLowerCase().includes(partialName))
+          filePaths.push(currentPath);
+
+        for (let child of node.children) {
+          const childPath = currentPath + '/' + child.name;
+          searchNode(child, level + 1, childPath);
+        }
+      }
+
+      searchNode(fileNode, 0, path);
+
+      return Promise.resolve(filePaths);
+    
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   const readdirV2 = (path: string): Promise<string[]> => {
-    const fileNode = _getNodeFromPath(path);
-    return Promise.resolve(fileNode.children?.map(file => file.name) || []);
+    try {
+      const fileNode = _getNodeFromPath(path);
+      return Promise.resolve(fileNode.children?.map(file => file.name) || []);
+    } catch (error) {
+      return Promise.reject(error);
+    }
   };
 
   const mkdir = (name: string, parent: ExplorerFile, id?: string) => {
@@ -123,6 +180,8 @@ export const useFileSystemContextState = () => {
     mkdir,
     updateFile,
     readdirV2,
-    searchFolderV2
+    searchFolderV2,
+    renameFolderV2,
+    deleteFolderV2
   };
 }

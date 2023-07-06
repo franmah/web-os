@@ -7,5 +7,7 @@ export type FileSystemContextType = {
   mkdir: (name: string, parent: ExplorerFile, id?: string) => void,
   updateFile: (file: ExplorerFile, content: any) => void,
   readdirV2: (path: string) => Promise<string[]>,
-  searchFolderV2: (path: string, partialName: string) => Promise<string[]>
+  searchFolderV2: (path: string, partialName: string) => Promise<string[]>,
+  renameFolderV2: (path: string, newName: string) => Promise<void>,
+  deleteFolderV2: (path: string) => Promise<void>
 };

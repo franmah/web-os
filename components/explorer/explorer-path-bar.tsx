@@ -4,12 +4,13 @@ import { GrRefresh } from 'react-icons/gr';
 import { convertPathToFragments } from "../../services/file-system/FilePathService";
 import Image from 'next/image';
 import { StyledExplorerPathBar } from "../../styled-components/system/explorer/styled-explorer-path-bar";
-
+import { getFolderIcon } from "../../services/icon-service";
 
 const ExplorerPathBar: FC<{ 
   path: string,
-  updatePath: (path: string) => void
-}> = ({ path = '', updatePath }) => {
+  updatePath: (path: string) => void,
+  refreshFileViewPaths: () => void
+}> = ({ path = '', updatePath, refreshFileViewPaths }) => {
 
 const [pathFragments, setPathFragments] = useState<string[]>([]);
 
@@ -28,7 +29,7 @@ const [pathFragments, setPathFragments] = useState<string[]>([]);
 
       <section className="path-fragments-container ">
         <div className="left-icon">
-          <Image src='/icons/folder-icon.png' alt='folder' height={23} width={23} />
+          <Image src={getFolderIcon(path)} alt='folder' height={18} width={18} />
         </div>
 
         <button className="path-fragment-container">
@@ -54,7 +55,7 @@ const [pathFragments, setPathFragments] = useState<string[]>([]);
       </section>
 
       <button className="refresh-icon path-fragment-container" onClick={() => onFolderClicked(pathFragments.length)}>
-        <GrRefresh />
+        <GrRefresh onClick={refreshFileViewPaths}/>
       </button>
       
     </StyledExplorerPathBar>

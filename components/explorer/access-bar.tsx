@@ -2,7 +2,7 @@ import { FC, useEffect, useRef } from "react";
 import ExplorerPathBar from "./explorer-path-bar";
 import { FiArrowRight, FiArrowLeft, FiArrowUp } from 'react-icons/fi';
 import { GrSearch } from 'react-icons/gr';
-import { getCurrentFolderOrFileNameInPath, getParentPath } from "../../services/file-system/FilePathService";
+import { getCurrentItemNameInPath, getParentPath } from "../../services/file-system/FilePathService";
 import { StyledExplorerAccessBar } from "../../styled-components/system/explorer/styled-explorer-access-bar";
 
 const ExplorerAccessBar: FC<{
@@ -12,8 +12,18 @@ const ExplorerAccessBar: FC<{
   previousFolder: () => void,
   nextFolder: () => void,
   updatePath: (path: string) => void,
-  searchFolder: (searchString: string) => void
-}> = ({ path, pathsFlow, searchView, updatePath, previousFolder, nextFolder, searchFolder }) => {
+  searchFolder: (searchString: string) => void,
+  refreshFileViewPaths: () => void
+}> = ({
+  path,
+  pathsFlow,
+  searchView,
+  updatePath,
+  previousFolder,
+  nextFolder,
+  searchFolder,
+  refreshFileViewPaths
+}) => {
 
   const searchInput = useRef<HTMLInputElement>(null);
 
@@ -52,6 +62,7 @@ const ExplorerAccessBar: FC<{
 
       <section className='explorer-path-bar'>
         <ExplorerPathBar
+          refreshFileViewPaths={refreshFileViewPaths}
           path={path}
           updatePath={handleUpdatePath}
         />
@@ -60,7 +71,7 @@ const ExplorerAccessBar: FC<{
       <section className="search-section">
         <input
           ref={searchInput}
-          placeholder={'Search ' + (getCurrentFolderOrFileNameInPath(path) || 'computer' )}
+          placeholder={'Search ' + (getCurrentItemNameInPath(path) || 'computer' )}
           onChange={e => searchFolder(e.target.value)}
         />
         <div className="search-button">

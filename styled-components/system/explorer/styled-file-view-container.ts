@@ -7,7 +7,10 @@ export const StyledExplorerFileViewContainer = styled.div`
   margin-top: 8px;
   height: 100%;
 
-  .content {
-    margin-top: 8px;
+  .empty-folder-text {
+    width: 100%;
+    text-align: center;
+    user-select: none;
+    color: #6D6DA0;
   }
 `;

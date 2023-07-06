@@ -5,12 +5,14 @@ export const StyledExplorerQuickAccess = styled.nav`
 
   .divider {
     margin: 16px 4px;
-    border-bottom: 2px solid #D9D9D9;
+    border-bottom: 1px solid #D6D6D6;
   }
   
   /* CHANGE TO A COMMON TYPE SINCE THEY'RE ALL THE SAME */
   /* left icon, folder icon, folder name, extra icon */
   .pinned-folder {
+    border: none;
+    background-color: white;
     padding: 8px 4px;
     padding-left: 15%;
     margin: 4px 0px;
@@ -18,15 +20,34 @@ export const StyledExplorerQuickAccess = styled.nav`
 
     display: flex;
     align-items: center;
+    width: 100%;
 
-    .folder-name {
-      margin-left: 4px;
+    .left-side {
+      display: flex;
+      align-items: center;
       flex: 1;
+
+      .folder-name {
+        margin-left: 4px;
+        overflow: hidden;
+      }
     }
 
     &:hover {
-      background-color: #D9D9D9;
+      background-color: #E5F3FF;
       cursor: pointer;
     }
+  }
+
+  .focused {
+    background-color: #CCE8FF;
+
+    &:hover {
+      background-color: 'CCE8FF';
+    }
+  }
+
+  .blured {
+    background-color: #D9D9D9;
   }
 `;

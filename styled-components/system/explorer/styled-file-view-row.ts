@@ -6,8 +6,8 @@ export const StyledFileViewRow = styled.div<{
 }>`
   display: flex;
   background-color: ${({ selected }) => selected ? '#CCE8FF' : ''};
-  margin-bottom: 8px;
-  height: 32px;
+  margin-bottom: 4px;
+  height: 28px;
   overflow: hidden;
   
   .column {
@@ -33,6 +33,10 @@ export const StyledFileViewRow = styled.div<{
     .icon {
       margin: 0px 6px;
     }
+
+    .name-input {
+      outline: none;
+    }    
   }
 
   .date-modified-col {

@@ -6,7 +6,7 @@ export const StyledExplorerAccessBar = styled.nav<{
   parentArrowDisabled: boolean
 }>`
   display: flex;
-  height: 42px;
+  height: 28px;
   margin: 6px 8px;
 
   .action-section {
@@ -47,7 +47,7 @@ export const StyledExplorerAccessBar = styled.nav<{
     margin-left: 8px;
     display: flex;
     align-items: center;
-    border: 2px solid #ECECEC;
+    border: 1px solid #D9D9D9;
     padding: 0px 4px;
 
     input {

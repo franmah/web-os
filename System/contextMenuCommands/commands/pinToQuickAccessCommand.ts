@@ -1,11 +1,10 @@
 import { ContextMenuCommand } from "../abstractCommand";
-
 export class PinToQuickAccessCommand extends ContextMenuCommand {
   
   private callback: () => any;
   
   constructor (callback: () => any) {
-    super('Pin to Quick Access', require('react-icons/fc').FcFolder);
+    super('Pin to Quick Access', require('react-icons/tb').TbPin);
     this.callback = callback;
   }
 

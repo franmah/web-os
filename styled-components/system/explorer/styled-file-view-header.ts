@@ -11,6 +11,15 @@ export const StyledExplorerFileViewHeader = styled.div<{
 
   .name-col {
     flex: ${({ columnSizes }) => `0 0 ${columnSizes['name']}`  };
+
+    .left-side {
+      display: flex;
+      align-items: center;
+      
+      .name-col-checkbox {
+        margin-right: 8px;
+      }
+    }
   }
   
   .date-modified-col {
@@ -29,7 +38,7 @@ export const StyledExplorerFileViewHeader = styled.div<{
     text-align: start;
     color: #515858;
     font-weight: normal;
-    padding: 0px 8px;
+    padding: 0px 8px 4px 8px;
     border-right: 1px solid #d9d9d9;
 
     &:first-child {

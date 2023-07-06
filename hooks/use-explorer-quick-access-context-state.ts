@@ -2,7 +2,11 @@ import { useState } from "react";
 
 export const QUICK_ACCESS_STATE_DEFAULT = [
   '/Desktop',
-  '/Documents'
+  '/Documents',
+  '/Downloads',
+  '/Pictures',
+  '/Music',
+  '/Videos'
 ];
 
 export const useExplorerQuickAccessContextState = () => {

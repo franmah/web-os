@@ -1,35 +1,91 @@
-import { FC, useContext } from "react";
+import { FC, useContext, useEffect, useRef, useState } from "react";
 import Image from 'next/image';
-import { convertPathToFragments } from "../../../services/file-system/FilePathService";
+import { getCurrentItemNameInPath } from "../../../services/file-system/FilePathService";
 import { toDateModifedFormat } from "../../../services/date-service";
 import { StyledFileViewRow } from "../../../styled-components/system/explorer/styled-file-view-row";
 import { ProcessContext } from "../../../contexts/processContext";
 import { PinToQuickAccessCommand } from "../../../System/contextMenuCommands/commands/pinToQuickAccessCommand";
 import { ExplorerQuickAccessContext } from "../../../contexts/explorer-quick-access-context";
 import { UnpinFromQuickAccessCommand } from "../../../System/contextMenuCommands/commands/unpinFromQuickAccessCommand";
+import { getFolderIcon } from "../../../services/icon-service";
+import Checkbox from "../../system/custom-checkbox";
+import { ShortcutCommandNames, getShorcutCommand } from "../../../System/contextMenuCommands/shortcut-command-factory";
 
 export const ExplorerFileViewRow: FC<{
   columnSizes: { [column: string]: string }
   isSelected: boolean,
   path: string,
   onFileSelected: (path: string, selected: boolean, unselectAll: boolean) => void,
-  openFile: (path: string) => void
+  openFile: (path: string) => void,
+  onRenameItem: (path: string, newName: string) => Promise<void>,
+  onDeleteItem: (path: string) => void
 }> = ({
   columnSizes,
   isSelected,
   path,
   onFileSelected,
-  openFile
+  openFile,
+  onRenameItem,
+  onDeleteItem
 }) => {
+
+  const fileName = getCurrentItemNameInPath(path);
 
   const { openProcess } = useContext(ProcessContext);
   const quickAccessContext = useContext(ExplorerQuickAccessContext);
+
+  const [editingName, setEditingName] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>(getCurrentItemNameInPath(path));
+
+  const inputRef = useRef<any>(null);
+
+  // Select whole name when editing item name
+  useEffect(() => {
+    if (editingName && inputRef.current)
+      inputRef.current?.select();
+
+    if (inputRef)
+      document.addEventListener('keyup', onInputEnterKeyPressed);
+
+    return () => document.removeEventListener('keyup', onInputEnterKeyPressed);
+  }, [inputRef.current]);
+
+  const onInputEnterKeyPressed = (e: any) => {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      handleRenameItem();
+    }
+  }
+
+  const onNameClicked = () => {
+    if (isSelected) {
+      setEditingName(true);
+    }
+  };
+
+  const handleRenameItem = () => {
+    
+    if (!inputRef.current) {
+      console.error('Error renaming item. inputRef.current is null: unable to get input value.');
+      return;
+    }
+
+    const newName = inputRef.current?.value || fileName;
+    onRenameItem(path, newName)
+      .then(() => setEditingName(false));
+  }
 
   const handleRightClick = (event: any) => {
     event.preventDefault();
     event.stopPropagation();
 
+    onFileSelected(path, true, true);
+
     // TODO: check if folder or file
+
+    const shortcutCommands = [
+      getShorcutCommand(ShortcutCommandNames.RENAME, () => setEditingName(true), 'rename'),
+      getShorcutCommand(ShortcutCommandNames.DELETE, () => onDeleteItem(path), 'delete')
+    ];
 
     const isPinned = quickAccessContext.getQuickAccessPaths().find(p => p === path);
     const command = isPinned ?
@@ -39,7 +95,8 @@ export const ExplorerFileViewRow: FC<{
     openProcess('contextMenu', {
       top: event.clientY,
       left: event.clientX,
-      commands: [command]
+      commands: [command],
+      shortcutCommands
     });
   };
 
@@ -53,26 +110,34 @@ export const ExplorerFileViewRow: FC<{
       selected={isSelected}
     >
       {/* Name */}
-      <div className="column name-col">
+      <div className="column name-col" onClick={onNameClicked}>
 
-        <input
+        <Checkbox
           className="select-checkbox"
-          type='checkbox'
           checked={isSelected}
           onClick={e => e.stopPropagation()}
-          onChange={e => onFileSelected(path, e.target.checked, false)}
+          onChange={checked => onFileSelected(path, checked, false)}
         />
 
         <Image
-          src='/icons/folder-icon.png'
+          src={getFolderIcon(path)}
           alt='folder icon'
           height={16}
           width={16}
           className="icon"
         />
 
-        { convertPathToFragments(path)?.pop() || 'Error' }
-
+        { 
+          editingName ?
+            <input
+              className="name-input"
+              ref={inputRef}
+              value={inputValue}
+              onBlur={() => handleRenameItem()}
+              onChange={e => setInputValue(e.target.value)}
+            /> :
+            fileName
+        }
       </div>
 
       {/* DATE MODIFIED  */}
