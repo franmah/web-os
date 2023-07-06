@@ -49,9 +49,14 @@ const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({
     >
       { 
         shortcutCommands.length > 0 ?
+        <>
           <ContextMenuShortcutCommandsComponent
             shortcutCommands={shortcutCommands}
-          /> :
+          />
+
+          <div className={styles.divider}></div>
+        </>
+           :
           null
       }
       
