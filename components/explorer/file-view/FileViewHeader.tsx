@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { ExplorerFileViewSortDirections, ExplorerFileViewSortFields } from "../../../constants/system/explorer/Explorer";
-import { StyledExplorerFileViewHeader } from "../../../styled-components/system/explorer/styled-file-view-header";
+import { StyledExplorerFileViewHeader } from "../../../styled-components/system/explorer/StyledFileViewHeader";
 import styled from "styled-components";
 import CustomCheckbox from "../../system/CustomCheckbox";
 

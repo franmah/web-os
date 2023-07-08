@@ -2,7 +2,7 @@ import { FC, useContext, useEffect, useRef, useState } from "react";
 import Image from 'next/image';
 import { getCurrentItemNameInPath } from "../../../services/file-system/FilePathService";
 import { toDateModifedFormat } from "../../../services/DateService";
-import { StyledFileViewRow } from "../../../styled-components/system/explorer/styled-file-view-row";
+import { StyledFileViewRow } from "../../../styled-components/system/explorer/StyledFileViewRow";
 import { ProcessContext } from "../../../contexts/ProcessContext";
 import { PinToQuickAccessCommand } from "../../../System/contextMenuCommands/commands/pinToQuickAccessCommand";
 import { ExplorerQuickAccessContext } from "../../../contexts/ExplorerQuickAccessContext";

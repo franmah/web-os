@@ -4,7 +4,7 @@ import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import SunEditorCore from "suneditor/src/lib/core";
 import { ExplorerFile } from "../../types/system/file/ExplorerElement";
 import { FileSystemContext } from "../../contexts/FileSystemContext";
-import { StyledSunEditorContainer } from "../../styled-components/styled-suneditor-container";
+import { StyledSunEditorContainer } from "../../styled-components/StyledSuneditorContainer";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,

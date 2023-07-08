@@ -3,7 +3,7 @@ import { MdKeyboardArrowRight } from 'react-icons/md';
 import { GrRefresh } from 'react-icons/gr';
 import { convertPathToFragments } from "../../services/file-system/FilePathService";
 import Image from 'next/image';
-import { StyledExplorerPathBar } from "../../styled-components/system/explorer/styled-explorer-path-bar";
+import { StyledExplorerPathBar } from "../../styled-components/system/explorer/StyledExplorerPathBar";
 import { getFolderIcon } from "../../services/IconService";
 
 const ExplorerPathBar: FC<{ 

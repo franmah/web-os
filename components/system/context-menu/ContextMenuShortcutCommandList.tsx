@@ -2,7 +2,7 @@ import { FC, useContext } from "react";
 import { ShortcutCommand } from "../../../System/contextMenuCommands/shortcut-command";
 import Image from 'next/image';
 import { ProcessContext } from "../../../contexts/ProcessContext";
-import { StyledContextMenuShortcutCommands } from "../../../styled-components/system/context-menu/styled-context-menu-shortcut-commands";
+import { StyledContextMenuShortcutCommands } from "../../../styled-components/system/context-menu/StyledContextMenuShortcutCommands";
 
 export const ContextMenuShortcutCommandList: FC<{
   shortcutCommands: ShortcutCommand[]

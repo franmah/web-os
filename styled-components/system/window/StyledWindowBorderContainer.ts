@@ -5,9 +5,9 @@ const CORNER_LENGTH = '8px';
 const CORNER_RADIUS = '8px';
 const BORDER_OFFSET = '-4px';
 
-export const StyledWindowBorderComponent = styled.div<{ resizing: boolean, zIndex: number }>`
-  width: '100%';
-  height: '100%';
+export const StyledWindowBorder = styled.div<{ resizing: boolean, zIndex: number }>`
+  width: 100%;
+  height: 100%;
   z-index: ${({ zIndex }) => zIndex };
 
   .children {

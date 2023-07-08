@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { WindowResizeDirection } from "../../../../constants/system/window/WindowResizeDirectionEnum";
-import { StyledWindowBorderComponent } from "../../../../styled-components/system/window/StyledWindowBorderComponentContainer";
+import { StyledWindowBorder } from "../../../../styled-components/system/window/StyledWindowBorderContainer";
 
 const WindowBorder: FC<{
   allowResize: boolean,
@@ -12,7 +12,7 @@ const WindowBorder: FC<{
 }> = ({ allowResize, isResizing, onBordersMouseDown, onTopResizeDoubleClick, children, zIndex }) => {
 
   return (
-    <StyledWindowBorderComponent
+    <StyledWindowBorder
       resizing={isResizing}
       zIndex={zIndex}
     >
@@ -87,7 +87,7 @@ const WindowBorder: FC<{
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.BottomRight)}>
         </div>
       </div>
-    </StyledWindowBorderComponent>
+    </StyledWindowBorder>
   );
 };
 

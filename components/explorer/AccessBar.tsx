@@ -3,7 +3,7 @@ import ExplorerPathBar from "./ExplorerPathBar";
 import { FiArrowRight, FiArrowLeft, FiArrowUp } from 'react-icons/fi';
 import { GrSearch } from 'react-icons/gr';
 import { getCurrentItemNameInPath, getParentPath } from "../../services/file-system/FilePathService";
-import { StyledExplorerAccessBar } from "../../styled-components/system/explorer/styled-explorer-access-bar";
+import { StyledExplorerAccessBar } from "../../styled-components/system/explorer/StyledExplorerAccessBar";
 
 const ExplorerAccessBar: FC<{
   path: string,

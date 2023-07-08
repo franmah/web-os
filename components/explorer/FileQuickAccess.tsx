@@ -2,7 +2,7 @@ import { FC, useContext, useState } from "react";
 import { getCurrentItemNameInPath } from "../../services/file-system/FilePathService";
 import { BsFillPinAngleFill } from 'react-icons/bs';
 import Image from 'next/image';
-import { StyledExplorerQuickAccess } from "../../styled-components/system/explorer/styled-explorer-quick-access";
+import { StyledExplorerQuickAccess } from "../../styled-components/system/explorer/StyledExplorerQuickAccess";
 import { ExplorerQuickAccessContext } from "../../contexts/ExplorerQuickAccessContext";
 import { ProcessContext } from "../../contexts/ProcessContext";
 import { UnpinFromQuickAccessCommand } from "../../System/contextMenuCommands/commands/unpinFromQuickAccessCommand";
