@@ -1,4 +1,4 @@
-import { ContextMenuCommand } from "./abstractCommand";
+import { ContextMenuCommand } from "./AbstractCommand";
 import { v4 as uuidv4 } from 'uuid';
 import { ComponentType } from "react";
 

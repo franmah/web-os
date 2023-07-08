@@ -1,6 +1,6 @@
 import { FC, useContext } from "react";
 import { ProcessContext } from "../../../contexts/ProcessContext";
-import { ContextMenuCommand } from "../../../System/contextMenuCommands/abstractCommand";
+import { ContextMenuCommand } from "../../../System/context-menu-commands/AbstractCommand";
 import styles from './context-menu.module.scss';
 import { CONTEXT_MENU_ITEM_HEIGHT } from "./ContextMenu";
 

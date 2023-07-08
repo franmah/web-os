@@ -1,6 +1,6 @@
-import { ContextMenuCommand } from "../../../System/contextMenuCommands/abstractCommand";
-import ContextMenuCommandContainer from "../../../System/contextMenuCommands/abstractCommandContainer";
-import { ShortcutCommand } from "../../../System/contextMenuCommands/shortcut-command";
+import { ContextMenuCommand } from "../../../System/context-menu-commands/AbstractCommand";
+import ContextMenuCommandContainer from "../../../System/context-menu-commands/AbstractCommandContainer";
+import { ShortcutCommand } from "../../../System/context-menu-commands/ShortcutCommand";
 
 export type ContextMenuParams = {
   top: number,

@@ -4,12 +4,12 @@ import { getCurrentItemNameInPath } from "../../../services/file-system/FilePath
 import { toDateModifedFormat } from "../../../services/DateService";
 import { StyledFileViewRow } from "../../../styled-components/system/explorer/StyledFileViewRow";
 import { ProcessContext } from "../../../contexts/ProcessContext";
-import { PinToQuickAccessCommand } from "../../../System/contextMenuCommands/commands/pinToQuickAccessCommand";
+import { PinToQuickAccessCommand } from "../../../System/context-menu-commands/commands/PinToQuickAccessCommand";
 import { ExplorerQuickAccessContext } from "../../../contexts/ExplorerQuickAccessContext";
-import { UnpinFromQuickAccessCommand } from "../../../System/contextMenuCommands/commands/unpinFromQuickAccessCommand";
+import { UnpinFromQuickAccessCommand } from "../../../System/context-menu-commands/commands/UnpinFromQuickAccessCommand";
 import { getFolderIcon } from "../../../services/IconService";
 import CustomCheckbox from "../../system/CustomCheckbox";
-import { ShortcutCommandNames, getShorcutCommand } from "../../../System/contextMenuCommands/shortcut-command-factory";
+import { ShortcutCommandNames, getShorcutCommand } from "../../../System/context-menu-commands/ShortcutCommandFactory";
 
 export const ExplorerFileViewRow: FC<{
   columnSizes: { [column: string]: string }

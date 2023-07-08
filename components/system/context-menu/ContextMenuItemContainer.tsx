@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import styles from './context-menu.module.scss';
-import ContextMenuCommandContainer from "../../../System/contextMenuCommands/abstractCommandContainer";
+import ContextMenuCommandContainer from "../../../System/context-menu-commands/AbstractCommandContainer";
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import ContextMenuComponent, { CONTEXT_MENU_ITEM_HEIGHT as CONTEXT_MENU_ITEM_HEIGHT } from "./ContextMenu";
 import { correctSubMenuLeftPosition, correctSubMenuTopPosition } from "../../../services/ContextMenuService";

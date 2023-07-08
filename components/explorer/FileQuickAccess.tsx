@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { StyledExplorerQuickAccess } from "../../styled-components/system/explorer/StyledExplorerQuickAccess";
 import { ExplorerQuickAccessContext } from "../../contexts/ExplorerQuickAccessContext";
 import { ProcessContext } from "../../contexts/ProcessContext";
-import { UnpinFromQuickAccessCommand } from "../../System/contextMenuCommands/commands/unpinFromQuickAccessCommand";
+import { UnpinFromQuickAccessCommand } from "../../System/context-menu-commands/commands/UnpinFromQuickAccessCommand";
 import { CommonFolderPaths } from "../../constants/system/file-system/CommonFilePaths";
 import { getFolderIcon } from "../../services/IconService";
 

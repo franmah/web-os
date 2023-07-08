@@ -1,4 +1,4 @@
-import { ContextMenuCommand } from "../abstractCommand";
+import { ContextMenuCommand } from "../AbstractCommand";
 
 export class SortByNameCommand extends ContextMenuCommand {
 

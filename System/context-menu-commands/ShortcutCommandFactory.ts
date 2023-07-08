@@ -1,4 +1,4 @@
-import { ShortcutCommand } from "./shortcut-command";
+import { ShortcutCommand } from "./ShortcutCommand";
 
 export enum ShortcutCommandNames {
   DELETE,

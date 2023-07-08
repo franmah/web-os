@@ -1,5 +1,5 @@
 import { FC, useContext } from "react";
-import { ShortcutCommand } from "../../../System/contextMenuCommands/shortcut-command";
+import { ShortcutCommand } from "../../../System/context-menu-commands/ShortcutCommand";
 import Image from 'next/image';
 import { ProcessContext } from "../../../contexts/ProcessContext";
 import { StyledContextMenuShortcutCommands } from "../../../styled-components/system/context-menu/StyledContextMenuShortcutCommands";
