@@ -4,7 +4,7 @@ import { GrRefresh } from 'react-icons/gr';
 import { convertPathToFragments } from "../../services/file-system/FilePathService";
 import Image from 'next/image';
 import { StyledExplorerPathBar } from "../../styled-components/system/explorer/styled-explorer-path-bar";
-import { getFolderIcon } from "../../services/icon-service";
+import { getFolderIcon } from "../../services/IconService";
 
 const ExplorerPathBar: FC<{ 
   path: string,

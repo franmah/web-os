@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { SelectionBox, SelectionBoxSize } from '../../../types/shared/SelectionBox';
 import styles from './selection-box.module.scss';
-import { getBoxNewPosition, getElementsInBox, SELECTION_BOX_OFF } from '../../../services/selectionBoxService';
+import { getBoxNewPosition, getElementsInBox, SELECTION_BOX_OFF } from '../../../services/SelectionBoxService';
 
 /**
  * @emitSelectedItemsUpdate sends update of elements within selection as its dragged.

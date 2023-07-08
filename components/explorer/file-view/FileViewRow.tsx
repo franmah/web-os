@@ -1,13 +1,13 @@
 import { FC, useContext, useEffect, useRef, useState } from "react";
 import Image from 'next/image';
 import { getCurrentItemNameInPath } from "../../../services/file-system/FilePathService";
-import { toDateModifedFormat } from "../../../services/date-service";
+import { toDateModifedFormat } from "../../../services/DateService";
 import { StyledFileViewRow } from "../../../styled-components/system/explorer/styled-file-view-row";
 import { ProcessContext } from "../../../contexts/ProcessContext";
 import { PinToQuickAccessCommand } from "../../../System/contextMenuCommands/commands/pinToQuickAccessCommand";
 import { ExplorerQuickAccessContext } from "../../../contexts/ExplorerQuickAccessContext";
 import { UnpinFromQuickAccessCommand } from "../../../System/contextMenuCommands/commands/unpinFromQuickAccessCommand";
-import { getFolderIcon } from "../../../services/icon-service";
+import { getFolderIcon } from "../../../services/IconService";
 import CustomCheckbox from "../../system/CustomCheckbox";
 import { ShortcutCommandNames, getShorcutCommand } from "../../../System/contextMenuCommands/shortcut-command-factory";
 

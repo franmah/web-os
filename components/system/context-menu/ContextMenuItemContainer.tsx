@@ -3,7 +3,7 @@ import styles from './context-menu.module.scss';
 import ContextMenuCommandContainer from "../../../System/contextMenuCommands/abstractCommandContainer";
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import ContextMenuComponent, { CONTEXT_MENU_ITEM_HEIGHT as CONTEXT_MENU_ITEM_HEIGHT } from "./ContextMenu";
-import { correctSubMenuLeftPosition, correctSubMenuTopPosition } from "../../../services/contextMenuService";
+import { correctSubMenuLeftPosition, correctSubMenuTopPosition } from "../../../services/ContextMenuService";
 
 const ContextMenuItemCommandContainer : FC<{
   command: ContextMenuCommandContainer

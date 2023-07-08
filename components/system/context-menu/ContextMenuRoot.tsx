@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { correctRootContextMenuPosition } from '../../../services/contextMenuService';
+import { correctRootContextMenuPosition } from '../../../services/ContextMenuService';
 import { ContextMenuParams } from '../../../types/system/contextMenu/contextMenu';
 import ContextMenuComponent, { DEFAULT_WIDTH_SUB_MENU } from './ContextMenu';
 

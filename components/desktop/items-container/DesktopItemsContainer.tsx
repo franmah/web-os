@@ -1,14 +1,14 @@
 import { ExplorerFile } from '../../../types/system/file/ExplorerElement';
 import { FC, Fragment, useEffect, useState } from 'react';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import { DEFAULT_FOLDER_ICON_PATH, getNewItemName, toItemWrappers } from '../../../services/desktopItemContainerService';
-import { getSelectedItemsFromSelectionBoxgWithCtrl, moveItemsOnDesktop, selectItemsWithShiftKey } from '../../../services/desktopItemContainerUiHelperService';
+import { DEFAULT_FOLDER_ICON_PATH, getNewItemName, toItemWrappers } from '../../../services/system/desktop/DesktopItemContainerService';
+import { getSelectedItemsFromSelectionBoxgWithCtrl, moveItemsOnDesktop, selectItemsWithShiftKey } from '../../../services/system/desktop/DesktopItemContainerUiHelperService';
 import { NewFolderCommand } from '../../../System/contextMenuCommands/commands/newFolderCommand';
 import { SortCommandContainer } from '../../../System/contextMenuCommands/commandContainers/sortCommand';
 import { NewItemCommandContainer } from '../../../System/contextMenuCommands/commandContainers/newItemCommand';
 import { SortByNameCommand } from '../../../System/contextMenuCommands/commands/sortByNameCommand';
 import { isEventOriginatedFromWithinTargetIdSubtree } from '../../../services/EventService';
-import { DesktopSortOptions, setItemPositions } from '../../../services/DesktopItemPlacementService';
+import { DesktopSortOptions, setItemPositions } from '../../../services/system/desktop/DesktopItemPlacementService';
 import { v4 } from 'uuid';
 import { ContextMenuCommandList } from '../../../types/system/contextMenu/contextMenu';
 import DesktopItemComponent from '../item/DesktopItem';

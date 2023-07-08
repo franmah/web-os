@@ -7,7 +7,7 @@ import { ExplorerQuickAccessContext } from "../../contexts/ExplorerQuickAccessCo
 import { ProcessContext } from "../../contexts/ProcessContext";
 import { UnpinFromQuickAccessCommand } from "../../System/contextMenuCommands/commands/unpinFromQuickAccessCommand";
 import { CommonFolderPaths } from "../../constants/system/file-system/CommonFilePaths";
-import { getFolderIcon } from "../../services/icon-service";
+import { getFolderIcon } from "../../services/IconService";
 
 const ExplorerFileQuickAccess: FC<{
   currentPath: string,

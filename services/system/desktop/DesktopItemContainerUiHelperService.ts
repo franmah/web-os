@@ -1,6 +1,6 @@
-import { HEIGHT_OFFSET, ITEM_HEIGHT, ITEM_WIDTH, WIDTH_OFFSET } from '../constants/Desktop';
-import { TASKBAR_HEIGHT } from '../constants/Taskbar';
-import { DesktopItem } from '../types/desktop/DesktopItem';
+import { HEIGHT_OFFSET, ITEM_HEIGHT, ITEM_WIDTH, WIDTH_OFFSET } from '../../../constants/Desktop';
+import { TASKBAR_HEIGHT } from '../../../constants/Taskbar';
+import { DesktopItem } from '../../../types/desktop/DesktopItem';
 
 export const moveItemsOnDesktop = (items: DesktopItem[], itemId: string, startItemTop: number,
 startItemLeft: number, newItemTop: number, newItemLeft: number) => {
