@@ -1,4 +1,4 @@
-import { DEFAULT_WIDTH_SUB_MENU } from "../../../components/system/contextMenu/contextMenuComponent";
+import { DEFAULT_WIDTH_SUB_MENU } from "../../../components/system/context-menu/ContextMenu";
 import { ContextMenuCommand } from "../abstractCommand";
 import ContextMenuCommandContainer from "../abstractCommandContainer";
 

@@ -44,7 +44,7 @@ export const getBoxNewPosition = (box: SelectionBox, clientX: number, clientY: n
 
   width = Math.abs(box.startX - clientX);
   height = Math.abs(box.startY - clientY);
-  // Top and left will change depending if the derction of the mouse.
+  // Top and left will change depending on if the direction of the mouse.
   // Top/left become either the start of the box or the end.
   if (bottomRight) {
     top = box.startY;

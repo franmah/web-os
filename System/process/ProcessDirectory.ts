@@ -4,13 +4,13 @@ import { ProcessDirectoryType } from "../../types/system/processes/processes";
 export const ProcessDirectory: ProcessDirectoryType = {
   'contextMenu': {
     name: 'contextMenu',
-    Component: dynamic<{ params: any }>(() => import('../../components/system/contextMenu/ContextMenuRootComponent')),
+    Component: dynamic<{ params: any }>(() => import('../../components/system/context-menu/ContextMenuRoot')),
     hasWindow: false,
     isUnique: true
   },
   'desktop': {
     name: 'desktop',
-    Component: dynamic<{ params: any }>(() => import('../../components/desktop/desktop/DesktopComponent')),
+    Component: dynamic<{ params: any }>(() => import('../../components/desktop/desktop/Desktop')),
     defaultParams: null,
     hasWindow: false,
     isUnique: true
@@ -22,8 +22,8 @@ export const ProcessDirectory: ProcessDirectoryType = {
     isUnique: true
   },
   'explorer': {
-    name: 'hello',
-    Component: dynamic<{ params: { startPath: string } }>(() => import('../../components/explorer/explorer-container')),
+    name: 'explorer',
+    Component: dynamic<{ params: { startPath: string } }>(() => import('../../components/explorer/ExplorerContainer')),
     windowParams: {
       headerOptions: {
         icon: '/icons/youtube-logo.png',
@@ -33,9 +33,9 @@ export const ProcessDirectory: ProcessDirectoryType = {
     hasWindow: true,
     isUnique: false
   },
-  'hello': {
-    name: 'hello',
-    Component: dynamic<{ params: any }>(() => import('../../components/hello/helloComponent')),
+  'youtube': {
+    name: 'youtube',
+    Component: dynamic<{ params: any }>(() => import('../../components/youtube/Youtube')),
     windowParams: {
       headerOptions: {
         icon: '/icons/youtube-logo.png',
@@ -48,7 +48,7 @@ export const ProcessDirectory: ProcessDirectoryType = {
   'sunTextEditor': {
     name: 'sunTextEditor',
     Component: dynamic<{ params: { originalContent: string } }>(
-      () => import('../../components/text-editor-app/suneditor') as any
+      () => import('../../components/text-editor-app/Suneditor') as any
     ),
     windowParams: {
       headerOptions: {

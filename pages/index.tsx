@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import ProcessContextProvider from '../contexts/processContext';
-import { ProcessLoaderComponent } from '../components/system/processLoaderComponent';
+import { ProcessLoader } from '../components/system/ProcessLoader';
 import FileSystemContextProvider from '../contexts/FileSystemContext';
 import ExplorerQuickAccessProvider from '../contexts/explorer-quick-access-context';
 
@@ -9,7 +9,7 @@ const Home: NextPage = () => (
     <ProcessContextProvider>
       <FileSystemContextProvider>
         <ExplorerQuickAccessProvider>
-          <ProcessLoaderComponent></ProcessLoaderComponent>
+          <ProcessLoader></ProcessLoader>
         </ExplorerQuickAccessProvider>
       </FileSystemContextProvider>
     </ProcessContextProvider>
