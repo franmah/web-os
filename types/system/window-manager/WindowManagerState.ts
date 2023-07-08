@@ -1,4 +1,4 @@
-import { WindowedProcess } from "../processes/processes";
+import { WindowedProcess } from "../processes/Processes";
 import { WindowState } from "../window/WindowState";
 
 export type WindowManagerState = {

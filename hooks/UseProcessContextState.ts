@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { v4 } from "uuid";
 import { ProcessDirectory } from "../System/process/ProcessDirectory";
-import { Process, ProcessContextType, Processes, WindowedProcess } from "../types/system/processes/processes";
+import { Process, ProcessContextType, Processes, WindowedProcess } from "../types/system/processes/Processes";
 
 const useProcessContextState = (): ProcessContextType => {
   

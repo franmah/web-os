@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { ProcessDirectoryType } from "../../types/system/processes/processes";
+import { ProcessDirectoryType } from "../../types/system/processes/Processes";
 
 export const ProcessDirectory: ProcessDirectoryType = {
   'contextMenu': {

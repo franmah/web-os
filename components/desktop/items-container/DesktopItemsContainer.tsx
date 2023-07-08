@@ -10,7 +10,7 @@ import { SortByNameCommand } from '../../../System/context-menu-commands/command
 import { isEventOriginatedFromWithinTargetIdSubtree } from '../../../services/EventService';
 import { DesktopSortOptions, setItemPositions } from '../../../services/system/desktop/DesktopItemPlacementService';
 import { v4 } from 'uuid';
-import { ContextMenuCommandList } from '../../../types/system/contextMenu/contextMenu';
+import { ContextMenuCommandList } from '../../../types/system/context-menu/ContextMenu';
 import DesktopItemComponent from '../item/DesktopItem';
 import SelectionBoxComponent from '../../shared/selection-box/SelectionBox';
 import { NewTxtFileCommand } from '../../../System/context-menu-commands/commands/NewTxtFileCommand';

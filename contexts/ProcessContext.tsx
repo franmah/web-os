@@ -1,6 +1,6 @@
 import React, { createContext, FC } from "react";
 import useProcessContextState from "../hooks/UseProcessContextState";
-import { ProcessContextType } from "../types/system/processes/processes";
+import { ProcessContextType } from "../types/system/processes/Processes";
 
 const START_PROCESS_CONTEXT: ProcessContextType = {
   processes: {},

@@ -1,7 +1,7 @@
 import { FC, Fragment, useContext, useEffect } from "react";
 import { ProcessContext } from "../../contexts/ProcessContext";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../services/EventService";
-import { Processes, WindowedProcess, WindowedProcesses } from "../../types/system/processes/processes";
+import { Processes, WindowedProcess, WindowedProcesses } from "../../types/system/processes/Processes";
 import { CONTEXT_MENU_ROOT_ID } from "./context-menu/ContextMenuRoot";
 import { WindowManager } from "./WindowManager";
 import { startingProccesses } from "../../System/process/StartingProccesses";

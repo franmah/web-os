@@ -4,7 +4,7 @@ import { BiFoodMenu } from 'react-icons/bi';
 import styles from './weather.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
 import Image from 'next/image';
-import { Weather } from "../../../types/taskbar/weather";
+import { Weather } from "../../../types/taskbar/Weather";
 
 const WeatherComponent: FC<{}> = () => {
 

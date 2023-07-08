@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import ContextMenuCommandContainer from '../../../System/context-menu-commands/AbstractCommandContainer';
-import { ContextMenuParams } from '../../../types/system/contextMenu/contextMenu';
+import { ContextMenuParams } from '../../../types/system/context-menu/ContextMenu';
 import styles from './context-menu.module.scss';
 import ContextMenuItemCommandContainer from './ContextMenuItemContainer';
 import ContextMenuItemComponent from './ContextMenuItem';
