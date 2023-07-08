@@ -1,7 +1,7 @@
 import { MaximizePlaceholderDirection } from "../../../constants/system/window/MaximizePlaceholderDirectionEnum";
 import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeEnum";
 import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
-import { TASKBAR_HEIGHT } from "../../../constants/TaskbarConsts";
+import { TASKBAR_HEIGHT } from "../../../constants/Taskbar";
 import { WindowState } from "../../../types/system/window/WindowState";
 import { finishMovingWindow } from "./MoveWindowService";
 

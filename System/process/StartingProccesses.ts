@@ -1,4 +1,4 @@
-import { Processes, WindowedProcesses } from '../../types/system/processes/processes';
+import { Processes, WindowedProcesses } from '../../types/system/processes/Processes';
 import { ProcessDirectory } from './ProcessDirectory';
 
 export const startingProccesses: any = {

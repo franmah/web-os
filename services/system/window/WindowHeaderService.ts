@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { CUSTOM_MAXIMIZE_MODAL_DELAY } from "../../../constants/system/window/WindowHeaderConts";
+import { CUSTOM_MAXIMIZE_MODAL_DELAY } from "../../../constants/system/window/WindowHeader";
 
 export const setMaximizeMenuListeners = (maximizeElementId: string,
 setShowMaximizeMenu: Dispatch<SetStateAction<boolean>>) => {

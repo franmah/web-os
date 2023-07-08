@@ -1,9 +1,9 @@
-import { WINDOW_STARTING_POSITION_OFFSET_PX } from "../../../constants/system/window-manager/WindowManagerConsts";
+import { WINDOW_STARTING_POSITION_OFFSET_PX } from "../../../constants/system/window-manager/WindowManager";
 import { CustomMaximizeDirection } from "../../../constants/system/window/CustomMaximizeDirectionEnum";
-import { DEFAULT_WINDOW_STATE } from "../../../constants/system/window/WindowConsts";
+import { DEFAULT_WINDOW_STATE } from "../../../constants/system/window/Window";
 import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeEnum";
 import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
-import { WindowedProcesses } from "../../../types/system/processes/processes";
+import { WindowedProcesses } from "../../../types/system/processes/Processes";
 import { WindowManagerState } from "../../../types/system/window-manager/WindowManagerState";
 import { WindowState } from "../../../types/system/window/WindowState";
 import { heightMaximizeWindow, maximizeOrRestoreWindow } from "../window/MaximizeRestoreWindowService";

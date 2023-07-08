@@ -1,6 +1,6 @@
 import { createContext, FC } from "react";
-import { useFileSystemContextState } from "../hooks/useFileSystemContextState";
-import { FileSystemContextType } from "../types/system/file/fileSystemContext";
+import { useFileSystemContextState } from "../hooks/UseFileSystemContextState";
+import { FileSystemContextType } from "../types/system/file/FileSystemContext";
 
 export const FileSystemContext = createContext<FileSystemContextType>(null as any);
 

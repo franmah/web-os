@@ -1,4 +1,4 @@
-import { WINDOW_MIN_HEIGH, WINDOW_MIN_WIDTH } from "../../../components/system/window/window";
+import { WINDOW_MIN_HEIGH, WINDOW_MIN_WIDTH } from "../../../components/system/window/Window";
 import { MaximizePlaceholderDirection } from "../../../constants/system/window/MaximizePlaceholderDirectionEnum";
 import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
 import { WindowState } from "../../../types/system/window/WindowState";

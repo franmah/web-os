@@ -1,5 +1,5 @@
 import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeEnum";
-import { TASKBAR_HEIGHT } from "../../../constants/TaskbarConsts";
+import { TASKBAR_HEIGHT } from "../../../constants/Taskbar";
 import { WindowState } from "../../../types/system/window/WindowState";
 
 export const getRestoredWindowOptionsRelativeToMouse = (mouseX: number, mouseY: number, options: WindowState): WindowState => {

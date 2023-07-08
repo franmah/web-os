@@ -1,14 +1,14 @@
 import { FC, useContext, useEffect, useState } from "react";
-import { ProcessContext } from "../../contexts/processContext";
+import { ProcessContext } from "../../contexts/ProcessContext";
 import { handleZindexesUpdateOnCloseWindow, setWindowAsMoving, setWindowAsResizing, updateWindowOnCustomMaximize, updateWindowOnHeightMaximize, updateWindowStatesOnNewProcess, updateWindowWarnBeforeProcessCloses, updateWindowsOnMaximize, updateWindowsOnMouseDown, updateWindowsOnMouseMove, updateWindowsOnMouseUp } from "../../services/system/window-manager/WindowManagerService";
-import { WindowedProcesses } from "../../types/system/processes/processes";
+import { WindowedProcesses } from "../../types/system/processes/Processes";
 import { WindowManagerState } from "../../types/system/window-manager/WindowManagerState";
-import WindowComponent from "./window/window";
+import WindowComponent from "./window/Window";
 import { WindowResizeDirection } from "../../constants/system/window/WindowResizeDirectionEnum";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../services/EventService";
 import { CustomMaximizeDirection } from "../../constants/system/window/CustomMaximizeDirectionEnum";
 
-export const WindowManagerComponent: FC<{ processes: WindowedProcesses }> = ({ processes }) => {
+export const WindowManager: FC<{ processes: WindowedProcesses }> = ({ processes }) => {
 
   const { closeProcess } = useContext(ProcessContext);
 

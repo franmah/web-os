@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { WINDOW_MIN_HEIGH, WINDOW_MIN_WIDTH } from "../../../components/system/window/window";
+import { WINDOW_MIN_HEIGH, WINDOW_MIN_WIDTH } from "../../../components/system/window/Window";
 
 export const StyledWindow = styled.div<{
   focused: boolean,
