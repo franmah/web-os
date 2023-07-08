@@ -3,7 +3,7 @@ import {VscChromeMinimize, VscClose } from 'react-icons/vsc';
 import globalStyles from '../../../../styles/global.module.scss';
 import { v4 } from 'uuid';
 import { WindowHeaderProps } from '../../../../types/system/window/WindowHeaderProps';
-import { CONTROL_ICON_SIZE, MAXIMIZE_DIV_PRE_ID } from '../../../../constants/system/window/WindowHeaderConts';
+import { CONTROL_ICON_SIZE, MAXIMIZE_DIV_PRE_ID } from '../../../../constants/system/window/WindowHeader';
 import { HeaderMaximizeButton } from '../header-maximize-button/HeaderMaximizeButton';
 import { WindowHeaderInformation } from '../header-information/HeaderInformation';
 import { StyledWindowHeader } from "../../../../styled-components/system/window/StyledWindowHeader";

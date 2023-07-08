@@ -1,4 +1,4 @@
-import { FOLDER_ICON_PATH } from "../constants/FileSystemConsts";
+import { FOLDER_ICON_PATH } from "../constants/FileSystem";
 import { ExplorerFile } from "../types/system/file/ExplorerElement";
 
 export const getRootAtSystemStart = (): ExplorerFile => {

@@ -1,5 +1,5 @@
-import { HEIGHT_OFFSET, ITEM_HEIGHT, ITEM_WIDTH, WIDTH_OFFSET } from "../constants/DesktopConsts";
-import { TASKBAR_HEIGHT } from "../constants/TaskbarConsts";
+import { HEIGHT_OFFSET, ITEM_HEIGHT, ITEM_WIDTH, WIDTH_OFFSET } from "../constants/Desktop";
+import { TASKBAR_HEIGHT } from "../constants/Taskbar";
 import { DesktopItem } from "../types/desktop/DesktopItem";
 
 export enum DesktopSortOptions { name, default };

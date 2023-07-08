@@ -1,4 +1,4 @@
-import { weatherCodeLookupDay, weatherCodeLookupNight } from "../constants/weatherCodes";
+import { weatherCodeLookupDay, weatherCodeLookupNight } from "../constants/WeatherCodes";
 import { Weather } from "../types/taskbar/weather";
 
 const BASE_URL = 'http://api.weatherapi.com/v1/forecast.json?key=f34bddabceab41c2a0900913230403&days=1&aqi=no&alerts=no&q=';

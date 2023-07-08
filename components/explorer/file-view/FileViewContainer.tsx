@@ -3,7 +3,7 @@ import { ExplorerFileViewHeader } from "./FileViewHeader";
 import { ExplorerFileViewRow } from "./FileViewRow";
 import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/EventService";
 import { StyledExplorerFileViewContainer } from "../../../styled-components/system/explorer/styled-file-view-container";
-import { ExplorerFileViewSortDirections, ExplorerFileViewSortFields, START_COLUMN_SIZES } from "../../../constants/system/explorer/explorer-consts";
+import { ExplorerFileViewSortDirections, ExplorerFileViewSortFields, START_COLUMN_SIZES } from "../../../constants/system/explorer/Explorer";
 
 export const FILE_VIEW_CONTAINER_ROWS_HTML_ID = 'file-view-container-rows';
 

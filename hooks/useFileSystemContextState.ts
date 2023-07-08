@@ -2,7 +2,7 @@ import { useState } from "react";
 import { v4 } from "uuid";
 import { getRootAtSystemStart } from "../services/FileSystemService";
 import { ExplorerFile } from "../types/system/file/ExplorerElement";
-import { FOLDER_ICON_PATH } from '../constants/FileSystemConsts';
+import { FOLDER_ICON_PATH } from '../constants/FileSystem';
 import { convertPathToFragments, getCurrentItemNameInPath, getParentPath } from "../services/file-system/FilePathService";
 import { CommonFolderPaths } from "../constants/system/file-system/CommonFilePaths";
 

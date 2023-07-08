@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { TASKBAR_HEIGHT_PX } from "../../../constants/TaskbarConsts";
+import { TASKBAR_HEIGHT_PX } from "../../../constants/Taskbar";
 import { MaximizePlaceholderDirection } from "../../../constants/system/window/MaximizePlaceholderDirectionEnum";
 
 const HEIGHT_OFFSET = '15px';

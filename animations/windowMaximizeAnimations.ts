@@ -1,4 +1,4 @@
-import { TASKBAR_HEIGHT } from "../constants/TaskbarConsts";
+import { TASKBAR_HEIGHT } from "../constants/Taskbar";
 
 const HEIGHT_OFFSET = '15px';
 
