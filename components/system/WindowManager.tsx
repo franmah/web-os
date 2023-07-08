@@ -1,5 +1,5 @@
 import { FC, useContext, useEffect, useState } from "react";
-import { ProcessContext } from "../../contexts/processContext";
+import { ProcessContext } from "../../contexts/ProcessContext";
 import { handleZindexesUpdateOnCloseWindow, setWindowAsMoving, setWindowAsResizing, updateWindowOnCustomMaximize, updateWindowOnHeightMaximize, updateWindowStatesOnNewProcess, updateWindowWarnBeforeProcessCloses, updateWindowsOnMaximize, updateWindowsOnMouseDown, updateWindowsOnMouseMove, updateWindowsOnMouseUp } from "../../services/system/window-manager/WindowManagerService";
 import { WindowedProcesses } from "../../types/system/processes/processes";
 import { WindowManagerState } from "../../types/system/window-manager/WindowManagerState";

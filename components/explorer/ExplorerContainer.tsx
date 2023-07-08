@@ -5,7 +5,7 @@ import ExplorerFileViewContainer from "./file-view/FileViewContainer";
 import { FileSystemContext } from "../../contexts/FileSystemContext";
 import { StyledExplorerContainer } from "../../styled-components/system/explorer/styled-explorer-container";
 import { convertPathToFragments } from "../../services/file-system/FilePathService";
-import { ExplorerQuickAccessContext } from "../../contexts/explorer-quick-access-context";
+import { ExplorerQuickAccessContext } from "../../contexts/ExplorerQuickAccessContext";
 import { CommonFolderPaths } from "../../constants/system/file-system/CommonFilePaths";
 
 const ExplorerContainer: FC<{ params: { startPath: string }}> = ({

@@ -1,8 +1,8 @@
 import type { NextPage } from 'next';
-import ProcessContextProvider from '../contexts/processContext';
+import ProcessContextProvider from '../contexts/ProcessContext';
 import { ProcessLoader } from '../components/system/ProcessLoader';
 import FileSystemContextProvider from '../contexts/FileSystemContext';
-import ExplorerQuickAccessProvider from '../contexts/explorer-quick-access-context';
+import ExplorerQuickAccessProvider from '../contexts/ExplorerQuickAccessContext';
 
 const Home: NextPage = () => (
   <div>

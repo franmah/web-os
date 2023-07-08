@@ -3,8 +3,8 @@ import { getCurrentItemNameInPath } from "../../services/file-system/FilePathSer
 import { BsFillPinAngleFill } from 'react-icons/bs';
 import Image from 'next/image';
 import { StyledExplorerQuickAccess } from "../../styled-components/system/explorer/styled-explorer-quick-access";
-import { ExplorerQuickAccessContext } from "../../contexts/explorer-quick-access-context";
-import { ProcessContext } from "../../contexts/processContext";
+import { ExplorerQuickAccessContext } from "../../contexts/ExplorerQuickAccessContext";
+import { ProcessContext } from "../../contexts/ProcessContext";
 import { UnpinFromQuickAccessCommand } from "../../System/contextMenuCommands/commands/unpinFromQuickAccessCommand";
 import { CommonFolderPaths } from "../../constants/system/file-system/CommonFilePaths";
 import { getFolderIcon } from "../../services/icon-service";

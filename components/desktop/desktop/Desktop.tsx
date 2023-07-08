@@ -6,7 +6,7 @@ import background_1080 from '../../../assets/background_image_light.jpg';
 import background_1440 from '../../../assets/background_image_light.jpg';
 import background_2400 from '../../../assets/background_image_light.jpg';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
-import { ProcessContext } from '../../../contexts/processContext';
+import { ProcessContext } from '../../../contexts/ProcessContext';
 import { ContextMenuCommandList } from '../../../types/system/contextMenu/contextMenu';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 
