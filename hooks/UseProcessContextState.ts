@@ -3,7 +3,7 @@ import { v4 } from "uuid";
 import { ProcessDirectory } from "../System/process/ProcessDirectory";
 import { Process, ProcessContextType, Processes, WindowedProcess } from "../types/system/processes/processes";
 
-const _useProcessContextState = (): ProcessContextType => {
+const useProcessContextState = (): ProcessContextType => {
   
   const [processes, setProcesses] = useState<Processes>({});
 
@@ -75,4 +75,4 @@ const _useProcessContextState = (): ProcessContextType => {
   return { processes, openProcess, closeProcess };
 };
 
-export default _useProcessContextState;
+export default useProcessContextState;

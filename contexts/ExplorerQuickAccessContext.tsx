@@ -1,5 +1,5 @@
 import { FC, createContext } from "react";
-import { useExplorerQuickAccessContextState } from "../hooks/use-explorer-quick-access-context-state";
+import { useExplorerQuickAccessContextState } from "../hooks/UseExplorerQuickAccessContextState";
 import { ExplorerQuickAccessContextType } from "../types/system/explorer/explorer-quick-access-context-type";
 
 export const ExplorerQuickAccessContext = createContext<ExplorerQuickAccessContextType>(null as any);
