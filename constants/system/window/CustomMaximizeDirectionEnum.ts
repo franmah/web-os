@@ -1,3 +1,10 @@
 export enum CustomMaximizeDirection {
-  Left, Right, LargerLeft, SmallerRight, TopRight, TopLeft, BottomRight, BottomLeft
-};
+	Left,
+	Right,
+	LargerLeft,
+	SmallerRight,
+	TopRight,
+	TopLeft,
+	BottomRight,
+	BottomLeft
+}

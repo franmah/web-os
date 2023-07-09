@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import ContextMenuCommandContainer from '../../../System/context-menu-commands/AbstractCommandContainer';
 import { ContextMenuParams } from '../../../types/system/context-menu/ContextMenu';
 import styles from './context-menu.module.scss';
@@ -14,75 +14,63 @@ export const CONTEXT_MENU_ITEM_HEIGHT = 21;
 const HOVERING_TIMEOUT = 300;
 
 const ContextMenuComponent: FC<{ params: ContextMenuParams }> = ({
-  params: { top, left, width, commands, shortcutCommands = [] }
+	params: { top, left, width, commands, shortcutCommands = [] }
 }) => {
+	const closeSubMenuTimeoutRef = useRef<NodeJS.Timeout>();
+	const [hoveredContainerId, setHoveredContainerId] = useState<string>('');
 
-  let closeSubMenuTimeout: NodeJS.Timeout;
+	useEffect(() => {
+		const timeout = closeSubMenuTimeoutRef.current;
+		return () => {
+			clearTimeout(timeout);
+		};
+	}, []);
 
-  const [hoveredContainerId, setHoveredContainerId] = useState<string>('');
+	const handleMouseEnterContainer = useCallback((containerId: string) => {
+		clearTimeout(closeSubMenuTimeoutRef.current);
 
-  useEffect(() => {
-    return () => clearTimeout(closeSubMenuTimeout);
-  }, []);
+		closeSubMenuTimeoutRef.current = setTimeout(() => {
+			setHoveredContainerId(() => containerId);
+		}, HOVERING_TIMEOUT);
+	}, []);
 
-  const handleMouseEnterContainer = (containerId: string) => {
-    clearTimeout(closeSubMenuTimeout);
-    closeSubMenuTimeout = setTimeout(() => {
-      setHoveredContainerId(() => (containerId));
-    }, HOVERING_TIMEOUT);
-  };
+	const handleMouseEnterItem = useCallback(() => {
+		clearTimeout(closeSubMenuTimeoutRef.current);
+		closeSubMenuTimeoutRef.current = setTimeout(() => setHoveredContainerId(() => ''), HOVERING_TIMEOUT);
+	}, []);
 
-  const handleMouseEnterItem = () => {
-    clearTimeout(closeSubMenuTimeout);
-    closeSubMenuTimeout = setTimeout(() => setHoveredContainerId(() => ('')), HOVERING_TIMEOUT);
-  };
+	return (
+		<section
+			className={styles.contextMenu}
+			style={{
+				left,
+				top,
+				width: width || DEFAULT_WIDTH_SUB_MENU,
+				zIndex: 10000
+			}}
+		>
+			{shortcutCommands.length > 0 ? (
+				<>
+					<ContextMenuShortcutCommandList shortcutCommands={shortcutCommands} />
 
-  return (
-    <section
-      className={styles.contextMenu}
-      style={{
-        top,
-        left,
-        width: width || DEFAULT_WIDTH_SUB_MENU,
-        zIndex: 10000
-      }}
-    >
-      { 
-        shortcutCommands.length > 0 ?
-        <>
-          <ContextMenuShortcutCommandList
-            shortcutCommands={shortcutCommands}
-          />
+					<div className={styles.divider}></div>
+				</>
+			) : null}
 
-          <div className={styles.divider}></div>
-        </>
-           :
-          null
-      }
-      
-      {
-        commands.map((command, index) =>
-          command instanceof ContextMenuCommandContainer ?
-
-            <ContextMenuItemCommandContainer
-              key={index}
-              command={command as any}
-              showSubMenu={hoveredContainerId === command.id}
-              handleMouseEnter={handleMouseEnterContainer}
-            />
-           
-            :
-
-            <ContextMenuItemComponent
-              key={index}
-              command={command as any}
-              handleMouseEnter={handleMouseEnterItem}
-            />
-        )
-      }
-
-    </section>
-  );
+			{commands.map((command, index) =>
+				command instanceof ContextMenuCommandContainer ? (
+					<ContextMenuItemCommandContainer
+						key={index}
+						command={command as any}
+						showSubMenu={hoveredContainerId === command.id}
+						handleMouseEnter={handleMouseEnterContainer}
+					/>
+				) : (
+					<ContextMenuItemComponent key={index} command={command as any} handleMouseEnter={handleMouseEnterItem} />
+				)
+			)}
+		</section>
+	);
 };
 
 export default ContextMenuComponent;

@@ -1,17 +1,16 @@
 .shortcutBar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
-  // Center shortcuts to the middle of the screen
-  // indpendently from weather and clock width
-  position: fixed;
-  left: 50%;
-  transform: translate(-50%, 0%);
-  
-  .shortcuts {
-    flex: 1;
-    display: flex;
-  }
+	// Center shortcuts to the middle of the screen
+	// indpendently from weather and clock width
+	position: fixed;
+	left: 50%;
+	transform: translate(-50%, 0%);
+
+	.shortcuts {
+		flex: 1;
+		display: flex;
+	}
 }
-

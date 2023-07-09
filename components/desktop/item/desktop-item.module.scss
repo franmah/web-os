@@ -1,37 +1,37 @@
 .desktopItem {
-  color: white;
-  position: absolute;
-  display: inline;
-  text-align: center;
-  font-size: 12px;
-  cursor: default;
-  border: 1px solid transparent;
+	color: white;
+	position: absolute;
+	display: inline;
+	text-align: center;
+	font-size: 12px;
+	cursor: default;
+	border: 1px solid transparent;
 
-  textarea {
-    resize: none;
-    outline: none;
-    border: none;
-    width: 100%;
-    height: auto;
-    min-height: 35px;
-    word-wrap: break-word;
-    overflow: auto;
-    text-align: justify;
-    -moz-text-align-last: center; /* Firefox 12+ */
-    text-align-last: center;
-  }
-  
-  div {
-    overflow-wrap: break-word;
-  }
+	textarea {
+		resize: none;
+		outline: none;
+		border: none;
+		width: 100%;
+		height: auto;
+		min-height: 35px;
+		word-wrap: break-word;
+		overflow: auto;
+		text-align: justify;
+		-moz-text-align-last: center; /* Firefox 12+ */
+		text-align-last: center;
+	}
+
+	div {
+		overflow-wrap: break-word;
+	}
 }
 
 .dekstopItemNotSelected {
-  &:hover {
-    background-color: #ffffff2c;
-  }
+	&:hover {
+		background-color: #ffffff2c;
+	}
 }
 
 .dekstopItemSelected {
-  background-color: #ffffff4b;
+	background-color: #ffffff4b;
 }

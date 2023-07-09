@@ -1,108 +1,109 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const BORDER_RADIUS = '6px';
 
 export const StyledMaximizeOptionsModalMain = styled.div`
-  height: 100%;
-  display: grid;
-  padding: 8px;
+	height: 100%;
+	display: grid;
+	padding: 8px;
 
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 12px;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 1fr 1fr;
+	gap: 12px;
 
-  .item {
-    background-color: #cfd8e1;
-    border: 1px solid #7d868f;
+	.item {
+		background-color: #cfd8e1;
+		border: 1px solid #7d868f;
 
-    &:hover {
-      background-color: #0067C0;
-    }
-  }
-  
-  .topLeft {
-    display: flex;
-    justify-content: space-between;
+		&:hover {
+			background-color: #0067c0;
+		}
+	}
 
-    .left {
-      height: 100%;
-      flex: 1;
-      margin-right: 4px;
-      border-radius: ${BORDER_RADIUS} 0px 0px ${BORDER_RADIUS};
-    }
+	.topLeft {
+		display: flex;
+		justify-content: space-between;
 
-    .right {
-      flex: 1;
-      height: 100%;
-      border-radius: 0px ${BORDER_RADIUS} ${BORDER_RADIUS} 0px;
-    }
-  }
+		.left {
+			height: 100%;
+			flex: 1;
+			margin-right: 4px;
+			border-radius: ${BORDER_RADIUS} 0px 0px ${BORDER_RADIUS};
+		}
 
-  .topRight {  
-    display: flex;
-    justify-content: space-between;
+		.right {
+			flex: 1;
+			height: 100%;
+			border-radius: 0px ${BORDER_RADIUS} ${BORDER_RADIUS} 0px;
+		}
+	}
 
-    .left {
-      height: 100%;
-      flex: 3;
-      margin-right: 4px;
-      border-radius: ${BORDER_RADIUS} 0px 0px ${BORDER_RADIUS};
-    }
+	.topRight {
+		display: flex;
+		justify-content: space-between;
 
-    .right {
-      flex: 2;
-      height: 100%;
-      border-radius: 0px ${BORDER_RADIUS} ${BORDER_RADIUS} 0px;
-    }
-  }
+		.left {
+			height: 100%;
+			flex: 3;
+			margin-right: 4px;
+			border-radius: ${BORDER_RADIUS} 0px 0px ${BORDER_RADIUS};
+		}
 
-  .bottomLeft {
-    display: grid;
-    grid-template-areas:  "left top"
-                          "left bottom";    
-    gap: 2px;
+		.right {
+			flex: 2;
+			height: 100%;
+			border-radius: 0px ${BORDER_RADIUS} ${BORDER_RADIUS} 0px;
+		}
+	}
 
-    .left {
-      grid-area: left;
-      height: 100%;
-      flex: 3;
-      margin-right: 4px;
-      border-radius: ${BORDER_RADIUS} 0px 0px ${BORDER_RADIUS};
-    }
+	.bottomLeft {
+		display: grid;
+		grid-template-areas:
+			'left top'
+			'left bottom';
+		gap: 2px;
 
-    .top {
-      grid-area: top;
-      border-radius: 0px ${BORDER_RADIUS} 0px 0px;
-      margin-bottom: 4px;
-    }
+		.left {
+			grid-area: left;
+			height: 100%;
+			flex: 3;
+			margin-right: 4px;
+			border-radius: ${BORDER_RADIUS} 0px 0px ${BORDER_RADIUS};
+		}
 
-    .bottom {
-      grid-area: bottom;
-      border-radius: 0px 0px ${BORDER_RADIUS} 0px;
-    }
-  }
+		.top {
+			grid-area: top;
+			border-radius: 0px ${BORDER_RADIUS} 0px 0px;
+			margin-bottom: 4px;
+		}
 
-  .bottomRight{
-    display: grid;
-    gap: 4px;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+		.bottom {
+			grid-area: bottom;
+			border-radius: 0px 0px ${BORDER_RADIUS} 0px;
+		}
+	}
 
-    .topLeft {
-      height: 100%;
-      border-radius: ${BORDER_RADIUS} 0px 0px 0px;
-    }
+	.bottomRight {
+		display: grid;
+		gap: 4px;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: 1fr 1fr;
 
-    .topRight {
-      border-radius: 0px ${BORDER_RADIUS} 0px 0px;
-    }
+		.topLeft {
+			height: 100%;
+			border-radius: ${BORDER_RADIUS} 0px 0px 0px;
+		}
 
-    .bottomLeft {
-      border-radius: 0px 0px 0px ${BORDER_RADIUS};
-    }
+		.topRight {
+			border-radius: 0px ${BORDER_RADIUS} 0px 0px;
+		}
 
-    .bottomRight {
-      border-radius:0px 0px ${BORDER_RADIUS} 0px;
-    }
-  }
+		.bottomLeft {
+			border-radius: 0px 0px 0px ${BORDER_RADIUS};
+		}
+
+		.bottomRight {
+			border-radius: 0px 0px ${BORDER_RADIUS} 0px;
+		}
+	}
 `;

@@ -1,53 +1,53 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const StyledExplorerQuickAccess = styled.nav`
-  padding: 8px 4px;
+	padding: 8px 4px;
 
-  .divider {
-    margin: 16px 4px;
-    border-bottom: 1px solid #D6D6D6;
-  }
-  
-  /* CHANGE TO A COMMON TYPE SINCE THEY'RE ALL THE SAME */
-  /* left icon, folder icon, folder name, extra icon */
-  .pinned-folder {
-    border: none;
-    background-color: white;
-    padding: 8px 4px;
-    padding-left: 15%;
-    margin: 4px 0px;
-    user-select: none;
+	.divider {
+		margin: 16px 4px;
+		border-bottom: 1px solid #d6d6d6;
+	}
 
-    display: flex;
-    align-items: center;
-    width: 100%;
+	/* CHANGE TO A COMMON TYPE SINCE THEY'RE ALL THE SAME */
+	/* left icon, folder icon, folder name, extra icon */
+	.pinned-folder {
+		border: none;
+		background-color: white;
+		padding: 8px 4px;
+		padding-left: 15%;
+		margin: 4px 0px;
+		user-select: none;
 
-    .left-side {
-      display: flex;
-      align-items: center;
-      flex: 1;
+		display: flex;
+		align-items: center;
+		width: 100%;
 
-      .folder-name {
-        margin-left: 4px;
-        overflow: hidden;
-      }
-    }
+		.left-side {
+			display: flex;
+			align-items: center;
+			flex: 1;
 
-    &:hover {
-      background-color: #E5F3FF;
-      cursor: pointer;
-    }
-  }
+			.folder-name {
+				margin-left: 4px;
+				overflow: hidden;
+			}
+		}
 
-  .focused {
-    background-color: #CCE8FF;
+		&:hover {
+			background-color: #e5f3ff;
+			cursor: pointer;
+		}
+	}
 
-    &:hover {
-      background-color: 'CCE8FF';
-    }
-  }
+	.focused {
+		background-color: #cce8ff;
 
-  .blured {
-    background-color: #D9D9D9;
-  }
+		&:hover {
+			background-color: 'CCE8FF';
+		}
+	}
+
+	.blured {
+		background-color: #d9d9d9;
+	}
 `;

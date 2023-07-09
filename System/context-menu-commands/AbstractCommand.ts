@@ -1,13 +1,13 @@
-import { ComponentType } from "react";
+import { ComponentType } from 'react';
 
 export abstract class ContextMenuCommand {
-  text: string;
-  IconComponent?: ComponentType;
-   
-  abstract execute(): boolean;
+	text: string;
+	IconComponent?: ComponentType;
 
-  constructor(text: string, icon?: ComponentType) {
-    this.text = text;
-    this.IconComponent = icon;
-  }
-};
+	abstract execute(): boolean;
+
+	constructor(text: string, icon?: ComponentType) {
+		this.text = text;
+		this.IconComponent = icon;
+	}
+}

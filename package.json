@@ -1,34 +1,36 @@
 {
-  "name": "web-os",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "next": "^13.2.1",
-    "react": "^18.2.0",
-    "react-beautiful-dnd": "^13.1.0",
-    "react-dom": "^18.2.0",
-    "react-icons": "^4.3.1",
-    "styled-components": "^5.3.9",
-    "suneditor": "^2.44.8",
-    "suneditor-react": "^3.4.1",
-    "uuid": "^9.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^18.14.2",
-    "@types/react": "^18.0.28",
-    "@types/react-beautiful-dnd": "^13.1.2",
-    "@types/styled-components": "^5.1.26",
-    "@types/uuid": "^9.0.1",
-    "eslint": "^8.35.0",
-    "eslint-config-next": "^13.2.1",
-    "eslint-config-prettier": "^8.5.0",
-    "sass": "^1.49.9",
-    "typescript": "^5.0.0"
-  }
+	"name": "web-os",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"prettier": "npx prettier --write ."
+	},
+	"dependencies": {
+		"next": "^13.2.1",
+		"react": "^18.2.0",
+		"react-beautiful-dnd": "^13.1.0",
+		"react-dom": "^18.2.0",
+		"react-icons": "^4.3.1",
+		"styled-components": "^5.3.9",
+		"suneditor": "^2.44.8",
+		"suneditor-react": "^3.4.1",
+		"uuid": "^9.0.0"
+	},
+	"devDependencies": {
+		"@types/node": "^18.14.2",
+		"@types/react": "^18.0.28",
+		"@types/react-beautiful-dnd": "^13.1.2",
+		"@types/styled-components": "^5.1.26",
+		"@types/uuid": "^9.0.1",
+		"eslint": "^8.35.0",
+		"eslint-config-next": "^13.2.1",
+		"eslint-config-prettier": "^8.8.0",
+		"prettier": "^3.0.0",
+		"sass": "^1.49.9",
+		"typescript": "^5.0.0"
+	}
 }

@@ -1,128 +1,140 @@
 import { FC, useEffect, useState } from 'react';
 import { SelectionBox, SelectionBoxSize } from '../../../types/shared/SelectionBox';
 import styles from './selection-box.module.scss';
-import { getBoxNewPosition, getElementsInBox, SELECTION_BOX_OFF } from '../../../services/SelectionBoxService';
+import * as selectionBoxSerivce from '../../../services/SelectionBoxService';
 
 /**
  * @emitSelectedItemsUpdate sends update of elements within selection as its dragged.
  *  Only go through elements that are directly children of target element.
  */
 const SelectionBoxComponent: FC<{
-  targetElementId: string,
-  emitSelectedItemsUpdate: (elementsInBox: HTMLElement[], previousElementsInBox: HTMLElement[], ctrlKey: boolean) => void
+	targetElementId: string;
+	emitSelectedItemsUpdate: (
+		elementsInBox: HTMLElement[],
+		previousElementsInBox: HTMLElement[],
+		ctrlKey: boolean
+	) => void;
 }> = ({ targetElementId, emitSelectedItemsUpdate }) => {
+	const [selectionBox, setSelectionBox] = useState<SelectionBox>(selectionBoxSerivce.SELECTION_BOX_OFF);
+	const [previouslySelected, setPreviouslySelectedElements] = useState<HTMLElement[]>([]);
 
-  const [selectionBox, setSelectionBox] = useState<SelectionBox>(SELECTION_BOX_OFF);
-  const [previouslySelected, setPreviouslySelectedElements] = useState<HTMLElement[]>([]);
+	// Start selection box when dragging start
+	useEffect(() => {
+		const targetElement = document.getElementById(targetElementId);
+		if (!targetElement) return;
 
-  // Start selection box when dragging start
-  useEffect(() => {
-    const targetElement = document.getElementById(targetElementId);
-    if (!targetElement) return;
-    
-    targetElement.addEventListener('mousedown', onMouseDown);
-    document.addEventListener('mouseup', onMouseUp);
+		targetElement.addEventListener('mousedown', onMouseDown);
+		document.addEventListener('mouseup', onMouseUp);
 
-    return () => {
-      targetElement.removeEventListener('mousedown', onMouseDown);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
-  }, []);
+		return () => {
+			targetElement.removeEventListener('mousedown', onMouseDown);
+			document.removeEventListener('mouseup', onMouseUp);
+		};
+	}, []);
 
-  // Updates selection box div
-  useEffect(() => {
-    if (selectionBox.active) {
-      document.addEventListener('mousemove', onMouseMove);
+	// Updates selection box div
+	useEffect(() => {
+		const onMouseMove = (event: MouseEvent) => {
+			const { clientY, clientX } = event;
+			const { clientHeight, clientWidth } = document.getElementById(targetElementId) as HTMLElement;
+			const { top, left, width, height } = selectionBoxSerivce.getBoxNewPosition(
+				selectionBox,
+				clientX,
+				clientY,
+				clientHeight,
+				clientWidth
+			);
 
-      return () => {
-        document.removeEventListener('mousemove', onMouseMove);
-      };
-    }
-  }, [selectionBox]);
-  
-  const onMouseDown = (event: any) => {
-    try {
-      if (event.which === 2 || event.which === 3) {
-        return; // Only trigger on left click.
-      }
-  
-      const target = event?.target?.id;
-      if (target === targetElementId) {
-         setSelectionBox({
-          ...selectionBox,
-          active: true,
-          left: +event.clientX,
-          startX: +event.clientX,
-          startY: +event.clientY,
-          top: +event.clientY,
-          border: '1px solid #0078d7'
-        });
-      }
-    } catch (error) {
-      console.warn(`Error in selection box component mouse down:\n${error}`);
-    }   
-  };
+			const updatedSelectionBox: SelectionBox = {
+				...selectionBox,
+				height,
+				left,
+				top,
+				width
+			};
 
-  const onMouseUp = () => {
-    setSelectionBox(SELECTION_BOX_OFF);
-    setPreviouslySelectedElements([]);
-  };
+			emitUpdateElementsInSelectionBox(event?.ctrlKey);
+			setSelectionBox(updatedSelectionBox);
+		};
 
-  const onMouseMove = (event: MouseEvent) => {
-    const { clientY, clientX } = event;
-    const { clientHeight, clientWidth } = document.getElementById(targetElementId) as HTMLElement;
-    const { top, left, width, height } = getBoxNewPosition(selectionBox, clientX, clientY, clientHeight, clientWidth);
+		if (selectionBox.active) {
+			document.addEventListener('mousemove', onMouseMove);
 
-    const updatedSelectionBox: SelectionBox = {
-      ...selectionBox,
-      height,
-      left,
-      top,
-      width
-    };
+			return () => {
+				document.removeEventListener('mousemove', onMouseMove);
+			};
+		}
+	}, [selectionBox]);
 
-    emitUpdateElementsInSelectionBox(event?.ctrlKey);
-    setSelectionBox(updatedSelectionBox);
-  };
+	const onMouseDown = (event: any) => {
+		const MIDDLE_BUTTON_CODE = 2;
+		const RIGHT_BUTTON_CODE = 3;
+		try {
+			if (event.which === RIGHT_BUTTON_CODE || event.which === MIDDLE_BUTTON_CODE) {
+				return; // Only trigger on left click.
+			}
 
-  const emitUpdateElementsInSelectionBox = (ctrlKey: boolean) => {
-    const elementsInBox = getItemsInBox();
-    setPreviouslySelectedElements(currentPreviouslySelected => {
-      emitSelectedItemsUpdate(elementsInBox, currentPreviouslySelected, ctrlKey);
-      return [...elementsInBox];
-    });
-  };
+			const target = event?.target?.id;
+			if (target === targetElementId) {
+				setSelectionBox({
+					...selectionBox,
+					active: true,
+					border: '1px solid #0078d7',
+					left: +event.clientX,
+					startX: +event.clientX,
+					startY: +event.clientY,
+					top: +event.clientY
+				});
+			}
+		} catch (error) {
+			console.warn(`Error in selection box component mouse down:\n${error}`);
+		}
+	};
 
-  const getItemsInBox = (): HTMLElement[] => {
-    const element = document.getElementById(targetElementId);
+	const onMouseUp = () => {
+		setSelectionBox(selectionBoxSerivce.SELECTION_BOX_OFF);
+		setPreviouslySelectedElements([]);
+	};
 
-    if (!element) { return []; }
+	const emitUpdateElementsInSelectionBox = (ctrlKey: boolean) => {
+		const elementsInBox = getItemsInBox();
+		setPreviouslySelectedElements(currentPreviouslySelected => {
+			emitSelectedItemsUpdate(elementsInBox, currentPreviouslySelected, ctrlKey);
+			return [...elementsInBox];
+		});
+	};
 
-    const boxSize: SelectionBoxSize = {
-       top: selectionBox.top,
-       left: selectionBox.left,
-       bottom: selectionBox.top + selectionBox.height,
-       right: selectionBox.left + selectionBox.width
-    };
+	const getItemsInBox = (): HTMLElement[] => {
+		const element = document.getElementById(targetElementId);
 
-    const children = Array.from(element.children) as HTMLElement[];
-    return getElementsInBox(children, boxSize);
-  };
+		if (!element) {
+			return [];
+		}
 
-  return (
-      <div
-        id='selectionBoxRoot'
-        className={styles.selectionBox}
-        style={{
-          height: selectionBox.height,
-          left: selectionBox.left,
-          top: selectionBox.top,
-          width: selectionBox.width,
-          border: selectionBox.border
-        }}
-      >
-      </div>
-  );
+		const boxSize: SelectionBoxSize = {
+			bottom: selectionBox.top + selectionBox.height,
+			left: selectionBox.left,
+			right: selectionBox.left + selectionBox.width,
+			top: selectionBox.top
+		};
+
+		const children = Array.from(element.children) as HTMLElement[];
+		return selectionBoxSerivce.getElementsInBox(children, boxSize);
+	};
+
+	return (
+		<div
+			id='selectionBoxRoot'
+			className={styles.selectionBox}
+			style={{
+				border: selectionBox.border,
+				height: selectionBox.height,
+				left: selectionBox.left,
+				top: selectionBox.top,
+				width: selectionBox.width
+			}}
+		></div>
+	);
 };
 
 export default SelectionBoxComponent;
