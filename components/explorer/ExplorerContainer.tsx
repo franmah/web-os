@@ -1,12 +1,12 @@
-import { FC, useContext, useEffect, useState } from "react";
-import ExplorerAccessBar from "./AccessBar";
-import ExplorerFileQuickAccess from "./FileQuickAccess";
-import ExplorerFileViewContainer from "./file-view/FileViewContainer";
-import { FileSystemContext } from "../../contexts/FileSystemContext";
-import { StyledExplorerContainer } from "../../styled-components/system/explorer/StyldExplorerContainer";
-import { convertPathToFragments } from "../../services/file-system/FilePathService";
-import { ExplorerQuickAccessContext } from "../../contexts/ExplorerQuickAccessContext";
-import { CommonFolderPaths } from "../../constants/system/file-system/CommonFilePaths";
+import { FC, useContext, useEffect, useState } from 'react';
+import ExplorerAccessBar from './AccessBar';
+import ExplorerFileQuickAccess from './FileQuickAccess';
+import ExplorerFileViewContainer from './file-view/FileViewContainer';
+import { FileSystemContext } from '../../contexts/FileSystemContext';
+import { StyledExplorerContainer } from '../../styled-components/system/explorer/StyldExplorerContainer';
+import { convertPathToFragments } from '../../services/file-system/FilePathService';
+import { ExplorerQuickAccessContext } from '../../contexts/ExplorerQuickAccessContext';
+import { CommonFolderPaths } from '../../constants/system/file-system/CommonFilePaths';
 
 const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
   params: { startPath }
@@ -14,7 +14,7 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
 
   const fs = useContext(FileSystemContext);
   const quickAccessContext = useContext(ExplorerQuickAccessContext);
-  
+
   const [pathsFlow, setPathsFlow] = useState<string[]>([startPath]);
   const [path, setPath] = useState<string>(startPath);
   const [fileViewPaths, setFileViewPaths] = useState<string[]>([]);
@@ -62,7 +62,7 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
 
   const nextFolder = () => {
     if (useSearchView) return;
-    
+
     const currentPathIndexInFlow = pathsFlow.findIndex(p => p === path);
     if (currentPathIndexInFlow + 1 < pathsFlow.length)
       setPath(pathsFlow[currentPathIndexInFlow + 1]);
@@ -74,7 +74,7 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
       setUseSearchView(false);
       return;
     }
-    
+
     setUseSearchView(true);
     fs.searchFolderV2(path, searchString)
       .then(paths => setFileViewPaths(paths));
@@ -93,7 +93,7 @@ const ExplorerContainer: FC<{ params: { startPath: string }}> = ({
           paths = paths.map(p => p === path ? updatedPath : p);
           return [...paths];
         });
-        
+
         return Promise.resolve();
       });
   };

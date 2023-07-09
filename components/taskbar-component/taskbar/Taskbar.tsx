@@ -8,7 +8,7 @@ const Taskbar: FC<{}> = () => {
 
   return (
     <nav className={styles.taskbarMain}>
-      
+
       <WeatherComponent />
 
       <ShortcutBar />

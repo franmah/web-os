@@ -7,13 +7,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     const preventContextMenuDefault = (event: MouseEvent) => {
       event.preventDefault();
-    }
+    };
     document.addEventListener('contextmenu', preventContextMenuDefault, true);
 
-    return () => 
+    return () =>
       document.removeEventListener('contextmenu', preventContextMenuDefault, true);
-    ;
-    
+
   });
 
   return <Component {...pageProps}/>;

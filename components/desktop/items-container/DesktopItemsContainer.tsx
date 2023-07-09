@@ -35,10 +35,31 @@ const DesktopItemContainer: FC<{
 
   // Any click anywhere in the app should unselect all items
   useEffect(() => {
+    const onMouseDown = (event: MouseEvent) => {
+      if (event.ctrlKey) {
+        return;
+      }
+
+      // If mousedown is on desktop unselect all items.
+      if ((event.target as any).id === 'desktop') {
+        selectItems();
+        return;
+      }
+
+      // If mousedown event comes from an item then don't unselect
+      const isEventFromAnyItem = desktopItems.some(item =>
+        isEventOriginatedFromWithinTargetIdSubtree(event, item.id)
+      );
+
+      if (!isEventFromAnyItem) {
+        selectItems();
+      }
+    };
+
     document.addEventListener('mousedown', onMouseDown, true);
     return () => {
       document.removeEventListener('mousedown', onMouseDown, true);
-    }
+    };
   }, [desktopItems]);
 
   useEffect(() => {
@@ -50,17 +71,17 @@ const DesktopItemContainer: FC<{
   }, []);
 
   const onContextMenuClick = (event: MouseEvent) => {
-    const commands =  [
+    const commands = [
       new NewItemCommandContainer([
         new NewFolderCommand(() => addItem(event.clientY, event.clientX, 'folder')),
         new NewTxtFileCommand(() => addItem(event.clientY, event.clientX, 'Text'))
-      ]),        
+      ]),
       new SortCommandContainer([
-        new SortByNameCommand(() => setDesktopItems(currentItems => 
+        new SortByNameCommand(() => setDesktopItems(currentItems =>
           [...setItemPositions(currentItems, DesktopSortOptions.name)]))
       ])
     ];
-      
+
     onDesktopContextMenuClick(event, commands);
   };
 
@@ -78,13 +99,13 @@ const DesktopItemContainer: FC<{
       }
 
       const item: DesktopItem = {
-        top,
+        iconPath: ProcessDirectory[defaultProcessByExtension[extension]]?.iconPath || '',
+        id: v4(),
         left,
         name: newItemName + '.' + extension,
-        iconPath: ProcessDirectory[defaultProcessByExtension[extension]]?.iconPath || '',
-        selected: false,
-        id: v4(),
         renaming: true,
+        selected: false,
+        top
       };
 
       onFileChange(item);
@@ -96,20 +117,20 @@ const DesktopItemContainer: FC<{
     setDesktopItems(currentItems => {
       const newItemName = getNewItemName('Folder', currentItems);
       const item: DesktopItem = {
-        top,
+        iconPath: DEFAULT_FOLDER_ICON_PATH,
+        id: v4(),
         left,
         name: newItemName,
-        iconPath: DEFAULT_FOLDER_ICON_PATH,
+        renaming: true,
         selected: false,
-        id: v4(),
-        renaming: true
+        top
       };
 
-      onFolderChange(item);      
+      onFolderChange(item);
       return [...currentItems, item];
     });
-    
-  }
+
+  };
 
   const onItemRenamed = (itemId: string, itemNewName: string) => {
     setDesktopItems(currentItems => {
@@ -130,31 +151,12 @@ const DesktopItemContainer: FC<{
         const newItem = updatedItems.find(i => i.id === itemId) as DesktopItem;
 
         onFileChange(newItem);
-        
+
         return [...updatedItems];
       }
 
       return currentItems;
     });
-  };
-
-  const onMouseDown = (event: MouseEvent) => {
-    if (event.ctrlKey) { return; }
-
-    // If mousedown is on desktop unselect all items.
-    if ((event.target as any).id === 'desktop') {
-      selectItems();
-      return;
-    } 
-
-    // If mousedown event comes from an item then don't unselect
-    const isEventFromAnyItem = desktopItems.some(item => 
-      isEventOriginatedFromWithinTargetIdSubtree(event, item.id)
-    );
-
-    if (!isEventFromAnyItem) {
-      selectItems();
-    }
   };
 
   const moveItem = (
@@ -176,8 +178,8 @@ const DesktopItemContainer: FC<{
       return [...updated];
     });
   };
-  
-  const selectItemsWithCtrl = (...itemIds: string[])=> {
+
+  const selectItemsWithCtrl = (...itemIds: string[]) => {
     setDesktopItems(currentItems => {
       const updatedItems = currentItems.map(i => ({
         ...i,
@@ -185,7 +187,7 @@ const DesktopItemContainer: FC<{
       }));
       return [...updatedItems];
     });
-  }
+  };
 
   const selectItemWithShift = (itemId: string, ctrlKey: boolean) => {
     setDesktopItems(currentItems => {
@@ -197,12 +199,12 @@ const DesktopItemContainer: FC<{
 
       return [...selectItemsWithShiftKey(itemId, currentItems, ctrlKey)];
     });
-  }
+  };
 
-  const handleItemDoubleClick = (item: DesktopItem) => { 
+  const handleItemDoubleClick = (item: DesktopItem) => {
     onItemDoubleClick(item);
   };
-  
+
   const handleSelectionBoxUpdates = (elements: HTMLElement[], previousElementInBox: HTMLElement[], ctrlKey: boolean) => {
     const selectedItemIds = elements.map(element => element.id);
 
@@ -219,8 +221,8 @@ const DesktopItemContainer: FC<{
     setDesktopItems(currentItems => {
       return currentItems.map(i => ({
         ...i,
-        renaming: i.id === itemId 
-      }))
+        renaming: i.id === itemId
+      }));
     });
   };
 
@@ -243,7 +245,7 @@ const DesktopItemContainer: FC<{
         )
       }
 
-      <SelectionBoxComponent 
+      <SelectionBoxComponent
         emitSelectedItemsUpdate={handleSelectionBoxUpdates}
         targetElementId='desktop'
       />

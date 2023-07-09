@@ -1,15 +1,15 @@
-import { FC, useContext, useEffect, useRef, useState } from "react";
+import { FC, useContext, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { getCurrentItemNameInPath } from "../../../services/file-system/FilePathService";
-import { toDateModifedFormat } from "../../../services/DateService";
-import { StyledFileViewRow } from "../../../styled-components/system/explorer/StyledFileViewRow";
-import { ProcessContext } from "../../../contexts/ProcessContext";
-import { PinToQuickAccessCommand } from "../../../System/context-menu-commands/commands/PinToQuickAccessCommand";
-import { ExplorerQuickAccessContext } from "../../../contexts/ExplorerQuickAccessContext";
-import { UnpinFromQuickAccessCommand } from "../../../System/context-menu-commands/commands/UnpinFromQuickAccessCommand";
-import { getFolderIcon } from "../../../services/IconService";
-import CustomCheckbox from "../../system/CustomCheckbox";
-import { ShortcutCommandNames, getShorcutCommand } from "../../../System/context-menu-commands/ShortcutCommandFactory";
+import { getCurrentItemNameInPath } from '../../../services/file-system/FilePathService';
+import { toDateModifedFormat } from '../../../services/DateService';
+import { StyledFileViewRow } from '../../../styled-components/system/explorer/StyledFileViewRow';
+import { ProcessContext } from '../../../contexts/ProcessContext';
+import { PinToQuickAccessCommand } from '../../../System/context-menu-commands/commands/PinToQuickAccessCommand';
+import { ExplorerQuickAccessContext } from '../../../contexts/ExplorerQuickAccessContext';
+import { UnpinFromQuickAccessCommand } from '../../../System/context-menu-commands/commands/UnpinFromQuickAccessCommand';
+import { getFolderIcon } from '../../../services/IconService';
+import CustomCheckbox from '../../system/CustomCheckbox';
+import { ShortcutCommandNames, getShorcutCommand } from '../../../System/context-menu-commands/ShortcutCommandFactory';
 
 export const ExplorerFileViewRow: FC<{
   columnSizes: { [column: string]: string }
@@ -41,6 +41,14 @@ export const ExplorerFileViewRow: FC<{
 
   // Select whole name when editing item name
   useEffect(() => {
+    const ENTER_KEY_CODE = 13;
+
+    const onInputEnterKeyPressed = (e: any) => {
+      if (e.key === 'Enter' || e.keyCode === ENTER_KEY_CODE) {
+        handleRenameItem();
+      }
+    };
+
     if (editingName && inputRef.current)
       inputRef.current?.select();
 
@@ -50,12 +58,6 @@ export const ExplorerFileViewRow: FC<{
     return () => document.removeEventListener('keyup', onInputEnterKeyPressed);
   }, [inputRef.current]);
 
-  const onInputEnterKeyPressed = (e: any) => {
-    if (e.key === 'Enter' || e.keyCode === 13) {
-      handleRenameItem();
-    }
-  }
-
   const onNameClicked = () => {
     if (isSelected) {
       setEditingName(true);
@@ -63,7 +65,7 @@ export const ExplorerFileViewRow: FC<{
   };
 
   const handleRenameItem = () => {
-    
+
     if (!inputRef.current) {
       console.error('Error renaming item. inputRef.current is null: unable to get input value.');
       return;
@@ -72,7 +74,7 @@ export const ExplorerFileViewRow: FC<{
     const newName = inputRef.current?.value || fileName;
     onRenameItem(path, newName)
       .then(() => setEditingName(false));
-  }
+  };
 
   const handleRightClick = (event: any) => {
     event.preventDefault();
@@ -93,10 +95,10 @@ export const ExplorerFileViewRow: FC<{
       new PinToQuickAccessCommand(() => quickAccessContext.pinToQuickAccess(path));
 
     openProcess('contextMenu', {
-      top: event.clientY,
-      left: event.clientX,
       commands: [command],
-      shortcutCommands
+      left: event.clientX,
+      shortcutCommands,
+      top: event.clientY
     });
   };
 
@@ -127,7 +129,7 @@ export const ExplorerFileViewRow: FC<{
           className="icon"
         />
 
-        { 
+        {
           editingName ?
             <input
               className="name-input"

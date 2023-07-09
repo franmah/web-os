@@ -32,29 +32,26 @@ const DesktopItemComponent: FC<{
   handleItemRenamed,
   startRenaming
 }) => {
-
   const [inputNameValue, setInputNameValue] = useState<string>(item.name);
-  
+
   const INPUT_ID = item.id + '_input';
   const TEXT_ID = item.id + '_text';
 
   let distanceMouseToItemTop = 0;
   let distanceMouseToItemLeft = 0;
-  let textareaElement: HTMLElement | null;
 
   useEffect(() => {
-
     if (item.renaming) {
-      textareaElement = document.getElementById(INPUT_ID);
+      const textAreaElement = document.getElementById(INPUT_ID);
       document.addEventListener('mousedown', onMouseDown);
       document.addEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming());
-      resizeTextArea();
+      resizeTextArea(textAreaElement);
     }
 
     return () => {
       if (item.renaming) {
         document.removeEventListener('mousedown', onMouseDown);
-        document.removeEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming())
+        document.removeEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming());
       }
     };
   }), [];
@@ -93,7 +90,7 @@ const DesktopItemComponent: FC<{
   };
 
   const onMouseDown = (event: any) => {
-    if (event?.target?.id !== INPUT_ID && event?.target?.id !==  TEXT_ID) {
+    if (event?.target?.id !== INPUT_ID && event?.target?.id !== TEXT_ID) {
       onItemDoneRenaming();
     }
   };
@@ -130,7 +127,7 @@ const DesktopItemComponent: FC<{
     };
 
   const getClass = () => {
-    const selectionClass = item.selected ? styles.dekstopItemSelected : 
+    const selectionClass = item.selected ? styles.dekstopItemSelected :
       styles.dekstopItemNotSelected;
     return styles.desktopItem + ' ' + globalStyles.unselectableText +
       ' ' + selectionClass;
@@ -138,12 +135,12 @@ const DesktopItemComponent: FC<{
 
   const onTextareaChange = (event: any) => {
     setInputNameValue(() => event?.target?.value);
-    resizeTextArea();   
+    resizeTextArea();
   };
 
-  const resizeTextArea = () => {
-    if (textareaElement) {
-      textareaElement.style.height = textareaElement.scrollHeight + 'px';
+  const resizeTextArea = (textAreaElement?: HTMLElement | null) => {
+    if (textAreaElement) {
+      textAreaElement.style.height = textAreaElement.scrollHeight + 'px';
     }
   };
 
@@ -158,8 +155,8 @@ const DesktopItemComponent: FC<{
       onDoubleClick={onDoubleClick}
       style={{
         left: item.left,
-        top: item.top,
         minHeight: ITEM_HEIGHT,
+        top: item.top,
         width: ITEM_WIDTH
       }}
     >
@@ -174,7 +171,7 @@ const DesktopItemComponent: FC<{
             onFocus={event => event?.target?.select()}
             value={inputNameValue}
             onChange={onTextareaChange}
-          >            
+          >
           </textarea>
 
           :

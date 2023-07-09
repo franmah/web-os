@@ -1,9 +1,9 @@
-import { FC, useEffect, useState } from "react";
-import { ExplorerFileViewHeader } from "./FileViewHeader";
-import { ExplorerFileViewRow } from "./FileViewRow";
-import { isEventOriginatedFromWithinTargetIdSubtree } from "../../../services/EventService";
-import { StyledExplorerFileViewContainer } from "../../../styled-components/system/explorer/StyledFileViewContainer";
-import { ExplorerFileViewSortDirections, ExplorerFileViewSortFields, START_COLUMN_SIZES } from "../../../constants/system/explorer/Explorer";
+import { FC, useEffect, useState } from 'react';
+import { ExplorerFileViewHeader } from './FileViewHeader';
+import { ExplorerFileViewRow } from './FileViewRow';
+import { isEventOriginatedFromWithinTargetIdSubtree } from '../../../services/EventService';
+import { StyledExplorerFileViewContainer } from '../../../styled-components/system/explorer/StyledFileViewContainer';
+import { ExplorerFileViewSortDirections, ExplorerFileViewSortFields, START_COLUMN_SIZES } from '../../../constants/system/explorer/Explorer';
 
 export const FILE_VIEW_CONTAINER_ROWS_HTML_ID = 'file-view-container-rows';
 
@@ -14,41 +14,41 @@ const ExplorerFileViewContainer: FC<{
   onRenameItem: (path: string, newName: string) => Promise<void>,
   onDeleteItem: (path: string) => void
 }> = ({ paths, openFile, updateNumSelectedItems, onRenameItem, onDeleteItem }) => {
-  
+
   const [sort, setSorting] = useState<{column: ExplorerFileViewSortFields, direction: ExplorerFileViewSortDirections}>
     ({ column: ExplorerFileViewSortFields.NAME, direction: ExplorerFileViewSortDirections.ASC });
   const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
 
   useEffect(() => {
     setSelectedChildren([]);
-    updateNumSelectedItems(0);    
+    updateNumSelectedItems(0);
   }, [paths]);
 
   useEffect(() => {
-    document.addEventListener('click', (e) => handleUnselectOnClick(e));
+    const handleUnselectOnClick = (event: MouseEvent) => {
+      if (!isEventOriginatedFromWithinTargetIdSubtree(event, FILE_VIEW_CONTAINER_ROWS_HTML_ID)) {
+        handleSelectAllChildren(false);
+      }
+    };
+
+    document.addEventListener('click', handleUnselectOnClick);
     () => {
-      document.removeEventListener('click', (e) => handleUnselectOnClick(e))
-    }
+      document.removeEventListener('click', handleUnselectOnClick);
+    };
   }, [paths]);
-  
-  const handleUnselectOnClick = (event: MouseEvent) => {
-    if (!isEventOriginatedFromWithinTargetIdSubtree(event, FILE_VIEW_CONTAINER_ROWS_HTML_ID)) {
-      handleSelectAllChildren(false);
-    }
-  };
 
   const handleFileSelected = (child: string, selected: boolean, unselectAll = false) => {
     if (unselectAll) {
       handleSelectAllChildren(false);
     }
-    
+
     setSelectedChildren(currentlySelectedChildren => {
       if (selected) {
-        updateNumSelectedItems(currentlySelectedChildren.length + 1)
+        updateNumSelectedItems(currentlySelectedChildren.length + 1);
         return [...currentlySelectedChildren, child];
       } else {
         const selectedChildren = [...currentlySelectedChildren].filter(c => c !== child);
-        updateNumSelectedItems(selectedChildren.length)
+        updateNumSelectedItems(selectedChildren.length);
         return selectedChildren;
       }
     });
@@ -75,7 +75,7 @@ const ExplorerFileViewContainer: FC<{
     const leftOperand = sort.direction === ExplorerFileViewSortDirections.ASC ? 1 : -1;
     const rightOperand = sort.direction === ExplorerFileViewSortDirections.ASC ? -1 : 1;
 
-    switch(sort.column) {
+    switch (sort.column) {
       case ExplorerFileViewSortFields.NAME:
         return child1 > child2 ? leftOperand : rightOperand;
       default:
@@ -96,10 +96,10 @@ const ExplorerFileViewContainer: FC<{
             onSort={handleSortChildren}
           /> :
           null
-      }  
+      }
 
-      { 
-        paths.length === 0 ? 
+      {
+        paths.length === 0 ?
           <div className='empty-folder-text'>This folder is empty.</div> :
           null
       }
@@ -113,7 +113,7 @@ const ExplorerFileViewContainer: FC<{
               return (
                 <ExplorerFileViewRow
                   columnSizes={START_COLUMN_SIZES}
-                  key={child}
+                  key={'file_view_container_' + child}
                   isSelected={isSelected}
                   path={child}
                   onFileSelected={handleFileSelected}
@@ -125,9 +125,9 @@ const ExplorerFileViewContainer: FC<{
             })
         }
       </div>
-      
+
     </StyledExplorerFileViewContainer>
-  )
+  );
 };
 
 export default ExplorerFileViewContainer;

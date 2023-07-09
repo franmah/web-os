@@ -23,7 +23,7 @@ const ShortcutBar: FC<{}> = () => {
 
   const handleReorderShortcutItemsOnDragEnd = (result: DropResult) => {
     setItems(items => {
-      if (!result.destination) 
+      if (!result.destination)
         return items;
 
       const [reorderedItem] = items.splice(result.source.index, 1);
@@ -50,7 +50,7 @@ const ShortcutBar: FC<{}> = () => {
       }
     </Draggable>
   ));
-  
+
   return (
     <section className={styles.shortcutBar}>
       <TaskbarShortcut>
@@ -58,9 +58,9 @@ const ShortcutBar: FC<{}> = () => {
       </TaskbarShortcut>
 
       {
-      /* TODO: put all drag/drop part into a wrapper component 
+      /* TODO: put all drag/drop part into a wrapper component
           If possible, move handleReorderShortcutItemsOnDragEnd to also be in that wrapper component
-      
+
       */}
       {/* TODO: drag not working */}
       <DragDropContext onDragEnd={handleReorderShortcutItemsOnDragEnd}>
@@ -75,7 +75,7 @@ const ShortcutBar: FC<{}> = () => {
 
                 {getFakeIconList()}
                 {provided.placeholder}
-                
+
               </div>
             )
           }

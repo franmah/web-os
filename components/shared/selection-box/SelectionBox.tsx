@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { SelectionBox, SelectionBoxSize } from '../../../types/shared/SelectionBox';
 import styles from './selection-box.module.scss';
-import { getBoxNewPosition, getElementsInBox, SELECTION_BOX_OFF } from '../../../services/SelectionBoxService';
+import * as selectionBoxSerivce from '../../../services/SelectionBoxService';
 
 /**
  * @emitSelectedItemsUpdate sends update of elements within selection as its dragged.
@@ -12,14 +12,14 @@ const SelectionBoxComponent: FC<{
   emitSelectedItemsUpdate: (elementsInBox: HTMLElement[], previousElementsInBox: HTMLElement[], ctrlKey: boolean) => void
 }> = ({ targetElementId, emitSelectedItemsUpdate }) => {
 
-  const [selectionBox, setSelectionBox] = useState<SelectionBox>(SELECTION_BOX_OFF);
+  const [selectionBox, setSelectionBox] = useState<SelectionBox>(selectionBoxSerivce.SELECTION_BOX_OFF);
   const [previouslySelected, setPreviouslySelectedElements] = useState<HTMLElement[]>([]);
 
   // Start selection box when dragging start
   useEffect(() => {
     const targetElement = document.getElementById(targetElementId);
     if (!targetElement) return;
-    
+
     targetElement.addEventListener('mousedown', onMouseDown);
     document.addEventListener('mouseup', onMouseUp);
 
@@ -31,6 +31,23 @@ const SelectionBoxComponent: FC<{
 
   // Updates selection box div
   useEffect(() => {
+    const onMouseMove = (event: MouseEvent) => {
+      const { clientY, clientX } = event;
+      const { clientHeight, clientWidth } = document.getElementById(targetElementId) as HTMLElement;
+      const { top, left, width, height } = selectionBoxSerivce.getBoxNewPosition(selectionBox, clientX, clientY, clientHeight, clientWidth);
+
+      const updatedSelectionBox: SelectionBox = {
+        ...selectionBox,
+        height,
+        left,
+        top,
+        width
+      };
+
+      emitUpdateElementsInSelectionBox(event?.ctrlKey);
+      setSelectionBox(updatedSelectionBox);
+    };
+
     if (selectionBox.active) {
       document.addEventListener('mousemove', onMouseMove);
 
@@ -39,50 +56,35 @@ const SelectionBoxComponent: FC<{
       };
     }
   }, [selectionBox]);
-  
+
   const onMouseDown = (event: any) => {
+    const MIDDLE_BUTTON_CODE = 2;
+    const RIGHT_BUTTON_CODE = 3;
     try {
-      if (event.which === 2 || event.which === 3) {
+      if (event.which === RIGHT_BUTTON_CODE || event.which === MIDDLE_BUTTON_CODE) {
         return; // Only trigger on left click.
       }
-  
+
       const target = event?.target?.id;
       if (target === targetElementId) {
          setSelectionBox({
           ...selectionBox,
           active: true,
+          border: '1px solid #0078d7',
           left: +event.clientX,
           startX: +event.clientX,
           startY: +event.clientY,
-          top: +event.clientY,
-          border: '1px solid #0078d7'
+          top: +event.clientY
         });
       }
     } catch (error) {
       console.warn(`Error in selection box component mouse down:\n${error}`);
-    }   
+    }
   };
 
   const onMouseUp = () => {
-    setSelectionBox(SELECTION_BOX_OFF);
+    setSelectionBox(selectionBoxSerivce.SELECTION_BOX_OFF);
     setPreviouslySelectedElements([]);
-  };
-
-  const onMouseMove = (event: MouseEvent) => {
-    const { clientY, clientX } = event;
-    const { clientHeight, clientWidth } = document.getElementById(targetElementId) as HTMLElement;
-    const { top, left, width, height } = getBoxNewPosition(selectionBox, clientX, clientY, clientHeight, clientWidth);
-
-    const updatedSelectionBox: SelectionBox = {
-      ...selectionBox,
-      height,
-      left,
-      top,
-      width
-    };
-
-    emitUpdateElementsInSelectionBox(event?.ctrlKey);
-    setSelectionBox(updatedSelectionBox);
   };
 
   const emitUpdateElementsInSelectionBox = (ctrlKey: boolean) => {
@@ -96,17 +98,19 @@ const SelectionBoxComponent: FC<{
   const getItemsInBox = (): HTMLElement[] => {
     const element = document.getElementById(targetElementId);
 
-    if (!element) { return []; }
+    if (!element) {
+      return [];
+    }
 
     const boxSize: SelectionBoxSize = {
-       top: selectionBox.top,
-       left: selectionBox.left,
        bottom: selectionBox.top + selectionBox.height,
-       right: selectionBox.left + selectionBox.width
+       left: selectionBox.left,
+       right: selectionBox.left + selectionBox.width,
+       top: selectionBox.top
     };
 
     const children = Array.from(element.children) as HTMLElement[];
-    return getElementsInBox(children, boxSize);
+    return selectionBoxSerivce.getElementsInBox(children, boxSize);
   };
 
   return (
@@ -114,11 +118,11 @@ const SelectionBoxComponent: FC<{
         id='selectionBoxRoot'
         className={styles.selectionBox}
         style={{
+          border: selectionBox.border,
           height: selectionBox.height,
           left: selectionBox.left,
           top: selectionBox.top,
-          width: selectionBox.width,
-          border: selectionBox.border
+          width: selectionBox.width
         }}
       >
       </div>

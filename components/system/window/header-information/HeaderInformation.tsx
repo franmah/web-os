@@ -1,7 +1,7 @@
-import { FC } from "react";
+import { FC } from 'react';
 import Image from 'next/image';
-import { WindowHeaderOptions } from "../../../../types/system/window/WindowHeaderOptions";
-import { StyledHeaderInformationH1 } from "../../../../styled-components/system/window/StyledHeaderInformationH1";
+import { WindowHeaderOptions } from '../../../../types/system/window/WindowHeaderOptions';
+import { StyledHeaderInformationH1 } from '../../../../styled-components/system/window/StyledHeaderInformationH1';
 
 export const WindowHeaderInformation: FC<{
   options: WindowHeaderOptions,
@@ -16,9 +16,9 @@ export const WindowHeaderInformation: FC<{
         options?.icon &&
         <Image
           style={{ marginRight: '4px' }}
-          src={options?.icon} 
-          alt={'window name'} 
-          width={24} 
+          src={options?.icon}
+          alt={'window name'}
+          width={24}
           height={24}
         />
       }
@@ -33,4 +33,4 @@ export const WindowHeaderInformation: FC<{
       </StyledHeaderInformationH1>
     </>
   );
-}
+};

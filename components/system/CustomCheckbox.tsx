@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { StyledCheckbox } from "../../styled-components/system/StyledCustomCheckbox";
+import { FC } from 'react';
+import { StyledCheckbox } from '../../styled-components/system/StyledCustomCheckbox';
 
 const CustomCheckbox: FC<{
   className?: string,
@@ -11,10 +11,10 @@ const CustomCheckbox: FC<{
   const handleClick = (e: any) => {
     if (onClick)
       onClick(e);
-    
+
     if (onChange)
       onChange(!checked);
-  }
+  };
 
   return (
     <StyledCheckbox

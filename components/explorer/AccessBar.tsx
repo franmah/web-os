@@ -1,9 +1,9 @@
-import { FC, useEffect, useRef } from "react";
-import ExplorerPathBar from "./ExplorerPathBar";
+import { FC, useEffect, useRef } from 'react';
+import ExplorerPathBar from './ExplorerPathBar';
 import { FiArrowRight, FiArrowLeft, FiArrowUp } from 'react-icons/fi';
 import { GrSearch } from 'react-icons/gr';
-import { getCurrentItemNameInPath, getParentPath } from "../../services/file-system/FilePathService";
-import { StyledExplorerAccessBar } from "../../styled-components/system/explorer/StyledExplorerAccessBar";
+import { getCurrentItemNameInPath, getParentPath } from '../../services/file-system/FilePathService';
+import { StyledExplorerAccessBar } from '../../styled-components/system/explorer/StyledExplorerAccessBar';
 
 const ExplorerAccessBar: FC<{
   path: string,
@@ -67,7 +67,7 @@ const ExplorerAccessBar: FC<{
           updatePath={handleUpdatePath}
         />
       </section>
-      
+
       <section className="search-section">
         <input
           ref={searchInput}

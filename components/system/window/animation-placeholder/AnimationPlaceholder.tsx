@@ -1,8 +1,8 @@
-import { FC, memo } from "react";
-import { heightMaximizeAnimation, leftMaximizeAnimation, maximizeAnimation, rightMaximizeAnimation } from "../../../../animations/windowMaximizeAnimations";
-import { MaximizePlaceholderDirection } from "../../../../constants/system/window/MaximizePlaceholderDirectionEnum";
-import { WindowMaximizePlaceholderProps } from "../../../../types/system/window/WindowAnimationPlaceholder";
-import { StyledAnimationMaximizePlaceholder } from "../../../../styled-components/system/window/StyledAnimationMaximizePlaceholder";
+import { FC, memo } from 'react';
+import { heightMaximizeAnimation, leftMaximizeAnimation, maximizeAnimation, rightMaximizeAnimation } from '../../../../animations/windowMaximizeAnimations';
+import { MaximizePlaceholderDirection } from '../../../../constants/system/window/MaximizePlaceholderDirectionEnum';
+import { WindowMaximizePlaceholderProps } from '../../../../types/system/window/WindowAnimationPlaceholder';
+import { StyledAnimationMaximizePlaceholder } from '../../../../styled-components/system/window/StyledAnimationMaximizePlaceholder';
 
 const WindowAnimationMaximizePlaceholder: FC<WindowMaximizePlaceholderProps> =
 memo(({ placeholderDirection, top, left, width, height, zIndex }) => {
@@ -20,6 +20,7 @@ memo(({ placeholderDirection, top, left, width, height, zIndex }) => {
   return (
     <>
       <style
+        // eslint-disable-next-line react/no-children-prop
         children={`
           ${maximizeAnimation.animation(left, width, height)}
           ${leftMaximizeAnimation.animation(top, height)}
@@ -43,4 +44,5 @@ memo(({ placeholderDirection, top, left, width, height, zIndex }) => {
   );
 });
 
+WindowAnimationMaximizePlaceholder.displayName = 'WindowAnimationMaximizePlaceholder';
 export default WindowAnimationMaximizePlaceholder;

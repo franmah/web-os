@@ -1,13 +1,13 @@
-import { FC, useContext, useState } from "react";
-import { getCurrentItemNameInPath } from "../../services/file-system/FilePathService";
+import { FC, useContext, useState } from 'react';
+import { getCurrentItemNameInPath } from '../../services/file-system/FilePathService';
 import { BsFillPinAngleFill } from 'react-icons/bs';
 import Image from 'next/image';
-import { StyledExplorerQuickAccess } from "../../styled-components/system/explorer/StyledExplorerQuickAccess";
-import { ExplorerQuickAccessContext } from "../../contexts/ExplorerQuickAccessContext";
-import { ProcessContext } from "../../contexts/ProcessContext";
-import { UnpinFromQuickAccessCommand } from "../../System/context-menu-commands/commands/UnpinFromQuickAccessCommand";
-import { CommonFolderPaths } from "../../constants/system/file-system/CommonFilePaths";
-import { getFolderIcon } from "../../services/IconService";
+import { StyledExplorerQuickAccess } from '../../styled-components/system/explorer/StyledExplorerQuickAccess';
+import { ExplorerQuickAccessContext } from '../../contexts/ExplorerQuickAccessContext';
+import { ProcessContext } from '../../contexts/ProcessContext';
+import { UnpinFromQuickAccessCommand } from '../../System/context-menu-commands/commands/UnpinFromQuickAccessCommand';
+import { CommonFolderPaths } from '../../constants/system/file-system/CommonFilePaths';
+import { getFolderIcon } from '../../services/IconService';
 
 const ExplorerFileQuickAccess: FC<{
   currentPath: string,
@@ -32,10 +32,26 @@ const ExplorerFileQuickAccess: FC<{
     const command = new UnpinFromQuickAccessCommand(() => unpinFromQuickAccess(path));
 
     openProcess('contextMenu', {
-      top: event.clientY,
+      commands: [command],
       left: event.clientX,
-      commands: [command]
+      top: event.clientY
     });
+  };
+
+  const getHomeButtonClassName = (): string => {
+    if (currentPath === CommonFolderPaths.ROOT)
+      return selectedElementFocusedOut === CommonFolderPaths.ROOT ?
+        'blured' :
+        'focused';
+
+    return '';
+  };
+
+  const getPinnedFolderClassName = (folderPath: string): string => {
+    if (folderPath !== currentPath)
+      return '';
+
+    return folderPath === selectedElementFocusedOut ? 'blured' : 'focused';
   };
 
   return (
@@ -45,10 +61,7 @@ const ExplorerFileQuickAccess: FC<{
 
         {/* HOME BUTTON */}
         <button
-          className={`pinned-folder ${
-            currentPath === CommonFolderPaths.ROOT ? 
-              selectedElementFocusedOut === '/' ? 'blured' : 'focused' : ''
-            }`
+          className={`pinned-folder ${getHomeButtonClassName()}`
           }
           key={CommonFolderPaths.ROOT}
           onClick={() => updatePath(CommonFolderPaths.ROOT)}
@@ -59,14 +72,14 @@ const ExplorerFileQuickAccess: FC<{
             <Image src={getFolderIcon(CommonFolderPaths.ROOT)} alt='home icon' height={23} width={23} />
             <div className="folder-name"> Home </div>
           </div>
-        </button> 
+        </button>
 
         <div className="divider"></div>
 
         {
-          pinnedFolderPaths.map(path => 
+          pinnedFolderPaths.map(path =>
             <button
-              className={`pinned-folder ${path === currentPath ? selectedElementFocusedOut === path ? 'blured' : 'focused' : ''}`}
+              className={`pinned-folder ${getPinnedFolderClassName(path)}`}
               key={path}
               onClick={() => updatePath(path)}
               onContextMenu={e => handleContextMenuClick(e, path)}
@@ -80,7 +93,7 @@ const ExplorerFileQuickAccess: FC<{
 
               <BsFillPinAngleFill color="#95A0A6" />
 
-            </button> 
+            </button>
           )
         }
       </section>
@@ -88,7 +101,7 @@ const ExplorerFileQuickAccess: FC<{
       <div className="divider"></div>
 
     </StyledExplorerQuickAccess>
-  )
-}
+  );
+};
 
 export default ExplorerFileQuickAccess;

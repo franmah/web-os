@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState } from 'react';
 import {VscChromeMinimize, VscClose } from 'react-icons/vsc';
 import globalStyles from '../../../../styles/global.module.scss';
 import { v4 } from 'uuid';
@@ -6,11 +6,11 @@ import { WindowHeaderProps } from '../../../../types/system/window/WindowHeaderP
 import { CONTROL_ICON_SIZE, MAXIMIZE_DIV_PRE_ID } from '../../../../constants/system/window/WindowHeader';
 import { HeaderMaximizeButton } from '../header-maximize-button/HeaderMaximizeButton';
 import { WindowHeaderInformation } from '../header-information/HeaderInformation';
-import { StyledWindowHeader } from "../../../../styled-components/system/window/StyledWindowHeader";
+import { StyledWindowHeader } from '../../../../styled-components/system/window/StyledWindowHeader';
 
 const WindowHeader: FC<WindowHeaderProps> = ({
   focused,
-  options, 
+  options,
   maximized,
   startMovingWindow,
   maximizeWindow,
@@ -21,7 +21,7 @@ const WindowHeader: FC<WindowHeaderProps> = ({
   const [headerId] = useState<string>(v4());
 
   const maximizeButtonDivID = MAXIMIZE_DIV_PRE_ID + '_' + headerId;
-  
+
   const onMinimize = () => {
     console.log('minimize');
   };
@@ -38,15 +38,15 @@ const WindowHeader: FC<WindowHeaderProps> = ({
         maximizeWindow={maximizeWindow}
       />
 
-      <div 
+      <div
         className='minimizeIcon'
         onClick={onMinimize}
-      > 
+      >
         <VscChromeMinimize size={CONTROL_ICON_SIZE}/>
       </div>
 
       {/* MAXIMIZE ICON BUTTON */}
-      <div 
+      <div
         className='maximizeContainer'
         id={maximizeButtonDivID}
       >
@@ -54,15 +54,15 @@ const WindowHeader: FC<WindowHeaderProps> = ({
           maximized={maximized}
           maximizeButtonHtmlId={maximizeButtonDivID}
           moveToCustomMaximizeOptionClick={moveToCustomMaximizeOptionClick}
-          maximizeWindow={maximizeWindow}   
+          maximizeWindow={maximizeWindow}
         />
       </div>
 
       <div
         className='closeIcon'
         onClick={onClose}
-      > 
-        <VscClose size={CONTROL_ICON_SIZE}/> 
+      >
+        <VscClose size={CONTROL_ICON_SIZE}/>
       </div>
 
     </StyledWindowHeader>

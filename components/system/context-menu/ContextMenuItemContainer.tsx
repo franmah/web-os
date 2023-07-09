@@ -1,9 +1,9 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from 'react';
 import styles from './context-menu.module.scss';
-import ContextMenuCommandContainer from "../../../System/context-menu-commands/AbstractCommandContainer";
+import ContextMenuCommandContainer from '../../../System/context-menu-commands/AbstractCommandContainer';
 import { MdKeyboardArrowRight } from 'react-icons/md';
-import ContextMenuComponent, { CONTEXT_MENU_ITEM_HEIGHT as CONTEXT_MENU_ITEM_HEIGHT } from "./ContextMenu";
-import { correctSubMenuLeftPosition, correctSubMenuTopPosition } from "../../../services/ContextMenuService";
+import ContextMenuComponent, { CONTEXT_MENU_ITEM_HEIGHT as CONTEXT_MENU_ITEM_HEIGHT } from './ContextMenu';
+import { correctSubMenuLeftPosition, correctSubMenuTopPosition } from '../../../services/ContextMenuService';
 
 const ContextMenuItemCommandContainer : FC<{
   command: ContextMenuCommandContainer
@@ -12,9 +12,9 @@ const ContextMenuItemCommandContainer : FC<{
 }> = ({ command: { id, text, subMenuWidth, IconComponent, commands }, handleMouseEnter, showSubMenu }) => {
 
   const [subMenuPosition, setSubMenuPosition] = useState({
-    top: 0,
     left: 0,
-    width: 0,
+    top: 0,
+    width: 0
   });
 
   useEffect(() => {
@@ -33,45 +33,45 @@ const ContextMenuItemCommandContainer : FC<{
     const updatedTop = correctSubMenuTopPosition(top, commands.length || 0, absolutePosition.top);
 
     setSubMenuPosition({
+      left: updatedLeft,
       top: updatedTop,
-      left:updatedLeft,
-      width: subMenuWidth,
+      width: subMenuWidth
     });
-  }, [showSubMenu]);
+  }, [showSubMenu, commands.length, subMenuWidth, id, handleMouseEnter]);
 
   return (
     <section
       id={id}
       onMouseEnter={() => handleMouseEnter(id)}
       className={
-        `${styles.contextMenuItemContainer}` + ' ' +
+        `${styles.contextMenuItemContainer} ` +
         `${showSubMenu ? styles.contextMenuContainerHovered : ''}`
       }
       style={{ height: `${CONTEXT_MENU_ITEM_HEIGHT}px`}}
     >
 
       <div className={styles.commandInfo}>
-        { 
-          IconComponent && 
-          <div className={styles.commandIcon}> <IconComponent /> </div> 
+        {
+          IconComponent &&
+          <div className={styles.commandIcon}> <IconComponent /> </div>
         }
         { text }
       </div>
-      
+
       <MdKeyboardArrowRight className={styles.containerArrowIcon}/>
 
       {
         showSubMenu &&
         <ContextMenuComponent
           params={{
-            top: subMenuPosition.top,
+            commands: commands,
             left: subMenuPosition.left,
-            width: subMenuPosition.width,
-            commands: commands
+            top: subMenuPosition.top,
+            width: subMenuPosition.width
           }}
         />
       }
-    
+
     </section>
   );
 };

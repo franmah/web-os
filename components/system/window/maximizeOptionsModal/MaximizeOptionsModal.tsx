@@ -1,6 +1,6 @@
-import { FC, memo } from "react";
-import { CustomMaximizeDirection } from "../../../../constants/system/window/CustomMaximizeDirectionEnum";
-import { StyledMaximizeOptionsModalMain } from "../../../../styled-components/system/window/StyledMaximizeOptionsModalMain";
+import { FC, memo } from 'react';
+import { CustomMaximizeDirection } from '../../../../constants/system/window/CustomMaximizeDirectionEnum';
+import { StyledMaximizeOptionsModalMain } from '../../../../styled-components/system/window/StyledMaximizeOptionsModalMain';
 
 const MaximizeOptionsModal: FC<{
   onCustomMaximizeClick: (direction: CustomMaximizeDirection) => void
@@ -53,9 +53,10 @@ const MaximizeOptionsModal: FC<{
           onClick={() => onCustomMaximizeClick(CustomMaximizeDirection.BottomRight)}>
         </div>
       </div>
-    
+
     </StyledMaximizeOptionsModalMain>
   );
 }, () => true);
 
+MaximizeOptionsModal.displayName = 'MaximizeOptionsModal';
 export default MaximizeOptionsModal;

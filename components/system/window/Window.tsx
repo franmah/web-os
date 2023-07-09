@@ -1,14 +1,14 @@
-import { FC, Fragment, useEffect } from "react";
-import { WindowMaximize } from "../../../constants/system/window/WindowMaximizeEnum";
-import { WindowResizeDirection } from "../../../constants/system/window/WindowResizeDirectionEnum";
-import { WindowParams } from "../../../types/system/window/WindowProps";
-import { WindowState } from "../../../types/system/window/WindowState";
-import WindowAnimationMaximizePlaceholder from "./animation-placeholder/AnimationPlaceholder";
-import WindowBorder from "./border/WindowBorder";
-import WindowHeader from "./header/Header";
-import { CustomMaximizeDirection } from "../../../constants/system/window/CustomMaximizeDirectionEnum";
-import { zIndexConsts } from "../../../constants/Zindex";
-import { StyledWindow } from "../../../styled-components/system/window/StyledWindow";
+import { FC, Fragment, useEffect } from 'react';
+import { WindowMaximize } from '../../../constants/system/window/WindowMaximizeEnum';
+import { WindowResizeDirection } from '../../../constants/system/window/WindowResizeDirectionEnum';
+import { WindowParams } from '../../../types/system/window/WindowProps';
+import { WindowState } from '../../../types/system/window/WindowState';
+import WindowAnimationMaximizePlaceholder from './animation-placeholder/AnimationPlaceholder';
+import WindowBorder from './border/WindowBorder';
+import WindowHeader from './header/Header';
+import { CustomMaximizeDirection } from '../../../constants/system/window/CustomMaximizeDirectionEnum';
+import { zIndexConsts } from '../../../constants/Zindex';
+import { StyledWindow } from '../../../styled-components/system/window/StyledWindow';
 
 export const WINDOW_MIN_HEIGH = 200; // TODO: move into styles component
 export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
@@ -46,6 +46,14 @@ const WindowComponent: FC<{
   };
 
   useEffect(() => {
+    const onMouseMove = (event: MouseEvent) => {
+      hanldeMouseMove(windowParams.windowId, event);
+    };
+
+    const onMouseUp = (event: MouseEvent) => {
+      handleMouseUp(windowParams.windowId, event);
+    };
+
     // Listener on document otherwise window stops updating if mouse moves out of it (if user moves mouse too fast)
     document.addEventListener('mouseup', onMouseUp);
     document.addEventListener('mousemove', onMouseMove);
@@ -53,16 +61,8 @@ const WindowComponent: FC<{
     return () => {
       document.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('mousemove', onMouseMove);
-    }
-  }, []);
-
-  const onMouseMove = (event: MouseEvent) => {
-    hanldeMouseMove(windowParams.windowId, event);
-  };
-
-  const onMouseUp = (event: MouseEvent) => {
-    handleMouseUp(windowParams.windowId, event);
-  };
+    };
+  }, [handleMouseUp, hanldeMouseMove, windowParams.windowId]);
 
   return (
     <Fragment>
@@ -100,24 +100,23 @@ const WindowComponent: FC<{
             {/* Either move that div into StyledComponentContainer, or Create the styled component directly? */}
             <div
               style={{
-                width: '100%',
-                height: '25px'
+                height: '25px',
+                width: '100%'
               }}
             >
               <WindowHeader
                 focused={state.focused}
                 options={windowParams.headerOptions}
                 maximized={state.maximized}
-                startMovingWindow={(e) => handleStartMoving(windowParams.windowId, e)}
+                startMovingWindow={e => handleStartMoving(windowParams.windowId, e)}
                 maximizeWindow={() => handleMaximize(windowParams.windowId)}
                 onClose={handleCloseWindow}
-                moveToCustomMaximizeOptionClick={(direction) => handleMoveToCustomMaximizeOptionClick(windowParams.windowId, direction)}
+                moveToCustomMaximizeOptionClick={direction => handleMoveToCustomMaximizeOptionClick(windowParams.windowId, direction)}
               />
             </div>
-            
 
             { children }
-            
+
           </div>
 
         </WindowBorder>

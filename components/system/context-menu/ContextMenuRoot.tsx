@@ -3,7 +3,7 @@ import { correctRootContextMenuPosition } from '../../../services/ContextMenuSer
 import { ContextMenuParams } from '../../../types/system/context-menu/ContextMenu';
 import ContextMenuComponent, { DEFAULT_WIDTH_SUB_MENU } from './ContextMenu';
 
-export const CONTEXT_MENU_ROOT_ID = "contextMenuRoot";
+export const CONTEXT_MENU_ROOT_ID = 'contextMenuRoot';
 
 const ContextMenuRoot: FC<{ params: ContextMenuParams }> = ({ params }) => {
 
@@ -15,11 +15,11 @@ const ContextMenuRoot: FC<{ params: ContextMenuParams }> = ({ params }) => {
     >
       <ContextMenuComponent
         params={{
-          top,
-          left,
-          width: DEFAULT_WIDTH_SUB_MENU,
           commands,
-          shortcutCommands: params.shortcutCommands
+          left,
+          shortcutCommands: params.shortcutCommands,
+          top,
+          width: DEFAULT_WIDTH_SUB_MENU
         }}
       />
 

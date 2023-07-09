@@ -1,19 +1,19 @@
-import dynamic from "next/dynamic";
-import { FC, useContext, useRef, useState } from "react";
+import dynamic from 'next/dynamic';
+import { FC, useContext, useRef } from 'react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
-import SunEditorCore from "suneditor/src/lib/core";
-import { ExplorerFile } from "../../types/system/file/ExplorerElement";
-import { FileSystemContext } from "../../contexts/FileSystemContext";
-import { StyledSunEditorContainer } from "../../styled-components/StyledSuneditorContainer";
+import SunEditorCore from 'suneditor/src/lib/core';
+import { ExplorerFile } from '../../types/system/file/ExplorerElement';
+import { FileSystemContext } from '../../contexts/FileSystemContext';
+import { StyledSunEditorContainer } from '../../styled-components/StyledSuneditorContainer';
 
-const SunEditor = dynamic(() => import("suneditor-react"), {
-  ssr: false,
+const SunEditor = dynamic(() => import('suneditor-react'), {
+  ssr: false
 });
 
 /**
  * Note about error TypeError: this._resourcesStateChange is not a function,
  * fixed by using reactStrictMode = false in next.config.js
- * @returns 
+ * @returns
  */
 const SunTextEditor: FC<{
   params: { processId: string, file: ExplorerFile },
@@ -24,20 +24,20 @@ const SunTextEditor: FC<{
 }) => {
 
   const editor = useRef<SunEditorCore>();
-  const { appendFile, updateFile } = useContext(FileSystemContext);
+  const { updateFile } = useContext(FileSystemContext);
 
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
-  }
+  };
 
   const handleSave = (content: string) => {
     updateWarnUserBeforeClose(processId, false);
     updateFile(file, content);
-  }
+  };
 
   const handleChange = (content: string) => {
     updateWarnUserBeforeClose(processId, true);
-  }
+  };
 
   return (
     <StyledSunEditorContainer
@@ -61,14 +61,14 @@ const SunTextEditor: FC<{
             'bold', 'underline', 'italic', 'strike',
             'align', 'horizontalRule', 'list', 'lineHeight',
             'outdent', 'indent',
-            'save',]
+            'save']
           ],
           resizingBar: false,
           resizingBarContainer: document.getElementById(processId) as HTMLElement
         }}
        />
     </StyledSunEditorContainer>
-  )
+  );
 };
 
 export default SunTextEditor;

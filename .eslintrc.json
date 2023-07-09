@@ -11,8 +11,7 @@
       "max": 300, 
       "skipBlankLines": false, 
       "skipComments": true }],
-    "no-console": ["warn", { "allow": ["warn", "warn"] }],
-    "no-magic-numbers": ["warn", { "ignore": [1, 0] }],
+    "no-magic-numbers": ["warn", { "ignore": [-1, 0, 1, 2] }],
     "no-multi-assign": "warn",
     "no-nested-ternary": "warn",
     "no-plusplus": "warn",
@@ -41,7 +40,7 @@
     "no-multi-spaces": "warn",
     "no-trailing-spaces": "warn",
     "no-multiple-empty-lines": ["warn", { "max": 1 }],
-    "no-unused-vars": "warn",
+    "no-unused-vars": "off",
     "no-undef": "off"
   }
 }

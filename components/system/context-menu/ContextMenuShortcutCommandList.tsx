@@ -1,8 +1,8 @@
-import { FC, useContext } from "react";
-import { ShortcutCommand } from "../../../System/context-menu-commands/ShortcutCommand";
+import { FC, useContext } from 'react';
+import { ShortcutCommand } from '../../../System/context-menu-commands/ShortcutCommand';
 import Image from 'next/image';
-import { ProcessContext } from "../../../contexts/ProcessContext";
-import { StyledContextMenuShortcutCommands } from "../../../styled-components/system/context-menu/StyledContextMenuShortcutCommands";
+import { ProcessContext } from '../../../contexts/ProcessContext';
+import { StyledContextMenuShortcutCommands } from '../../../styled-components/system/context-menu/StyledContextMenuShortcutCommands';
 
 export const ContextMenuShortcutCommandList: FC<{
   shortcutCommands: ShortcutCommand[]
@@ -21,16 +21,17 @@ export const ContextMenuShortcutCommandList: FC<{
     <StyledContextMenuShortcutCommands>
       {
         shortcutCommands.map(command =>
-          <div className="command" onClick={() => handleCommandClick(command)}>
+          <div
+            className="command" onClick={() => handleCommandClick(command)}
+            key={'context-menu-shortcut-' + command.getName()}
+          >
             <Image
-              key={"context-menu-shortcut-" + command.getName()}
               src={command.getIconPath()}
               alt={command.getName()}
               width={22}
               height={22}
             />
           </div>
-          
         )
       }
     </StyledContextMenuShortcutCommands>

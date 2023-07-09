@@ -1,6 +1,6 @@
-import { FC } from "react";
-import { WindowResizeDirection } from "../../../../constants/system/window/WindowResizeDirectionEnum";
-import { StyledWindowBorder } from "../../../../styled-components/system/window/StyledWindowBorderContainer";
+import { FC } from 'react';
+import { WindowResizeDirection } from '../../../../constants/system/window/WindowResizeDirectionEnum';
+import { StyledWindowBorder } from '../../../../styled-components/system/window/StyledWindowBorderContainer';
 
 const WindowBorder: FC<{
   allowResize: boolean,
@@ -24,8 +24,8 @@ const WindowBorder: FC<{
           className={'topLeft'}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopLeft)}>
         </div>
-        
-        <div 
+
+        <div
           className={'top'}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.Top)}
           onDoubleClick={onTopResizeDoubleClick}>
@@ -41,7 +41,7 @@ const WindowBorder: FC<{
       <div
         className={allowResize ? 'centerLeft' : ''}
       >
-          <div className={'leftCenterTop'} 
+          <div className={'leftCenterTop'}
             onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.TopLeft)}
           ></div>
           <div className={'leftCenterMiddle'}
@@ -73,7 +73,7 @@ const WindowBorder: FC<{
       <div
         className={allowResize ? 'bottomBorder' : ''}
       >
-        
+
         <div
           className={'bottomLeft'}
           onMouseDown={event => onBordersMouseDown(event, WindowResizeDirection.BottomLeft)}>

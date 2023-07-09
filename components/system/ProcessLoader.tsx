@@ -1,10 +1,10 @@
-import { FC, Fragment, useContext, useEffect } from "react";
-import { ProcessContext } from "../../contexts/ProcessContext";
-import { isEventOriginatedFromWithinTargetIdSubtree } from "../../services/EventService";
-import { Processes, WindowedProcess, WindowedProcesses } from "../../types/system/processes/Processes";
-import { CONTEXT_MENU_ROOT_ID } from "./context-menu/ContextMenuRoot";
-import { WindowManager } from "./WindowManager";
-import { startingProccesses } from "../../System/process/StartingProccesses";
+import { FC, Fragment, useContext, useEffect } from 'react';
+import { ProcessContext } from '../../contexts/ProcessContext';
+import { isEventOriginatedFromWithinTargetIdSubtree } from '../../services/EventService';
+import { Processes, WindowedProcess, WindowedProcesses } from '../../types/system/processes/Processes';
+import { CONTEXT_MENU_ROOT_ID } from './context-menu/ContextMenuRoot';
+import { WindowManager } from './WindowManager';
+import { startingProccesses } from '../../System/process/StartingProccesses';
 
 export const ProcessLoader: FC<{}> = () => {
 
@@ -15,7 +15,7 @@ export const ProcessLoader: FC<{}> = () => {
 
   // Load starting processes
   useEffect(() => {
-    for (let processName in startingProccesses) {
+    for (const processName in startingProccesses) {
       processContext.openProcess(processName);
     }
   }, []);
