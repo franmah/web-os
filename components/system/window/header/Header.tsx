@@ -22,7 +22,7 @@ const WindowHeader: FC<WindowHeaderProps> = ({
 	const maximizeButtonDivID = MAXIMIZE_DIV_PRE_ID + '_' + headerId;
 
 	const onMinimize = () => {
-		console.log('minimize');
+		console.debug('minimize');
 	};
 
 	return (

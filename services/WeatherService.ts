@@ -22,10 +22,10 @@ export const getWeatherInformation = async (latitude: number, longitude: number)
 		// console.log('Icons provided by Dorava: https://www.dovora.com/resources/weather-icons/ under creative commons license: https://creativecommons.org/licenses/by-sa/4.0/');
 
 		return {
-			temperature,
-			temperatureUnit,
 			forecast: codeData.forecast,
-			icon: codeData.icon
+			icon: codeData.icon,
+			temperature,
+			temperatureUnit
 		};
 	} catch (error) {
 		console.error(`Error getting weather information: ${error}`);

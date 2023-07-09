@@ -73,7 +73,7 @@ const useProcessContextState = (): ProcessContextType => {
 		setWindowIdCount(windowIdCount + 1);
 	};
 
-	return { closeProcess, processes, openProcess };
+	return { closeProcess, openProcess, processes };
 };
 
 export default useProcessContextState;
