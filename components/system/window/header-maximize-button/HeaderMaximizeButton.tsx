@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { WindowMaximize } from '../../../../constants/system/window/WindowMaximizeEnum';
 import { VscChromeMaximize, VscChromeRestore } from 'react-icons/vsc';
 import { CONTROL_ICON_SIZE } from '../../../../constants/system/window/WindowHeader';
-import MaximizeOptionsModal from '../maximizeOptionsModal/MaximizeOptionsModal';
+import MaximizeOptionsModal from '../maximize-options-modal/MaximizeOptionsModal';
 import { setMaximizeMenuListeners } from '../../../../services/system/window/WindowHeaderService';
 import { StyledHeaderMaximizedIconContainer } from '../../../../styled-components/system/window/StyledHeaderMaximizedIconContainer';
 import { StyledHeaderMaximizeOptionsModalContainer } from '../../../../styled-components/system/window/StyledMaximizeOptionsModalContainer';
