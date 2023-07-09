@@ -2,24 +2,24 @@ import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/do
 import { resetServerContext } from 'react-beautiful-dnd';
 
 class MyDocument extends Document {
-  static async getInitialProps(ctx: DocumentContext) {
-    await ctx.renderPage();
-    const initialProps = await Document.getInitialProps(ctx);
-    resetServerContext();
-    return { ...initialProps };
-  }
+	static async getInitialProps(ctx: DocumentContext) {
+		await ctx.renderPage();
+		const initialProps = await Document.getInitialProps(ctx);
+		resetServerContext();
+		return { ...initialProps };
+	}
 
-  render() {
-    return (
-      <Html>
-        <Head />
-        <body>
-          <Main />
-          <NextScript />
-        </body>
-      </Html>
-    );
-  }
+	render() {
+		return (
+			<Html>
+				<Head />
+				<body>
+					<Main />
+					<NextScript />
+				</body>
+			</Html>
+		);
+	}
 }
 
 export default MyDocument;

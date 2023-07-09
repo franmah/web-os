@@ -1,0 +1,11 @@
+/pages/_documents.tsx
+/pages/index.tsx
+next-env.d.ts
+.gitignore
+.eslintrc.json
+.prettierrc,
+next.config.js
+.notes.txt
+.packgage.json
+.packgage-lock.json
+.tsconfig.json

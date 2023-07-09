@@ -12,144 +12,124 @@ import CustomCheckbox from '../../system/CustomCheckbox';
 import { ShortcutCommandNames, getShorcutCommand } from '../../../System/context-menu-commands/ShortcutCommandFactory';
 
 export const ExplorerFileViewRow: FC<{
-  columnSizes: { [column: string]: string }
-  isSelected: boolean,
-  path: string,
-  onFileSelected: (path: string, selected: boolean, unselectAll: boolean) => void,
-  openFile: (path: string) => void,
-  onRenameItem: (path: string, newName: string) => Promise<void>,
-  onDeleteItem: (path: string) => void
-}> = ({
-  columnSizes,
-  isSelected,
-  path,
-  onFileSelected,
-  openFile,
-  onRenameItem,
-  onDeleteItem
-}) => {
+	columnSizes: { [column: string]: string };
+	isSelected: boolean;
+	path: string;
+	onFileSelected: (path: string, selected: boolean, unselectAll: boolean) => void;
+	openFile: (path: string) => void;
+	onRenameItem: (path: string, newName: string) => Promise<void>;
+	onDeleteItem: (path: string) => void;
+}> = ({ columnSizes, isSelected, path, onFileSelected, openFile, onRenameItem, onDeleteItem }) => {
+	const fileName = getCurrentItemNameInPath(path);
 
-  const fileName = getCurrentItemNameInPath(path);
+	const { openProcess } = useContext(ProcessContext);
+	const quickAccessContext = useContext(ExplorerQuickAccessContext);
 
-  const { openProcess } = useContext(ProcessContext);
-  const quickAccessContext = useContext(ExplorerQuickAccessContext);
+	const [editingName, setEditingName] = useState<boolean>(false);
+	const [inputValue, setInputValue] = useState<string>(getCurrentItemNameInPath(path));
 
-  const [editingName, setEditingName] = useState<boolean>(false);
-  const [inputValue, setInputValue] = useState<string>(getCurrentItemNameInPath(path));
+	const inputRef = useRef<any>(null);
 
-  const inputRef = useRef<any>(null);
+	// Select whole name when editing item name
+	useEffect(() => {
+		const ENTER_KEY_CODE = 13;
 
-  // Select whole name when editing item name
-  useEffect(() => {
-    const ENTER_KEY_CODE = 13;
+		const onInputEnterKeyPressed = (e: any) => {
+			if (e.key === 'Enter' || e.keyCode === ENTER_KEY_CODE) {
+				handleRenameItem();
+			}
+		};
 
-    const onInputEnterKeyPressed = (e: any) => {
-      if (e.key === 'Enter' || e.keyCode === ENTER_KEY_CODE) {
-        handleRenameItem();
-      }
-    };
+		if (editingName && inputRef.current) inputRef.current?.select();
 
-    if (editingName && inputRef.current)
-      inputRef.current?.select();
+		if (inputRef) document.addEventListener('keyup', onInputEnterKeyPressed);
 
-    if (inputRef)
-      document.addEventListener('keyup', onInputEnterKeyPressed);
+		return () => document.removeEventListener('keyup', onInputEnterKeyPressed);
+	}, [inputRef.current]);
 
-    return () => document.removeEventListener('keyup', onInputEnterKeyPressed);
-  }, [inputRef.current]);
+	const onNameClicked = () => {
+		if (isSelected) {
+			setEditingName(true);
+		}
+	};
 
-  const onNameClicked = () => {
-    if (isSelected) {
-      setEditingName(true);
-    }
-  };
+	const handleRenameItem = () => {
+		if (!inputRef.current) {
+			console.error('Error renaming item. inputRef.current is null: unable to get input value.');
+			return;
+		}
 
-  const handleRenameItem = () => {
+		const newName = inputRef.current?.value || fileName;
+		onRenameItem(path, newName).then(() => setEditingName(false));
+	};
 
-    if (!inputRef.current) {
-      console.error('Error renaming item. inputRef.current is null: unable to get input value.');
-      return;
-    }
+	const handleRightClick = (event: any) => {
+		event.preventDefault();
+		event.stopPropagation();
 
-    const newName = inputRef.current?.value || fileName;
-    onRenameItem(path, newName)
-      .then(() => setEditingName(false));
-  };
+		onFileSelected(path, true, true);
 
-  const handleRightClick = (event: any) => {
-    event.preventDefault();
-    event.stopPropagation();
+		// TODO: check if folder or file
 
-    onFileSelected(path, true, true);
+		const shortcutCommands = [
+			getShorcutCommand(ShortcutCommandNames.RENAME, () => setEditingName(true), 'rename'),
+			getShorcutCommand(ShortcutCommandNames.DELETE, () => onDeleteItem(path), 'delete')
+		];
 
-    // TODO: check if folder or file
+		const isPinned = quickAccessContext.getQuickAccessPaths().find(p => p === path);
+		const command = isPinned
+			? new UnpinFromQuickAccessCommand(() => quickAccessContext.unpinFromQuickAccess(path))
+			: new PinToQuickAccessCommand(() => quickAccessContext.pinToQuickAccess(path));
 
-    const shortcutCommands = [
-      getShorcutCommand(ShortcutCommandNames.RENAME, () => setEditingName(true), 'rename'),
-      getShorcutCommand(ShortcutCommandNames.DELETE, () => onDeleteItem(path), 'delete')
-    ];
+		openProcess('contextMenu', {
+			commands: [command],
+			left: event.clientX,
+			shortcutCommands,
+			top: event.clientY
+		});
+	};
 
-    const isPinned = quickAccessContext.getQuickAccessPaths().find(p => p === path);
-    const command = isPinned ?
-      new UnpinFromQuickAccessCommand(() => quickAccessContext.unpinFromQuickAccess(path)) :
-      new PinToQuickAccessCommand(() => quickAccessContext.pinToQuickAccess(path));
+	return (
+		<StyledFileViewRow
+			columnSizes={columnSizes}
+			className={isSelected ? 'selected-row' : ''}
+			onClick={() => onFileSelected(path, true, true)}
+			onDoubleClick={() => openFile(path)}
+			onContextMenu={e => handleRightClick(e)}
+			selected={isSelected}
+		>
+			{/* Name */}
+			<div className='column name-col' onClick={onNameClicked}>
+				<CustomCheckbox
+					className='select-checkbox'
+					checked={isSelected}
+					onClick={e => e.stopPropagation()}
+					onChange={checked => onFileSelected(path, checked, false)}
+				/>
 
-    openProcess('contextMenu', {
-      commands: [command],
-      left: event.clientX,
-      shortcutCommands,
-      top: event.clientY
-    });
-  };
+				<Image src={getFolderIcon(path)} alt='folder icon' height={16} width={16} className='icon' />
 
-  return (
-    <StyledFileViewRow
-      columnSizes={columnSizes}
-      className={isSelected ? 'selected-row' : ''}
-      onClick={() => onFileSelected(path, true, true)}
-      onDoubleClick={() => openFile(path)}
-      onContextMenu={e => handleRightClick(e)}
-      selected={isSelected}
-    >
-      {/* Name */}
-      <div className="column name-col" onClick={onNameClicked}>
+				{editingName ? (
+					<input
+						className='name-input'
+						ref={inputRef}
+						value={inputValue}
+						onBlur={() => handleRenameItem()}
+						onChange={e => setInputValue(e.target.value)}
+					/>
+				) : (
+					fileName
+				)}
+			</div>
 
-        <CustomCheckbox
-          className="select-checkbox"
-          checked={isSelected}
-          onClick={e => e.stopPropagation()}
-          onChange={checked => onFileSelected(path, checked, false)}
-        />
+			{/* DATE MODIFIED  */}
+			<div className='column date-modified-col'>{toDateModifedFormat(new Date())}</div>
 
-        <Image
-          src={getFolderIcon(path)}
-          alt='folder icon'
-          height={16}
-          width={16}
-          className="icon"
-        />
+			{/* TYPE */}
+			<div className='column type-col'>File folder</div>
 
-        {
-          editingName ?
-            <input
-              className="name-input"
-              ref={inputRef}
-              value={inputValue}
-              onBlur={() => handleRenameItem()}
-              onChange={e => setInputValue(e.target.value)}
-            /> :
-            fileName
-        }
-      </div>
-
-      {/* DATE MODIFIED  */}
-      <div className="column date-modified-col">{ toDateModifedFormat(new Date()) }</div>
-
-      {/* TYPE */}
-      <div className="column type-col">File folder</div>
-
-      {/* SIZE */}
-      <div className="column size-col"></div>
-    </StyledFileViewRow>
-  );
+			{/* SIZE */}
+			<div className='column size-col'></div>
+		</StyledFileViewRow>
+	);
 };

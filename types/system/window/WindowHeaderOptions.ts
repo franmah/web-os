@@ -1,4 +1,4 @@
 export type WindowHeaderOptions = {
-  icon?: string;
-  text?: string;
+	icon?: string;
+	text?: string;
 };

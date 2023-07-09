@@ -1,61 +1,61 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const StyledFileViewRow = styled.div<{
-  columnSizes: { [column: string]: string },
-  selected: boolean
+	columnSizes: { [column: string]: string };
+	selected: boolean;
 }>`
-  display: flex;
-  background-color: ${({ selected }) => selected ? '#CCE8FF' : ''};
-  margin-bottom: 4px;
-  height: 28px;
-  overflow: hidden;
-  
-  .column {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 8px 8px;
+	display: flex;
+	background-color: ${({ selected }) => (selected ? '#CCE8FF' : '')};
+	margin-bottom: 4px;
+	height: 28px;
+	overflow: hidden;
 
-    &:first-child {
-      padding-right: 100px
-    }
+	.column {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		padding: 8px 8px;
 
-    .select-checkbox {
-      visibility: ${({ selected }) => selected ? 'visible' : 'hidden'};
-    }
-  }
+		&:first-child {
+			padding-right: 100px;
+		}
 
-  .name-col {
-    flex: ${({ columnSizes }) => `0 0 ${columnSizes['name']}`  };
-    display: flex;
-    align-items: center;
+		.select-checkbox {
+			visibility: ${({ selected }) => (selected ? 'visible' : 'hidden')};
+		}
+	}
 
-    .icon {
-      margin: 0px 6px;
-    }
+	.name-col {
+		flex: ${({ columnSizes }) => `0 0 ${columnSizes['name']}`};
+		display: flex;
+		align-items: center;
 
-    .name-input {
-      outline: none;
-    }    
-  }
+		.icon {
+			margin: 0px 6px;
+		}
 
-  .date-modified-col {
-    flex: ${({ columnSizes }) => `0 0 ${columnSizes['dateModified']}` };
-  }
+		.name-input {
+			outline: none;
+		}
+	}
 
-  .type-col {
-    flex: ${({ columnSizes }) => `0 0 ${columnSizes['type']}`  };
-  }
+	.date-modified-col {
+		flex: ${({ columnSizes }) => `0 0 ${columnSizes['dateModified']}`};
+	}
 
-  .size-col {
-    flex: ${({ columnSizes }) => `0 0 ${columnSizes['size']}`  };
-  }
+	.type-col {
+		flex: ${({ columnSizes }) => `0 0 ${columnSizes['type']}`};
+	}
 
-  &:hover {
-    background-color: ${({ selected }) => selected ? '#CCE8FF' : '#E5F3FF'};
+	.size-col {
+		flex: ${({ columnSizes }) => `0 0 ${columnSizes['size']}`};
+	}
 
-    .select-checkbox {
-      visibility: visible;
-    }
-  }
+	&:hover {
+		background-color: ${({ selected }) => (selected ? '#CCE8FF' : '#E5F3FF')};
+
+		.select-checkbox {
+			visibility: visible;
+		}
+	}
 `;

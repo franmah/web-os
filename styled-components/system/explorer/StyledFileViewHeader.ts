@@ -1,74 +1,74 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const StyledExplorerFileViewHeader = styled.div<{
-  columnSizes: { [column: string]: string }
+	columnSizes: { [column: string]: string };
 }>`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  overflow: hidden;
-  margin-bottom: 16px;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	overflow: hidden;
+	margin-bottom: 16px;
 
-  .name-col {
-    flex: ${({ columnSizes }) => `0 0 ${columnSizes['name']}`  };
+	.name-col {
+		flex: ${({ columnSizes }) => `0 0 ${columnSizes['name']}`};
 
-    .left-side {
-      display: flex;
-      align-items: center;
-      
-      .name-col-checkbox {
-        margin-right: 8px;
-      }
-    }
-  }
-  
-  .date-modified-col {
-    flex: ${({ columnSizes }) => `0 0 ${columnSizes['dateModified']}`  };
-  }
+		.left-side {
+			display: flex;
+			align-items: center;
 
-  .type-col {
-    flex: ${({ columnSizes }) => `0 0 ${columnSizes['type']}`  };
-  }
+			.name-col-checkbox {
+				margin-right: 8px;
+			}
+		}
+	}
 
-  .size-col {
-    flex: ${({ columnSizes }) => `0 0 ${columnSizes['size']}`  };
-  }
+	.date-modified-col {
+		flex: ${({ columnSizes }) => `0 0 ${columnSizes['dateModified']}`};
+	}
 
-  .column {
-    text-align: start;
-    color: #515858;
-    font-weight: normal;
-    padding: 0px 8px 4px 8px;
-    border-right: 1px solid #d9d9d9;
+	.type-col {
+		flex: ${({ columnSizes }) => `0 0 ${columnSizes['type']}`};
+	}
 
-    &:first-child {
-      padding-right: 100px
-    }
+	.size-col {
+		flex: ${({ columnSizes }) => `0 0 ${columnSizes['size']}`};
+	}
 
-    .sort-icon {
-      position: relative;
-      top: 0px;
-      left: 50%;
-      width: 1px;
-      height: 10px;
-      visibility: hidden;
-    }
+	.column {
+		text-align: start;
+		color: #515858;
+		font-weight: normal;
+		padding: 0px 8px 4px 8px;
+		border-right: 1px solid #d9d9d9;
 
-    .active-sort-icon {
-      visibility: visible;
-    }
+		&:first-child {
+			padding-right: 100px;
+		}
 
-    &:hover {
-      background-color: #e5f3ff;
-    }
-  }
+		.sort-icon {
+			position: relative;
+			top: 0px;
+			left: 50%;
+			width: 1px;
+			height: 10px;
+			visibility: hidden;
+		}
 
-  .header-section-divider {
-    border-left: 1px solid red;
-    padding: 0px 3px;
+		.active-sort-icon {
+			visibility: visible;
+		}
 
-    &:hover {
-      cursor: ew-resize;
-    }
-  }
+		&:hover {
+			background-color: #e5f3ff;
+		}
+	}
+
+	.header-section-divider {
+		border-left: 1px solid red;
+		padding: 0px 3px;
+
+		&:hover {
+			cursor: ew-resize;
+		}
+	}
 `;

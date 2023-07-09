@@ -1,35 +1,34 @@
-import { weatherCodeLookupDay, weatherCodeLookupNight } from "../constants/WeatherCodes";
-import { Weather } from "../types/taskbar/Weather";
+import { weatherCodeLookupDay, weatherCodeLookupNight } from '../constants/WeatherCodes';
+import { Weather } from '../types/taskbar/Weather';
 
-const BASE_URL = 'http://api.weatherapi.com/v1/forecast.json?key=f34bddabceab41c2a0900913230403&days=1&aqi=no&alerts=no&q=';
+const BASE_URL =
+	'http://api.weatherapi.com/v1/forecast.json?key=f34bddabceab41c2a0900913230403&days=1&aqi=no&alerts=no&q=';
 
 export const getWeatherInformation = async (latitude: number, longitude: number): Promise<Weather> => {
-  try {
+	try {
+		const url = BASE_URL + latitude + ',' + longitude;
+		const res = await fetch(url);
+		const data = await res.json();
 
-    const url = BASE_URL + latitude + ',' + longitude;
-    const res = await fetch(url);
-    const data = await res.json();
+		const temperature = data?.current?.temp_f;
+		const temperatureUnit = 'F';
+		const code: number = data?.current?.condition?.code;
+		const isDay = data?.current?.is_day;
 
-    const temperature = data?.current?.temp_f;
-    const temperatureUnit = 'F';
-    const code: number = data?.current?.condition?.code;
-    const isDay = data?.current?.is_day;
+		const codeData: any = isDay ? weatherCodeLookupDay[code] : weatherCodeLookupNight[code];
 
-    const codeData: any = isDay ? weatherCodeLookupDay[code] : weatherCodeLookupNight[code];
+		// Icon credit
+		// TODO: uncomment or find better way to credit icon author.
+		// console.log('Icons provided by Dorava: https://www.dovora.com/resources/weather-icons/ under creative commons license: https://creativecommons.org/licenses/by-sa/4.0/');
 
-    // Icon credit
-    // TODO: uncomment or find better way to credit icon author.
-    // console.log('Icons provided by Dorava: https://www.dovora.com/resources/weather-icons/ under creative commons license: https://creativecommons.org/licenses/by-sa/4.0/');
-
-    return {
-      temperature,
-      temperatureUnit,
-      forecast: codeData.forecast,
-      icon: codeData.icon
-    };
-
-  } catch (error) {
-    console.error(`Error getting weather information: ${error}`);
-    return Promise.reject();
-  }
+		return {
+			temperature,
+			temperatureUnit,
+			forecast: codeData.forecast,
+			icon: codeData.icon
+		};
+	} catch (error) {
+		console.error(`Error getting weather information: ${error}`);
+		return Promise.reject();
+	}
 };

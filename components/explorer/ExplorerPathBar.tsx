@@ -7,59 +7,50 @@ import { StyledExplorerPathBar } from '../../styled-components/system/explorer/S
 import { getFolderIcon } from '../../services/IconService';
 
 const ExplorerPathBar: FC<{
-  path: string,
-  updatePath: (path: string) => void,
-  refreshFileViewPaths: () => void
+	path: string;
+	updatePath: (path: string) => void;
+	refreshFileViewPaths: () => void;
 }> = ({ path = '', updatePath, refreshFileViewPaths }) => {
+	const [pathFragments, setPathFragments] = useState<string[]>([]);
 
-const [pathFragments, setPathFragments] = useState<string[]>([]);
+	useEffect(() => {
+		setPathFragments(convertPathToFragments(path));
+	}, [path]);
 
-  useEffect(() => {
-    setPathFragments(convertPathToFragments(path));
-  }, [path]);
+	// TODO: move parse to fs service (findPathToFolderInPath(path: string, folderName: string))
+	const onFolderClicked = (fragmentIndex: number) => {
+		const pathToFolder = '/' + pathFragments.slice(0, fragmentIndex + 1).join('/') + '/';
+		updatePath(pathToFolder);
+	};
 
-  // TODO: move parse to fs service (findPathToFolderInPath(path: string, folderName: string))
-  const onFolderClicked = (fragmentIndex: number) => {
-    const pathToFolder = '/' + pathFragments.slice(0, fragmentIndex + 1).join('/') + '/';
-    updatePath(pathToFolder);
-  };
+	return (
+		<StyledExplorerPathBar>
+			<section className='path-fragments-container '>
+				<div className='left-icon'>
+					<Image src={getFolderIcon(path)} alt='folder' height={18} width={18} />
+				</div>
 
-  return (
-    <StyledExplorerPathBar>
+				<button className='path-fragment-container'>
+					<MdKeyboardArrowRight />
+				</button>
 
-      <section className="path-fragments-container ">
-        <div className="left-icon">
-          <Image src={getFolderIcon(path)} alt='folder' height={18} width={18} />
-        </div>
+				{pathFragments.map((folder, index) => (
+					<button className='path-fragment-container' key={folder} onClick={() => onFolderClicked(index)}>
+						{folder}
+						{index !== pathFragments.length - 1 ? (
+							<div className='arrow-icon'>
+								<MdKeyboardArrowRight />
+							</div>
+						) : null}
+					</button>
+				))}
+			</section>
 
-        <button className="path-fragment-container">
-          <MdKeyboardArrowRight />
-        </button>
-
-        {
-          pathFragments
-            .map((folder, index) =>
-              <button className="path-fragment-container" key={folder} onClick={() => onFolderClicked(index)}>
-                { folder }
-                {
-                  index !== pathFragments.length - 1 ?
-                    <div className="arrow-icon">
-                      <MdKeyboardArrowRight />
-                    </div>
-                      :
-                    null
-                }
-              </button>
-            )
-        }
-      </section>
-
-      <button className="refresh-icon path-fragment-container" onClick={() => onFolderClicked(pathFragments.length)}>
-        <GrRefresh onClick={refreshFileViewPaths}/>
-      </button>
-
-    </StyledExplorerPathBar>
-  );
+			<button className='refresh-icon path-fragment-container' onClick={() => onFolderClicked(pathFragments.length)}>
+				<GrRefresh onClick={refreshFileViewPaths} />
+			</button>
+		</StyledExplorerPathBar>
+	);
 };
 
 export default ExplorerPathBar;

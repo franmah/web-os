@@ -9,57 +9,45 @@ import { StyledHeaderMaximizeOptionsModalContainer } from '../../../../styled-co
 import { CustomMaximizeDirection } from '../../../../constants/system/window/CustomMaximizeDirectionEnum';
 
 export const HeaderMaximizeButton: FC<{
-  maximized: WindowMaximize,
-  maximizeButtonHtmlId: string,
-  moveToCustomMaximizeOptionClick: (direction: CustomMaximizeDirection) => void,
-  maximizeWindow: (event: any) => void,
-}> = ({
-  maximized,
-  maximizeButtonHtmlId,
-  moveToCustomMaximizeOptionClick,
-  maximizeWindow
-}) => {
+	maximized: WindowMaximize;
+	maximizeButtonHtmlId: string;
+	moveToCustomMaximizeOptionClick: (direction: CustomMaximizeDirection) => void;
+	maximizeWindow: (event: any) => void;
+}> = ({ maximized, maximizeButtonHtmlId, moveToCustomMaximizeOptionClick, maximizeWindow }) => {
+	const [showMaximizeMenu, setShowMaximizeMenu] = useState<boolean>(false);
 
-  const [showMaximizeMenu, setShowMaximizeMenu] = useState<boolean>(false);
+	useEffect(() => {
+		const cleanupFunction = setMaximizeMenuListeners(maximizeButtonHtmlId, setShowMaximizeMenu);
+		return () => {
+			if (cleanupFunction) cleanupFunction();
+		};
+	}, [maximizeButtonHtmlId]);
 
-  useEffect(() => {
-    const cleanupFunction = setMaximizeMenuListeners(maximizeButtonHtmlId, setShowMaximizeMenu);
-    return () => {
-      if (cleanupFunction)
-        cleanupFunction();
-    };
-  }, [maximizeButtonHtmlId]);
+	const onCustomMaximizeClick = (direction: CustomMaximizeDirection) => {
+		setShowMaximizeMenu(false);
+		moveToCustomMaximizeOptionClick(direction);
+	};
 
-  const onCustomMaximizeClick = (direction: CustomMaximizeDirection) => {
-    setShowMaximizeMenu(false);
-    moveToCustomMaximizeOptionClick(direction);
-  };
+	const onMaximizeIconClick = (event: React.MouseEvent) => {
+		setShowMaximizeMenu(false);
+		maximizeWindow(event);
+	};
 
-  const onMaximizeIconClick = (event: React.MouseEvent) => {
-    setShowMaximizeMenu(false);
-    maximizeWindow(event);
-  };
+	return (
+		<>
+			<StyledHeaderMaximizedIconContainer onClick={onMaximizeIconClick}>
+				{maximized === WindowMaximize.Full ? (
+					<VscChromeRestore size={CONTROL_ICON_SIZE} />
+				) : (
+					<VscChromeMaximize size={CONTROL_ICON_SIZE} />
+				)}
+			</StyledHeaderMaximizedIconContainer>
 
-  return (
-    <>
-      <StyledHeaderMaximizedIconContainer
-        onClick={onMaximizeIconClick}
-      >
-        {
-          maximized === WindowMaximize.Full ?
-          <VscChromeRestore size={CONTROL_ICON_SIZE}/> :
-          <VscChromeMaximize size={CONTROL_ICON_SIZE}/>
-        }
-      </StyledHeaderMaximizedIconContainer>
-
-      {
-        showMaximizeMenu &&
-        <StyledHeaderMaximizeOptionsModalContainer>
-          <MaximizeOptionsModal
-            onCustomMaximizeClick={onCustomMaximizeClick}
-          />
-        </StyledHeaderMaximizeOptionsModalContainer>
-      }
-    </>
-  );
+			{showMaximizeMenu && (
+				<StyledHeaderMaximizeOptionsModalContainer>
+					<MaximizeOptionsModal onCustomMaximizeClick={onCustomMaximizeClick} />
+				</StyledHeaderMaximizeOptionsModalContainer>
+			)}
+		</>
+	);
 };

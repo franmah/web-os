@@ -1,15 +1,15 @@
 export const isEventOriginatedFromWithinTargetIdSubtree = (event: MouseEvent, targetId: string) => {
-  let element: any = event.target;
+	let element: any = event.target;
 
-  while (element) {
-    const id: string = element.id;
-    
-    if (id.includes(targetId)) {
-      return true;
-    }
+	while (element) {
+		const id: string = element.id;
 
-    element = element.parentElement;
-  }
+		if (id.includes(targetId)) {
+			return true;
+		}
 
-  return false;
+		element = element.parentElement;
+	}
+
+	return false;
 };

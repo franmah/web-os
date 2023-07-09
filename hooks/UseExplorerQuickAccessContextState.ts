@@ -1,34 +1,26 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-export const QUICK_ACCESS_STATE_DEFAULT = [
-  '/Desktop',
-  '/Documents',
-  '/Downloads',
-  '/Pictures',
-  '/Music',
-  '/Videos'
-];
+export const QUICK_ACCESS_STATE_DEFAULT = ['/Desktop', '/Documents', '/Downloads', '/Pictures', '/Music', '/Videos'];
 
 export const useExplorerQuickAccessContextState = () => {
+	const [quickAccessPaths, setQuickAccessPaths] = useState<string[]>(QUICK_ACCESS_STATE_DEFAULT);
 
-  const [quickAccessPaths, setQuickAccessPaths] = useState<string[]>(QUICK_ACCESS_STATE_DEFAULT);
+	const pinToQuickAccess = (path: string) => {
+		setQuickAccessPaths(paths => {
+			const alreadyPinned = paths.find(p => p === path);
+			return alreadyPinned ? paths : [...paths, path];
+		});
+	};
 
-  const pinToQuickAccess = (path: string) => {
-    setQuickAccessPaths(paths => {
-      const alreadyPinned = paths.find(p => p === path);
-      return alreadyPinned ? paths : [...paths, path];
-    });
-  };
-  
-  const unpinFromQuickAccess = (path: string) => {
-    setQuickAccessPaths(paths => [...paths.filter(p => p !== path)]);
-  };
+	const unpinFromQuickAccess = (path: string) => {
+		setQuickAccessPaths(paths => [...paths.filter(p => p !== path)]);
+	};
 
-  const getQuickAccessPaths = () => quickAccessPaths;
+	const getQuickAccessPaths = () => quickAccessPaths;
 
-  return {
-    pinToQuickAccess,
-    unpinFromQuickAccess,
-    getQuickAccessPaths
-  };
+	return {
+		pinToQuickAccess,
+		unpinFromQuickAccess,
+		getQuickAccessPaths
+	};
 };

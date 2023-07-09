@@ -11,74 +11,76 @@ import { ContextMenuCommandList } from '../../../types/system/context-menu/Conte
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 
 const Desktop: FC = () => {
-  const { getDesktop, appendFile, mkdir } = useContext(FileSystemContext);
-  const { openProcess } = useContext(ProcessContext);
+	const { getDesktop, appendFile, mkdir } = useContext(FileSystemContext);
+	const { openProcess } = useContext(ProcessContext);
 
-  const handleItemContextMenuClick = (event: MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-  };
+	const handleItemContextMenuClick = (event: MouseEvent) => {
+		event.preventDefault();
+		event.stopPropagation();
+	};
 
-  const handleDesktopContextMenuClick = (event: MouseEvent, commands: ContextMenuCommandList) => {
-    event.preventDefault();
-    event.stopPropagation();
+	const handleDesktopContextMenuClick = (event: MouseEvent, commands: ContextMenuCommandList) => {
+		event.preventDefault();
+		event.stopPropagation();
 
-    openProcess('contextMenu', {
-      commands,
-      left: event.clientX,
-      top: event.clientY
-    });
-  };
+		openProcess('contextMenu', {
+			commands,
+			left: event.clientX,
+			top: event.clientY
+		});
+	};
 
-  const openItemProcess = (item: DesktopItem) => {
-    // const explorerItem = getDesktop().children.find(c => c.id === item.id);
-    // openProcess('sunTextEditor', { file: explorerItem  });
-    openProcess('explorer', { startPath: '/Desktop' });
-  };
+	const openItemProcess = (item: DesktopItem) => {
+		// const explorerItem = getDesktop().children.find(c => c.id === item.id);
+		// openProcess('sunTextEditor', { file: explorerItem  });
+		openProcess('explorer', { startPath: '/Desktop' });
+	};
 
-  const handleFileChange = (newItem: DesktopItem) => {
-    const oldFile = getDesktop().children?.find(file => file.id === newItem.id);
-    if (!oldFile) {
-      appendFile(newItem.name, newItem.iconPath, getDesktop(), newItem.id);
-    }
-  };
+	const handleFileChange = (newItem: DesktopItem) => {
+		const oldFile = getDesktop().children?.find(file => file.id === newItem.id);
+		if (!oldFile) {
+			appendFile(newItem.name, newItem.iconPath, getDesktop(), newItem.id);
+		}
+	};
 
-  const handleFolderChange = (item: DesktopItem) => {
-    const oldFolder = getDesktop().children?.find(file => file.id === item.id);
+	const handleFolderChange = (item: DesktopItem) => {
+		const oldFolder = getDesktop().children?.find(file => file.id === item.id);
 
-    if (!oldFolder) {
-      mkdir(item.name, getDesktop());
-    }
-  };
+		if (!oldFolder) {
+			mkdir(item.name, getDesktop());
+		}
+	};
 
-  return (
-    <Fragment>
-      {
-        // <Image> doesn't support srcSet.
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          alt="background image"
-          className={styles.backgroundImg}
-          src={background.src}
-          srcSet={`${background1080.src} 1920w, ${background1440.src} 3440w, ${background2400.src} 3840w`}
-        />
-      }
+	return (
+		<Fragment>
+			{
+				// <Image> doesn't support srcSet.
+				// eslint-disable-next-line @next/next/no-img-element
+				<img
+					alt='background image'
+					className={styles.backgroundImg}
+					src={background.src}
+					srcSet={`${background1080.src} 1920w, ${background1440.src} 3440w, ${background2400.src} 3840w`}
+				/>
+			}
 
-      <div className={styles.background} id='desktop'
-        // onDrop={handleUserComputerFileDrop}
-        // onDragOver={(e) => e.preventDefault() } // Needed to prevent browser from opening user's file on drop
-      >
-        <DesktopItemContainer
-          files={getDesktop().children}
-          onDesktopContextMenuClick={handleDesktopContextMenuClick}
-          onItemContextMenuClick={handleItemContextMenuClick}
-          onFileChange={handleFileChange}
-          onFolderChange={handleFolderChange}
-          onItemDoubleClick={openItemProcess}
-        />
-      </div>
-    </Fragment>
-  );
+			<div
+				className={styles.background}
+				id='desktop'
+				// onDrop={handleUserComputerFileDrop}
+				// onDragOver={(e) => e.preventDefault() } // Needed to prevent browser from opening user's file on drop
+			>
+				<DesktopItemContainer
+					files={getDesktop().children}
+					onDesktopContextMenuClick={handleDesktopContextMenuClick}
+					onItemContextMenuClick={handleItemContextMenuClick}
+					onFileChange={handleFileChange}
+					onFolderChange={handleFolderChange}
+					onItemDoubleClick={openItemProcess}
+				/>
+			</div>
+		</Fragment>
+	);
 };
 
 export default Desktop;

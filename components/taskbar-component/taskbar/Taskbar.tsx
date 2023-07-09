@@ -5,18 +5,15 @@ import TaskbarClock from '../clock/TaskbarClock';
 import WeatherComponent from '../weather/Weather';
 
 const Taskbar: FC<{}> = () => {
+	return (
+		<nav className={styles.taskbarMain}>
+			<WeatherComponent />
 
-  return (
-    <nav className={styles.taskbarMain}>
+			<ShortcutBar />
 
-      <WeatherComponent />
-
-      <ShortcutBar />
-
-      <TaskbarClock />
-
-    </nav>
-  );
+			<TaskbarClock />
+		</nav>
+	);
 };
 
 export default Taskbar;

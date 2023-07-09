@@ -1,8 +1,16 @@
 import { ExplorerFile } from '../../../types/system/file/ExplorerElement';
 import { FC, Fragment, useEffect, useState } from 'react';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import { DEFAULT_FOLDER_ICON_PATH, getNewItemName, toItemWrappers } from '../../../services/system/desktop/DesktopItemContainerService';
-import { getSelectedItemsFromSelectionBoxgWithCtrl, moveItemsOnDesktop, selectItemsWithShiftKey } from '../../../services/system/desktop/DesktopItemContainerUiHelperService';
+import {
+	DEFAULT_FOLDER_ICON_PATH,
+	getNewItemName,
+	toItemWrappers
+} from '../../../services/system/desktop/DesktopItemContainerService';
+import {
+	getSelectedItemsFromSelectionBoxgWithCtrl,
+	moveItemsOnDesktop,
+	selectItemsWithShiftKey
+} from '../../../services/system/desktop/DesktopItemContainerUiHelperService';
 import { NewFolderCommand } from '../../../System/context-menu-commands/commands/NewFolderCommand';
 import { SortCommandContainer } from '../../../System/context-menu-commands/command-containers/SortCommand';
 import { NewItemCommandContainer } from '../../../System/context-menu-commands/command-containers/NewItemCommand';
@@ -18,239 +26,251 @@ import { defaultProcessByExtension } from '../../../System/process/ProcessDirect
 import { ProcessDirectory } from '../../../System/process/ProcessDirectory';
 
 const DesktopItemContainer: FC<{
-  files: ExplorerFile[],
-  onDesktopContextMenuClick: (event: MouseEvent, commands: ContextMenuCommandList) => void,
-  onItemContextMenuClick: (event: MouseEvent) => void,
-  onFileChange: (newItem: DesktopItem) => void,
-  onFolderChange: (item: DesktopItem) => void,
-  onItemDoubleClick: (item: DesktopItem) => void
-}> = ({ files, onDesktopContextMenuClick, onItemContextMenuClick, onFileChange, onFolderChange, onItemDoubleClick }) => {
+	files: ExplorerFile[];
+	onDesktopContextMenuClick: (event: MouseEvent, commands: ContextMenuCommandList) => void;
+	onItemContextMenuClick: (event: MouseEvent) => void;
+	onFileChange: (newItem: DesktopItem) => void;
+	onFolderChange: (item: DesktopItem) => void;
+	onItemDoubleClick: (item: DesktopItem) => void;
+}> = ({
+	files,
+	onDesktopContextMenuClick,
+	onItemContextMenuClick,
+	onFileChange,
+	onFolderChange,
+	onItemDoubleClick
+}) => {
+	const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
 
-  const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
+	useEffect(() => {
+		const items = toItemWrappers(files);
+		setDesktopItems(() => [...setItemPositions(items, DesktopSortOptions.default)]);
+	}, [files]);
 
-  useEffect(() => {
-    const items = toItemWrappers(files);
-    setDesktopItems(() => [...setItemPositions(items, DesktopSortOptions.default)]);
-  }, [files]);
+	// Any click anywhere in the app should unselect all items
+	useEffect(() => {
+		const onMouseDown = (event: MouseEvent) => {
+			if (event.ctrlKey) {
+				return;
+			}
 
-  // Any click anywhere in the app should unselect all items
-  useEffect(() => {
-    const onMouseDown = (event: MouseEvent) => {
-      if (event.ctrlKey) {
-        return;
-      }
+			// If mousedown is on desktop unselect all items.
+			if ((event.target as any).id === 'desktop') {
+				selectItems();
+				return;
+			}
 
-      // If mousedown is on desktop unselect all items.
-      if ((event.target as any).id === 'desktop') {
-        selectItems();
-        return;
-      }
+			// If mousedown event comes from an item then don't unselect
+			const isEventFromAnyItem = desktopItems.some(item => isEventOriginatedFromWithinTargetIdSubtree(event, item.id));
 
-      // If mousedown event comes from an item then don't unselect
-      const isEventFromAnyItem = desktopItems.some(item =>
-        isEventOriginatedFromWithinTargetIdSubtree(event, item.id)
-      );
+			if (!isEventFromAnyItem) {
+				selectItems();
+			}
+		};
 
-      if (!isEventFromAnyItem) {
-        selectItems();
-      }
-    };
+		document.addEventListener('mousedown', onMouseDown, true);
+		return () => {
+			document.removeEventListener('mousedown', onMouseDown, true);
+		};
+	}, [desktopItems]);
 
-    document.addEventListener('mousedown', onMouseDown, true);
-    return () => {
-      document.removeEventListener('mousedown', onMouseDown, true);
-    };
-  }, [desktopItems]);
+	useEffect(() => {
+		const desktop = document.getElementById('desktop');
+		desktop?.addEventListener('contextmenu', onContextMenuClick);
+		return () => {
+			desktop?.removeEventListener('contextmenu', onContextMenuClick);
+		};
+	}, []);
 
-  useEffect(() => {
-    const desktop = document.getElementById('desktop');
-    desktop?.addEventListener('contextmenu', onContextMenuClick);
-    return () => {
-      desktop?.removeEventListener('contextmenu', onContextMenuClick);
-    };
-  }, []);
+	const onContextMenuClick = (event: MouseEvent) => {
+		const commands = [
+			new NewItemCommandContainer([
+				new NewFolderCommand(() => addItem(event.clientY, event.clientX, 'folder')),
+				new NewTxtFileCommand(() => addItem(event.clientY, event.clientX, 'Text'))
+			]),
+			new SortCommandContainer([
+				new SortByNameCommand(() =>
+					setDesktopItems(currentItems => [...setItemPositions(currentItems, DesktopSortOptions.name)])
+				)
+			])
+		];
 
-  const onContextMenuClick = (event: MouseEvent) => {
-    const commands = [
-      new NewItemCommandContainer([
-        new NewFolderCommand(() => addItem(event.clientY, event.clientX, 'folder')),
-        new NewTxtFileCommand(() => addItem(event.clientY, event.clientX, 'Text'))
-      ]),
-      new SortCommandContainer([
-        new SortByNameCommand(() => setDesktopItems(currentItems =>
-          [...setItemPositions(currentItems, DesktopSortOptions.name)]))
-      ])
-    ];
+		onDesktopContextMenuClick(event, commands);
+	};
 
-    onDesktopContextMenuClick(event, commands);
-  };
+	const addItem = (top: number, left: number, type: string) => {
+		if (type === 'folder') {
+			return addFolder(top, left);
+		}
 
-  const addItem = (top: number, left: number, type: string) => {
-    if (type === 'folder') {
-      return addFolder(top, left);
-    }
+		setDesktopItems(currentItems => {
+			const newItemName = getNewItemName(type, currentItems);
+			let extension = '';
 
-    setDesktopItems(currentItems => {
-      const newItemName = getNewItemName(type, currentItems);
-      let extension = '';
+			if (type === 'Text') {
+				extension = 'txt';
+			}
 
-      if (type === 'Text') {
-        extension = 'txt';
-      }
+			const item: DesktopItem = {
+				iconPath: ProcessDirectory[defaultProcessByExtension[extension]]?.iconPath || '',
+				id: v4(),
+				left,
+				name: newItemName + '.' + extension,
+				renaming: true,
+				selected: false,
+				top
+			};
 
-      const item: DesktopItem = {
-        iconPath: ProcessDirectory[defaultProcessByExtension[extension]]?.iconPath || '',
-        id: v4(),
-        left,
-        name: newItemName + '.' + extension,
-        renaming: true,
-        selected: false,
-        top
-      };
+			onFileChange(item);
+			return [...currentItems, item];
+		});
+	};
 
-      onFileChange(item);
-      return [...currentItems, item];
-    });
-  };
+	const addFolder = (top: number, left: number) => {
+		setDesktopItems(currentItems => {
+			const newItemName = getNewItemName('Folder', currentItems);
+			const item: DesktopItem = {
+				iconPath: DEFAULT_FOLDER_ICON_PATH,
+				id: v4(),
+				left,
+				name: newItemName,
+				renaming: true,
+				selected: false,
+				top
+			};
 
-  const addFolder = (top: number, left: number) => {
-    setDesktopItems(currentItems => {
-      const newItemName = getNewItemName('Folder', currentItems);
-      const item: DesktopItem = {
-        iconPath: DEFAULT_FOLDER_ICON_PATH,
-        id: v4(),
-        left,
-        name: newItemName,
-        renaming: true,
-        selected: false,
-        top
-      };
+			onFolderChange(item);
+			return [...currentItems, item];
+		});
+	};
 
-      onFolderChange(item);
-      return [...currentItems, item];
-    });
+	const onItemRenamed = (itemId: string, itemNewName: string) => {
+		setDesktopItems(currentItems => {
+			if (!itemNewName || itemNewName.trim() === '') {
+				return currentItems;
+			}
 
-  };
+			const isNameAlreadyUsed = currentItems.find(i => i.name === itemNewName && i.id !== itemId);
 
-  const onItemRenamed = (itemId: string, itemNewName: string) => {
-    setDesktopItems(currentItems => {
-      if (!itemNewName || itemNewName.trim() === '') {
-        return currentItems;
-      }
+			if (!isNameAlreadyUsed) {
+				const updatedItems: DesktopItem[] = currentItems.map(i => ({
+					...i,
+					name: i.id === itemId ? itemNewName : i.name,
+					renaming: false,
+					selected: i.id === itemId
+				}));
 
-      const isNameAlreadyUsed = currentItems.find(i => i.name === itemNewName && i.id !== itemId);
+				const newItem = updatedItems.find(i => i.id === itemId) as DesktopItem;
 
-      if (!isNameAlreadyUsed) {
-        const updatedItems: DesktopItem[] = currentItems.map(i => ({
-          ...i,
-          name: i.id === itemId ? itemNewName : i.name,
-          renaming: false,
-          selected: i.id === itemId
-        }));
+				onFileChange(newItem);
 
-        const newItem = updatedItems.find(i => i.id === itemId) as DesktopItem;
+				return [...updatedItems];
+			}
 
-        onFileChange(newItem);
+			return currentItems;
+		});
+	};
 
-        return [...updatedItems];
-      }
+	const moveItem = (
+		itemId: string,
+		startItemTop: number,
+		startItemLeft: number,
+		newItemTop: number,
+		newItemLeft: number
+	) => {
+		setDesktopItems(currentItems => {
+			const updatedItems = moveItemsOnDesktop(
+				currentItems,
+				itemId,
+				startItemTop,
+				startItemLeft,
+				newItemTop,
+				newItemLeft
+			);
+			return [...updatedItems];
+		});
+	};
 
-      return currentItems;
-    });
-  };
+	const selectItems = (...itemIds: string[]) => {
+		setDesktopItems(currentItems => {
+			const updated = currentItems.map(i => ({ ...i, selected: itemIds.includes(i.id) }));
+			return [...updated];
+		});
+	};
 
-  const moveItem = (
-    itemId: string,
-    startItemTop: number,
-    startItemLeft: number,
-    newItemTop: number,
-    newItemLeft: number
-  ) => {
-    setDesktopItems(currentItems => {
-      const updatedItems = moveItemsOnDesktop(currentItems, itemId, startItemTop, startItemLeft, newItemTop, newItemLeft);
-      return [...updatedItems];
-    });
-  };
+	const selectItemsWithCtrl = (...itemIds: string[]) => {
+		setDesktopItems(currentItems => {
+			const updatedItems = currentItems.map(i => ({
+				...i,
+				selected: itemIds.includes(i.id) ? !i.selected : i.selected
+			}));
+			return [...updatedItems];
+		});
+	};
 
-  const selectItems = (...itemIds: string[] ) => {
-    setDesktopItems(currentItems => {
-      const updated = currentItems.map(i => ({ ...i, selected: itemIds.includes(i.id)}));
-      return [...updated];
-    });
-  };
+	const selectItemWithShift = (itemId: string, ctrlKey: boolean) => {
+		setDesktopItems(currentItems => {
+			const clickedItem = currentItems.find(item => item.id === itemId);
 
-  const selectItemsWithCtrl = (...itemIds: string[]) => {
-    setDesktopItems(currentItems => {
-      const updatedItems = currentItems.map(i => ({
-        ...i,
-        selected: itemIds.includes(i.id) ? !i.selected : i.selected
-      }));
-      return [...updatedItems];
-    });
-  };
+			if (!clickedItem || clickedItem.selected) {
+				return currentItems;
+			}
 
-  const selectItemWithShift = (itemId: string, ctrlKey: boolean) => {
-    setDesktopItems(currentItems => {
-      const clickedItem = currentItems.find(item => item.id === itemId);
+			return [...selectItemsWithShiftKey(itemId, currentItems, ctrlKey)];
+		});
+	};
 
-      if (!clickedItem || clickedItem.selected) {
-        return currentItems;
-      }
+	const handleItemDoubleClick = (item: DesktopItem) => {
+		onItemDoubleClick(item);
+	};
 
-      return [...selectItemsWithShiftKey(itemId, currentItems, ctrlKey)];
-    });
-  };
+	const handleSelectionBoxUpdates = (
+		elements: HTMLElement[],
+		previousElementInBox: HTMLElement[],
+		ctrlKey: boolean
+	) => {
+		const selectedItemIds = elements.map(element => element.id);
 
-  const handleItemDoubleClick = (item: DesktopItem) => {
-    onItemDoubleClick(item);
-  };
+		if (!ctrlKey) {
+			selectItems(...selectedItemIds);
+		} else {
+			setDesktopItems(currentDesktopItems => {
+				return [
+					...getSelectedItemsFromSelectionBoxgWithCtrl(currentDesktopItems, selectedItemIds, previousElementInBox)
+				];
+			});
+		}
+	};
 
-  const handleSelectionBoxUpdates = (elements: HTMLElement[], previousElementInBox: HTMLElement[], ctrlKey: boolean) => {
-    const selectedItemIds = elements.map(element => element.id);
+	const handleItemRenaming = (itemId: string) => {
+		setDesktopItems(currentItems => {
+			return currentItems.map(i => ({
+				...i,
+				renaming: i.id === itemId
+			}));
+		});
+	};
 
-    if (!ctrlKey) {
-      selectItems(...selectedItemIds);
-    } else {
-      setDesktopItems(currentDesktopItems => {
-        return [...getSelectedItemsFromSelectionBoxgWithCtrl(currentDesktopItems, selectedItemIds, previousElementInBox)];
-      });
-    }
-  };
+	return (
+		<Fragment>
+			{desktopItems.map((item, index) => (
+				<DesktopItemComponent
+					key={index}
+					item={item}
+					moveItem={moveItem}
+					selectItems={selectItems}
+					selectItemsWithCtrl={selectItemsWithCtrl}
+					selectItemsWithShift={selectItemWithShift}
+					handleDoubleClick={handleItemDoubleClick}
+					handleContextMenuClick={event => onItemContextMenuClick(event)}
+					handleItemRenamed={onItemRenamed}
+					startRenaming={handleItemRenaming}
+				/>
+			))}
 
-  const handleItemRenaming = (itemId: string) => {
-    setDesktopItems(currentItems => {
-      return currentItems.map(i => ({
-        ...i,
-        renaming: i.id === itemId
-      }));
-    });
-  };
-
-  return (
-    <Fragment>
-      {
-        desktopItems.map((item, index) =>
-          <DesktopItemComponent
-            key={index}
-            item={item}
-            moveItem={moveItem}
-            selectItems={selectItems}
-            selectItemsWithCtrl={selectItemsWithCtrl}
-            selectItemsWithShift={selectItemWithShift}
-            handleDoubleClick={handleItemDoubleClick}
-            handleContextMenuClick={event => onItemContextMenuClick(event)}
-            handleItemRenamed={onItemRenamed}
-            startRenaming={handleItemRenaming}
-          />
-        )
-      }
-
-      <SelectionBoxComponent
-        emitSelectedItemsUpdate={handleSelectionBoxUpdates}
-        targetElementId='desktop'
-      />
-    </Fragment>
-  );
+			<SelectionBoxComponent emitSelectedItemsUpdate={handleSelectionBoxUpdates} targetElementId='desktop' />
+		</Fragment>
+	);
 };
 
 export default DesktopItemContainer;

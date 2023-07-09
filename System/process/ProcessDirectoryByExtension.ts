@@ -1,3 +1,3 @@
-export const defaultProcessByExtension: { [extension: string]: string} = {
-  'txt': 'sunTextEditor'
-}
+export const defaultProcessByExtension: { [extension: string]: string } = {
+	txt: 'sunTextEditor'
+};
