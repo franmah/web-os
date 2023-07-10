@@ -35,6 +35,7 @@ const DesktopItemComponent: FC<{
 	let distanceMouseToItemLeft = 0;
 
 	useEffect(() => {
+		console.debug('hello');
 		if (item.renaming) {
 			const textAreaElement = document.getElementById(INPUT_ID);
 			document.addEventListener('mousedown', onMouseDown);
@@ -48,7 +49,7 @@ const DesktopItemComponent: FC<{
 				document.removeEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming());
 			}
 		};
-	}, []);
+	});
 
 	const onDoubleClick = () => {
 		handleDoubleClick(item);
