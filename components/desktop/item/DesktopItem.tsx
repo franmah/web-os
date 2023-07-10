@@ -48,8 +48,7 @@ const DesktopItemComponent: FC<{
 				document.removeEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming());
 			}
 		};
-	}),
-		[];
+	}, []);
 
 	const onDoubleClick = () => {
 		handleDoubleClick(item);
