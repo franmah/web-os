@@ -62,7 +62,7 @@ const DesktopItemContainer: FC<{
 			}
 
 			// If mousedown event comes from an item then don't unselect
-			const isEventFromAnyItem = desktopItems.some(item => isEventOriginatedFromWithinTargetIdSubtree(event, item.id));
+			const isEventFromAnyItem = desktopItems.some(item => isEventOriginatedFromWithinTargetIdSubtree(event, item.path));
 
 			if (!isEventFromAnyItem) {
 				selectItems();

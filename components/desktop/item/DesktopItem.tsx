@@ -1,10 +1,11 @@
 import Image from 'next/image';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import styles from './desktop-item.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, SHORTENED_NAME_LENGTH } from '../../../constants/Desktop';
 import { getCurrentItemNameInPath } from '../../../services/file-system/FilePathService';
+import { FOLDER_ICON_PATH } from '../../../constants/FileSystem';
 
 const DesktopItemComponent: FC<{
 	item: DesktopItem;
@@ -33,11 +34,10 @@ const DesktopItemComponent: FC<{
 	const INPUT_ID = item.path + '_input';
 	const TEXT_ID = item.path + '_text';
 
-	let distanceMouseToItemTop = 0;
-	let distanceMouseToItemLeft = 0;
+	const distanceMouseToItemTopRef = useRef(0);
+	const distanceMouseToItemLeftRef = useRef(0);
 
 	useEffect(() => {
-		console.debug('hello');
 		if (item.renaming) {
 			const textAreaElement = document.getElementById(INPUT_ID);
 			document.addEventListener('mousedown', onMouseDown);
@@ -70,15 +70,15 @@ const DesktopItemComponent: FC<{
 	const onDragEnd = (event: any) => {
 		const { top, left } = getDestopItemNewPositionRelativeToMouse(
 			event,
-			distanceMouseToItemTop,
-			distanceMouseToItemLeft
+			distanceMouseToItemTopRef.current,
+			distanceMouseToItemLeftRef.current
 		);
 		moveItem(item.path, item.top, item.left, top, left);
 	};
 
 	const onDragStart = (event: any) => {
-		distanceMouseToItemTop = event.clientY - item.top;
-		distanceMouseToItemLeft = event.clientX - item.left;
+		distanceMouseToItemTopRef.current = event.clientY - item.top;
+		distanceMouseToItemLeftRef.current = event.clientX - item.left;
 
 		if (!item.selected) {
 			selectItems(item.path);
@@ -161,7 +161,7 @@ const DesktopItemComponent: FC<{
 				width: ITEM_WIDTH
 			}}
 		>
-			{/* <Image src={item.iconPath} alt={'icon'} width={48} height={40} /> */}
+			<Image src={FOLDER_ICON_PATH} alt={'icon'} width={48} height={40} />
 
 			{item.renaming ? (
 				<textarea
