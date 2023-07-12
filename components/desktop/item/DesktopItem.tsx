@@ -4,17 +4,18 @@ import styles from './desktop-item.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, SHORTENED_NAME_LENGTH } from '../../../constants/Desktop';
+import { getCurrentItemNameInPath } from '../../../services/file-system/FilePathService';
 
 const DesktopItemComponent: FC<{
 	item: DesktopItem;
-	moveItem: (id: string, startItemTop: number, startItemLeft: number, newItemTop: number, newItemLeft: number) => void;
-	selectItems: (...ids: string[]) => void;
-	selectItemsWithCtrl: (...ids: string[]) => void;
-	selectItemsWithShift: (id: string, ctrlKey: boolean) => void;
+	moveItem: (path: string, startItemTop: number, startItemLeft: number, newItemTop: number, newItemLeft: number) => void;
+	selectItems: (...paths: string[]) => void;
+	selectItemsWithCtrl: (...paths: string[]) => void;
+	selectItemsWithShift: (path: string, ctrlKey: boolean) => void;
 	handleDoubleClick: (item: DesktopItem) => void;
 	handleContextMenuClick: (event: MouseEvent) => void;
-	handleItemRenamed: (itemId: string, itemNewName: string) => void;
-	startRenaming: (itemId: string) => void;
+	handleItemRenamed: (itemPath: string, itemNewName: string) => void;
+	startRenaming: (itemPath: string) => void;
 }> = ({
 	item,
 	moveItem,
@@ -26,10 +27,11 @@ const DesktopItemComponent: FC<{
 	handleItemRenamed,
 	startRenaming
 }) => {
-	const [inputNameValue, setInputNameValue] = useState<string>(item.name);
 
-	const INPUT_ID = item.id + '_input';
-	const TEXT_ID = item.id + '_text';
+	const [inputNameValue, setInputNameValue] = useState<string>(getCurrentItemNameInPath(item.path));
+
+	const INPUT_ID = item.path + '_input';
+	const TEXT_ID = item.path + '_text';
 
 	let distanceMouseToItemTop = 0;
 	let distanceMouseToItemLeft = 0;
@@ -57,11 +59,11 @@ const DesktopItemComponent: FC<{
 
 	const onClick = (event: any) => {
 		if (event.shiftKey) {
-			selectItemsWithShift(item.id, event.ctrlKey);
+			selectItemsWithShift(item.path, event.ctrlKey);
 		} else if (event.ctrlKey) {
-			selectItemsWithCtrl(item.id);
+			selectItemsWithCtrl(item.path);
 		} else {
-			selectItems(item.id);
+			selectItems(item.path);
 		}
 	};
 
@@ -71,14 +73,16 @@ const DesktopItemComponent: FC<{
 			distanceMouseToItemTop,
 			distanceMouseToItemLeft
 		);
-		moveItem(item.id, item.top, item.left, top, left);
+		moveItem(item.path, item.top, item.left, top, left);
 	};
 
 	const onDragStart = (event: any) => {
 		distanceMouseToItemTop = event.clientY - item.top;
 		distanceMouseToItemLeft = event.clientX - item.left;
 
-		if (!item.selected) selectItems(item.id);
+		if (!item.selected) {
+			selectItems(item.path);
+		}
 	};
 
 	const onContextMenuClick = (event: MouseEvent) => {
@@ -94,12 +98,15 @@ const DesktopItemComponent: FC<{
 
 	const onItemDoneRenaming = () => {
 		if (inputNameValue && inputNameValue.trim() !== '') {
-			handleItemRenamed(item.id, inputNameValue.trim());
+			handleItemRenamed(item.path, inputNameValue.trim());
 		}
 	};
 
-	const formatItemName = (name: string): string => {
-		if (item.selected || item.name.length <= SHORTENED_NAME_LENGTH) return name;
+	const formatItemName = (): string => {
+		const name = getCurrentItemNameInPath(item.path);
+		if (item.selected || name.length <= SHORTENED_NAME_LENGTH) {
+			return name;
+		}
 
 		const shortenedName = name.substring(0, SHORTENED_NAME_LENGTH);
 		return shortenedName + '...';
@@ -107,7 +114,7 @@ const DesktopItemComponent: FC<{
 
 	const onItemNameClick = () => {
 		if (item.selected) {
-			startRenaming(item.id);
+			startRenaming(item.path);
 		}
 	};
 
@@ -140,7 +147,7 @@ const DesktopItemComponent: FC<{
 
 	return (
 		<div
-			id={item.id}
+			id={`desktop-item-${item.path}`}
 			draggable={!item.renaming}
 			className={getClass()}
 			onDragEnd={onDragEnd}
@@ -154,7 +161,7 @@ const DesktopItemComponent: FC<{
 				width: ITEM_WIDTH
 			}}
 		>
-			<Image src={item.iconPath} alt={'icon'} width={48} height={40} />
+			{/* <Image src={item.iconPath} alt={'icon'} width={48} height={40} /> */}
 
 			{item.renaming ? (
 				<textarea
@@ -167,7 +174,7 @@ const DesktopItemComponent: FC<{
 			) : (
 				<div id={TEXT_ID} onClick={onItemNameClick}>
 					{' '}
-					{formatItemName(item.name)}{' '}
+					{formatItemName()}{' '}
 				</div>
 			)}
 		</div>

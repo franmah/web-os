@@ -17,23 +17,24 @@ import { NewItemCommandContainer } from '../../../System/context-menu-commands/c
 import { SortByNameCommand } from '../../../System/context-menu-commands/commands/SortByNameCommand';
 import { isEventOriginatedFromWithinTargetIdSubtree } from '../../../services/EventService';
 import { DesktopSortOptions, setItemPositions } from '../../../services/system/desktop/DesktopItemPlacementService';
-import { v4 } from 'uuid';
 import { ContextMenuCommandList } from '../../../types/system/context-menu/ContextMenu';
 import DesktopItemComponent from '../item/DesktopItem';
 import SelectionBoxComponent from '../../shared/selection-box/SelectionBox';
 import { NewTxtFileCommand } from '../../../System/context-menu-commands/commands/NewTxtFileCommand';
 import { defaultProcessByExtension } from '../../../System/process/ProcessDirectoryByExtension';
 import { ProcessDirectory } from '../../../System/process/ProcessDirectory';
+import { CommonFolderPaths } from '../../../constants/system/file-system/CommonFilePaths';
+import { getCurrentItemNameInPath } from '../../../services/file-system/FilePathService';
 
 const DesktopItemContainer: FC<{
-	files: ExplorerFile[];
+	paths: string[];
 	onDesktopContextMenuClick: (event: MouseEvent, commands: ContextMenuCommandList) => void;
 	onItemContextMenuClick: (event: MouseEvent) => void;
 	onFileChange: (newItem: DesktopItem) => void;
 	onFolderChange: (item: DesktopItem) => void;
 	onItemDoubleClick: (item: DesktopItem) => void;
 }> = ({
-	files,
+	paths,
 	onDesktopContextMenuClick,
 	onItemContextMenuClick,
 	onFileChange,
@@ -43,9 +44,9 @@ const DesktopItemContainer: FC<{
 	const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
 
 	useEffect(() => {
-		const items = toItemWrappers(files);
+		const items = toItemWrappers(paths);
 		setDesktopItems(() => [...setItemPositions(items, DesktopSortOptions.default)]);
-	}, [files]);
+	}, [paths]);
 
 	// Any click anywhere in the app should unselect all items
 	useEffect(() => {
@@ -112,13 +113,11 @@ const DesktopItemContainer: FC<{
 			}
 
 			const item: DesktopItem = {
-				iconPath: ProcessDirectory[defaultProcessByExtension[extension]]?.iconPath || '',
-				id: v4(),
 				left,
-				name: newItemName + '.' + extension,
 				renaming: true,
 				selected: false,
-				top
+				top,
+				path: CommonFolderPaths.DESKTOP + '/' + newItemName // TODO: is that correct?
 			};
 
 			onFileChange(item);
@@ -130,13 +129,11 @@ const DesktopItemContainer: FC<{
 		setDesktopItems(currentItems => {
 			const newItemName = getNewItemName('Folder', currentItems);
 			const item: DesktopItem = {
-				iconPath: DEFAULT_FOLDER_ICON_PATH,
-				id: v4(),
 				left,
-				name: newItemName,
 				renaming: true,
 				selected: false,
-				top
+				top,
+				path: CommonFolderPaths.DESKTOP + '/' + newItemName // TODO: is that correct?
 			};
 
 			onFolderChange(item);
@@ -144,23 +141,23 @@ const DesktopItemContainer: FC<{
 		});
 	};
 
-	const onItemRenamed = (itemId: string, itemNewName: string) => {
+	const onItemRenamed = (itemPath: string, itemNewName: string) => {
 		setDesktopItems(currentItems => {
 			if (!itemNewName || itemNewName.trim() === '') {
 				return currentItems;
 			}
 
-			const isNameAlreadyUsed = currentItems.find(i => i.name === itemNewName && i.id !== itemId);
+			const isNameAlreadyUsed = currentItems.find(i => getCurrentItemNameInPath(i.path) === itemNewName && i.path !== itemPath);
 
 			if (!isNameAlreadyUsed) {
 				const updatedItems: DesktopItem[] = currentItems.map(i => ({
 					...i,
-					name: i.id === itemId ? itemNewName : i.name,
+					name: i.path === itemPath ? itemNewName : getCurrentItemNameInPath(i.path),
 					renaming: false,
-					selected: i.id === itemId
+					selected: i.path === itemPath
 				}));
 
-				const newItem = updatedItems.find(i => i.id === itemId) as DesktopItem;
+				const newItem = updatedItems.find(i => i.path === itemPath) as DesktopItem;
 
 				onFileChange(newItem);
 
@@ -172,7 +169,7 @@ const DesktopItemContainer: FC<{
 	};
 
 	const moveItem = (
-		itemId: string,
+		itemPath: string,
 		startItemTop: number,
 		startItemLeft: number,
 		newItemTop: number,
@@ -181,7 +178,7 @@ const DesktopItemContainer: FC<{
 		setDesktopItems(currentItems => {
 			const updatedItems = moveItemsOnDesktop(
 				currentItems,
-				itemId,
+				itemPath,
 				startItemTop,
 				startItemLeft,
 				newItemTop,
@@ -191,32 +188,32 @@ const DesktopItemContainer: FC<{
 		});
 	};
 
-	const selectItems = (...itemIds: string[]) => {
+	const selectItems = (...itemPaths: string[]) => {
 		setDesktopItems(currentItems => {
-			const updated = currentItems.map(i => ({ ...i, selected: itemIds.includes(i.id) }));
+			const updated = currentItems.map(i => ({ ...i, selected: itemPaths.includes(i.path) }));
 			return [...updated];
 		});
 	};
 
-	const selectItemsWithCtrl = (...itemIds: string[]) => {
+	const selectItemsWithCtrl = (...itemPaths: string[]) => {
 		setDesktopItems(currentItems => {
 			const updatedItems = currentItems.map(i => ({
 				...i,
-				selected: itemIds.includes(i.id) ? !i.selected : i.selected
+				selected: itemPaths.includes(i.path) ? !i.selected : i.selected
 			}));
 			return [...updatedItems];
 		});
 	};
 
-	const selectItemWithShift = (itemId: string, ctrlKey: boolean) => {
+	const selectItemWithShift = (itemPath: string, ctrlKey: boolean) => {
 		setDesktopItems(currentItems => {
-			const clickedItem = currentItems.find(item => item.id === itemId);
+			const clickedItem = currentItems.find(item => item.path === itemPath);
 
 			if (!clickedItem || clickedItem.selected) {
 				return currentItems;
 			}
 
-			return [...selectItemsWithShiftKey(itemId, currentItems, ctrlKey)];
+			return [...selectItemsWithShiftKey(itemPath, currentItems, ctrlKey)];
 		});
 	};
 
@@ -242,11 +239,11 @@ const DesktopItemContainer: FC<{
 		}
 	};
 
-	const handleItemRenaming = (itemId: string) => {
+	const handleItemRenaming = (itemPath: string) => {
 		setDesktopItems(currentItems => {
 			return currentItems.map(i => ({
 				...i,
-				renaming: i.id === itemId
+				renaming: i.path === itemPath
 			}));
 		});
 	};

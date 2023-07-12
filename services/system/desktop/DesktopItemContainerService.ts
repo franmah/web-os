@@ -1,22 +1,20 @@
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import { ExplorerFile } from '../../../types/system/file/ExplorerElement';
+import { getCurrentItemNameInPath } from '../../file-system/FilePathService';
 
 const DEFAULT_FOLDER_NAME = 'New folder';
 const NEW_FOLDER_NAME_REGEX = (type: string) => new RegExp(`New ${type} \([2-9]+\)`, 'g');
 export const DEFAULT_FOLDER_ICON_PATH = '/icons/folder-icon-empty.png';
 
-export const toItemWrappers = (files: ExplorerFile[]): DesktopItem[] => {
+export const toItemWrappers = (paths: string[]): DesktopItem[] => {
 	return (
-		files?.map(
-			file =>
+		paths?.map(
+			path =>
 				({
-					id: file.id,
-					iconPath: file.iconPath,
 					left: 0,
-					name: file.name,
+					path,
+					renaming: false,
 					selected: false,
-					top: 0,
-					renaming: false
+					top: 0
 				}) as DesktopItem
 		) || []
 	);
@@ -29,17 +27,17 @@ export const toItemWrappers = (files: ExplorerFile[]): DesktopItem[] => {
  * (starting from 2)
  */
 export const getNewItemName = (fileType: string, items: DesktopItem[]): string => {
-	const itemsWithDefaultFolderName = items.filter(i => i.name.includes(fileType));
+	const itemsWithDefaultFolderName = items.filter(i => getCurrentItemNameInPath(i.path).includes(fileType));
 
 	if (itemsWithDefaultFolderName?.length === 0) {
 		return 'New ' + fileType;
 	}
 
-	const temp = items.filter(i => !!i.name.match(NEW_FOLDER_NAME_REGEX(fileType)));
+	const temp = items.filter(i => !!getCurrentItemNameInPath(i.path).match(NEW_FOLDER_NAME_REGEX(fileType)));
 
 	let i = 0;
 	for (; i < temp.length; i++) {
-		const num = +temp[i].name?.[12];
+		const num = +getCurrentItemNameInPath(temp[i].path)?.[12];
 		if (i + 2 < num) return `${fileType} (${i + 2})`;
 	}
 

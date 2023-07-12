@@ -1,4 +1,4 @@
-import { FC, Fragment, useContext } from 'react';
+import { FC, Fragment, useContext, useEffect, useState } from 'react';
 import DesktopItemContainer from '../items-container/DesktopItemsContainer';
 import styles from './desktop.module.scss';
 import background from '../../../assets/background_image_light.jpg';
@@ -9,10 +9,18 @@ import { FileSystemContext } from '../../../contexts/FileSystemContext';
 import { ProcessContext } from '../../../contexts/ProcessContext';
 import { ContextMenuCommandList } from '../../../types/system/context-menu/ContextMenu';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
+import { CommonFolderPaths } from '../../../constants/system/file-system/CommonFilePaths';
 
 const Desktop: FC = () => {
-	const { getDesktop, appendFile, mkdir } = useContext(FileSystemContext);
+	const { getDesktop, appendFile, mkdir, readdirV2 } = useContext(FileSystemContext);
 	const { openProcess } = useContext(ProcessContext);
+
+	const [paths, setPaths] = useState<string[]>([]);
+
+	useEffect(() => {
+		readdirV2(CommonFolderPaths.DESKTOP)
+			.then(paths => setPaths(paths));
+	}, []);
 
 	const handleItemContextMenuClick = (event: MouseEvent) => {
 		event.preventDefault();
@@ -31,24 +39,25 @@ const Desktop: FC = () => {
 	};
 
 	const openItemProcess = (item: DesktopItem) => {
-		// const explorerItem = getDesktop().children.find(c => c.id === item.id);
-		// openProcess('sunTextEditor', { file: explorerItem  });
 		openProcess('explorer', { startPath: '/Desktop' });
 	};
 
-	const handleFileChange = (newItem: DesktopItem) => {
-		const oldFile = getDesktop().children?.find(file => file.id === newItem.id);
-		if (!oldFile) {
-			appendFile(newItem.name, newItem.iconPath, getDesktop(), newItem.id);
-		}
+	// TODO: fix
+	const handleFileChange = async (newItem: DesktopItem) => {
+		// const desktopPaths = await readdirV2(CommonFolderPaths.DESKTOP);
+		// const oldFile = getDesktop().children?.find(file => file.id === newItem.id);
+		// if (!oldFile) {
+		// 	appendFile(newItem.name, newItem.iconPath, getDesktop(), newItem.id);
+		// }
 	};
 
+	// TODO: fix
 	const handleFolderChange = (item: DesktopItem) => {
-		const oldFolder = getDesktop().children?.find(file => file.id === item.id);
+		// const oldFolder = getDesktop().children?.find(file => file.id === item.id);
 
-		if (!oldFolder) {
-			mkdir(item.name, getDesktop());
-		}
+		// if (!oldFolder) {
+		// 	mkdir(item.name, getDesktop());
+		// }
 	};
 
 	return (
@@ -71,7 +80,7 @@ const Desktop: FC = () => {
 				// onDragOver={(e) => e.preventDefault() } // Needed to prevent browser from opening user's file on drop
 			>
 				<DesktopItemContainer
-					files={getDesktop().children}
+					paths={paths}
 					onDesktopContextMenuClick={handleDesktopContextMenuClick}
 					onItemContextMenuClick={handleItemContextMenuClick}
 					onFileChange={handleFileChange}

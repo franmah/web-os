@@ -4,13 +4,13 @@ import { DesktopItem } from '../../../types/desktop/DesktopItem';
 
 export const moveItemsOnDesktop = (
 	items: DesktopItem[],
-	itemId: string,
+	itemPath: string,
 	startItemTop: number,
 	startItemLeft: number,
 	newItemTop: number,
 	newItemLeft: number
 ) => {
-	const element = items.find(el => el.id === itemId);
+	const element = items.find(el => el.path === itemPath);
 	if (!element) {
 		return items;
 	}
@@ -52,7 +52,7 @@ const correctItemPosition = (top: number, left: number): { correctedTop: number;
 };
 
 const isPositionInvalid = (
-	itemId: string,
+	itemPath: string,
 	top: number,
 	left: number,
 	itemsMoving: DesktopItem[],
@@ -60,8 +60,8 @@ const isPositionInvalid = (
 ): boolean => {
 	return items.some(item => {
 		return (
-			!itemsMoving.some(i => i.id === item.id) && // Don't check item that are moving.
-			item.id !== itemId &&
+			!itemsMoving.some(i => i.path === item.path) && // Don't check item that are moving.
+			item.path !== itemPath &&
 			isItemOverlapingOtherItems(top, left, item)
 		);
 	});
@@ -86,7 +86,7 @@ const isItemOverlapingOtherItems = (i1Top: number, i1Left: number, i2: DesktopIt
 // Was unable to implement it because too many events triggered for useState to follow.
 export const getSelectedItemsFromSelectionBoxgWithCtrl = (
 	currentDesktopItems: DesktopItem[],
-	selectedItemIds: string[],
+	selectedItemPaths: string[],
 	previousElementInBox: HTMLElement[]
 ): DesktopItem[] => {
 	const previouslySelectedItemIds = previousElementInBox.map(element => element.id);
@@ -94,11 +94,11 @@ export const getSelectedItemsFromSelectionBoxgWithCtrl = (
 	const updatedItems = currentDesktopItems.map(i => {
 		let selected = i.selected;
 
-		if (selectedItemIds.includes(i.id)) {
+		if (selectedItemPaths.includes(i.path)) {
 			selected = true;
 		}
 		// Unselect item if it was in box but is not anymore.
-		else if (previouslySelectedItemIds.includes(i.id)) {
+		else if (previouslySelectedItemIds.includes(i.path)) {
 			selected = false;
 		}
 
@@ -114,16 +114,16 @@ export const getSelectedItemsFromSelectionBoxgWithCtrl = (
 /**
  * Select items that are between the most top left selected item and the clicked item,
  * from the left of the top item to the right of the bottom item, from top to bottom.
- * @param clickedItemId
+ * @param clickedItemPath
  * @param items
  * @returns
  */
 export const selectItemsWithShiftKey = (
-	clickedItemId: string,
+	clickedItemPath: string,
 	items: DesktopItem[],
 	ctrlKey: boolean
 ): DesktopItem[] => {
-	const clickedItem = items.find(i => i.id === clickedItemId) as DesktopItem;
+	const clickedItem = items.find(i => i.path === clickedItemPath) as DesktopItem;
 
 	if (!clickedItem) {
 		throw Error('Select items with shift key: No clicked item.');
@@ -137,7 +137,7 @@ export const selectItemsWithShiftKey = (
 	}
 
 	const topItem = mostTopLeftSelectedItem.top < clickedItem.top ? mostTopLeftSelectedItem : clickedItem;
-	const bottomItem = topItem.id === clickedItem.id ? mostTopLeftSelectedItem : clickedItem;
+	const bottomItem = topItem.path === clickedItem.path ? mostTopLeftSelectedItem : clickedItem;
 
 	const updatedItems: DesktopItem[] = items.map(item => ({
 		...item,
