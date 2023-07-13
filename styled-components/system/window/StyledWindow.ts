@@ -18,8 +18,8 @@ export const StyledWindow = styled.div<{
 	height: ${({ height }) => `${height}px`};
 	z-index: ${({ zIndex }) => zIndex};
 
-	min-width: ${() => WINDOW_MIN_WIDTH};
-	min-height: ${() => WINDOW_MIN_HEIGH};
+	min-width: ${() => `${WINDOW_MIN_WIDTH}px`};
+	min-height: ${() => `${WINDOW_MIN_HEIGH}px`};
 	border-radius: 8px;
 
 	box-shadow: ${({ focused }) => (focused ? '0px 0px 16px 2px #0000003a' : '0px 0px 4px 2px #0000002a')};
