@@ -1,24 +1,25 @@
+import { IconPaths } from '../constants/IconPaths';
 import { SupportedFileExtension } from '../constants/SupportedFileExtension';
 import { CommonFolderPaths } from '../constants/system/file-system/CommonFilePaths';
 
 export const getFolderIcon = (path: string) => {
 	switch (path) {
 		case CommonFolderPaths.ROOT:
-			return '/icons/win11_home.png';
+			return IconPaths.HOME_FOLDER;
 		case CommonFolderPaths.DESKTOP:
-			return '/icons/win11_desktop.png';
+			return IconPaths.DESKTOP_FOLDER;
 		case CommonFolderPaths.DOCUMENTS:
-			return '/icons/win11_documents.png';
+			return IconPaths.DOCUMENTS_FOLDER;
 		case CommonFolderPaths.DOWNLOADS:
-			return '/icons/win11_downloads.png';
+			return IconPaths.DOWNLOADS_FOLDER;
 		case CommonFolderPaths.PICTURES:
-			return '/icons/win11_pictures.png';
+			return IconPaths.PICTURES_FOLDER;
 		case CommonFolderPaths.MUSIC:
-			return '/icons/win11_music.png';
+			return IconPaths.MUSIC_FOLDER;
 		case CommonFolderPaths.VIDEOS:
-			return '/icons/win11_videos.png';
+			return IconPaths.VIDEOS_FOLDER;
 		default:
-			return '/icons/folder-icon.png';
+			return IconPaths.FOLDER;
 	}
 };
 
@@ -29,4 +30,4 @@ export const getDesktopIconPathByExtension = (extension: string): string => {
 		default:
 			return '';
 	}
-}
+};
