@@ -5,7 +5,6 @@ import { ExplorerFile } from '../types/system/file/ExplorerElement';
 import {
 	convertPathToFragments,
 	getCurrentItemNameInPath,
-	getFileExtension,
 	getParentPath
 } from '../services/file-system/FilePathService';
 import { CommonFolderPaths } from '../constants/system/file-system/CommonFilePaths';

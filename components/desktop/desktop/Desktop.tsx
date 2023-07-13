@@ -10,9 +10,11 @@ import { ProcessContext } from '../../../contexts/ProcessContext';
 import { ContextMenuCommandList } from '../../../types/system/context-menu/ContextMenu';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { CommonFolderPaths } from '../../../constants/system/file-system/CommonFilePaths';
+import { getCurrentItemNameInPath, getFileExtension } from '../../../services/file-system/FilePathService';
+import { ProcessDirectoryByExtension } from '../../../System/process/ProcessDirectoryByExtension';
 
 const Desktop: FC = () => {
-	const { getDesktop, appendFile, mkdir, readdirV2 } = useContext(FileSystemContext);
+	const { getDesktop, appendFile, mkdir, readdirV2, isDirectory } = useContext(FileSystemContext);
 	const { openProcess } = useContext(ProcessContext);
 
 	const [paths, setPaths] = useState<string[]>([]);
@@ -39,7 +41,20 @@ const Desktop: FC = () => {
 	};
 
 	const openItemProcess = (item: DesktopItem) => {
-		openProcess('explorer', { startPath: '/Desktop' });
+		if (isDirectory(item.path)) {
+			return openProcess('explorer', { startPath: '/Desktop' });
+		}
+
+		// TODO: should open process properly (with right parameters)
+		const fileName = getCurrentItemNameInPath(item.path);
+		const extension = getFileExtension(fileName);
+		const processName = ProcessDirectoryByExtension[extension];
+		if (!processName) {
+			console.error('Tried to open an unkown extension. file: ' + item.path);
+		} else {
+			openProcess(processName);
+		}
+
 	};
 
 	// TODO: fix

@@ -75,7 +75,7 @@ const getExampleDesktopChildren = (desktop: ExplorerFile): ExplorerFile[] => [
 	{
 		children: [],
 		iconPath: IconPaths.FOLDER,
-		name: 'Video.youtube',
+		name: 'The weeknd - save your tears.youtube',
 		id: 'youtube-video-1',
 		parent: desktop,
 		isFolder: true
