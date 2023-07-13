@@ -15,20 +15,19 @@ OK - Create a isDirectory in FileSystem context
 
 OK 2.5 Add more test files (at least one youtube and one text file)
 
-2.6
-- Donwload 1024*1024 actual png icons and replace the current ones. Every icon should have the same size.
-
-2.7 Explorer:
+OK 2.7 Explorer:
   - Fix icons in explorer (should use fileName extension)
+
+4.5 FIX DESKTOP SELECTION BOX (items don't get selected.)
+  - probably because of the item.id change.
 
 4. Renaming Requirement
 - Create a function to validate names.
   For now files are not allowed to go without an extension in their name.
 - Update desktop and explorer to use validation function just above when renaming.
 
-4.5 FIX DESKTOP SELECTION BOX (items don't get selected.)
-  - probably because of the item.id change.
-
+2.6
+- Donwload 1024*1024 actual png icons and replace the current ones. Every icon should have the same size.
 
 5. Refactor ExplorerFile
 - remove extra fields (icon path, make children optional...)

@@ -1,5 +1,5 @@
 import { FC, Fragment, useContext, useEffect, useState } from 'react';
-import DesktopItemContainer from '../items-container/DesktopItemsContainer';
+import DesktopItemsContainer from '../items-container/DesktopItemsContainer';
 import styles from './desktop.module.scss';
 import background from '../../../assets/background_image_light.jpg';
 import background1080 from '../../../assets/background_image_light.jpg';
@@ -94,7 +94,7 @@ const Desktop: FC = () => {
 				// onDrop={handleUserComputerFileDrop}
 				// onDragOver={(e) => e.preventDefault() } // Needed to prevent browser from opening user's file on drop
 			>
-				<DesktopItemContainer
+				<DesktopItemsContainer
 					paths={paths}
 					onDesktopContextMenuClick={handleDesktopContextMenuClick}
 					onItemContextMenuClick={handleItemContextMenuClick}

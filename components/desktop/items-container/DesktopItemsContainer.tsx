@@ -24,7 +24,7 @@ import { getCurrentItemNameInPath } from '../../../services/file-system/FilePath
 import { getFolderIcon, getIconPathByExtension } from '../../../services/IconService';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
 
-const DesktopItemContainer: FC<{
+const DesktopItemsContainer: FC<{
 	paths: string[];
 	onDesktopContextMenuClick: (event: MouseEvent, commands: ContextMenuCommandList) => void;
 	onItemContextMenuClick: (event: MouseEvent) => void;
@@ -276,4 +276,4 @@ const DesktopItemContainer: FC<{
 	);
 };
 
-export default DesktopItemContainer;
+export default DesktopItemsContainer;
