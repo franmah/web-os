@@ -15,12 +15,12 @@ OK - Create a isDirectory in FileSystem context
 
 OK 2.5 Add more test files (at least one youtube and one text file)
 
-2.5:
-- CONVERT FILE EXTENSION DIRECTORY TO A CONTEXT
+
+2.7 Explorer:
+  - Fix icons in explorer (should use fileName extension)
 
 3. Open process.
-- Complete ProcessDirectoryByExtension (refactor if needed since it's been there for a while)
-- Fix desktop to open process using either file extension or explorer
+- Fix desktop to open process using either file extension or explorer (with correct parameters)
 - Fix explorer to open files or directory correctly
 
 4. Renaming Requirement
