@@ -21,11 +21,6 @@ OK 2.5 Add more test files (at least one youtube and one text file)
 2.7 Explorer:
   - Fix icons in explorer (should use fileName extension)
 
-3. Open process.
-- Find a better way to pass parameters?
-- Fix desktop to open process using either file extension or explorer (with correct parameters)
-- Fix explorer to open files or directory correctly WITH CORRECT PARAMETERS
-
 4. Renaming Requirement
 - Create a function to validate names.
   For now files are not allowed to go without an extension in their name.
@@ -34,7 +29,6 @@ OK 2.5 Add more test files (at least one youtube and one text file)
 4.5 FIX DESKTOP SELECTION BOX (items don't get selected.)
   - probably because of the item.id change.
 
-5. Refactor "folder" usage to "directory"
 
 5. Refactor ExplorerFile
 - remove extra fields (icon path, make children optional...)
@@ -43,6 +37,7 @@ OK 2.5 Add more test files (at least one youtube and one text file)
 - improve desktop file name display
 - Fix window header icon
 
+5. Refactor "folder" usage to "directory"
 
 /////////////////// MVP ///////////////
 1. Explorer app
