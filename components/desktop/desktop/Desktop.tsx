@@ -42,7 +42,7 @@ const Desktop: FC = () => {
 
 	const openItemProcess = (item: DesktopItem) => {
 		if (isDirectory(item.path)) {
-			return openProcess('explorer', { startPath: '/Desktop' });
+			return openProcess('explorer', { startPath: CommonFolderPaths.DESKTOP });
 		}
 
 		// TODO: should open process properly (with right parameters)

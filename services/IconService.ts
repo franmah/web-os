@@ -29,8 +29,6 @@ export const getIconPathByExtension = (extension: string): string => {
 			return IconPaths.TEXT;
 		case SupportedFileExtension.YOUTUBE:
 			return IconPaths.YOUTUBE;
-		case '': // TODO: remove
-			return IconPaths.FOLDER;
 		default:
 			return IconPaths.UNKOWN_EXTENSION;
 	}
