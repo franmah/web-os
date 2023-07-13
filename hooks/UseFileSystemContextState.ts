@@ -19,10 +19,9 @@ export const useFileSystemContextState = () => {
 	let getDesktop = (): ExplorerFile => getRoot()?.children?.[0];
 
 	// For a file will always have an extension. If there's no extension then it's a directory
-	const isDirectory = (path: string): Promise<boolean> => {
+	const isDirectory = (path: string): boolean => {
 		const fileName = getCurrentItemNameInPath(path);
-		const extension = getFileExtension(fileName);
-		return Promise.resolve(!extension);
+		return !fileName.includes('.');
 	};
 
 	const deleteFolderV2 = (path: string): Promise<void> => {

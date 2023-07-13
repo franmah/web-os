@@ -1,9 +1,8 @@
 
-import { FC, Fragment, useEffect, useState } from 'react';
+import { FC, Fragment, useContext, useEffect, useState } from 'react';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import {
-	getNewItemName,
-	toItemWrappers
+	getNewItemName, pathToDesktopItem
 } from '../../../services/system/desktop/DesktopItemContainerService';
 import {
 	getSelectedItemsFromSelectionBoxgWithCtrl,
@@ -23,6 +22,7 @@ import { NewTxtFileCommand } from '../../../System/context-menu-commands/command
 import { CommonFolderPaths } from '../../../constants/system/file-system/CommonFilePaths';
 import { getCurrentItemNameInPath } from '../../../services/file-system/FilePathService';
 import { getFolderIcon, getIconPathByExtension } from '../../../services/IconService';
+import { FileSystemContext } from '../../../contexts/FileSystemContext';
 
 const DesktopItemContainer: FC<{
 	paths: string[];
@@ -39,10 +39,13 @@ const DesktopItemContainer: FC<{
 	onFolderChange,
 	onItemDoubleClick
 }) => {
+
+	const fs = useContext(FileSystemContext);
+
 	const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
 
 	useEffect(() => {
-		const items = toItemWrappers(paths);
+		const items = paths.map(path => pathToDesktopItem(path, fs.isDirectory(path)));
 		setDesktopItems(() => [...setItemPositions(items, DesktopSortOptions.default)]);
 	}, [paths]);
 

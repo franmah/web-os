@@ -4,9 +4,7 @@ import styles from './desktop-item.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, SHORTENED_NAME_LENGTH } from '../../../constants/Desktop';
-import { getCurrentItemNameInPath, getFileExtension } from '../../../services/file-system/FilePathService';
-import { getIconPathByExtension } from '../../../services/IconService';
-import { IconPaths } from '../../../constants/IconPaths';
+import { getCurrentItemNameInPath } from '../../../services/file-system/FilePathService';
 
 const DesktopItemComponent: FC<{
 	item: DesktopItem;

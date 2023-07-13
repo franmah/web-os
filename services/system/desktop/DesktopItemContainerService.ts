@@ -6,20 +6,19 @@ const DEFAULT_FOLDER_NAME = 'New folder';
 const NEW_FOLDER_NAME_REGEX = (type: string) => new RegExp(`New ${type} \([2-9]+\)`, 'g');
 export const DEFAULT_FOLDER_ICON_PATH = '/icons/folder-icon-empty.png';
 
-export const toItemWrappers = (paths: string[]): DesktopItem[] => {
-	return paths?.map(path => {
-		const fileName = getCurrentItemNameInPath(path);
-		const extension = getFileExtension(fileName);
+export const pathToDesktopItem = (path: string, isDirectory: boolean): DesktopItem => {
+	const iconPath = isDirectory ?
+		getFolderIcon(path) :
+		getIconPathByExtension(getFileExtension(getCurrentItemNameInPath(path)));
 
-		return {
-			iconPath: getIconPathByExtension(extension) || getFolderIcon(path),
-			left: 0,
-			path,
-			renaming: false,
-			selected: false,
-			top: 0
-		};
-	});
+	return {
+		iconPath,
+		left: 0,
+		path,
+		renaming: false,
+		selected: false,
+		top: 0
+	};
 };
 
 /**
