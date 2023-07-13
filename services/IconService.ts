@@ -1,3 +1,4 @@
+import { SupportedFileExtension } from '../constants/SupportedFileExtension';
 import { CommonFolderPaths } from '../constants/system/file-system/CommonFilePaths';
 
 export const getFolderIcon = (path: string) => {
@@ -20,3 +21,12 @@ export const getFolderIcon = (path: string) => {
 			return '/icons/folder-icon.png';
 	}
 };
+
+export const getDesktopIconPathByExtension = (extension: string): string => {
+	switch (extension) {
+		case SupportedFileExtension.TXT:
+			return '/icons/folder-icon.png';
+		default:
+			return '';
+	}
+}
