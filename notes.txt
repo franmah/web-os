@@ -15,13 +15,16 @@ OK - Create a isDirectory in FileSystem context
 
 OK 2.5 Add more test files (at least one youtube and one text file)
 
+2.6
+- Donwload 1024*1024 actual png icons and replace the current ones. Every icon should have the same size.
 
 2.7 Explorer:
   - Fix icons in explorer (should use fileName extension)
 
 3. Open process.
+- Find a better way to pass parameters?
 - Fix desktop to open process using either file extension or explorer (with correct parameters)
-- Fix explorer to open files or directory correctly
+- Fix explorer to open files or directory correctly WITH CORRECT PARAMETERS
 
 4. Renaming Requirement
 - Create a function to validate names.
@@ -32,6 +35,14 @@ OK 2.5 Add more test files (at least one youtube and one text file)
   - probably because of the item.id change.
 
 5. Refactor "folder" usage to "directory"
+
+5. Refactor ExplorerFile
+- remove extra fields (icon path, make children optional...)
+
+6. general refactor
+- improve desktop file name display
+- Fix window header icon
+
 
 /////////////////// MVP ///////////////
 1. Explorer app
@@ -58,12 +69,6 @@ and change file system to use actual FS style (use string path instead of Explor
 
 4. Windows menu
 - show apps 
-
-5. Refactor ExplorerFile
-- remove extra fields (icon path, make children optional...)
-
-6. general refactor
-- improve desktop file name display
 
 ////// IN PROGRESS:
 
@@ -106,8 +111,6 @@ Explorer
 - Try to replace calls to getElementById to useRefs 
 - add tests. Especially for services
 
-- move to webstorm
-
 - Bug: desktop image doesn't load right away. Maybe the background image should be it's own process?
   - also need a loading screen while starting processes load.
   The loading animation leaves the screen once everything is loaded.
@@ -119,11 +122,6 @@ Explorer
   - Add e.preventDefault(). This will avoid side effect such as triggering a new render when clicking a page. (make sure to test after doing so)
 
 - look into using classes for services and having indepency injection
-
-- Add option to have no window header (still should have minimize... icons)
-  - Decide if there is a header of if the header accept children? Maybe accepting children would be easier. but how do they communicate with the process?
-  - If no header then just reuse Component for icons
-  - Nothing should go behind or over the icons
 
 - file system
   - readdir should return a list of string. The deskop component should then transform those strings in DesktopItems using the files' extension
