@@ -1,7 +1,7 @@
 // WORKING ON
 
 1. Desktop icons
-- Create a constant file with icon paths
+OK - Create a constant file with icon paths
 - Add missing icons
   - unkown extension
   - youtube

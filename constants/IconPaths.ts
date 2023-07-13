@@ -8,5 +8,6 @@ export enum IconPaths {
 	VIDEOS_FOLDER = '/icons/win11_videos.png',
   FOLDER = '/icons/folder-icon.png',
   YOUTUBE = '/icons/youtube.png',
-  TEXT = '/icons/text-icon.png'
+  TEXT = '/icons/text-icon.png',
+  UNKOWN_EXTENSION = '/icons/unkown-extension-icon.png'
 }
