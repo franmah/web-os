@@ -113,17 +113,18 @@ export const ExplorerFileViewRow: FC<{
 
 				<Image src={iconPath} alt='folder icon' height={16} width={16} className='icon' />
 
-				{editingName ? (
-					<input
-						className='name-input'
-						ref={inputRef}
-						value={inputValue}
-						onBlur={() => handleRenameItem()}
-						onChange={e => setInputValue(e.target.value)}
-					/>
-				) : (
-					fileName
-				)}
+				<div className='file-name'>
+					{editingName ? (
+						<input
+							ref={inputRef}
+							value={inputValue}
+							onBlur={() => handleRenameItem()}
+							onChange={e => setInputValue(e.target.value)}
+						/>
+					) : (
+						fileName
+					)}
+				</div>
 			</div>
 
 			{/* DATE MODIFIED  */}
