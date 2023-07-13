@@ -1,4 +1,4 @@
-import { FOLDER_ICON_PATH } from '../constants/FileSystem';
+import { IconPaths } from '../constants/IconPaths';
 import { ExplorerFile } from '../types/system/file/ExplorerElement';
 
 export const getRootAtSystemStart = (): ExplorerFile => {
@@ -66,7 +66,7 @@ export const getRootAtSystemStart = (): ExplorerFile => {
 const getExampleDesktopChildren = (desktop: ExplorerFile): ExplorerFile[] => [
 	{
 		children: [],
-		iconPath: FOLDER_ICON_PATH,
+		iconPath: IconPaths.FOLDER,
 		name: 'New folder (2)',
 		id: 'num #2',
 		parent: desktop,
@@ -74,7 +74,7 @@ const getExampleDesktopChildren = (desktop: ExplorerFile): ExplorerFile[] => [
 	},
 	{
 		children: [],
-		iconPath: FOLDER_ICON_PATH,
+		iconPath: IconPaths.FOLDER,
 		name: 'New folder (3)',
 		id: 'num #3',
 		parent: desktop,
@@ -86,7 +86,7 @@ const getExampleDesktopChildren = (desktop: ExplorerFile): ExplorerFile[] => [
 				children: [
 					{
 						children: [],
-						iconPath: FOLDER_ICON_PATH,
+						iconPath: IconPaths.FOLDER,
 						name: 'sub folder 1',
 						id: 'sub folder 1',
 						parent: desktop,
@@ -94,21 +94,21 @@ const getExampleDesktopChildren = (desktop: ExplorerFile): ExplorerFile[] => [
 					},
 					{
 						children: [],
-						iconPath: FOLDER_ICON_PATH,
+						iconPath: IconPaths.FOLDER,
 						name: 'sub folder 2',
 						id: 'sub folder 2',
 						parent: desktop,
 						isFolder: true
 					}
 				],
-				iconPath: FOLDER_ICON_PATH,
+				iconPath: IconPaths.FOLDER,
 				name: 'sub folder',
 				id: 'sub folder',
 				parent: desktop,
 				isFolder: true
 			}
 		],
-		iconPath: FOLDER_ICON_PATH,
+		iconPath: IconPaths.FOLDER,
 		name: 'New folder',
 		id: 'num #1',
 		parent: desktop,

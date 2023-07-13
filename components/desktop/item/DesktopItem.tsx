@@ -5,7 +5,7 @@ import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, SHORTENED_NAME_LENGTH } from '../../../constants/Desktop';
 import { getCurrentItemNameInPath } from '../../../services/file-system/FilePathService';
-import { FOLDER_ICON_PATH } from '../../../constants/FileSystem';
+import { IconPaths } from '../../../constants/IconPaths';
 
 const DesktopItemComponent: FC<{
 	item: DesktopItem;
@@ -161,7 +161,7 @@ const DesktopItemComponent: FC<{
 				width: ITEM_WIDTH
 			}}
 		>
-			<Image src={FOLDER_ICON_PATH} alt={'icon'} width={48} height={40} />
+			<Image src={IconPaths.FOLDER} alt={'icon'} width={48} height={40} />
 
 			{item.renaming ? (
 				<textarea

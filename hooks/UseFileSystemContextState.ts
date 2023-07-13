@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { v4 } from 'uuid';
 import { getRootAtSystemStart } from '../services/FileSystemService';
 import { ExplorerFile } from '../types/system/file/ExplorerElement';
-import { FOLDER_ICON_PATH } from '../constants/FileSystem';
 import {
 	convertPathToFragments,
 	getCurrentItemNameInPath,
 	getParentPath
 } from '../services/file-system/FilePathService';
 import { CommonFolderPaths } from '../constants/system/file-system/CommonFilePaths';
+import { IconPaths } from '../constants/IconPaths';
 
 export const useFileSystemContextState = () => {
 	const rootFile: ExplorerFile = getRootAtSystemStart();
@@ -75,7 +75,7 @@ export const useFileSystemContextState = () => {
 
 				if (node.name.toLowerCase().includes(partialName)) filePaths.push(currentPath);
 
-				for (let child of node.children) {
+				for (const child of node.children) {
 					const childPath = currentPath + '/' + child.name;
 					searchNode(child, level + 1, childPath);
 				}
@@ -101,10 +101,9 @@ export const useFileSystemContextState = () => {
 	const mkdir = (name: string, parent: ExplorerFile, id?: string) => {
 		setRoot(getRoot => {
 			const root = getRoot();
-
-			const file = {
+			const file: ExplorerFile = {
 				name,
-				FOLDER_ICON_PATH,
+				iconPath: IconPaths.FOLDER,
 				parent,
 				children: [],
 				id: id || v4(),
@@ -156,7 +155,7 @@ export const useFileSystemContextState = () => {
 		const fragments = convertPathToFragments(path);
 		let fileNode = getRoot();
 
-		for (let folder of fragments) {
+		for (const folder of fragments) {
 			const childNode = fileNode.children?.find(file => file.name === folder);
 			if (!childNode) throw Error(`Can't find directory ${folder} in path: ${path}`);
 			fileNode = childNode;

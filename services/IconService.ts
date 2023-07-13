@@ -23,10 +23,12 @@ export const getFolderIcon = (path: string) => {
 	}
 };
 
-export const getDesktopIconPathByExtension = (extension: string): string => {
+export const getIconPathByExtension = (extension: string): string => {
 	switch (extension) {
 		case SupportedFileExtension.TXT:
-			return '/icons/folder-icon.png';
+			return IconPaths.TEXT;
+		case SupportedFileExtension.YOUTUBE:
+			return IconPaths.YOUTUBE;
 		default:
 			return '';
 	}
