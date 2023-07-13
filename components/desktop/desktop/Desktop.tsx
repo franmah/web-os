@@ -19,7 +19,7 @@ const Desktop: FC = () => {
 
 	useEffect(() => {
 		readdirV2(CommonFolderPaths.DESKTOP)
-			.then(paths => setPaths(paths));
+			.then(fileNames => setPaths(fileNames.map(fileName => CommonFolderPaths.DESKTOP + '/' + fileName)));
 	}, []);
 
 	const handleItemContextMenuClick = (event: MouseEvent) => {
