@@ -16,3 +16,8 @@ export const getParentPath = (path: string): string => {
 	const pathArr = pathFragments.slice(0, pathFragments.length - 1);
 	return '/' + pathArr.join('/') || '/';
 };
+
+export const getFileExtension = (fileName: string): string => {
+	const fragments = fileName.split('.');
+	return fragments.at(-1) || '';
+};
