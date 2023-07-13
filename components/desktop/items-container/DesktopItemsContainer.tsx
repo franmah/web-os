@@ -101,53 +101,28 @@ const DesktopItemsContainer: FC<{
 		onDesktopContextMenuClick(event, commands);
 	};
 
-	const addItem = (top: number, left: number, type: string) => {
-		if (type === 'folder') {
-			return addFolder(top, left);
-		}
-
+	const addItem = (top: number, left: number, fileType: string) => {
 		setDesktopItems(currentItems => {
-			let newItemName = getNewItemName(type, currentItems);
-			let extension = '';
+			const isDirectory = fileType === 'folder';
+			const newItemName = getNewItemName(fileType, currentItems);
+			const path = CommonFolderPaths.DESKTOP + '/' + newItemName + _getExtension(fileType);
+			const item = pathToDesktopItem(path, isDirectory);
+			item.left = left;
+			item.top = top;
 
-			if (type === 'Text') {
-				extension = 'txt';
-			}
-
-			newItemName += '.' + extension;
-
-			const item: DesktopItem = {
-				left,
-				renaming: true,
-				selected: false,
-				top,
-				path: CommonFolderPaths.DESKTOP + '/' + newItemName, // TODO: is that correct?,
-				iconPath: getIconPathByExtension(extension),
-				id: v4()
-			};
-
-			onFileChange(item);
+			if (isDirectory)
+				onFolderChange(item);
+			else
+				onFileChange(item);
 			return [...currentItems, item];
 		});
 	};
 
-	const addFolder = (top: number, left: number) => {
-		setDesktopItems(currentItems => {
-			const newItemName = getNewItemName('Folder', currentItems);
-			const path = CommonFolderPaths.DESKTOP + '/' + newItemName; // TODO: is that correct?
-			const item: DesktopItem = {
-				left,
-				renaming: true,
-				selected: false,
-				top,
-				path,
-				iconPath: getFolderIcon(path),
-				id: v4()
-			};
-
-			onFolderChange(item);
-			return [...currentItems, item];
-		});
+	const _getExtension = (fileType: string) => {
+		if (fileType === 'folder')
+			return '';
+		if (fileType === 'Text')
+			return '.txt';
 	};
 
 	const onItemRenamed = (itemPath: string, itemNewName: string) => {
