@@ -6,11 +6,11 @@ OK - Add missing icons
   - unkown extension
   - youtube
 OK - Create function in file system service to get extension from a file (not a path (single resonsibility))
-- Complete IconService function for desktop items to get their icons.
-- IconService function getDesktopIconPath... should be more generic (not just for desktop)
+OK - Complete IconService function for desktop items to get their icons.
+OK - IconService function getDesktopIconPath... should be more generic (not just for desktop)
 
 2. File or folder
-- Create a isDirectory in FileSystem context
+OK - Create a isDirectory in FileSystem context
   should return true if file has no extension.
 
 OK 2.5 Add more test files (at least one youtube and one text file)
@@ -27,6 +27,9 @@ OK 2.5 Add more test files (at least one youtube and one text file)
 - Create a function to validate names.
   For now files are not allowed to go without an extension in their name.
 - Update desktop and explorer to use validation function just above when renaming.
+
+4.5 FIX DESKTOP SELECTION BOX (items don't get selected.)
+  - probably because of the item.id change.
 
 5. Refactor "folder" usage to "directory"
 
