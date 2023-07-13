@@ -75,8 +75,16 @@ const getExampleDesktopChildren = (desktop: ExplorerFile): ExplorerFile[] => [
 	{
 		children: [],
 		iconPath: IconPaths.FOLDER,
-		name: 'New folder (3)',
-		id: 'num #3',
+		name: 'Video.youtube',
+		id: 'youtube-video-1',
+		parent: desktop,
+		isFolder: true
+	},
+	{
+		children: [],
+		iconPath: IconPaths.FOLDER,
+		name: 'Text.txt',
+		id: 'text-1',
 		parent: desktop,
 		isFolder: true
 	},
