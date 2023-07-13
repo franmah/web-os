@@ -86,7 +86,7 @@ const isItemOverlapingOtherItems = (i1Top: number, i1Left: number, i2: DesktopIt
 // Was unable to implement it because too many events triggered for useState to follow.
 export const getSelectedItemsFromSelectionBoxgWithCtrl = (
 	currentDesktopItems: DesktopItem[],
-	selectedItemPaths: string[],
+	selectedItemIds: string[],
 	previousElementInBox: HTMLElement[]
 ): DesktopItem[] => {
 	const previouslySelectedItemIds = previousElementInBox.map(element => element.id);
@@ -94,11 +94,11 @@ export const getSelectedItemsFromSelectionBoxgWithCtrl = (
 	const updatedItems = currentDesktopItems.map(i => {
 		let selected = i.selected;
 
-		if (selectedItemPaths.includes(i.path)) {
+		if (selectedItemIds.includes(i.id)) {
 			selected = true;
 		}
 		// Unselect item if it was in box but is not anymore.
-		else if (previouslySelectedItemIds.includes(i.path)) {
+		else if (previouslySelectedItemIds.includes(i.id)) {
 			selected = false;
 		}
 
@@ -114,16 +114,16 @@ export const getSelectedItemsFromSelectionBoxgWithCtrl = (
 /**
  * Select items that are between the most top left selected item and the clicked item,
  * from the left of the top item to the right of the bottom item, from top to bottom.
- * @param clickedItemPath
+ * @param clickedItemId
  * @param items
  * @returns
  */
 export const selectItemsWithShiftKey = (
-	clickedItemPath: string,
+	clickedItemId: string,
 	items: DesktopItem[],
 	ctrlKey: boolean
 ): DesktopItem[] => {
-	const clickedItem = items.find(i => i.path === clickedItemPath) as DesktopItem;
+	const clickedItem = items.find(i => i.id === clickedItemId) as DesktopItem;
 
 	if (!clickedItem) {
 		throw Error('Select items with shift key: No clicked item.');
@@ -137,7 +137,7 @@ export const selectItemsWithShiftKey = (
 	}
 
 	const topItem = mostTopLeftSelectedItem.top < clickedItem.top ? mostTopLeftSelectedItem : clickedItem;
-	const bottomItem = topItem.path === clickedItem.path ? mostTopLeftSelectedItem : clickedItem;
+	const bottomItem = topItem.id === clickedItem.id ? mostTopLeftSelectedItem : clickedItem;
 
 	const updatedItems: DesktopItem[] = items.map(item => ({
 		...item,

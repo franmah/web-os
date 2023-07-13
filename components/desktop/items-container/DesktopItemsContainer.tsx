@@ -23,6 +23,7 @@ import { CommonFolderPaths } from '../../../constants/system/file-system/CommonF
 import { getCurrentItemNameInPath } from '../../../services/file-system/FilePathService';
 import { getFolderIcon, getIconPathByExtension } from '../../../services/IconService';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
+import { v4 } from 'uuid';
 
 const DesktopItemsContainer: FC<{
 	paths: string[];
@@ -121,7 +122,8 @@ const DesktopItemsContainer: FC<{
 				selected: false,
 				top,
 				path: CommonFolderPaths.DESKTOP + '/' + newItemName, // TODO: is that correct?,
-				iconPath: getIconPathByExtension(extension)
+				iconPath: getIconPathByExtension(extension),
+				id: v4()
 			};
 
 			onFileChange(item);
@@ -139,7 +141,8 @@ const DesktopItemsContainer: FC<{
 				selected: false,
 				top,
 				path,
-				iconPath: getFolderIcon(path)
+				iconPath: getFolderIcon(path),
+				id: v4()
 			};
 
 			onFolderChange(item);
@@ -194,32 +197,32 @@ const DesktopItemsContainer: FC<{
 		});
 	};
 
-	const selectItems = (...itemPaths: string[]) => {
+	const selectItems = (...itemIds: string[]) => {
 		setDesktopItems(currentItems => {
-			const updated = currentItems.map(i => ({ ...i, selected: itemPaths.includes(i.path) }));
+			const updated = currentItems.map(i => ({ ...i, selected: itemIds.includes(i.id) }));
 			return [...updated];
 		});
 	};
 
-	const selectItemsWithCtrl = (...itemPaths: string[]) => {
+	const selectItemsWithCtrl = (...itemIds: string[]) => {
 		setDesktopItems(currentItems => {
 			const updatedItems = currentItems.map(i => ({
 				...i,
-				selected: itemPaths.includes(i.path) ? !i.selected : i.selected
+				selected: itemIds.includes(i.id) ? !i.selected : i.selected
 			}));
 			return [...updatedItems];
 		});
 	};
 
-	const selectItemWithShift = (itemPath: string, ctrlKey: boolean) => {
+	const selectItemWithShift = (itemId: string, ctrlKey: boolean) => {
 		setDesktopItems(currentItems => {
-			const clickedItem = currentItems.find(item => item.path === itemPath);
+			const clickedItem = currentItems.find(item => item.id === itemId);
 
 			if (!clickedItem || clickedItem.selected) {
 				return currentItems;
 			}
 
-			return [...selectItemsWithShiftKey(itemPath, currentItems, ctrlKey)];
+			return [...selectItemsWithShiftKey(itemId, currentItems, ctrlKey)];
 		});
 	};
 

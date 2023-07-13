@@ -9,9 +9,9 @@ import { getCurrentItemNameInPath } from '../../../services/file-system/FilePath
 const DesktopItemComponent: FC<{
 	item: DesktopItem;
 	moveItem: (path: string, startItemTop: number, startItemLeft: number, newItemTop: number, newItemLeft: number) => void;
-	selectItems: (...paths: string[]) => void;
-	selectItemsWithCtrl: (...paths: string[]) => void;
-	selectItemsWithShift: (path: string, ctrlKey: boolean) => void;
+	selectItems: (...ids: string[]) => void;
+	selectItemsWithCtrl: (...ids: string[]) => void;
+	selectItemsWithShift: (id: string, ctrlKey: boolean) => void;
 	handleDoubleClick: (item: DesktopItem) => void;
 	handleContextMenuClick: (event: MouseEvent) => void;
 	handleItemRenamed: (itemPath: string, itemNewName: string) => void;
@@ -58,11 +58,11 @@ const DesktopItemComponent: FC<{
 
 	const onClick = (event: any) => {
 		if (event.shiftKey) {
-			selectItemsWithShift(item.path, event.ctrlKey);
+			selectItemsWithShift(item.id, event.ctrlKey);
 		} else if (event.ctrlKey) {
-			selectItemsWithCtrl(item.path);
+			selectItemsWithCtrl(item.id);
 		} else {
-			selectItems(item.path);
+			selectItems(item.id);
 		}
 	};
 
@@ -146,7 +146,7 @@ const DesktopItemComponent: FC<{
 
 	return (
 		<div
-			id={`desktop-item-${item.path}`}
+			id={item.id}
 			draggable={!item.renaming}
 			className={getClass()}
 			onDragEnd={onDragEnd}

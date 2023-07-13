@@ -5,4 +5,5 @@ export type DesktopItem = {
 	renaming: boolean;
 	path: string;
 	iconPath: string;
+	id: string;
 };

@@ -1,3 +1,4 @@
+import { v4 } from 'uuid';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { getFolderIcon, getIconPathByExtension } from '../../IconService';
 import { getCurrentItemNameInPath, getFileExtension } from '../../file-system/FilePathService';
@@ -17,7 +18,8 @@ export const pathToDesktopItem = (path: string, isDirectory: boolean): DesktopIt
 		path,
 		renaming: false,
 		selected: false,
-		top: 0
+		top: 0,
+		id: v4()
 	};
 };
 
