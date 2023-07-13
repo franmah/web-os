@@ -4,7 +4,8 @@ import styles from './desktop-item.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, SHORTENED_NAME_LENGTH } from '../../../constants/Desktop';
-import { getCurrentItemNameInPath } from '../../../services/file-system/FilePathService';
+import { getCurrentItemNameInPath, getFileExtension } from '../../../services/file-system/FilePathService';
+import { getIconPathByExtension } from '../../../services/IconService';
 import { IconPaths } from '../../../constants/IconPaths';
 
 const DesktopItemComponent: FC<{
@@ -161,7 +162,7 @@ const DesktopItemComponent: FC<{
 				width: ITEM_WIDTH
 			}}
 		>
-			<Image src={IconPaths.FOLDER} alt={'icon'} width={48} height={40} />
+			<Image src={item.iconPath} alt={'icon'} width={48} height={40} />
 
 			{item.renaming ? (
 				<textarea

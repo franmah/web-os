@@ -1,23 +1,25 @@
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import { getCurrentItemNameInPath } from '../../file-system/FilePathService';
+import { getFolderIcon, getIconPathByExtension } from '../../IconService';
+import { getCurrentItemNameInPath, getFileExtension } from '../../file-system/FilePathService';
 
 const DEFAULT_FOLDER_NAME = 'New folder';
 const NEW_FOLDER_NAME_REGEX = (type: string) => new RegExp(`New ${type} \([2-9]+\)`, 'g');
 export const DEFAULT_FOLDER_ICON_PATH = '/icons/folder-icon-empty.png';
 
 export const toItemWrappers = (paths: string[]): DesktopItem[] => {
-	return (
-		paths?.map(
-			path =>
-				({
-					left: 0,
-					path,
-					renaming: false,
-					selected: false,
-					top: 0
-				}) as DesktopItem
-		) || []
-	);
+	return paths?.map(path => {
+		const fileName = getCurrentItemNameInPath(path);
+		const extension = getFileExtension(fileName);
+
+		return {
+			iconPath: getIconPathByExtension(extension) || getFolderIcon(path),
+			left: 0,
+			path,
+			renaming: false,
+			selected: false,
+			top: 0
+		};
+	});
 };
 
 /**

@@ -70,6 +70,8 @@ and change file system to use actual FS style (use string path instead of Explor
   - ItemsContainerComponent should let DesktopComponent know that there's a new file or folder that was created.
 
 /////// TODO: in other
+Desktop:
+  - Refactor the way new files and folders are created.
 
 Explorer
   - explorer goes out of window when making window too small.

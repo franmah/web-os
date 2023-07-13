@@ -1,8 +1,7 @@
-import { ExplorerFile } from '../../../types/system/file/ExplorerElement';
+
 import { FC, Fragment, useEffect, useState } from 'react';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import {
-	DEFAULT_FOLDER_ICON_PATH,
 	getNewItemName,
 	toItemWrappers
 } from '../../../services/system/desktop/DesktopItemContainerService';
@@ -21,10 +20,9 @@ import { ContextMenuCommandList } from '../../../types/system/context-menu/Conte
 import DesktopItemComponent from '../item/DesktopItem';
 import SelectionBoxComponent from '../../shared/selection-box/SelectionBox';
 import { NewTxtFileCommand } from '../../../System/context-menu-commands/commands/NewTxtFileCommand';
-import { defaultProcessByExtension } from '../../../System/process/ProcessDirectoryByExtension';
-import { ProcessDirectory } from '../../../System/process/ProcessDirectory';
 import { CommonFolderPaths } from '../../../constants/system/file-system/CommonFilePaths';
 import { getCurrentItemNameInPath } from '../../../services/file-system/FilePathService';
+import { getFolderIcon, getIconPathByExtension } from '../../../services/IconService';
 
 const DesktopItemContainer: FC<{
 	paths: string[];
@@ -105,19 +103,22 @@ const DesktopItemContainer: FC<{
 		}
 
 		setDesktopItems(currentItems => {
-			const newItemName = getNewItemName(type, currentItems);
+			let newItemName = getNewItemName(type, currentItems);
 			let extension = '';
 
 			if (type === 'Text') {
 				extension = 'txt';
 			}
 
+			newItemName += '.' + extension;
+
 			const item: DesktopItem = {
 				left,
 				renaming: true,
 				selected: false,
 				top,
-				path: CommonFolderPaths.DESKTOP + '/' + newItemName // TODO: is that correct?
+				path: CommonFolderPaths.DESKTOP + '/' + newItemName, // TODO: is that correct?,
+				iconPath: getIconPathByExtension(extension)
 			};
 
 			onFileChange(item);
@@ -128,12 +129,14 @@ const DesktopItemContainer: FC<{
 	const addFolder = (top: number, left: number) => {
 		setDesktopItems(currentItems => {
 			const newItemName = getNewItemName('Folder', currentItems);
+			const path = CommonFolderPaths.DESKTOP + '/' + newItemName; // TODO: is that correct?
 			const item: DesktopItem = {
 				left,
 				renaming: true,
 				selected: false,
 				top,
-				path: CommonFolderPaths.DESKTOP + '/' + newItemName // TODO: is that correct?
+				path,
+				iconPath: getFolderIcon(path)
 			};
 
 			onFolderChange(item);

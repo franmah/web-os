@@ -4,4 +4,5 @@ export type DesktopItem = {
 	selected: boolean;
 	renaming: boolean;
 	path: string;
+	iconPath: string;
 };
