@@ -14,7 +14,8 @@ const FileSystemContextProvider: FC<{ children: React.ReactNode }> = ({ children
 		readdirV2,
 		searchFolderV2,
 		renameFolderV2,
-		deleteFolderV2
+		deleteFolderV2,
+		isDirectory
 	} = useFileSystemContextState();
 
 	return (
@@ -28,7 +29,8 @@ const FileSystemContextProvider: FC<{ children: React.ReactNode }> = ({ children
 				readdirV2,
 				searchFolderV2,
 				renameFolderV2,
-				deleteFolderV2
+				deleteFolderV2,
+				isDirectory
 			}}
 		>
 			{children}

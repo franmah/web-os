@@ -5,6 +5,7 @@ import { ExplorerFile } from '../types/system/file/ExplorerElement';
 import {
 	convertPathToFragments,
 	getCurrentItemNameInPath,
+	getFileExtension,
 	getParentPath
 } from '../services/file-system/FilePathService';
 import { CommonFolderPaths } from '../constants/system/file-system/CommonFilePaths';
@@ -16,6 +17,13 @@ export const useFileSystemContextState = () => {
 	const [getRoot, setRoot] = useState<() => ExplorerFile>(() => () => rootFile);
 
 	let getDesktop = (): ExplorerFile => getRoot()?.children?.[0];
+
+	// For a file will always have an extension. If there's no extension then it's a directory
+	const isDirectory = (path: string): Promise<boolean> => {
+		const fileName = getCurrentItemNameInPath(path);
+		const extension = getFileExtension(fileName);
+		return Promise.resolve(!extension);
+	};
 
 	const deleteFolderV2 = (path: string): Promise<void> => {
 		return new Promise((resolve, reject) => {
@@ -173,6 +181,7 @@ export const useFileSystemContextState = () => {
 		readdirV2,
 		searchFolderV2,
 		renameFolderV2,
-		deleteFolderV2
+		deleteFolderV2,
+		isDirectory
 	};
 };
