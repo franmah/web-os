@@ -2,10 +2,10 @@
 
 1. Desktop icons
 OK - Create a constant file with icon paths
-- Add missing icons
+OK - Add missing icons
   - unkown extension
   - youtube
-- Create function in file system service to get extension from a file (not a path (single resonsibility))
+OK - Create function in file system service to get extension from a file (not a path (single resonsibility))
 - Complete IconService function for desktop items to get their icons.
 - IconService function getDesktopIconPath... should be more generic (not just for desktop)
 
@@ -13,7 +13,7 @@ OK - Create a constant file with icon paths
 - Create a isDirectory in FileSystem context
   should return true if file has no extension.
 
-2.5 Add more test files (at least one youtube and one text file)
+OK 2.5 Add more test files (at least one youtube and one text file)
 
 3. Open process.
 - Complete ProcessDirectoryByExtension (refactor if needed since it's been there for a while)
@@ -53,6 +53,11 @@ and change file system to use actual FS style (use string path instead of Explor
 4. Windows menu
 - show apps 
 
+5. Refactor ExplorerFile
+- remove extra fields (icon path, make children optional...)
+
+6. general refactor
+- improve desktop file name display
 
 ////// IN PROGRESS:
 
