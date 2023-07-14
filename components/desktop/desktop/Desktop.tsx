@@ -14,13 +14,13 @@ import { getCurrentItemNameInPath, getFileExtension } from '../../../services/fi
 import { ProcessDirectoryByExtension } from '../../../System/process/ProcessDirectoryByExtension';
 
 const Desktop: FC = () => {
-	const { getDesktop, appendFile, mkdir, readdirV2, isDirectory } = useContext(FileSystemContext);
+	const fs = useContext(FileSystemContext);
 	const { openProcess } = useContext(ProcessContext);
 
 	const [paths, setPaths] = useState<string[]>([]);
 
 	useEffect(() => {
-		readdirV2(CommonFolderPaths.DESKTOP)
+		fs.readdirV2(CommonFolderPaths.DESKTOP)
 			.then(fileNames => setPaths(fileNames.map(fileName => CommonFolderPaths.DESKTOP + '/' + fileName)));
 	}, []);
 
@@ -41,7 +41,7 @@ const Desktop: FC = () => {
 	};
 
 	const openItemProcess = (item: DesktopItem) => {
-		if (isDirectory(item.path)) {
+		if (fs.isDirectory(item.path)) {
 			return openProcess('explorer', { startPath: item.path });
 		}
 
@@ -57,22 +57,15 @@ const Desktop: FC = () => {
 
 	};
 
-	// TODO: fix
-	const handleFileChange = async (newItem: DesktopItem) => {
-		// const desktopPaths = await readdirV2(CommonFolderPaths.DESKTOP);
-		// const oldFile = getDesktop().children?.find(file => file.id === newItem.id);
-		// if (!oldFile) {
-		// 	appendFile(newItem.name, newItem.iconPath, getDesktop(), newItem.id);
-		// }
+	const handleNewItemCreated = (path: string) => {
+		if (fs.isDirectory(path))
+			fs.mkdir(path);
+		else
+			fs.appendFileV2(path);
 	};
 
-	// TODO: fix
-	const handleFolderChange = (item: DesktopItem) => {
-		// const oldFolder = getDesktop().children?.find(file => file.id === item.id);
-
-		// if (!oldFolder) {
-		// 	mkdir(item.name, getDesktop());
-		// }
+	const handleRenameItem = (oldPath: string, newPath: string) => {
+		fs.renameFolderV2(oldPath, getCurrentItemNameInPath(newPath));
 	};
 
 	return (
@@ -98,8 +91,9 @@ const Desktop: FC = () => {
 					paths={paths}
 					onDesktopContextMenuClick={handleDesktopContextMenuClick}
 					onItemContextMenuClick={handleItemContextMenuClick}
-					onFileChange={handleFileChange}
-					onFolderChange={handleFolderChange}
+					onItemCreated={handleNewItemCreated}
+					onRenameItem={handleRenameItem}
+
 					onItemDoubleClick={openItemProcess}
 				/>
 			</div>

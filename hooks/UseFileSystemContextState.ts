@@ -5,6 +5,7 @@ import { ExplorerFile } from '../types/system/file/ExplorerElement';
 import {
 	convertPathToFragments,
 	getCurrentItemNameInPath,
+	getFileExtension,
 	getParentPath
 } from '../services/file-system/FilePathService';
 import { CommonFolderPaths } from '../constants/system/file-system/CommonFilePaths';
@@ -104,19 +105,22 @@ export const useFileSystemContextState = () => {
 		}
 	};
 
-	const mkdir = (name: string, parent: ExplorerFile, id?: string) => {
+	const mkdir = (path: string) => {
 		setRoot(getRoot => {
 			const root = getRoot();
+			const parentPath = getParentPath(path);
+			const parentNode = _getNodeFromPath(parentPath);
+
 			const file: ExplorerFile = {
-				name,
+				name: getCurrentItemNameInPath(parentPath),
 				iconPath: IconPaths.FOLDER,
-				parent,
+				parent: parentNode,
 				children: [],
-				id: id || v4(),
+				id: v4(),
 				isFolder: true
 			};
 
-			if (parent) parent.children.push(file);
+			parentNode.children.push(file);
 
 			getDesktop = () => root?.children?.[0];
 
@@ -128,35 +132,55 @@ export const useFileSystemContextState = () => {
 		file.content = content;
 	};
 
-	const appendFile = (name: string, iconPath: string, parent: ExplorerFile | null, id?: string, content?: any) => {
-		setRoot(getRoot => {
-			const root = getRoot();
+	// TODO: only creates a file, update to actually append
+	const appendFileV2 = async (path: string, content?: any): Promise<void> => {
+		if (path === CommonFolderPaths.ROOT) {
+			return;
+		}
 
-			const extension = name.split('.').at(-1);
+		if (await exists(path)) {
+			return;
+		}
+		const parentPath = getParentPath(path);
 
-			const file: ExplorerFile = {
-				name,
-				iconPath,
-				children: [],
-				parent,
-				id: id || v4(),
-				isFolder: false,
-				extension,
-				content
-			};
+		if (!await exists(path))
+			throw Error('Parent directory does not exist.');
 
-			if (parent) {
-				parent.children.push(file);
-			}
+		const parentNode = _getNodeFromPath(parentPath);
+		const file: ExplorerFile = {
+			children: [],
+			content,
+			extension: getFileExtension(getCurrentItemNameInPath(path)),
+			iconPath: '',
+			id: v4(),
+			isFolder: false,
+			name: getCurrentItemNameInPath(path),
+			parent: parentNode
+		};
 
-			getDesktop = () => root?.children?.[0];
+		parentNode.children.push(file);
+	};
 
-			return () => root;
-		});
+	const exists = (path: string): Promise<boolean> => {
+		if (path.at(-1) === '/')
+			path = path.substring(0, path.length - 1);
+
+		const fragments = convertPathToFragments(path);
+		let fileNode = getRoot();
+
+		for (const folder of fragments) {
+			const childNode = fileNode.children?.find(file => file.name === folder);
+			if (!childNode)
+				return Promise.resolve(false);
+			fileNode = childNode;
+		}
+
+		return Promise.resolve(true);
 	};
 
 	const _getNodeFromPath = (path: string): ExplorerFile => {
-		if (path.at(-1) === '/') path = path.substring(0, path.length - 1);
+		if (path.at(-1) === '/')
+			path = path.substring(0, path.length - 1);
 
 		const fragments = convertPathToFragments(path);
 		let fileNode = getRoot();
@@ -171,15 +195,15 @@ export const useFileSystemContextState = () => {
 	};
 
 	return {
-		getRoot,
-		appendFile,
-		getDesktop,
-		mkdir,
-		updateFile,
-		readdirV2,
-		searchFolderV2,
-		renameFolderV2,
+		appendFileV2,
 		deleteFolderV2,
-		isDirectory
+		getDesktop,
+		getRoot,
+		isDirectory,
+		mkdir,
+		readdirV2,
+		renameFolderV2,
+		searchFolderV2,
+		updateFile
 	};
 };

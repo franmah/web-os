@@ -14,8 +14,7 @@ const DesktopItemComponent: FC<{
 	selectItemsWithShift: (id: string, ctrlKey: boolean) => void;
 	handleDoubleClick: (item: DesktopItem) => void;
 	handleContextMenuClick: (event: MouseEvent) => void;
-	handleItemRenamed: (itemPath: string, itemNewName: string) => void;
-	startRenaming: (itemPath: string) => void;
+	onItemRename: (itemPath: string, itemNewName: string) => void;
 }> = ({
 	item,
 	moveItem,
@@ -24,11 +23,11 @@ const DesktopItemComponent: FC<{
 	selectItemsWithShift,
 	handleDoubleClick,
 	handleContextMenuClick,
-	handleItemRenamed,
-	startRenaming
+	onItemRename
 }) => {
 
 	const [inputNameValue, setInputNameValue] = useState<string>(getCurrentItemNameInPath(item.path));
+	const [renaming, setRenaming] = useState<boolean>(false);
 
 	const INPUT_ID = item.id + '_input';
 	const TEXT_ID = item.id + '_text';
@@ -37,17 +36,22 @@ const DesktopItemComponent: FC<{
 	const distanceMouseToItemLeftRef = useRef(0);
 
 	useEffect(() => {
-		if (item.renaming) {
+		const renameItem = (event: KeyboardEvent) => {
+			if (event.key === 'Enter')
+				onItemDoneRenaming();
+		};
+
+		if (renaming) {
 			const textAreaElement = document.getElementById(INPUT_ID);
 			document.addEventListener('mousedown', onMouseDown);
-			document.addEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming());
+			document.addEventListener('keyup', renameItem);
 			resizeTextArea(textAreaElement);
 		}
 
 		return () => {
-			if (item.renaming) {
+			if (renaming) {
 				document.removeEventListener('mousedown', onMouseDown);
-				document.removeEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming());
+				document.removeEventListener('keyup', renameItem);
 			}
 		};
 	});
@@ -97,7 +101,8 @@ const DesktopItemComponent: FC<{
 
 	const onItemDoneRenaming = () => {
 		if (inputNameValue && inputNameValue.trim() !== '') {
-			handleItemRenamed(item.path, inputNameValue.trim());
+			setRenaming(false);
+			onItemRename(item.id, inputNameValue.trim());
 		}
 	};
 
@@ -113,7 +118,7 @@ const DesktopItemComponent: FC<{
 
 	const onItemNameClick = () => {
 		if (item.selected) {
-			startRenaming(item.path);
+			setRenaming(true);
 		}
 	};
 
@@ -147,7 +152,7 @@ const DesktopItemComponent: FC<{
 	return (
 		<div
 			id={item.id}
-			draggable={!item.renaming}
+			draggable={!renaming}
 			className={getClass()}
 			onDragEnd={onDragEnd}
 			onClick={onClick}
@@ -162,7 +167,7 @@ const DesktopItemComponent: FC<{
 		>
 			<Image src={item.iconPath} alt={'icon'} width={48} height={40} />
 
-			{item.renaming ? (
+			{renaming ? (
 				<textarea
 					id={INPUT_ID}
 					autoFocus
@@ -172,7 +177,7 @@ const DesktopItemComponent: FC<{
 				></textarea>
 			) : (
 				<div id={TEXT_ID} onClick={onItemNameClick}>
-					{formatItemName()}{' '}
+					{formatItemName()}
 				</div>
 			)}
 		</div>

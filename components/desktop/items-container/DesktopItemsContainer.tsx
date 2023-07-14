@@ -20,25 +20,23 @@ import DesktopItemComponent from '../item/DesktopItem';
 import SelectionBoxComponent from '../../shared/selection-box/SelectionBox';
 import { NewTxtFileCommand } from '../../../System/context-menu-commands/commands/NewTxtFileCommand';
 import { CommonFolderPaths } from '../../../constants/system/file-system/CommonFilePaths';
-import { getCurrentItemNameInPath } from '../../../services/file-system/FilePathService';
-import { getFolderIcon, getIconPathByExtension } from '../../../services/IconService';
+import { getCurrentItemNameInPath, getFileExtension, getParentPath } from '../../../services/file-system/FilePathService';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
-import { v4 } from 'uuid';
 
 const DesktopItemsContainer: FC<{
 	paths: string[];
 	onDesktopContextMenuClick: (event: MouseEvent, commands: ContextMenuCommandList) => void;
 	onItemContextMenuClick: (event: MouseEvent) => void;
-	onFileChange: (newItem: DesktopItem) => void;
-	onFolderChange: (item: DesktopItem) => void;
+	onItemCreated: (path: string) => void;
 	onItemDoubleClick: (item: DesktopItem) => void;
+	onRenameItem: (oldPath: string, newPath: string) => void;
 }> = ({
 	paths,
 	onDesktopContextMenuClick,
 	onItemContextMenuClick,
-	onFileChange,
-	onFolderChange,
-	onItemDoubleClick
+	onItemCreated,
+	onItemDoubleClick,
+	onRenameItem
 }) => {
 
 	const fs = useContext(FileSystemContext);
@@ -111,10 +109,7 @@ const DesktopItemsContainer: FC<{
 			item.left = left;
 			item.top = top;
 
-			if (isDirectory)
-				onFolderChange(item);
-			else
-				onFileChange(item);
+			onItemCreated(item.path);
 			return [...currentItems, item];
 		});
 	};
@@ -126,30 +121,47 @@ const DesktopItemsContainer: FC<{
 			return '.txt';
 	};
 
-	const onItemRenamed = (itemPath: string, itemNewName: string) => {
+	// TODO: once changes to the File System triggers a render, this should be handled by the FS context
+	const handleItemRenamed = (itemToRenameId: string, itemNewName: string) => {
 		setDesktopItems(currentItems => {
-			if (!itemNewName || itemNewName.trim() === '') {
+			if (!itemNewName) {
 				return currentItems;
 			}
 
-			const isNameAlreadyUsed = currentItems.find(i => getCurrentItemNameInPath(i.path) === itemNewName && i.path !== itemPath);
-
-			if (!isNameAlreadyUsed) {
-				const updatedItems: DesktopItem[] = currentItems.map(i => ({
-					...i,
-					name: i.path === itemPath ? itemNewName : getCurrentItemNameInPath(i.path),
-					renaming: false,
-					selected: i.path === itemPath
-				}));
-
-				const newItem = updatedItems.find(i => i.path === itemPath) as DesktopItem;
-
-				onFileChange(newItem);
-
-				return [...updatedItems];
+			const itemToRename = currentItems.find(item => item.id === itemToRenameId);
+			if (!itemToRename) {
+				console.error(`Error renaming item: ${itemToRenameId}. Item not found.`);
+				return currentItems;
 			}
 
-			return currentItems;
+			const parentPath = getParentPath(itemToRename.path);
+			const newPath = parentPath + '/' + itemNewName;
+
+			const extension = getFileExtension(itemNewName);
+			if (extension && fs.isDirectory(itemToRename.path)) {
+				console.error('Directory can\'t have extensions.');
+				return currentItems;
+			}
+
+			if (!extension && !fs.isDirectory(itemToRename.path)) {
+				console.error('Non directory files must have an extension.');
+				return currentItems;
+			}
+
+			const isNameAlreadyUsed = currentItems.find(i => getCurrentItemNameInPath(i.path) === itemNewName && i.path !== itemToRenameId);
+
+			if (isNameAlreadyUsed) {
+				return currentItems;
+			}
+
+			const updatedItems: DesktopItem[] = currentItems.map(item => ({
+				...item,
+				path: item.id === itemToRenameId ? newPath : item.path,
+				selected: item.id === itemToRenameId
+			}));
+
+			onRenameItem(itemToRename.path, newPath);
+			return [...updatedItems];
 		});
 	};
 
@@ -224,15 +236,6 @@ const DesktopItemsContainer: FC<{
 		}
 	};
 
-	const handleItemRenaming = (itemPath: string) => {
-		setDesktopItems(currentItems => {
-			return currentItems.map(i => ({
-				...i,
-				renaming: i.path === itemPath
-			}));
-		});
-	};
-
 	return (
 		<Fragment>
 			{desktopItems.map((item, index) => (
@@ -245,8 +248,7 @@ const DesktopItemsContainer: FC<{
 					selectItemsWithShift={selectItemWithShift}
 					handleDoubleClick={handleItemDoubleClick}
 					handleContextMenuClick={event => onItemContextMenuClick(event)}
-					handleItemRenamed={onItemRenamed}
-					startRenaming={handleItemRenaming}
+					onItemRename={handleItemRenamed}
 				/>
 			))}
 

@@ -21,7 +21,7 @@ OK 2.7 Explorer:
 OK 4.5 FIX DESKTOP SELECTION BOX (items don't get selected.)
   - probably because of the item.id change.
 
-4.55 Fix items not moving on desktop
+OK 4.55 Fix items not moving on desktop
 
 4.6 Renaming
   - fix renaming items not working
@@ -75,6 +75,10 @@ and change file system to use actual FS style (use string path instead of Explor
   - ItemsContainerComponent should let DesktopComponent know that there's a new file or folder that was created.
 
 /////// TODO: in other
+
+FileSystem
+  - update functions to match node.js file system.
+  
 Desktop:
   - Refactor the way new files and folders are created.
 
