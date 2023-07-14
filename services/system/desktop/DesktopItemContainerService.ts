@@ -8,9 +8,9 @@ const NEW_FOLDER_NAME_REGEX = (type: string) => new RegExp(`New ${type} \([2-9]+
 export const DEFAULT_FOLDER_ICON_PATH = '/icons/folder-icon-empty.png';
 
 export const pathToDesktopItem = (path: string, isDirectory: boolean): DesktopItem => {
-	const iconPath = isDirectory ?
-		getFolderIcon(path) :
-		getIconPathByExtension(getFileExtension(getCurrentItemNameInPath(path)));
+	const iconPath = isDirectory
+		? getFolderIcon(path)
+		: getIconPathByExtension(getFileExtension(getCurrentItemNameInPath(path)));
 
 	return {
 		iconPath,

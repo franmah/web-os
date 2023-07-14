@@ -1,9 +1,6 @@
-
 import { FC, Fragment, useContext, useEffect, useState } from 'react';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import {
-	getNewItemName, pathToDesktopItem
-} from '../../../services/system/desktop/DesktopItemContainerService';
+import { getNewItemName, pathToDesktopItem } from '../../../services/system/desktop/DesktopItemContainerService';
 import {
 	getSelectedItemsFromSelectionBoxgWithCtrl,
 	moveItemsOnDesktop,
@@ -20,7 +17,11 @@ import DesktopItemComponent from '../item/DesktopItem';
 import SelectionBoxComponent from '../../shared/selection-box/SelectionBox';
 import { NewTxtFileCommand } from '../../../System/context-menu-commands/commands/NewTxtFileCommand';
 import { CommonFolderPaths } from '../../../constants/system/file-system/CommonFilePaths';
-import { getCurrentItemNameInPath, getFileExtension, getParentPath } from '../../../services/file-system/FilePathService';
+import {
+	getCurrentItemNameInPath,
+	getFileExtension,
+	getParentPath
+} from '../../../services/file-system/FilePathService';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
 
 const DesktopItemsContainer: FC<{
@@ -30,15 +31,7 @@ const DesktopItemsContainer: FC<{
 	onItemCreated: (path: string) => void;
 	onItemDoubleClick: (item: DesktopItem) => void;
 	onRenameItem: (oldPath: string, newPath: string) => void;
-}> = ({
-	paths,
-	onDesktopContextMenuClick,
-	onItemContextMenuClick,
-	onItemCreated,
-	onItemDoubleClick,
-	onRenameItem
-}) => {
-
+}> = ({ paths, onDesktopContextMenuClick, onItemContextMenuClick, onItemCreated, onItemDoubleClick, onRenameItem }) => {
 	const fs = useContext(FileSystemContext);
 
 	const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
@@ -62,8 +55,7 @@ const DesktopItemsContainer: FC<{
 			}
 
 			// If mousedown event comes from an item then don't unselect
-			const isEventFromAnyItem = desktopItems
-				.some(item => isEventOriginatedFromWithinTargetIdSubtree(event, item.id));
+			const isEventFromAnyItem = desktopItems.some(item => isEventOriginatedFromWithinTargetIdSubtree(event, item.id));
 
 			if (!isEventFromAnyItem) {
 				selectItems();
@@ -115,10 +107,8 @@ const DesktopItemsContainer: FC<{
 	};
 
 	const _getExtension = (fileType: string) => {
-		if (fileType === 'folder')
-			return '';
-		if (fileType === 'Text')
-			return '.txt';
+		if (fileType === 'folder') return '';
+		if (fileType === 'Text') return '.txt';
 	};
 
 	// TODO: once changes to the File System triggers a render, this should be handled by the FS context
@@ -139,7 +129,7 @@ const DesktopItemsContainer: FC<{
 
 			const extension = getFileExtension(itemNewName);
 			if (extension && fs.isDirectory(itemToRename.path)) {
-				console.error('Directory can\'t have extensions.');
+				console.error("Directory can't have extensions.");
 				return currentItems;
 			}
 
@@ -148,7 +138,9 @@ const DesktopItemsContainer: FC<{
 				return currentItems;
 			}
 
-			const isNameAlreadyUsed = currentItems.find(i => getCurrentItemNameInPath(i.path) === itemNewName && i.path !== itemToRenameId);
+			const isNameAlreadyUsed = currentItems.find(
+				i => getCurrentItemNameInPath(i.path) === itemNewName && i.path !== itemToRenameId
+			);
 
 			if (isNameAlreadyUsed) {
 				return currentItems;

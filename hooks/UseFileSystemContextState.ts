@@ -143,8 +143,7 @@ export const useFileSystemContextState = () => {
 		}
 		const parentPath = getParentPath(path);
 
-		if (!await exists(path))
-			throw Error('Parent directory does not exist.');
+		if (!(await exists(path))) throw Error('Parent directory does not exist.');
 
 		const parentNode = _getNodeFromPath(parentPath);
 		const file: ExplorerFile = {
@@ -162,16 +161,14 @@ export const useFileSystemContextState = () => {
 	};
 
 	const exists = (path: string): Promise<boolean> => {
-		if (path.at(-1) === '/')
-			path = path.substring(0, path.length - 1);
+		if (path.at(-1) === '/') path = path.substring(0, path.length - 1);
 
 		const fragments = convertPathToFragments(path);
 		let fileNode = getRoot();
 
 		for (const folder of fragments) {
 			const childNode = fileNode.children?.find(file => file.name === folder);
-			if (!childNode)
-				return Promise.resolve(false);
+			if (!childNode) return Promise.resolve(false);
 			fileNode = childNode;
 		}
 
@@ -179,8 +176,7 @@ export const useFileSystemContextState = () => {
 	};
 
 	const _getNodeFromPath = (path: string): ExplorerFile => {
-		if (path.at(-1) === '/')
-			path = path.substring(0, path.length - 1);
+		if (path.at(-1) === '/') path = path.substring(0, path.length - 1);
 
 		const fragments = convertPathToFragments(path);
 		let fileNode = getRoot();

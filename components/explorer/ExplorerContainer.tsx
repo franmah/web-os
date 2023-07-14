@@ -4,7 +4,11 @@ import ExplorerFileQuickAccess from './FileQuickAccess';
 import ExplorerFileViewContainer from './file-view/FileViewContainer';
 import { FileSystemContext } from '../../contexts/FileSystemContext';
 import { StyledExplorerContainer } from '../../styled-components/system/explorer/StyldExplorerContainer';
-import { convertPathToFragments, getCurrentItemNameInPath, getFileExtension } from '../../services/file-system/FilePathService';
+import {
+	convertPathToFragments,
+	getCurrentItemNameInPath,
+	getFileExtension
+} from '../../services/file-system/FilePathService';
 import { ExplorerQuickAccessContext } from '../../contexts/ExplorerQuickAccessContext';
 import { CommonFolderPaths } from '../../constants/system/file-system/CommonFilePaths';
 import { ProcessContext } from '../../contexts/ProcessContext';
@@ -39,7 +43,6 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 	};
 
 	const openFile = (newPath: string) => {
-
 		// TODO: fix newPath starting with // sometimes (following code removes the extra /)
 		if (newPath[1] === '/') newPath = '/' + newPath.substring(2, newPath.length);
 

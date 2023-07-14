@@ -7,13 +7,7 @@ export const FileSystemContext = createContext<FileSystemContextType>(null as an
 const FileSystemContextProvider: FC<{ children: React.ReactNode }> = ({ children }) => {
 	const fs = useFileSystemContextState();
 
-	return (
-		<FileSystemContext.Provider
-			value={fs}
-		>
-			{children}
-		</FileSystemContext.Provider>
-	);
+	return <FileSystemContext.Provider value={fs}>{children}</FileSystemContext.Provider>;
 };
 
 export default FileSystemContextProvider;

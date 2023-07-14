@@ -8,7 +8,13 @@ import { getCurrentItemNameInPath } from '../../../services/file-system/FilePath
 
 const DesktopItemComponent: FC<{
 	item: DesktopItem;
-	moveItem: (itemId: string, startItemTop: number, startItemLeft: number, newItemTop: number, newItemLeft: number) => void;
+	moveItem: (
+		itemId: string,
+		startItemTop: number,
+		startItemLeft: number,
+		newItemTop: number,
+		newItemLeft: number
+	) => void;
 	selectItems: (...ids: string[]) => void;
 	selectItemsWithCtrl: (...ids: string[]) => void;
 	selectItemsWithShift: (id: string, ctrlKey: boolean) => void;
@@ -25,7 +31,6 @@ const DesktopItemComponent: FC<{
 	handleContextMenuClick,
 	onItemRename
 }) => {
-
 	const [inputNameValue, setInputNameValue] = useState<string>(getCurrentItemNameInPath(item.path));
 	const [renaming, setRenaming] = useState<boolean>(false);
 
@@ -37,8 +42,7 @@ const DesktopItemComponent: FC<{
 
 	useEffect(() => {
 		const renameItem = (event: KeyboardEvent) => {
-			if (event.key === 'Enter')
-				onItemDoneRenaming();
+			if (event.key === 'Enter') onItemDoneRenaming();
 		};
 
 		if (renaming) {

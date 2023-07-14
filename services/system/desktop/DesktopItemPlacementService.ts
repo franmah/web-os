@@ -17,7 +17,7 @@ export const setItemPositions = (items: DesktopItem[], sortOption: DesktopSortOp
 };
 
 const setItemPositionsByName = (items: DesktopItem[]): DesktopItem[] => {
-	const sortedItems = items.sort((i1, i2) => i1.path > i2.path ? 1 : 0);
+	const sortedItems = items.sort((i1, i2) => (i1.path > i2.path ? 1 : 0));
 	return setItemDefaultPositions(sortedItems);
 };
 

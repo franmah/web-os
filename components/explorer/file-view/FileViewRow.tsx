@@ -32,9 +32,9 @@ export const ExplorerFileViewRow: FC<{
 
 	const inputRef = useRef<any>(null);
 
-	const iconPath: string = isDirectory(path) ?
-		getFolderIcon(path) :
-		getIconPathByExtension(getFileExtension(getCurrentItemNameInPath(path)));
+	const iconPath: string = isDirectory(path)
+		? getFolderIcon(path)
+		: getIconPathByExtension(getFileExtension(getCurrentItemNameInPath(path)));
 
 	// Select whole name when editing item name
 	useEffect(() => {

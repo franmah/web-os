@@ -20,8 +20,9 @@ const Desktop: FC = () => {
 	const [paths, setPaths] = useState<string[]>([]);
 
 	useEffect(() => {
-		fs.readdirV2(CommonFolderPaths.DESKTOP)
-			.then(fileNames => setPaths(fileNames.map(fileName => CommonFolderPaths.DESKTOP + '/' + fileName)));
+		fs.readdirV2(CommonFolderPaths.DESKTOP).then(fileNames =>
+			setPaths(fileNames.map(fileName => CommonFolderPaths.DESKTOP + '/' + fileName))
+		);
 	}, []);
 
 	const handleItemContextMenuClick = (event: MouseEvent) => {
@@ -54,14 +55,11 @@ const Desktop: FC = () => {
 		} else {
 			openProcess(processName);
 		}
-
 	};
 
 	const handleNewItemCreated = (path: string) => {
-		if (fs.isDirectory(path))
-			fs.mkdir(path);
-		else
-			fs.appendFileV2(path);
+		if (fs.isDirectory(path)) fs.mkdir(path);
+		else fs.appendFileV2(path);
 	};
 
 	const handleRenameItem = (oldPath: string, newPath: string) => {
@@ -93,7 +91,6 @@ const Desktop: FC = () => {
 					onItemContextMenuClick={handleItemContextMenuClick}
 					onItemCreated={handleNewItemCreated}
 					onRenameItem={handleRenameItem}
-
 					onItemDoubleClick={openItemProcess}
 				/>
 			</div>
