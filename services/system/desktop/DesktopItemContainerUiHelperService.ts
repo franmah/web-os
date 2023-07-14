@@ -4,18 +4,16 @@ import { DesktopItem } from '../../../types/desktop/DesktopItem';
 
 export const moveItemsOnDesktop = (
 	items: DesktopItem[],
-	itemPath: string,
+	itemId: string,
 	startItemTop: number,
 	startItemLeft: number,
 	newItemTop: number,
 	newItemLeft: number
 ) => {
-	const element = items.find(el => el.path === itemPath);
+	const element = items.find(el => el.id === itemId);
 	if (!element) {
 		return items;
 	}
-
-	const itemsToMove = items.filter(i => i.selected);
 
 	const updatedItems = items.map(item => {
 		if (!item.selected) {
@@ -32,8 +30,8 @@ export const moveItemsOnDesktop = (
 
 		return {
 			...item,
-			top: correctedTop,
-			left: correctedLeft
+			left: correctedLeft,
+			top: correctedTop
 		};
 	});
 

@@ -8,7 +8,7 @@ import { getCurrentItemNameInPath } from '../../../services/file-system/FilePath
 
 const DesktopItemComponent: FC<{
 	item: DesktopItem;
-	moveItem: (path: string, startItemTop: number, startItemLeft: number, newItemTop: number, newItemLeft: number) => void;
+	moveItem: (itemId: string, startItemTop: number, startItemLeft: number, newItemTop: number, newItemLeft: number) => void;
 	selectItems: (...ids: string[]) => void;
 	selectItemsWithCtrl: (...ids: string[]) => void;
 	selectItemsWithShift: (id: string, ctrlKey: boolean) => void;
@@ -30,8 +30,8 @@ const DesktopItemComponent: FC<{
 
 	const [inputNameValue, setInputNameValue] = useState<string>(getCurrentItemNameInPath(item.path));
 
-	const INPUT_ID = item.path + '_input';
-	const TEXT_ID = item.path + '_text';
+	const INPUT_ID = item.id + '_input';
+	const TEXT_ID = item.id + '_text';
 
 	const distanceMouseToItemTopRef = useRef(0);
 	const distanceMouseToItemLeftRef = useRef(0);
@@ -72,7 +72,7 @@ const DesktopItemComponent: FC<{
 			distanceMouseToItemTopRef.current,
 			distanceMouseToItemLeftRef.current
 		);
-		moveItem(item.path, item.top, item.left, top, left);
+		moveItem(item.id, item.top, item.left, top, left);
 	};
 
 	const onDragStart = (event: any) => {
@@ -80,7 +80,7 @@ const DesktopItemComponent: FC<{
 		distanceMouseToItemLeftRef.current = event.clientX - item.left;
 
 		if (!item.selected) {
-			selectItems(item.path);
+			selectItems(item.id);
 		}
 	};
 
@@ -172,7 +172,6 @@ const DesktopItemComponent: FC<{
 				></textarea>
 			) : (
 				<div id={TEXT_ID} onClick={onItemNameClick}>
-					{' '}
 					{formatItemName()}{' '}
 				</div>
 			)}

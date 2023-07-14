@@ -64,7 +64,8 @@ const DesktopItemsContainer: FC<{
 			}
 
 			// If mousedown event comes from an item then don't unselect
-			const isEventFromAnyItem = desktopItems.some(item => isEventOriginatedFromWithinTargetIdSubtree(event, item.path));
+			const isEventFromAnyItem = desktopItems
+				.some(item => isEventOriginatedFromWithinTargetIdSubtree(event, item.id));
 
 			if (!isEventFromAnyItem) {
 				selectItems();
@@ -153,7 +154,7 @@ const DesktopItemsContainer: FC<{
 	};
 
 	const moveItem = (
-		itemPath: string,
+		itemId: string,
 		startItemTop: number,
 		startItemLeft: number,
 		newItemTop: number,
@@ -162,7 +163,7 @@ const DesktopItemsContainer: FC<{
 		setDesktopItems(currentItems => {
 			const updatedItems = moveItemsOnDesktop(
 				currentItems,
-				itemPath,
+				itemId,
 				startItemTop,
 				startItemLeft,
 				newItemTop,
