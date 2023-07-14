@@ -44,8 +44,7 @@ export const useFileSystemContextState = () => {
 		const currentName = getCurrentItemNameInPath(path);
 		if (currentName === newName) return Promise.resolve();
 
-		const fragments = convertPathToFragments(path);
-		const parentPath = fragments.at(-2);
+		const parentPath = getParentPath(path);
 
 		const parentNode = !parentPath ? getRoot() : _getNodeFromPath(parentPath);
 
@@ -57,7 +56,7 @@ export const useFileSystemContextState = () => {
 			return Promise.reject();
 		}
 
-		const nodeName = fragments.at(-1) as string;
+		const nodeName = getCurrentItemNameInPath(path);
 		const node = parentNode.children.find(child => child.name === nodeName);
 
 		if (!node) {
@@ -112,12 +111,12 @@ export const useFileSystemContextState = () => {
 			const parentNode = _getNodeFromPath(parentPath);
 
 			const file: ExplorerFile = {
-				name: getCurrentItemNameInPath(parentPath),
-				iconPath: IconPaths.FOLDER,
-				parent: parentNode,
 				children: [],
+				iconPath: IconPaths.FOLDER,
 				id: v4(),
-				isFolder: true
+				isFolder: true,
+				name: getCurrentItemNameInPath(parentPath),
+				parent: parentNode
 			};
 
 			parentNode.children.push(file);
@@ -128,6 +127,7 @@ export const useFileSystemContextState = () => {
 		});
 	};
 
+	// TODO: remove
 	const updateFile = (file: ExplorerFile, content: any) => {
 		file.content = content;
 	};
