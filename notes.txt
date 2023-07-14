@@ -18,10 +18,13 @@ OK 2.5 Add more test files (at least one youtube and one text file)
 OK 2.7 Explorer:
   - Fix icons in explorer (should use fileName extension)
 
-4.5 FIX DESKTOP SELECTION BOX (items don't get selected.)
+OK 4.5 FIX DESKTOP SELECTION BOX (items don't get selected.)
   - probably because of the item.id change.
 
-4. Renaming Requirement
+4.55 Fix items not moving on desktop
+
+4.6 Renaming
+  - fix renaming items not working
 - Create a function to validate names.
   For now files are not allowed to go without an extension in their name.
 - Update desktop and explorer to use validation function just above when renaming.
