@@ -117,7 +117,7 @@ export const useFileSystemContextState = () => {
 		}
 
 		const node = _getNodeFromPath(path);
-		return Promise.reject(node.children || []);
+		return Promise.resolve(node.children || []);
 	};
 
 	const mkdir = (path: string) => {

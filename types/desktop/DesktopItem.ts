@@ -5,4 +5,5 @@ export type DesktopItem = {
 	path: string;
 	iconPath: string;
 	id: string;
+	fsId: string; // Item id in the FileSystem
 };
