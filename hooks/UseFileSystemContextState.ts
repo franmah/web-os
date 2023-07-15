@@ -107,6 +107,19 @@ export const useFileSystemContextState = () => {
 		}
 	};
 
+	/**
+	 * @param path the path to the parent directory.
+	 * @returns children of the directory as an ExplorerItem list.
+	 */
+	const opendir = (path: string): Promise<ExplorerItem[]> => {
+		if (!isDirectory(path)) {
+			return Promise.reject('Path is not a folder.');
+		}
+
+		const node = _getNodeFromPath(path);
+		return Promise.reject(node.children || []);
+	};
+
 	const mkdir = (path: string) => {
 		setRoot(getRoot => {
 			const root = getRoot();
@@ -195,6 +208,7 @@ export const useFileSystemContextState = () => {
 		getRoot,
 		isDirectory,
 		mkdir,
+		opendir,
 		readdirV2,
 		renameFolderV2,
 		searchFolderV2,
