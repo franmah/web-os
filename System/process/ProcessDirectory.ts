@@ -55,7 +55,7 @@ export const ProcessDirectory: ProcessDirectoryType = {
 		name: 'youtube',
 		windowParams: {
 			headerOptions: {
-				icon: '/icons/youtube-logo.png',
+				icon: IconPaths.YOUTUBE,
 				text: 'Youtube Player'
 			}
 		}

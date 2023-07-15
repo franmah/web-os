@@ -12,7 +12,7 @@ export const WindowHeaderInformation: FC<{
 	return (
 		<>
 			{options?.icon && (
-				<Image style={{ marginRight: '4px' }} src={options?.icon} alt={'window name'} width={24} height={24} />
+				<Image style={{ marginLeft: '8px', marginRight: '4px' }} src={options?.icon} alt={'window name'} width={18} height={18} />
 			)}
 
 			<StyledHeaderInformationH1 focused={focused} onMouseDown={startMovingWindow} onDoubleClick={maximizeWindow}>
