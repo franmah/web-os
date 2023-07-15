@@ -20,7 +20,8 @@ import { CommonFolderPaths } from '../../../constants/system/file-system/CommonF
 import {
 	getCurrentItemNameInPath,
 	getFileExtension,
-	getParentPath
+	getParentPath,
+	isNewItemNameValid
 } from '../../../services/file-system/FilePathService';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
 
@@ -127,14 +128,7 @@ const DesktopItemsContainer: FC<{
 			const parentPath = getParentPath(itemToRename.path);
 			const newPath = parentPath + '/' + itemNewName;
 
-			const extension = getFileExtension(itemNewName);
-			if (extension && fs.isDirectory(itemToRename.path)) {
-				console.error("Directory can't have extensions.");
-				return currentItems;
-			}
-
-			if (!extension && !fs.isDirectory(itemToRename.path)) {
-				console.error('Non directory files must have an extension.');
+			if (!isNewItemNameValid(itemToRename.path, newPath, fs.isDirectory(itemToRename.path))) {
 				return currentItems;
 			}
 

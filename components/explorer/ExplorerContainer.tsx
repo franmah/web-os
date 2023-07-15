@@ -7,7 +7,9 @@ import { StyledExplorerContainer } from '../../styled-components/system/explorer
 import {
 	convertPathToFragments,
 	getCurrentItemNameInPath,
-	getFileExtension
+	getFileExtension,
+	getParentPath,
+	isNewItemNameValid
 } from '../../services/file-system/FilePathService';
 import { ExplorerQuickAccessContext } from '../../contexts/ExplorerQuickAccessContext';
 import { CommonFolderPaths } from '../../constants/system/file-system/CommonFilePaths';
@@ -86,8 +88,12 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 
 	// TODO: once file tree updates automatically: move it back to file-view-row
 	const handleRenameItem = (path: string, newName: string): Promise<void> => {
+		const newPath = getParentPath(path) + '/' + newName;
+		if (!isNewItemNameValid(path, newPath, fs.isDirectory(path)))
+			return Promise.reject();
+
 		return fs.renameFolderV2(path, newName).then(() => {
-			// TODO: remove one file tree updates automatically.
+			// TODO: once file tree updates automatically.
 			setFileViewPaths(paths => {
 				const fragments = convertPathToFragments(path);
 				fragments[fragments.length - 1] = newName;

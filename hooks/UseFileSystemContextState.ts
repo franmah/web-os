@@ -20,6 +20,9 @@ export const useFileSystemContextState = () => {
 
 	// For a file will always have an extension. If there's no extension then it's a directory
 	const isDirectory = (path: string): boolean => {
+		if (path === CommonFolderPaths.ROOT) {
+			return true;
+		}
 		const fileName = getCurrentItemNameInPath(path);
 		return !fileName.includes('.');
 	};

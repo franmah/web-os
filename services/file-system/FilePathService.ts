@@ -26,3 +26,19 @@ export const getFileExtension = (fileName: string): string => {
 	const fragments = fileName.split('.');
 	return fragments.at(-1) || '';
 };
+
+export const isNewItemNameValid = (oldPath: string, newPath: string, isDirectory: boolean): boolean => {
+	const extension = getFileExtension(getCurrentItemNameInPath(newPath));
+
+	if (extension && isDirectory) {
+		console.error('Directory can\'t have extensions.');
+		return false;
+	}
+
+	if (!extension && !isDirectory) {
+		console.error('Non directory files must have an extension.');
+		return false;
+	}
+
+	return true;
+};

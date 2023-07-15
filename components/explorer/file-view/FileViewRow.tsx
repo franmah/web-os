@@ -66,7 +66,9 @@ export const ExplorerFileViewRow: FC<{
 		}
 
 		const newName = inputRef.current?.value || fileName;
-		onRenameItem(path, newName).then(() => setEditingName(false));
+		onRenameItem(path, newName)
+			.catch(() => setInputValue(getCurrentItemNameInPath(path)))
+			.finally(() => setEditingName(false));
 	};
 
 	const handleRightClick = (event: any) => {
