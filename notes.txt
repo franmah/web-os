@@ -29,17 +29,17 @@ OK 4.6 Renaming
   For now files are not allowed to go without an extension in their name.
 - Update desktop and explorer to use validation function just above when renaming.
 
-2.6
-- Donwload 1024*1024 actual png icons and replace the current ones. Every icon should have the same size.
-
-5. Refactor ExplorerFile
+OK 5. Refactor ExplorerFile
 - remove extra fields (icon path, make children optional...)
 
-6. general refactor
+OK 6. general refactor
 - improve desktop file name display
 - Fix window header icon
 
-5. Refactor "folder" usage to "directory"
+1. updating a file's extension doesn't update it's icon
+
+2.6
+- Donwload 1024*1024 actual png icons and replace the current ones. Every icon should have the same size.
 
 /////////////////// MVP ///////////////
 1. Explorer app
