@@ -38,6 +38,9 @@ OK 6. general refactor
 
 1. updating a file's extension doesn't update it's icon
 
+2 add useEffect on fs in Desktop and ExplorerContainer
+- both should reload files when there's a change in the file system?
+
 2.6
 - Donwload 1024*1024 actual png icons and replace the current ones. Every icon should have the same size.
 
