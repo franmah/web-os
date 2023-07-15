@@ -1,13 +1,9 @@
+import { IconPaths } from '../../constants/IconPaths';
 import { ShortcutCommand } from './ShortcutCommand';
 
 export enum ShortcutCommandNames {
 	DELETE,
 	RENAME
-}
-
-export enum IconPaths {
-	SHORTCUT_DELETE = '/icons/win11_shortcut_bin.png',
-	SHORTCUT_RENAME = '/icons/win11_shortcut_rename.png'
 }
 
 export const getShorcutCommand = (command: ShortcutCommandNames, callback: () => any, name: string) => {

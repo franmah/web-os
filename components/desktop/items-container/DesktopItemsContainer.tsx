@@ -19,7 +19,6 @@ import { NewTxtFileCommand } from '../../../System/context-menu-commands/command
 import { CommonFolderPaths } from '../../../constants/system/file-system/CommonFilePaths';
 import {
 	getCurrentItemNameInPath,
-	getFileExtension,
 	getParentPath,
 	isNewItemNameValid
 } from '../../../services/file-system/FilePathService';

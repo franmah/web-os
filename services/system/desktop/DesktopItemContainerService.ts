@@ -14,12 +14,12 @@ export const pathToDesktopItem = (path: string, isDirectory: boolean): DesktopIt
 
 	return {
 		iconPath,
+		id: v4(),
 		left: 0,
 		path,
 		renaming: false,
 		selected: false,
-		top: 0,
-		id: v4()
+		top: 0
 	};
 };
 
@@ -39,7 +39,7 @@ export const getNewItemName = (fileType: string, items: DesktopItem[]): string =
 	const temp = items.filter(i => !!getCurrentItemNameInPath(i.path).match(NEW_FOLDER_NAME_REGEX(fileType)));
 
 	let i = 0;
-	for (; i < temp.length; i++) {
+	for (; i < temp.length; i += 1) {
 		const num = +getCurrentItemNameInPath(temp[i].path)?.[12];
 		if (i + 2 < num) return `${fileType} (${i + 2})`;
 	}

@@ -23,7 +23,7 @@ OK 4.5 FIX DESKTOP SELECTION BOX (items don't get selected.)
 
 OK 4.55 Fix items not moving on desktop
 
-4.6 Renaming
+OK 4.6 Renaming
   - fix renaming items not working
 - Create a function to validate names.
   For now files are not allowed to go without an extension in their name.

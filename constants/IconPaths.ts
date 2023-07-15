@@ -9,5 +9,7 @@ export enum IconPaths {
 	FOLDER = '/icons/folder-icon.png',
 	YOUTUBE = '/icons/youtube-logo-v3.png',
 	TEXT = '/icons/text-icon.png',
-	UNKOWN_EXTENSION = '/icons/unknown-extension-icon.png'
+	UNKOWN_EXTENSION = '/icons/unknown-extension-icon.png',
+	SHORTCUT_DELETE = '/icons/win11_shortcut_bin.png',
+	SHORTCUT_RENAME = '/icons/win11_shortcut_rename.png'
 }
