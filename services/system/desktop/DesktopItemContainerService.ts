@@ -17,7 +17,6 @@ export const pathToDesktopItem = (path: string, isDirectory: boolean): DesktopIt
 		id: v4(),
 		left: 0,
 		path,
-		renaming: false,
 		selected: false,
 		top: 0
 	};
