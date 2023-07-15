@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic';
 import { FC, useContext, useRef } from 'react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import SunEditorCore from 'suneditor/src/lib/core';
-import { ExplorerFile } from '../../types/system/file/ExplorerElement';
+import { ExplorerItem } from '../../types/system/file/ExplorerItem';
 import { FileSystemContext } from '../../contexts/FileSystemContext';
 import { StyledSunEditorContainer } from '../../styled-components/StyledSuneditorContainer';
 
@@ -16,7 +16,7 @@ const SunEditor = dynamic(() => import('suneditor-react'), {
  * @returns
  */
 const SunTextEditor: FC<{
-	params: { processId: string; file: ExplorerFile };
+	params: { processId: string; file: ExplorerItem };
 	updateWarnUserBeforeClose: (processId: string, canClose: boolean) => void;
 }> = ({ params: { processId, file }, updateWarnUserBeforeClose }) => {
 	const editor = useRef<SunEditorCore>();

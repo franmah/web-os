@@ -1,10 +1,10 @@
-import { ExplorerFile } from './ExplorerElement';
+import { ExplorerItem } from './ExplorerItem';
 
 export type FileSystemContextType = {
-	getRoot: () => ExplorerFile;
-	getDesktop: () => ExplorerFile;
+	getRoot: () => ExplorerItem;
+	getDesktop: () => ExplorerItem;
 	mkdir: (path: string) => void;
-	updateFile: (file: ExplorerFile, content: any) => void;
+	updateFile: (file: ExplorerItem, content: any) => void;
 	readdirV2: (path: string) => Promise<string[]>;
 	searchFolderV2: (path: string, partialName: string) => Promise<string[]>;
 	renameFolderV2: (path: string, newName: string) => Promise<void>;

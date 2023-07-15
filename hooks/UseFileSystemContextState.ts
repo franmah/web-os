@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { v4 } from 'uuid';
 import { getRootAtSystemStart } from '../services/FileSystemService';
-import { ExplorerFile } from '../types/system/file/ExplorerElement';
+import { ExplorerItem } from '../types/system/file/ExplorerItem';
 import {
 	convertPathToFragments,
 	getCurrentItemNameInPath,
@@ -12,11 +12,11 @@ import { CommonFolderPaths } from '../constants/system/file-system/CommonFilePat
 import { IconPaths } from '../constants/IconPaths';
 
 export const useFileSystemContextState = () => {
-	const rootFile: ExplorerFile = getRootAtSystemStart();
+	const rootFile: ExplorerItem = getRootAtSystemStart();
 
-	const [getRoot, setRoot] = useState<() => ExplorerFile>(() => () => rootFile);
+	const [getRoot, setRoot] = useState<() => ExplorerItem>(() => () => rootFile);
 
-	let getDesktop = (): ExplorerFile => getRoot()?.children?.[0];
+	let getDesktop = (): ExplorerItem => getRoot()?.children?.[0];
 
 	// For a file will always have an extension. If there's no extension then it's a directory
 	const isDirectory = (path: string): boolean => {
@@ -77,7 +77,7 @@ export const useFileSystemContextState = () => {
 			const MAX_SEARCH_DEPTH = 20; // How far down the file tree to search.
 			partialName = partialName.toLowerCase();
 
-			const searchNode = (node: ExplorerFile, level: number, currentPath: string) => {
+			const searchNode = (node: ExplorerItem, level: number, currentPath: string) => {
 				if (!node) return;
 
 				if (level === MAX_SEARCH_DEPTH) return;
@@ -113,11 +113,9 @@ export const useFileSystemContextState = () => {
 			const parentPath = getParentPath(path);
 			const parentNode = _getNodeFromPath(parentPath);
 
-			const file: ExplorerFile = {
+			const file: ExplorerItem = {
 				children: [],
-				iconPath: IconPaths.FOLDER,
 				id: v4(),
-				isFolder: true,
 				name: getCurrentItemNameInPath(parentPath),
 				parent: parentNode
 			};
@@ -131,7 +129,7 @@ export const useFileSystemContextState = () => {
 	};
 
 	// TODO: remove
-	const updateFile = (file: ExplorerFile, content: any) => {
+	const updateFile = (file: ExplorerItem, content: any) => {
 		file.content = content;
 	};
 
@@ -149,13 +147,10 @@ export const useFileSystemContextState = () => {
 		if (!(await exists(path))) throw Error('Parent directory does not exist.');
 
 		const parentNode = _getNodeFromPath(parentPath);
-		const file: ExplorerFile = {
+		const file: ExplorerItem = {
 			children: [],
 			content,
-			extension: getFileExtension(getCurrentItemNameInPath(path)),
-			iconPath: '',
 			id: v4(),
-			isFolder: false,
 			name: getCurrentItemNameInPath(path),
 			parent: parentNode
 		};
@@ -178,7 +173,7 @@ export const useFileSystemContextState = () => {
 		return Promise.resolve(true);
 	};
 
-	const _getNodeFromPath = (path: string): ExplorerFile => {
+	const _getNodeFromPath = (path: string): ExplorerItem => {
 		if (path.at(-1) === '/') path = path.substring(0, path.length - 1);
 
 		const fragments = convertPathToFragments(path);
