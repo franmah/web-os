@@ -26,6 +26,8 @@ import {
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
 import { ExplorerItem } from '../../../types/system/file/ExplorerItem';
 import { getIconPathByExtension } from '../../../services/IconService';
+import { CreateItemType } from '../../../constants/CreateItemType';
+import { SupportedFileExtension } from '../../../constants/SupportedFileExtension';
 
 const DesktopItemsContainer: FC<{
 	paths: string[];
@@ -112,8 +114,8 @@ const DesktopItemsContainer: FC<{
 	const onContextMenuClick = (event: MouseEvent) => {
 		const commands = [
 			new NewItemCommandContainer([
-				new NewFolderCommand(() => addItem(event.clientY, event.clientX, 'folder')),
-				new NewTxtFileCommand(() => addItem(event.clientY, event.clientX, 'Text'))
+				new NewFolderCommand(() => addItem(event.clientY, event.clientX, CreateItemType.FOLDER)),
+				new NewTxtFileCommand(() => addItem(event.clientY, event.clientX, CreateItemType.TEXT))
 			]),
 			new SortCommandContainer([
 				new SortByNameCommand(() =>
@@ -125,10 +127,10 @@ const DesktopItemsContainer: FC<{
 		onDesktopContextMenuClick(event, commands);
 	};
 
-	const addItem = (top: number, left: number, fileType: string) => {
+	const addItem = (top: number, left: number, fileType: CreateItemType) => {
 		setDesktopItems(currentItems => {
-			const isDirectory = fileType === 'folder';
-			const newItemName = getNewItemName(fileType, currentItems);
+			const isDirectory = fileType === CreateItemType.FOLDER;
+			const newItemName = getNewItemName(fileType, _getExtension(fileType), currentItems);
 			const path = CommonFolderPaths.DESKTOP + '/' + newItemName + _getExtension(fileType);
 			const item = pathToDesktopItem(path, isDirectory);
 			item.left = left;
@@ -139,9 +141,10 @@ const DesktopItemsContainer: FC<{
 		});
 	};
 
-	const _getExtension = (fileType: string) => {
+	const _getExtension = (fileType: CreateItemType): string => {
 		if (fileType === 'folder') return '';
-		if (fileType === 'Text') return '.txt';
+		if (fileType === 'Text Document') return SupportedFileExtension.TXT;
+		return '';
 	};
 
 	// TODO: once changes to the File System triggers a render, this should be handled by the FS context

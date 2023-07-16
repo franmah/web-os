@@ -3,11 +3,9 @@ import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { getFolderIcon, getIconPathByExtension } from '../../IconService';
 import { getCurrentItemNameInPath, getFileExtension } from '../../file-system/FilePathService';
 import { ExplorerItem } from '../../../types/system/file/ExplorerItem';
-import { CommonFolderPaths } from '../../../constants/system/file-system/CommonFilePaths';
+import { CreateItemType } from '../../../constants/CreateItemType';
 
-const DEFAULT_FOLDER_NAME = 'New folder';
-const NEW_FOLDER_NAME_REGEX = (type: string) => new RegExp(`New ${type} \([2-9]+\)`, 'g');
-export const DEFAULT_FOLDER_ICON_PATH = '/icons/folder-icon-empty.png';
+const NEW_FOLDER_NAME_REGEX = (type: CreateItemType) => new RegExp(`New ${type}( \([1-9]+\))?`, 'g');
 
 export const pathToDesktopItem = (path: string, isDirectory: boolean): DesktopItem => {
 	const iconPath = isDirectory
@@ -47,20 +45,35 @@ export const explorerItemToDesktopItem = (explorerItem: ExplorerItem, path: stri
  * @returns either 'New folder' or 'New folder (x)' where x is the next availble number
  * (starting from 2)
  */
-export const getNewItemName = (fileType: string, items: DesktopItem[]): string => {
-	const itemsWithDefaultFolderName = items.filter(i => getCurrentItemNameInPath(i.path).includes(fileType));
+export const getNewItemName = (fileType: CreateItemType, extension: string, items: DesktopItem[]): string => {
+	const itemsWithDefaultName = items.filter(item => getCurrentItemNameInPath(item.path).includes(fileType));
 
-	if (itemsWithDefaultFolderName?.length === 0) {
+	if (itemsWithDefaultName?.length === 0) {
 		return 'New ' + fileType;
 	}
 
-	const temp = items.filter(i => !!getCurrentItemNameInPath(i.path).match(NEW_FOLDER_NAME_REGEX(fileType)));
+	const matches = items.filter(item => NEW_FOLDER_NAME_REGEX(fileType).test(getCurrentItemNameInPath(item.path)));
 
-	let i = 0;
-	for (; i < temp.length; i += 1) {
-		const num = +getCurrentItemNameInPath(temp[i].path)?.[12];
-		if (i + 2 < num) return `${fileType} (${i + 2})`;
+	// Default name without a number
+	if (!matches.find(item => getCurrentItemNameInPath(item.path) === `New ${fileType}${extension}`)) {
+		return `New ${fileType}`;
 	}
 
-	return `${fileType} (${i + 2})`;
+	const numberStartingIndex = `New ${fileType} (`.length;
+	const lastNumberDigit = 2;
+
+	const digits = matches.map(item =>
+		+getCurrentItemNameInPath(item.path).substring(numberStartingIndex, numberStartingIndex + lastNumberDigit - 1)
+	);
+
+	digits.sort((a, b) => +a > +b ? 1 : -1);
+
+	let i = 2;
+	for (; i <= digits[digits.length - 1]; i += 1) {
+		if (!digits.includes(i)) {
+			return `New ${fileType} (${i})`;
+		}
+	}
+
+	return `New ${fileType} (${i})`;
 };
