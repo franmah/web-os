@@ -21,8 +21,9 @@ const Desktop: FC = () => {
 	const [fileItems, setFileItems] = useState<ExplorerItem[]>([]);
 
 	useEffect(() => {
+		console.log('hello');
 		fs.opendir(CommonFolderPaths.DESKTOP)
-			.then(items => setFileItems(items));
+			.then(items => setFileItems([...items]));
 	}, [fs]);
 
 	const handleItemContextMenuClick = (event: MouseEvent) => {
@@ -90,7 +91,6 @@ const Desktop: FC = () => {
 				// onDragOver={(e) => e.preventDefault() } // Needed to prevent browser from opening user's file on drop
 			>
 				<DesktopItemsContainer
-					paths={[]}
 					fileItems={fileItems}
 					onDesktopContextMenuClick={handleDesktopContextMenuClick}
 					onItemContextMenuClick={handleItemContextMenuClick}

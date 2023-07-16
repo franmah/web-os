@@ -5,11 +5,9 @@ import { ExplorerItem } from '../types/system/file/ExplorerItem';
 import {
 	convertPathToFragments,
 	getCurrentItemNameInPath,
-	getFileExtension,
 	getParentPath
 } from '../services/file-system/FilePathService';
 import { CommonFolderPaths } from '../constants/system/file-system/CommonFilePaths';
-import { IconPaths } from '../constants/IconPaths';
 
 export const useFileSystemContextState = () => {
 	const rootFile: ExplorerItem = getRootAtSystemStart();
@@ -32,7 +30,7 @@ export const useFileSystemContextState = () => {
 			if (path === CommonFolderPaths.ROOT) reject();
 
 			const parent = getParentPath(path);
-			const parentNode = _getNodeFromPath(parent);
+			const parentNode = getNodeFromPath(parent);
 			const itemName = getCurrentItemNameInPath(path);
 
 			parentNode.children = parentNode.children.filter(child => child.name !== itemName);
@@ -49,7 +47,7 @@ export const useFileSystemContextState = () => {
 
 		const parentPath = getParentPath(path);
 
-		const parentNode = !parentPath ? getRoot() : _getNodeFromPath(parentPath);
+		const parentNode = !parentPath ? getRoot() : getNodeFromPath(parentPath);
 
 		const nameAlreadyUsed = parentNode.children.find(child => child.name === newName);
 		if (nameAlreadyUsed) {
@@ -67,12 +65,13 @@ export const useFileSystemContextState = () => {
 			return Promise.reject();
 		}
 		node.name = newName;
+		setRoot(() => () => getRoot());
 		return Promise.resolve();
 	};
 
 	const searchFolderV2 = (path: string, partialName: string): Promise<string[]> => {
 		try {
-			const fileNode = _getNodeFromPath(path);
+			const fileNode = getNodeFromPath(path);
 			const filePaths: string[] = [];
 			const MAX_SEARCH_DEPTH = 20; // How far down the file tree to search.
 			partialName = partialName.toLowerCase();
@@ -100,7 +99,7 @@ export const useFileSystemContextState = () => {
 
 	const readdirV2 = (path: string): Promise<string[]> => {
 		try {
-			const fileNode = _getNodeFromPath(path);
+			const fileNode = getNodeFromPath(path);
 			return Promise.resolve(fileNode.children?.map(file => file.name) || []);
 		} catch (error) {
 			return Promise.reject(error);
@@ -116,7 +115,7 @@ export const useFileSystemContextState = () => {
 			return Promise.reject('Path is not a folder.');
 		}
 
-		const node = _getNodeFromPath(path);
+		const node = getNodeFromPath(path);
 		return Promise.resolve(node.children || []);
 	};
 
@@ -124,7 +123,7 @@ export const useFileSystemContextState = () => {
 		setRoot(getRoot => {
 			const root = getRoot();
 			const parentPath = getParentPath(path);
-			const parentNode = _getNodeFromPath(parentPath);
+			const parentNode = getNodeFromPath(parentPath);
 
 			const file: ExplorerItem = {
 				children: [],
@@ -159,7 +158,7 @@ export const useFileSystemContextState = () => {
 
 		if (!(await exists(parentPath))) throw Error('Parent directory does not exist.');
 
-		const parentNode = _getNodeFromPath(parentPath);
+		const parentNode = getNodeFromPath(parentPath);
 		const file: ExplorerItem = {
 			children: [],
 			content,
@@ -167,6 +166,8 @@ export const useFileSystemContextState = () => {
 			name: getCurrentItemNameInPath(path),
 			parent: parentNode
 		};
+
+		getDesktop = () => getRoot()?.children?.[0];
 
 		parentNode.children.push(file);
 	};
@@ -186,7 +187,7 @@ export const useFileSystemContextState = () => {
 		return Promise.resolve(true);
 	};
 
-	const _getNodeFromPath = (path: string): ExplorerItem => {
+	const getNodeFromPath = (path: string): ExplorerItem => {
 		if (path.at(-1) === '/') path = path.substring(0, path.length - 1);
 
 		const fragments = convertPathToFragments(path);

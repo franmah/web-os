@@ -18,23 +18,24 @@ export const setCurrentItemsFromFileItems = (
 	const updatedItems: DesktopItem[] = [];
 
 	// Update current items that have been modified
-	currentItems.forEach(desktopItem => {
-		const matchingFileItem = fileItems.find(fi => fi.id === desktopItem.id);
+	for (const desktopItem of currentItems) {
+		const matchingFileItem = fileItems.find(fileItem => fileItem.id === desktopItem.fsId);
 		if (matchingFileItem) {
-			updatedItems.push({
+			const item = {
 				fsId: matchingFileItem.id,
 				iconPath: getIconPathByExtension(getFileExtension(matchingFileItem.name)),
 				id: desktopItem.id,
-				left: desktopItem.left,
+				left: 123,
 				path: CommonFolderPaths.DESKTOP + '/' + matchingFileItem.name,
 				selected: desktopItem.selected,
-				top: desktopItem.top
-			});
+				top: 123
+			};
+			updatedItems.push({ ...item });
 		}
-	});
-
+	}
+	console.log({ updatedItems });
 	// Add new items
-	const newItems = fileItems.filter(fi => !currentItems.find(ci => ci.id === fi.id));
+	const newItems = fileItems.filter(fileItem => !currentItems.find(desktopItem => fileItem.id === desktopItem.fsId));
 	updatedItems.push(...newItems.map(i =>
 		explorerItemToDesktopItem(i, CommonFolderPaths.DESKTOP + '/' + i.name, isDirectory(CommonFolderPaths.DESKTOP + '/' + i.name))));
 

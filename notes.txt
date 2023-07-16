@@ -2,10 +2,11 @@
 
 OK - New items don't have a correct name
 OK - renaming a file in desktop should reload (because fs changed) without changing the item's position
-- updating a file's extension doesn't update it's icon
-- same with explorer, renaming an item should update the desktop without changing the item's position.
-- Updating an item in the desktop should trigger an update in the explorer
-- updating an item in the explorer should trigger an udpate in the desktop
+OK - updating a file's extension doesn't update it's icon
+- Updating an item (rename and create) in the desktop should trigger an update in the explorer
+- updating an item (rename and delete) in the explorer should trigger an udpate in the desktop
+- opening a process should only require passing a path (can potentially pass extra argument but shouldn't be needed for now)
+
 2.6
 - Donwload 1024*1024 actual png icons and replace the current ones. Every icon should have the same size.
 
