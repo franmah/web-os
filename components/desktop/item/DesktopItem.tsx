@@ -1,10 +1,12 @@
 import Image from 'next/image';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
 import styles from './desktop-item.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, SHORTENED_NAME_LENGTH } from '../../../constants/Desktop';
-import { getCurrentItemNameInPath } from '../../../services/file-system/FilePathService';
+import { getCurrentItemNameInPath, getFileExtension } from '../../../services/file-system/FilePathService';
+import { getFolderIcon, getIconPathByExtension } from '../../../services/IconService';
+import { FileSystemContext } from '../../../contexts/FileSystemContext';
 
 const DesktopItemComponent: FC<{
 	item: DesktopItem;
@@ -31,6 +33,8 @@ const DesktopItemComponent: FC<{
 	handleContextMenuClick,
 	onItemRename
 }) => {
+	const fs = useContext(FileSystemContext);
+
 	const [inputNameValue, setInputNameValue] = useState<string>(getCurrentItemNameInPath(item.path));
 	const [renaming, setRenaming] = useState<boolean>(false);
 
@@ -153,6 +157,17 @@ const DesktopItemComponent: FC<{
 		}
 	};
 
+	const getIconPath = () => {
+		return fs.isDirectory(item.path) ?
+			getFolderIcon(item.path) :
+			getIconPathByExtension(getFileExtension(getCurrentItemNameInPath(item.path)));
+	};
+
+	const selectItemNameOnRenameFocus = (event: any) => {
+		const index = getCurrentItemNameInPath(item.path).lastIndexOf('.');
+		event?.target?.setSelectionRange(0, index || item.path.length);
+	};
+
 	return (
 		<div
 			id={item.id}
@@ -169,13 +184,14 @@ const DesktopItemComponent: FC<{
 				width: ITEM_WIDTH
 			}}
 		>
-			<Image src={item.iconPath} alt={'icon'} width={48} height={40} />
+			<Image src={getIconPath()} alt={'icon'} width={48} height={40} />
 
 			{renaming ? (
 				<textarea
 					id={INPUT_ID}
+					spellCheck="false"
 					autoFocus
-					onFocus={event => event?.target?.select()}
+					onFocus={selectItemNameOnRenameFocus}
 					value={inputNameValue}
 					onChange={onTextareaChange}
 				></textarea>

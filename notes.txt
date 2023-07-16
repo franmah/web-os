@@ -1,8 +1,8 @@
 // WORKING ON
 
-- New items don't have a correct name
+OK - New items don't have a correct name
+OK - renaming a file in desktop should reload (because fs changed) without changing the item's position
 - updating a file's extension doesn't update it's icon
-- renaming a file in desktop should reload (because fs changed) without changing the item's position
 - same with explorer, renaming an item should update the desktop without changing the item's position.
 - Updating an item in the desktop should trigger an update in the explorer
 - updating an item in the explorer should trigger an udpate in the desktop

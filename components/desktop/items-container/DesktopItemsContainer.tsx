@@ -18,12 +18,14 @@ import SelectionBoxComponent from '../../shared/selection-box/SelectionBox';
 import { NewTxtFileCommand } from '../../../System/context-menu-commands/commands/NewTxtFileCommand';
 import {
 	getCurrentItemNameInPath,
+	getFileExtension,
 	getParentPath,
 	isNewItemNameValid
 } from '../../../services/file-system/FilePathService';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
 import { ExplorerItem } from '../../../types/system/file/ExplorerItem';
 import { CreateItemType } from '../../../constants/CreateItemType';
+import { getIconPathByExtension } from '../../../services/IconService';
 
 const DesktopItemsContainer: FC<{
 	fileItems: ExplorerItem[];
