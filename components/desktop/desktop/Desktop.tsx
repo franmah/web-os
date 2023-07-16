@@ -59,8 +59,11 @@ const Desktop: FC = () => {
 	};
 
 	const handleNewItemCreated = (path: string) => {
-		if (fs.isDirectory(path)) fs.mkdir(path);
-		else fs.appendFileV2(path);
+		if (fs.isDirectory(path)) {
+			fs.mkdir(path);
+		} else {
+			fs.appendFileV2(path);
+		}
 	};
 
 	const handleRenameItem = (oldPath: string, newPath: string) => {

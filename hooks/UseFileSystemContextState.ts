@@ -129,7 +129,7 @@ export const useFileSystemContextState = () => {
 			const file: ExplorerItem = {
 				children: [],
 				id: v4(),
-				name: getCurrentItemNameInPath(parentPath),
+				name: getCurrentItemNameInPath(path),
 				parent: parentNode
 			};
 
