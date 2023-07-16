@@ -157,7 +157,7 @@ export const useFileSystemContextState = () => {
 		}
 		const parentPath = getParentPath(path);
 
-		if (!(await exists(path))) throw Error('Parent directory does not exist.');
+		if (!(await exists(parentPath))) throw Error('Parent directory does not exist.');
 
 		const parentNode = _getNodeFromPath(parentPath);
 		const file: ExplorerItem = {

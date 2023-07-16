@@ -70,7 +70,7 @@ const DesktopItemsContainer: FC<{
 			updatedItems.push(...newItems.map(i =>
 				explorerItemToDesktopItem(i, CommonFolderPaths.DESKTOP + '/' + i.name, fs.isDirectory(CommonFolderPaths.DESKTOP + '/' + i.name))));
 
-			return updatedItems;
+			return setItemPositions(updatedItems, DesktopSortOptions.default);
 		});
 	}, [fileItems]);
 
