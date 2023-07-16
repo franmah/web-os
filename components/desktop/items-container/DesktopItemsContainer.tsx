@@ -1,6 +1,6 @@
 import { FC, Fragment, useContext, useEffect, useState } from 'react';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import { explorerItemToDesktopItem, getNewItemName, pathToDesktopItem } from '../../../services/system/desktop/DesktopItemContainerService';
+import { createNewItem, setCurrentItemsFromFileItems } from '../../../services/system/desktop/DesktopItemContainerService';
 import {
 	getSelectedItemsFromSelectionBoxgWithCtrl,
 	moveItemsOnDesktop,
@@ -16,62 +16,30 @@ import { ContextMenuCommandList } from '../../../types/system/context-menu/Conte
 import DesktopItemComponent from '../item/DesktopItem';
 import SelectionBoxComponent from '../../shared/selection-box/SelectionBox';
 import { NewTxtFileCommand } from '../../../System/context-menu-commands/commands/NewTxtFileCommand';
-import { CommonFolderPaths } from '../../../constants/system/file-system/CommonFilePaths';
 import {
 	getCurrentItemNameInPath,
-	getFileExtension,
 	getParentPath,
 	isNewItemNameValid
 } from '../../../services/file-system/FilePathService';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
 import { ExplorerItem } from '../../../types/system/file/ExplorerItem';
-import { getIconPathByExtension } from '../../../services/IconService';
 import { CreateItemType } from '../../../constants/CreateItemType';
-import { SupportedFileExtension } from '../../../constants/SupportedFileExtension';
 
 const DesktopItemsContainer: FC<{
-	paths: string[];
 	fileItems: ExplorerItem[];
 	onDesktopContextMenuClick: (event: MouseEvent, commands: ContextMenuCommandList) => void;
 	onItemContextMenuClick: (event: MouseEvent) => void;
 	onItemCreated: (path: string) => void;
 	onItemDoubleClick: (item: DesktopItem) => void;
 	onRenameItem: (oldPath: string, newPath: string) => void;
-}> = ({ paths, fileItems, onDesktopContextMenuClick, onItemContextMenuClick, onItemCreated, onItemDoubleClick, onRenameItem }) => {
+}> = ({ fileItems, onDesktopContextMenuClick, onItemContextMenuClick, onItemCreated, onItemDoubleClick, onRenameItem }) => {
 	const fs = useContext(FileSystemContext);
 
 	const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
 
-	// useEffect(() => {
-	// 	const items = paths.map(path => pathToDesktopItem(path, fs.isDirectory(path)));
-	// 	setDesktopItems(() => [...setItemPositions(items, DesktopSortOptions.default)]);
-	// }, [paths]);
-
 	useEffect(() => {
 		setDesktopItems(currentItems => {
-			const updatedItems: DesktopItem[] = [];
-
-			// Update current items that have been modified
-			currentItems.forEach(desktopItem => {
-				const matchingFileItem = fileItems.find(fi => fi.id === desktopItem.id);
-				if (matchingFileItem) {
-					updatedItems.push({
-						fsId: matchingFileItem.id,
-						iconPath: getIconPathByExtension(getFileExtension(matchingFileItem.name)),
-						id: desktopItem.id,
-						left: desktopItem.left,
-						path: CommonFolderPaths.DESKTOP + '/' + matchingFileItem.name,
-						selected: desktopItem.selected,
-						top: desktopItem.top
-					});
-				}
-			});
-
-			// Add new items
-			const newItems = fileItems.filter(fi => !currentItems.find(ci => ci.id === fi.id));
-			updatedItems.push(...newItems.map(i =>
-				explorerItemToDesktopItem(i, CommonFolderPaths.DESKTOP + '/' + i.name, fs.isDirectory(CommonFolderPaths.DESKTOP + '/' + i.name))));
-
+			const updatedItems = setCurrentItemsFromFileItems(fileItems, currentItems, fs.isDirectory);
 			return setItemPositions(updatedItems, DesktopSortOptions.default);
 		});
 	}, [fileItems]);
@@ -129,22 +97,10 @@ const DesktopItemsContainer: FC<{
 
 	const addItem = (top: number, left: number, fileType: CreateItemType) => {
 		setDesktopItems(currentItems => {
-			const isDirectory = fileType === CreateItemType.FOLDER;
-			const newItemName = getNewItemName(fileType, _getExtension(fileType), currentItems);
-			const path = CommonFolderPaths.DESKTOP + '/' + newItemName + _getExtension(fileType);
-			const item = pathToDesktopItem(path, isDirectory);
-			item.left = left;
-			item.top = top;
-
-			onItemCreated(item.path);
-			return [...currentItems, item];
+			const newItem = createNewItem(top, left, fileType, currentItems);
+			onItemCreated(newItem.path);
+			return [...currentItems, newItem];
 		});
-	};
-
-	const _getExtension = (fileType: CreateItemType): string => {
-		if (fileType === 'folder') return '';
-		if (fileType === 'Text Document') return SupportedFileExtension.TXT;
-		return '';
 	};
 
 	// TODO: once changes to the File System triggers a render, this should be handled by the FS context
