@@ -37,7 +37,7 @@ export const useFileSystemContextState = () => {
 
 			resolve();
 
-			setRoot(() => () => getRoot());
+			setRoot(() => () => getRoot()); // Triggers render
 		});
 	};
 
@@ -169,9 +169,9 @@ export const useFileSystemContextState = () => {
 			parent: parentNode
 		};
 
-		getDesktop = () => getRoot()?.children?.[0];
-
 		parentNode.children.push(file);
+
+		setRoot(() => () => getRoot()); // Triggers render
 	};
 
 	const exists = (path: string): Promise<boolean> => {
