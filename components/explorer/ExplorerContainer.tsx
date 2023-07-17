@@ -29,7 +29,7 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 
 	useEffect(() => {
 		resetFileViewPathsToCurrentPath();
-	}, [path]);
+	}, [fs, path]);
 
 	const resetFileViewPathsToCurrentPath = () => {
 		fs.readdirV2(path)
