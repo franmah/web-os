@@ -3,7 +3,7 @@
 OK - New items don't have a correct name
 OK - renaming a file in desktop should reload (because fs changed) without changing the item's position
 OK - updating a file's extension doesn't update it's icon
-- Updating an item (rename and create) in the desktop should trigger an update in the explorer
+ok - Updating an item (rename and create) in the desktop should trigger an update in the explorer
 - updating an item (rename and delete) in the explorer should trigger an udpate in the desktop
 - opening a process should only require passing a path (can potentially pass extra argument but shouldn't be needed for now)
 

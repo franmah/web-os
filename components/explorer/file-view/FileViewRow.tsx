@@ -95,14 +95,6 @@ export const ExplorerFileViewRow: FC<{
 		});
 	};
 
-	const selectItemNameOnRenameFocus = (event: any) => {
-		console.log('helo');
-		if (inputRef.current) {
-			const index = getCurrentItemNameInPath(path).lastIndexOf('.');
-			inputRef.current.setSelectionRange(0, index || path.length);
-		}
-	};
-
 	return (
 		<StyledFileViewRow
 			columnSizes={columnSizes}

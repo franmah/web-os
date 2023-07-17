@@ -106,10 +106,11 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 		});
 	};
 
-	const handleDeleteItem = (pathToDelete: string) => {
-		fs.deleteFolderV2(pathToDelete)
-			.then(() => quickAccessContext.unpinFromQuickAccess(pathToDelete))
-			.then(() => resetFileViewPathsToCurrentPath());
+	const handleDeleteItems = (...pathsToDelete: string[]) => {
+		for (const path of pathsToDelete) {
+			fs.deleteFolderV2(path)
+				.then(() => quickAccessContext.unpinFromQuickAccess(path));
+		}
 	};
 
 	return (
@@ -142,7 +143,7 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 						openFile={openFile}
 						updateNumSelectedItems={setNumItemsSelected}
 						paths={fileViewPaths}
-						onDeleteItem={handleDeleteItem}
+						onDeleteItems={handleDeleteItems}
 					/>
 				</div>
 			</section>
