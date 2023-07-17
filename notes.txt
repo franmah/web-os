@@ -1,3 +1,26 @@
+current requiements:
+
+Apps in taskbar:
+- open app but window not focused.
+  - should only show a grey small bar uder the app icon.
+  - don't show have a special background.
+- hovering app 
+  - change background color.
+  - no background change if app window is focused.
+  - !! if multiple windows for the same app are open then show double background style.
+  - Optional: If app is open it should show a miniature of every windows.
+  - Optional: if app is not open then show app name in a modal above icon.
+
+- focused app:
+  - show blue bigger bar under it.
+  - show 'hovered' background all the time.
+  - !! if multiple windows for the same app are open then show double background style.
+
+- Windows icon hovers like any other icons
+
+- process icons on the right: don't implement for now.
+
+- search bar: don't implement for now.
 
 /////////////////// MVP ///////////////
 1. Explorer app
