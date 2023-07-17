@@ -1,10 +1,8 @@
-import { ExplorerFile } from '../../../types/system/file/ExplorerElement';
-import { FC, Fragment, useEffect, useState } from 'react';
+import { FC, Fragment, useContext, useEffect, useState } from 'react';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import {
-	DEFAULT_FOLDER_ICON_PATH,
-	getNewItemName,
-	toItemWrappers
+	createNewItem,
+	setCurrentItemsFromFileItems
 } from '../../../services/system/desktop/DesktopItemContainerService';
 import {
 	getSelectedItemsFromSelectionBoxgWithCtrl,
@@ -17,35 +15,44 @@ import { NewItemCommandContainer } from '../../../System/context-menu-commands/c
 import { SortByNameCommand } from '../../../System/context-menu-commands/commands/SortByNameCommand';
 import { isEventOriginatedFromWithinTargetIdSubtree } from '../../../services/EventService';
 import { DesktopSortOptions, setItemPositions } from '../../../services/system/desktop/DesktopItemPlacementService';
-import { v4 } from 'uuid';
 import { ContextMenuCommandList } from '../../../types/system/context-menu/ContextMenu';
 import DesktopItemComponent from '../item/DesktopItem';
 import SelectionBoxComponent from '../../shared/selection-box/SelectionBox';
 import { NewTxtFileCommand } from '../../../System/context-menu-commands/commands/NewTxtFileCommand';
-import { defaultProcessByExtension } from '../../../System/process/ProcessDirectoryByExtension';
-import { ProcessDirectory } from '../../../System/process/ProcessDirectory';
+import {
+	getCurrentItemNameInPath,
+	getParentPath,
+	isNewItemNameValid
+} from '../../../services/file-system/FilePathService';
+import { FileSystemContext } from '../../../contexts/FileSystemContext';
+import { ExplorerItem } from '../../../types/system/file/ExplorerItem';
+import { CreateItemType } from '../../../constants/CreateItemType';
 
-const DesktopItemContainer: FC<{
-	files: ExplorerFile[];
+const DesktopItemsContainer: FC<{
+	fileItems: ExplorerItem[];
+	onDeleteItems: (...paths: string[]) => void;
 	onDesktopContextMenuClick: (event: MouseEvent, commands: ContextMenuCommandList) => void;
 	onItemContextMenuClick: (event: MouseEvent) => void;
-	onFileChange: (newItem: DesktopItem) => void;
-	onFolderChange: (item: DesktopItem) => void;
+	onItemCreated: (path: string) => void;
 	onItemDoubleClick: (item: DesktopItem) => void;
+	onRenameItem: (oldPath: string, newPath: string) => void;
 }> = ({
-	files,
+	fileItems,
+	onDeleteItems,
 	onDesktopContextMenuClick,
 	onItemContextMenuClick,
-	onFileChange,
-	onFolderChange,
-	onItemDoubleClick
+	onItemCreated,
+	onItemDoubleClick,
+	onRenameItem
 }) => {
+	const fs = useContext(FileSystemContext);
+
 	const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
 
 	useEffect(() => {
-		const items = toItemWrappers(files);
-		setDesktopItems(() => [...setItemPositions(items, DesktopSortOptions.default)]);
-	}, [files]);
+		const updatedItems = setCurrentItemsFromFileItems(fileItems, desktopItems, fs.isDirectory);
+		setDesktopItems([...setItemPositions(updatedItems, DesktopSortOptions.default)]);
+	}, [fileItems]);
 
 	// Any click anywhere in the app should unselect all items
 	useEffect(() => {
@@ -82,11 +89,29 @@ const DesktopItemContainer: FC<{
 		};
 	}, []);
 
+	// Delete files on DELETE key
+	useEffect(() => {
+		const deleteSelectedItems = (e: any) => {
+			const DELETE_KEY_CODE = 46;
+			if (e.which === DELETE_KEY_CODE || e.key === 'Delete') {
+				const selectedItems = desktopItems.filter(item => item.selected);
+				const paths = selectedItems.map(item => item.path);
+				onDeleteItems(...paths);
+			}
+		};
+
+		document.addEventListener('keydown', deleteSelectedItems);
+
+		return () => {
+			document.removeEventListener('keydown', deleteSelectedItems);
+		};
+	}, [desktopItems]);
+
 	const onContextMenuClick = (event: MouseEvent) => {
 		const commands = [
 			new NewItemCommandContainer([
-				new NewFolderCommand(() => addItem(event.clientY, event.clientX, 'folder')),
-				new NewTxtFileCommand(() => addItem(event.clientY, event.clientX, 'Text'))
+				new NewFolderCommand(() => addItem(event.clientY, event.clientX, CreateItemType.FOLDER)),
+				new NewTxtFileCommand(() => addItem(event.clientY, event.clientX, CreateItemType.TEXT))
 			]),
 			new SortCommandContainer([
 				new SortByNameCommand(() =>
@@ -98,76 +123,50 @@ const DesktopItemContainer: FC<{
 		onDesktopContextMenuClick(event, commands);
 	};
 
-	const addItem = (top: number, left: number, type: string) => {
-		if (type === 'folder') {
-			return addFolder(top, left);
-		}
-
+	const addItem = (top: number, left: number, fileType: CreateItemType) => {
 		setDesktopItems(currentItems => {
-			const newItemName = getNewItemName(type, currentItems);
-			let extension = '';
-
-			if (type === 'Text') {
-				extension = 'txt';
-			}
-
-			const item: DesktopItem = {
-				iconPath: ProcessDirectory[defaultProcessByExtension[extension]]?.iconPath || '',
-				id: v4(),
-				left,
-				name: newItemName + '.' + extension,
-				renaming: true,
-				selected: false,
-				top
-			};
-
-			onFileChange(item);
-			return [...currentItems, item];
+			const newItem = createNewItem(top, left, fileType, currentItems);
+			onItemCreated(newItem.path);
+			return [...currentItems, newItem];
 		});
 	};
 
-	const addFolder = (top: number, left: number) => {
+	// TODO: once changes to the File System triggers a render, this should be handled by the FS context
+	const handleItemRenamed = (itemToRenameId: string, itemNewName: string) => {
 		setDesktopItems(currentItems => {
-			const newItemName = getNewItemName('Folder', currentItems);
-			const item: DesktopItem = {
-				iconPath: DEFAULT_FOLDER_ICON_PATH,
-				id: v4(),
-				left,
-				name: newItemName,
-				renaming: true,
-				selected: false,
-				top
-			};
-
-			onFolderChange(item);
-			return [...currentItems, item];
-		});
-	};
-
-	const onItemRenamed = (itemId: string, itemNewName: string) => {
-		setDesktopItems(currentItems => {
-			if (!itemNewName || itemNewName.trim() === '') {
+			if (!itemNewName) {
 				return currentItems;
 			}
 
-			const isNameAlreadyUsed = currentItems.find(i => i.name === itemNewName && i.id !== itemId);
-
-			if (!isNameAlreadyUsed) {
-				const updatedItems: DesktopItem[] = currentItems.map(i => ({
-					...i,
-					name: i.id === itemId ? itemNewName : i.name,
-					renaming: false,
-					selected: i.id === itemId
-				}));
-
-				const newItem = updatedItems.find(i => i.id === itemId) as DesktopItem;
-
-				onFileChange(newItem);
-
-				return [...updatedItems];
+			const itemToRename = currentItems.find(item => item.id === itemToRenameId);
+			if (!itemToRename) {
+				console.error(`Error renaming item: ${itemToRenameId}. Item not found.`);
+				return currentItems;
 			}
 
-			return currentItems;
+			const parentPath = getParentPath(itemToRename.path);
+			const newPath = parentPath + '/' + itemNewName;
+
+			if (!isNewItemNameValid(itemToRename.path, newPath, fs.isDirectory(itemToRename.path))) {
+				return currentItems;
+			}
+
+			const isNameAlreadyUsed = currentItems.find(
+				i => getCurrentItemNameInPath(i.path) === itemNewName && i.path !== itemToRenameId
+			);
+
+			if (isNameAlreadyUsed) {
+				return currentItems;
+			}
+
+			const updatedItems: DesktopItem[] = currentItems.map(item => ({
+				...item,
+				path: item.id === itemToRenameId ? newPath : item.path,
+				selected: item.id === itemToRenameId
+			}));
+
+			onRenameItem(itemToRename.path, newPath);
+			return [...updatedItems];
 		});
 	};
 
@@ -242,15 +241,6 @@ const DesktopItemContainer: FC<{
 		}
 	};
 
-	const handleItemRenaming = (itemId: string) => {
-		setDesktopItems(currentItems => {
-			return currentItems.map(i => ({
-				...i,
-				renaming: i.id === itemId
-			}));
-		});
-	};
-
 	return (
 		<Fragment>
 			{desktopItems.map((item, index) => (
@@ -263,8 +253,7 @@ const DesktopItemContainer: FC<{
 					selectItemsWithShift={selectItemWithShift}
 					handleDoubleClick={handleItemDoubleClick}
 					handleContextMenuClick={event => onItemContextMenuClick(event)}
-					handleItemRenamed={onItemRenamed}
-					startRenaming={handleItemRenaming}
+					onItemRename={handleItemRenamed}
 				/>
 			))}
 
@@ -273,4 +262,4 @@ const DesktopItemContainer: FC<{
 	);
 };
 
-export default DesktopItemContainer;
+export default DesktopItemsContainer;

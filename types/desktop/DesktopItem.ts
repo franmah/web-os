@@ -1,9 +1,9 @@
 export type DesktopItem = {
 	left: number;
-	iconPath: string;
-	name: string;
 	top: number;
 	selected: boolean;
-	renaming: boolean;
+	path: string;
+	iconPath: string;
 	id: string;
+	fsId: string; // Item id in the FileSystem
 };

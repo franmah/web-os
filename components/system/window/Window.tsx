@@ -5,7 +5,7 @@ import { WindowParams } from '../../../types/system/window/WindowProps';
 import { WindowState } from '../../../types/system/window/WindowState';
 import WindowAnimationMaximizePlaceholder from './animation-placeholder/AnimationPlaceholder';
 import WindowBorder from './border/WindowBorder';
-import WindowHeader from './header/Header';
+import WindowHeader from './header/WindowHeader';
 import { CustomMaximizeDirection } from '../../../constants/system/window/CustomMaximizeDirectionEnum';
 import { zIndexConsts } from '../../../constants/Zindex';
 import { StyledWindow } from '../../../styled-components/system/window/StyledWindow';

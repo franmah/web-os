@@ -16,10 +16,6 @@ export const StyledFileViewRow = styled.div<{
 		text-overflow: ellipsis;
 		padding: 8px 8px;
 
-		&:first-child {
-			padding-right: 100px;
-		}
-
 		.select-checkbox {
 			visibility: ${({ selected }) => (selected ? 'visible' : 'hidden')};
 		}
@@ -28,7 +24,9 @@ export const StyledFileViewRow = styled.div<{
 	.name-col {
 		flex: ${({ columnSizes }) => `0 0 ${columnSizes['name']}`};
 		display: flex;
+		justify-content: flex-start;
 		align-items: center;
+		width: 100%;
 
 		.icon {
 			margin: 0px 6px;
@@ -36,6 +34,13 @@ export const StyledFileViewRow = styled.div<{
 
 		.name-input {
 			outline: none;
+		}
+
+		.file-name {
+			flex: 2;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 	}
 

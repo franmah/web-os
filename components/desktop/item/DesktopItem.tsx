@@ -1,20 +1,28 @@
 import Image from 'next/image';
-import { FC, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
 import styles from './desktop-item.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, SHORTENED_NAME_LENGTH } from '../../../constants/Desktop';
+import { getCurrentItemNameInPath, getFileExtension } from '../../../services/file-system/FilePathService';
+import { getFolderIcon, getIconPathByExtension } from '../../../services/IconService';
+import { FileSystemContext } from '../../../contexts/FileSystemContext';
 
 const DesktopItemComponent: FC<{
 	item: DesktopItem;
-	moveItem: (id: string, startItemTop: number, startItemLeft: number, newItemTop: number, newItemLeft: number) => void;
+	moveItem: (
+		itemId: string,
+		startItemTop: number,
+		startItemLeft: number,
+		newItemTop: number,
+		newItemLeft: number
+	) => void;
 	selectItems: (...ids: string[]) => void;
 	selectItemsWithCtrl: (...ids: string[]) => void;
 	selectItemsWithShift: (id: string, ctrlKey: boolean) => void;
 	handleDoubleClick: (item: DesktopItem) => void;
 	handleContextMenuClick: (event: MouseEvent) => void;
-	handleItemRenamed: (itemId: string, itemNewName: string) => void;
-	startRenaming: (itemId: string) => void;
+	onItemRename: (itemPath: string, itemNewName: string) => void;
 }> = ({
 	item,
 	moveItem,
@@ -23,30 +31,35 @@ const DesktopItemComponent: FC<{
 	selectItemsWithShift,
 	handleDoubleClick,
 	handleContextMenuClick,
-	handleItemRenamed,
-	startRenaming
+	onItemRename
 }) => {
-	const [inputNameValue, setInputNameValue] = useState<string>(item.name);
+	const fs = useContext(FileSystemContext);
+
+	const [inputNameValue, setInputNameValue] = useState<string>(getCurrentItemNameInPath(item.path));
+	const [renaming, setRenaming] = useState<boolean>(false);
 
 	const INPUT_ID = item.id + '_input';
 	const TEXT_ID = item.id + '_text';
 
-	let distanceMouseToItemTop = 0;
-	let distanceMouseToItemLeft = 0;
+	const distanceMouseToItemTopRef = useRef(0);
+	const distanceMouseToItemLeftRef = useRef(0);
 
 	useEffect(() => {
-		console.debug('hello');
-		if (item.renaming) {
+		const renameItem = (event: KeyboardEvent) => {
+			if (event.key === 'Enter') onItemDoneRenaming();
+		};
+
+		if (renaming) {
 			const textAreaElement = document.getElementById(INPUT_ID);
 			document.addEventListener('mousedown', onMouseDown);
-			document.addEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming());
+			document.addEventListener('keyup', renameItem);
 			resizeTextArea(textAreaElement);
 		}
 
 		return () => {
-			if (item.renaming) {
+			if (renaming) {
 				document.removeEventListener('mousedown', onMouseDown);
-				document.removeEventListener('keyup', event => event.key === 'Enter' && onItemDoneRenaming());
+				document.removeEventListener('keyup', renameItem);
 			}
 		};
 	});
@@ -68,17 +81,19 @@ const DesktopItemComponent: FC<{
 	const onDragEnd = (event: any) => {
 		const { top, left } = getDestopItemNewPositionRelativeToMouse(
 			event,
-			distanceMouseToItemTop,
-			distanceMouseToItemLeft
+			distanceMouseToItemTopRef.current,
+			distanceMouseToItemLeftRef.current
 		);
 		moveItem(item.id, item.top, item.left, top, left);
 	};
 
 	const onDragStart = (event: any) => {
-		distanceMouseToItemTop = event.clientY - item.top;
-		distanceMouseToItemLeft = event.clientX - item.left;
+		distanceMouseToItemTopRef.current = event.clientY - item.top;
+		distanceMouseToItemLeftRef.current = event.clientX - item.left;
 
-		if (!item.selected) selectItems(item.id);
+		if (!item.selected) {
+			selectItems(item.id);
+		}
 	};
 
 	const onContextMenuClick = (event: MouseEvent) => {
@@ -94,12 +109,16 @@ const DesktopItemComponent: FC<{
 
 	const onItemDoneRenaming = () => {
 		if (inputNameValue && inputNameValue.trim() !== '') {
-			handleItemRenamed(item.id, inputNameValue.trim());
+			setRenaming(false);
+			onItemRename(item.id, inputNameValue.trim());
 		}
 	};
 
-	const formatItemName = (name: string): string => {
-		if (item.selected || item.name.length <= SHORTENED_NAME_LENGTH) return name;
+	const formatItemName = (): string => {
+		const name = getCurrentItemNameInPath(item.path);
+		if (item.selected || name.length <= SHORTENED_NAME_LENGTH) {
+			return name;
+		}
 
 		const shortenedName = name.substring(0, SHORTENED_NAME_LENGTH);
 		return shortenedName + '...';
@@ -107,7 +126,7 @@ const DesktopItemComponent: FC<{
 
 	const onItemNameClick = () => {
 		if (item.selected) {
-			startRenaming(item.id);
+			setRenaming(true);
 		}
 	};
 
@@ -138,10 +157,21 @@ const DesktopItemComponent: FC<{
 		}
 	};
 
+	const getIconPath = () => {
+		return fs.isDirectory(item.path)
+			? getFolderIcon(item.path)
+			: getIconPathByExtension(getFileExtension(getCurrentItemNameInPath(item.path)));
+	};
+
+	const selectItemNameOnRenameFocus = (event: any) => {
+		const index = getCurrentItemNameInPath(item.path).lastIndexOf('.');
+		event?.target?.setSelectionRange(0, index || item.path.length);
+	};
+
 	return (
 		<div
 			id={item.id}
-			draggable={!item.renaming}
+			draggable={!renaming}
 			className={getClass()}
 			onDragEnd={onDragEnd}
 			onClick={onClick}
@@ -154,20 +184,20 @@ const DesktopItemComponent: FC<{
 				width: ITEM_WIDTH
 			}}
 		>
-			<Image src={item.iconPath} alt={'icon'} width={48} height={40} />
+			<Image src={getIconPath()} alt={'icon'} width={48} height={40} />
 
-			{item.renaming ? (
+			{renaming ? (
 				<textarea
 					id={INPUT_ID}
+					spellCheck='false'
 					autoFocus
-					onFocus={event => event?.target?.select()}
+					onFocus={selectItemNameOnRenameFocus}
 					value={inputNameValue}
 					onChange={onTextareaChange}
 				></textarea>
 			) : (
 				<div id={TEXT_ID} onClick={onItemNameClick}>
-					{' '}
-					{formatItemName(item.name)}{' '}
+					{formatItemName()}
 				</div>
 			)}
 		</div>

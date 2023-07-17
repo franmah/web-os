@@ -1,13 +1,15 @@
-import { ExplorerFile } from './ExplorerElement';
+import { ExplorerItem } from './ExplorerItem';
 
 export type FileSystemContextType = {
-	getRoot: () => ExplorerFile;
-	appendFile: (name: string, iconPath: string, parent: ExplorerFile | null, id?: string, content?: any) => void;
-	getDesktop: () => ExplorerFile;
-	mkdir: (name: string, parent: ExplorerFile, id?: string) => void;
-	updateFile: (file: ExplorerFile, content: any) => void;
-	readdirV2: (path: string) => Promise<string[]>;
-	searchFolderV2: (path: string, partialName: string) => Promise<string[]>;
-	renameFolderV2: (path: string, newName: string) => Promise<void>;
+	appendFileV2: (path: string) => Promise<void>;
 	deleteFolderV2: (path: string) => Promise<void>;
+	getRoot: () => ExplorerItem;
+	getDesktop: () => ExplorerItem;
+	isDirectory: (path: string) => boolean;
+	mkdir: (path: string) => void;
+	opendir: (path: string) => Promise<ExplorerItem[]>;
+	readdirV2: (path: string) => Promise<string[]>;
+	renameFolderV2: (path: string, newName: string) => Promise<void>;
+	searchFolderV2: (path: string, partialName: string) => Promise<string[]>;
+	updateFile: (file: ExplorerItem, content: any) => void;
 };

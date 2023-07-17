@@ -6,7 +6,6 @@ export const StyledExplorerFileViewHeader = styled.div<{
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-start;
-	overflow: hidden;
 	margin-bottom: 16px;
 
 	.name-col {

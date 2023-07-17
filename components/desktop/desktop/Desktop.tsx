@@ -1,5 +1,5 @@
-import { FC, Fragment, useContext } from 'react';
-import DesktopItemContainer from '../items-container/DesktopItemsContainer';
+import { FC, Fragment, useContext, useEffect, useState } from 'react';
+import DesktopItemsContainer from '../items-container/DesktopItemsContainer';
 import styles from './desktop.module.scss';
 import background from '../../../assets/background_image_light.jpg';
 import background1080 from '../../../assets/background_image_light.jpg';
@@ -9,10 +9,20 @@ import { FileSystemContext } from '../../../contexts/FileSystemContext';
 import { ProcessContext } from '../../../contexts/ProcessContext';
 import { ContextMenuCommandList } from '../../../types/system/context-menu/ContextMenu';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
+import { CommonFolderPaths } from '../../../constants/system/file-system/CommonFilePaths';
+import { getCurrentItemNameInPath, getFileExtension } from '../../../services/file-system/FilePathService';
+import { ProcessDirectoryByExtension } from '../../../System/process/ProcessDirectoryByExtension';
+import { ExplorerItem } from '../../../types/system/file/ExplorerItem';
 
 const Desktop: FC = () => {
-	const { getDesktop, appendFile, mkdir } = useContext(FileSystemContext);
+	const fs = useContext(FileSystemContext);
 	const { openProcess } = useContext(ProcessContext);
+
+	const [fileItems, setFileItems] = useState<ExplorerItem[]>([]);
+
+	useEffect(() => {
+		fs.opendir(CommonFolderPaths.DESKTOP).then(items => setFileItems([...items]));
+	}, [fs]);
 
 	const handleItemContextMenuClick = (event: MouseEvent) => {
 		event.preventDefault();
@@ -31,23 +41,35 @@ const Desktop: FC = () => {
 	};
 
 	const openItemProcess = (item: DesktopItem) => {
-		// const explorerItem = getDesktop().children.find(c => c.id === item.id);
-		// openProcess('sunTextEditor', { file: explorerItem  });
-		openProcess('explorer', { startPath: '/Desktop' });
-	};
+		if (fs.isDirectory(item.path)) {
+			return openProcess('explorer', { startPath: item.path });
+		}
 
-	const handleFileChange = (newItem: DesktopItem) => {
-		const oldFile = getDesktop().children?.find(file => file.id === newItem.id);
-		if (!oldFile) {
-			appendFile(newItem.name, newItem.iconPath, getDesktop(), newItem.id);
+		const fileName = getCurrentItemNameInPath(item.path);
+		const extension = getFileExtension(fileName);
+		const processName = ProcessDirectoryByExtension[extension];
+		if (!processName) {
+			console.error('Tried to open an unkown extension. file: ' + item.path);
+		} else {
+			openProcess(processName);
 		}
 	};
 
-	const handleFolderChange = (item: DesktopItem) => {
-		const oldFolder = getDesktop().children?.find(file => file.id === item.id);
+	const handleNewItemCreated = (path: string) => {
+		if (fs.isDirectory(path)) {
+			fs.mkdir(path);
+		} else {
+			fs.appendFileV2(path);
+		}
+	};
 
-		if (!oldFolder) {
-			mkdir(item.name, getDesktop());
+	const handleRenameItem = (oldPath: string, newPath: string) => {
+		fs.renameFolderV2(oldPath, getCurrentItemNameInPath(newPath));
+	};
+
+	const handleDeleteItems = (...paths: string[]) => {
+		for (const path of paths) {
+			fs.deleteFolderV2(path);
 		}
 	};
 
@@ -70,12 +92,13 @@ const Desktop: FC = () => {
 				// onDrop={handleUserComputerFileDrop}
 				// onDragOver={(e) => e.preventDefault() } // Needed to prevent browser from opening user's file on drop
 			>
-				<DesktopItemContainer
-					files={getDesktop().children}
+				<DesktopItemsContainer
+					fileItems={fileItems}
+					onDeleteItems={handleDeleteItems}
 					onDesktopContextMenuClick={handleDesktopContextMenuClick}
 					onItemContextMenuClick={handleItemContextMenuClick}
-					onFileChange={handleFileChange}
-					onFolderChange={handleFolderChange}
+					onItemCreated={handleNewItemCreated}
+					onRenameItem={handleRenameItem}
 					onItemDoubleClick={openItemProcess}
 				/>
 			</div>

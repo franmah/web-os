@@ -4,13 +4,22 @@ import ExplorerFileQuickAccess from './FileQuickAccess';
 import ExplorerFileViewContainer from './file-view/FileViewContainer';
 import { FileSystemContext } from '../../contexts/FileSystemContext';
 import { StyledExplorerContainer } from '../../styled-components/system/explorer/StyldExplorerContainer';
-import { convertPathToFragments } from '../../services/file-system/FilePathService';
+import {
+	convertPathToFragments,
+	getCurrentItemNameInPath,
+	getFileExtension,
+	getParentPath,
+	isNewItemNameValid
+} from '../../services/file-system/FilePathService';
 import { ExplorerQuickAccessContext } from '../../contexts/ExplorerQuickAccessContext';
 import { CommonFolderPaths } from '../../constants/system/file-system/CommonFilePaths';
+import { ProcessContext } from '../../contexts/ProcessContext';
+import { ProcessDirectoryByExtension } from '../../System/process/ProcessDirectoryByExtension';
 
 const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { startPath } }) => {
 	const fs = useContext(FileSystemContext);
 	const quickAccessContext = useContext(ExplorerQuickAccessContext);
+	const { openProcess } = useContext(ProcessContext);
 
 	const [pathsFlow, setPathsFlow] = useState<string[]>([startPath]);
 	const [path, setPath] = useState<string>(startPath);
@@ -20,7 +29,7 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 
 	useEffect(() => {
 		resetFileViewPathsToCurrentPath();
-	}, [path]);
+	}, [fs, path]);
 
 	const resetFileViewPathsToCurrentPath = () => {
 		fs.readdirV2(path)
@@ -36,13 +45,16 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 	};
 
 	const openFile = (newPath: string) => {
-		// TODO: check if folder or app
+		// TODO: fix newPath starting with // sometimes (following code removes the extra /)
+		if (newPath[1] === '/') newPath = '/' + newPath.substring(2, newPath.length);
+
+		if (!fs.isDirectory(newPath)) {
+			const extension = getFileExtension(getCurrentItemNameInPath(newPath));
+			return openProcess(ProcessDirectoryByExtension[extension]);
+		}
 
 		setUseSearchView(false);
 		resetFileViewPathsToCurrentPath();
-
-		// TODO: fix newPath starting with // sometimes (following code removes the extra /)
-		if (newPath[1] === '/') newPath = '/' + newPath.substring(2, newPath.length);
 
 		const currentPathIndexInFlow = pathsFlow.findIndex(p => p === path);
 		setPathsFlow(flow => [...flow.slice(0, currentPathIndexInFlow + 1), newPath]);
@@ -76,8 +88,11 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 
 	// TODO: once file tree updates automatically: move it back to file-view-row
 	const handleRenameItem = (path: string, newName: string): Promise<void> => {
+		const newPath = getParentPath(path) + '/' + newName;
+		if (!isNewItemNameValid(path, newPath, fs.isDirectory(path))) return Promise.reject();
+
 		return fs.renameFolderV2(path, newName).then(() => {
-			// TODO: remove one file tree updates automatically.
+			// TODO: once file tree updates automatically.
 			setFileViewPaths(paths => {
 				const fragments = convertPathToFragments(path);
 				fragments[fragments.length - 1] = newName;
@@ -90,10 +105,10 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 		});
 	};
 
-	const handleDeleteItem = (pathToDelete: string) => {
-		fs.deleteFolderV2(pathToDelete)
-			.then(() => quickAccessContext.unpinFromQuickAccess(pathToDelete))
-			.then(() => resetFileViewPathsToCurrentPath());
+	const handleDeleteItems = (...pathsToDelete: string[]) => {
+		for (const path of pathsToDelete) {
+			fs.deleteFolderV2(path).then(() => quickAccessContext.unpinFromQuickAccess(path));
+		}
 	};
 
 	return (
@@ -126,7 +141,7 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 						openFile={openFile}
 						updateNumSelectedItems={setNumItemsSelected}
 						paths={fileViewPaths}
-						onDeleteItem={handleDeleteItem}
+						onDeleteItems={handleDeleteItems}
 					/>
 				</div>
 			</section>

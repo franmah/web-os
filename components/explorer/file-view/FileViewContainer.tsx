@@ -16,8 +16,8 @@ const ExplorerFileViewContainer: FC<{
 	openFile: (path: string) => void;
 	updateNumSelectedItems: (number: number) => void;
 	onRenameItem: (path: string, newName: string) => Promise<void>;
-	onDeleteItem: (path: string) => void;
-}> = ({ paths, openFile, updateNumSelectedItems, onRenameItem, onDeleteItem }) => {
+	onDeleteItems: (...path: string[]) => void;
+}> = ({ paths, openFile, updateNumSelectedItems, onRenameItem, onDeleteItems }) => {
 	const [sort, setSorting] = useState<{
 		column: ExplorerFileViewSortFields;
 		direction: ExplorerFileViewSortDirections;
@@ -28,6 +28,21 @@ const ExplorerFileViewContainer: FC<{
 		setSelectedChildren([]);
 		updateNumSelectedItems(0);
 	}, [paths]);
+
+	useEffect(() => {
+		const deleteSelectedItems = (e: any) => {
+			const DELETE_KEY_CODE = 46;
+			if (e.which === DELETE_KEY_CODE || e.key === 'Delete') {
+				onDeleteItems(...selectedChildren);
+			}
+		};
+
+		document.addEventListener('keydown', deleteSelectedItems);
+
+		return () => {
+			document.removeEventListener('keydown', deleteSelectedItems);
+		};
+	}, [selectedChildren]);
 
 	useEffect(() => {
 		const handleUnselectOnClick = (event: MouseEvent) => {
@@ -115,7 +130,7 @@ const ExplorerFileViewContainer: FC<{
 							onFileSelected={handleFileSelected}
 							openFile={openFile}
 							onRenameItem={onRenameItem}
-							onDeleteItem={onDeleteItem}
+							onDeleteItem={onDeleteItems}
 						/>
 					);
 				})}

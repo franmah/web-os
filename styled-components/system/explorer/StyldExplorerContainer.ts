@@ -6,10 +6,10 @@ export const StyledExplorerContainer = styled.div`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+	overflow: auto;
 
 	.main-content {
 		display: flex;
-		width: 100%;
 		height: 100%;
 
 		.quick-access {

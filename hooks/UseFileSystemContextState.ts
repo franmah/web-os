@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { v4 } from 'uuid';
 import { getRootAtSystemStart } from '../services/FileSystemService';
-import { ExplorerFile } from '../types/system/file/ExplorerElement';
-import { FOLDER_ICON_PATH } from '../constants/FileSystem';
+import { ExplorerItem } from '../types/system/file/ExplorerItem';
 import {
 	convertPathToFragments,
 	getCurrentItemNameInPath,
@@ -11,23 +10,34 @@ import {
 import { CommonFolderPaths } from '../constants/system/file-system/CommonFilePaths';
 
 export const useFileSystemContextState = () => {
-	const rootFile: ExplorerFile = getRootAtSystemStart();
+	const rootFile: ExplorerItem = getRootAtSystemStart();
 
-	const [getRoot, setRoot] = useState<() => ExplorerFile>(() => () => rootFile);
+	const [getRoot, setRoot] = useState<() => ExplorerItem>(() => () => rootFile);
 
-	let getDesktop = (): ExplorerFile => getRoot()?.children?.[0];
+	let getDesktop = (): ExplorerItem => getRoot()?.children?.[0];
+
+	// For now, a file will always have an extension. If there's no extension then it's a directory
+	const isDirectory = (path: string): boolean => {
+		if (path === CommonFolderPaths.ROOT) {
+			return true;
+		}
+		const fileName = getCurrentItemNameInPath(path);
+		return !fileName.includes('.');
+	};
 
 	const deleteFolderV2 = (path: string): Promise<void> => {
 		return new Promise((resolve, reject) => {
 			if (path === CommonFolderPaths.ROOT) reject();
 
 			const parent = getParentPath(path);
-			const parentNode = _getNodeFromPath(parent);
+			const parentNode = getNodeFromPath(parent);
 			const itemName = getCurrentItemNameInPath(path);
 
 			parentNode.children = parentNode.children.filter(child => child.name !== itemName);
 
 			resolve();
+
+			setRoot(() => () => getRoot()); // Triggers render
 		});
 	};
 
@@ -37,10 +47,9 @@ export const useFileSystemContextState = () => {
 		const currentName = getCurrentItemNameInPath(path);
 		if (currentName === newName) return Promise.resolve();
 
-		const fragments = convertPathToFragments(path);
-		const parentPath = fragments.at(-2);
+		const parentPath = getParentPath(path);
 
-		const parentNode = !parentPath ? getRoot() : _getNodeFromPath(parentPath);
+		const parentNode = !parentPath ? getRoot() : getNodeFromPath(parentPath);
 
 		const nameAlreadyUsed = parentNode.children.find(child => child.name === newName);
 		if (nameAlreadyUsed) {
@@ -50,7 +59,7 @@ export const useFileSystemContextState = () => {
 			return Promise.reject();
 		}
 
-		const nodeName = fragments.at(-1) as string;
+		const nodeName = getCurrentItemNameInPath(path);
 		const node = parentNode.children.find(child => child.name === nodeName);
 
 		if (!node) {
@@ -58,24 +67,25 @@ export const useFileSystemContextState = () => {
 			return Promise.reject();
 		}
 		node.name = newName;
+		setRoot(() => () => getRoot());
 		return Promise.resolve();
 	};
 
 	const searchFolderV2 = (path: string, partialName: string): Promise<string[]> => {
 		try {
-			const fileNode = _getNodeFromPath(path);
+			const fileNode = getNodeFromPath(path);
 			const filePaths: string[] = [];
 			const MAX_SEARCH_DEPTH = 20; // How far down the file tree to search.
 			partialName = partialName.toLowerCase();
 
-			const searchNode = (node: ExplorerFile, level: number, currentPath: string) => {
+			const searchNode = (node: ExplorerItem, level: number, currentPath: string) => {
 				if (!node) return;
 
 				if (level === MAX_SEARCH_DEPTH) return;
 
 				if (node.name.toLowerCase().includes(partialName)) filePaths.push(currentPath);
 
-				for (let child of node.children) {
+				for (const child of node.children) {
 					const childPath = currentPath + '/' + child.name;
 					searchNode(child, level + 1, childPath);
 				}
@@ -91,27 +101,40 @@ export const useFileSystemContextState = () => {
 
 	const readdirV2 = (path: string): Promise<string[]> => {
 		try {
-			const fileNode = _getNodeFromPath(path);
+			const fileNode = getNodeFromPath(path);
 			return Promise.resolve(fileNode.children?.map(file => file.name) || []);
 		} catch (error) {
 			return Promise.reject(error);
 		}
 	};
 
-	const mkdir = (name: string, parent: ExplorerFile, id?: string) => {
+	/**
+	 * @param path the path to the parent directory.
+	 * @returns children of the directory as an ExplorerItem list.
+	 */
+	const opendir = (path: string): Promise<ExplorerItem[]> => {
+		if (!isDirectory(path)) {
+			return Promise.reject('Path is not a folder.');
+		}
+
+		const node = getNodeFromPath(path);
+		return Promise.resolve(node.children || []);
+	};
+
+	const mkdir = (path: string) => {
 		setRoot(getRoot => {
 			const root = getRoot();
+			const parentPath = getParentPath(path);
+			const parentNode = getNodeFromPath(parentPath);
 
-			const file = {
-				name,
-				FOLDER_ICON_PATH,
-				parent,
+			const file: ExplorerItem = {
 				children: [],
-				id: id || v4(),
-				isFolder: true
+				id: v4(),
+				name: getCurrentItemNameInPath(path),
+				parent: parentNode
 			};
 
-			if (parent) parent.children.push(file);
+			parentNode.children.push(file);
 
 			getDesktop = () => root?.children?.[0];
 
@@ -119,44 +142,60 @@ export const useFileSystemContextState = () => {
 		});
 	};
 
-	const updateFile = (file: ExplorerFile, content: any) => {
+	// TODO: remove
+	const updateFile = (file: ExplorerItem, content: any) => {
 		file.content = content;
 	};
 
-	const appendFile = (name: string, iconPath: string, parent: ExplorerFile | null, id?: string, content?: any) => {
-		setRoot(getRoot => {
-			const root = getRoot();
+	// TODO: only creates a file, update to actually append
+	const appendFileV2 = async (path: string, content?: any): Promise<void> => {
+		if (path === CommonFolderPaths.ROOT) {
+			return;
+		}
 
-			const extension = name.split('.').at(-1);
+		if (await exists(path)) {
+			return;
+		}
+		const parentPath = getParentPath(path);
 
-			const file: ExplorerFile = {
-				name,
-				iconPath,
-				children: [],
-				parent,
-				id: id || v4(),
-				isFolder: false,
-				extension,
-				content
-			};
+		if (!(await exists(parentPath))) throw Error('Parent directory does not exist.');
 
-			if (parent) {
-				parent.children.push(file);
-			}
+		const parentNode = getNodeFromPath(parentPath);
+		const file: ExplorerItem = {
+			children: [],
+			content,
+			id: v4(),
+			name: getCurrentItemNameInPath(path),
+			parent: parentNode
+		};
 
-			getDesktop = () => root?.children?.[0];
+		parentNode.children.push(file);
 
-			return () => root;
-		});
+		setRoot(() => () => getRoot()); // Triggers render
 	};
 
-	const _getNodeFromPath = (path: string): ExplorerFile => {
+	const exists = (path: string): Promise<boolean> => {
 		if (path.at(-1) === '/') path = path.substring(0, path.length - 1);
 
 		const fragments = convertPathToFragments(path);
 		let fileNode = getRoot();
 
-		for (let folder of fragments) {
+		for (const folder of fragments) {
+			const childNode = fileNode.children?.find(file => file.name === folder);
+			if (!childNode) return Promise.resolve(false);
+			fileNode = childNode;
+		}
+
+		return Promise.resolve(true);
+	};
+
+	const getNodeFromPath = (path: string): ExplorerItem => {
+		if (path.at(-1) === '/') path = path.substring(0, path.length - 1);
+
+		const fragments = convertPathToFragments(path);
+		let fileNode = getRoot();
+
+		for (const folder of fragments) {
 			const childNode = fileNode.children?.find(file => file.name === folder);
 			if (!childNode) throw Error(`Can't find directory ${folder} in path: ${path}`);
 			fileNode = childNode;
@@ -166,14 +205,16 @@ export const useFileSystemContextState = () => {
 	};
 
 	return {
-		getRoot,
-		appendFile,
+		appendFileV2,
+		deleteFolderV2,
 		getDesktop,
+		getRoot,
+		isDirectory,
 		mkdir,
-		updateFile,
+		opendir,
 		readdirV2,
-		searchFolderV2,
 		renameFolderV2,
-		deleteFolderV2
+		searchFolderV2,
+		updateFile
 	};
 };

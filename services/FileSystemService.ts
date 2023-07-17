@@ -1,61 +1,54 @@
-import { FOLDER_ICON_PATH } from '../constants/FileSystem';
-import { ExplorerFile } from '../types/system/file/ExplorerElement';
+import { IconPaths } from '../constants/IconPaths';
+import { ExplorerItem } from '../types/system/file/ExplorerItem';
 
-export const getRootAtSystemStart = (): ExplorerFile => {
-	const root: ExplorerFile = {
+export const getRootAtSystemStart = (): ExplorerItem => {
+	const root: ExplorerItem = {
 		name: 'root',
 		id: 'root',
 		children: [],
-		parent: null,
-		isFolder: true
+		parent: null
 	};
 
 	root.children.push({
 		name: 'Desktop',
 		id: 'desktop',
 		children: [],
-		parent: root,
-		isFolder: true
+		parent: root
 	});
 
 	root.children.push({
 		name: 'Documents',
 		id: 'documents',
 		children: [],
-		parent: root,
-		isFolder: true
+		parent: root
 	});
 
 	root.children.push({
 		name: 'Downloads',
 		id: 'downloads',
 		children: [],
-		parent: root,
-		isFolder: true
+		parent: root
 	});
 
 	root.children.push({
 		name: 'Pictures',
 		id: 'pictures',
 		children: [],
-		parent: root,
-		isFolder: true
+		parent: root
 	});
 
 	root.children.push({
 		name: 'Music',
 		id: 'music',
 		children: [],
-		parent: root,
-		isFolder: true
+		parent: root
 	});
 
 	root.children.push({
 		name: 'Videos',
 		id: 'videos',
 		children: [],
-		parent: root,
-		isFolder: true
+		parent: root
 	});
 
 	root.children[0].children = getExampleDesktopChildren(root.children[0]);
@@ -63,22 +56,24 @@ export const getRootAtSystemStart = (): ExplorerFile => {
 	return root;
 };
 
-const getExampleDesktopChildren = (desktop: ExplorerFile): ExplorerFile[] => [
+const getExampleDesktopChildren = (desktop: ExplorerItem): ExplorerItem[] => [
 	{
 		children: [],
-		iconPath: FOLDER_ICON_PATH,
-		name: 'New folder (2)',
+		name: 'New folder (1)',
 		id: 'num #2',
-		parent: desktop,
-		isFolder: true
+		parent: desktop
 	},
 	{
 		children: [],
-		iconPath: FOLDER_ICON_PATH,
-		name: 'New folder (3)',
-		id: 'num #3',
-		parent: desktop,
-		isFolder: true
+		name: 'The weeknd - save your tears.youtube',
+		id: 'youtube-video-1',
+		parent: desktop
+	},
+	{
+		children: [],
+		name: 'Text.txt',
+		id: 'text-1',
+		parent: desktop
 	},
 	{
 		children: [
@@ -86,32 +81,24 @@ const getExampleDesktopChildren = (desktop: ExplorerFile): ExplorerFile[] => [
 				children: [
 					{
 						children: [],
-						iconPath: FOLDER_ICON_PATH,
 						name: 'sub folder 1',
 						id: 'sub folder 1',
-						parent: desktop,
-						isFolder: true
+						parent: desktop
 					},
 					{
 						children: [],
-						iconPath: FOLDER_ICON_PATH,
 						name: 'sub folder 2',
 						id: 'sub folder 2',
-						parent: desktop,
-						isFolder: true
+						parent: desktop
 					}
 				],
-				iconPath: FOLDER_ICON_PATH,
 				name: 'sub folder',
 				id: 'sub folder',
-				parent: desktop,
-				isFolder: true
+				parent: desktop
 			}
 		],
-		iconPath: FOLDER_ICON_PATH,
 		name: 'New folder',
 		id: 'num #1',
-		parent: desktop,
-		isFolder: true
+		parent: desktop
 	}
 ];

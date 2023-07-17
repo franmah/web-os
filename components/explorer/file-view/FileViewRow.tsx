@@ -1,15 +1,16 @@
 import { FC, useContext, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { getCurrentItemNameInPath } from '../../../services/file-system/FilePathService';
+import { getCurrentItemNameInPath, getFileExtension } from '../../../services/file-system/FilePathService';
 import { toDateModifedFormat } from '../../../services/DateService';
 import { StyledFileViewRow } from '../../../styled-components/system/explorer/StyledFileViewRow';
 import { ProcessContext } from '../../../contexts/ProcessContext';
 import { PinToQuickAccessCommand } from '../../../System/context-menu-commands/commands/PinToQuickAccessCommand';
 import { ExplorerQuickAccessContext } from '../../../contexts/ExplorerQuickAccessContext';
 import { UnpinFromQuickAccessCommand } from '../../../System/context-menu-commands/commands/UnpinFromQuickAccessCommand';
-import { getFolderIcon } from '../../../services/IconService';
+import { getFolderIcon, getIconPathByExtension } from '../../../services/IconService';
 import CustomCheckbox from '../../system/CustomCheckbox';
 import { ShortcutCommandNames, getShorcutCommand } from '../../../System/context-menu-commands/ShortcutCommandFactory';
+import { FileSystemContext } from '../../../contexts/FileSystemContext';
 
 export const ExplorerFileViewRow: FC<{
 	columnSizes: { [column: string]: string };
@@ -23,12 +24,17 @@ export const ExplorerFileViewRow: FC<{
 	const fileName = getCurrentItemNameInPath(path);
 
 	const { openProcess } = useContext(ProcessContext);
+	const { isDirectory } = useContext(FileSystemContext);
 	const quickAccessContext = useContext(ExplorerQuickAccessContext);
 
 	const [editingName, setEditingName] = useState<boolean>(false);
 	const [inputValue, setInputValue] = useState<string>(getCurrentItemNameInPath(path));
 
 	const inputRef = useRef<any>(null);
+
+	const iconPath: string = isDirectory(path)
+		? getFolderIcon(path)
+		: getIconPathByExtension(getFileExtension(getCurrentItemNameInPath(path)));
 
 	// Select whole name when editing item name
 	useEffect(() => {
@@ -60,7 +66,9 @@ export const ExplorerFileViewRow: FC<{
 		}
 
 		const newName = inputRef.current?.value || fileName;
-		onRenameItem(path, newName).then(() => setEditingName(false));
+		onRenameItem(path, newName)
+			.catch(() => setInputValue(getCurrentItemNameInPath(path)))
+			.finally(() => setEditingName(false));
 	};
 
 	const handleRightClick = (event: any) => {
@@ -68,8 +76,6 @@ export const ExplorerFileViewRow: FC<{
 		event.stopPropagation();
 
 		onFileSelected(path, true, true);
-
-		// TODO: check if folder or file
 
 		const shortcutCommands = [
 			getShorcutCommand(ShortcutCommandNames.RENAME, () => setEditingName(true), 'rename'),
@@ -107,19 +113,20 @@ export const ExplorerFileViewRow: FC<{
 					onChange={checked => onFileSelected(path, checked, false)}
 				/>
 
-				<Image src={getFolderIcon(path)} alt='folder icon' height={16} width={16} className='icon' />
+				<Image src={iconPath} alt='folder icon' height={16} width={16} className='icon' />
 
-				{editingName ? (
-					<input
-						className='name-input'
-						ref={inputRef}
-						value={inputValue}
-						onBlur={() => handleRenameItem()}
-						onChange={e => setInputValue(e.target.value)}
-					/>
-				) : (
-					fileName
-				)}
+				<div className='file-name'>
+					{editingName ? (
+						<input
+							ref={inputRef}
+							value={inputValue}
+							onBlur={() => handleRenameItem()}
+							onChange={e => setInputValue(e.target.value)}
+						/>
+					) : (
+						fileName
+					)}
+				</div>
 			</div>
 
 			{/* DATE MODIFIED  */}
