@@ -18,14 +18,12 @@ import SelectionBoxComponent from '../../shared/selection-box/SelectionBox';
 import { NewTxtFileCommand } from '../../../System/context-menu-commands/commands/NewTxtFileCommand';
 import {
 	getCurrentItemNameInPath,
-	getFileExtension,
 	getParentPath,
 	isNewItemNameValid
 } from '../../../services/file-system/FilePathService';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
 import { ExplorerItem } from '../../../types/system/file/ExplorerItem';
 import { CreateItemType } from '../../../constants/CreateItemType';
-import { getIconPathByExtension } from '../../../services/IconService';
 
 const DesktopItemsContainer: FC<{
 	fileItems: ExplorerItem[];
@@ -40,10 +38,8 @@ const DesktopItemsContainer: FC<{
 	const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
 
 	useEffect(() => {
-		setDesktopItems(currentItems => {
-			const updatedItems = setCurrentItemsFromFileItems(fileItems, currentItems, fs.isDirectory);
-			return setItemPositions(updatedItems, DesktopSortOptions.default);
-		});
+		const updatedItems = setCurrentItemsFromFileItems(fileItems, desktopItems, fs.isDirectory);
+		setDesktopItems([...setItemPositions(updatedItems, DesktopSortOptions.default)]);
 	}, [fileItems]);
 
 	// Any click anywhere in the app should unselect all items

@@ -25,15 +25,15 @@ export const setCurrentItemsFromFileItems = (
 				fsId: matchingFileItem.id,
 				iconPath: getIconPathByExtension(getFileExtension(matchingFileItem.name)),
 				id: desktopItem.id,
-				left: 123,
+				left: desktopItem.left,
 				path: CommonFolderPaths.DESKTOP + '/' + matchingFileItem.name,
 				selected: desktopItem.selected,
-				top: 123
+				top: desktopItem.top
 			};
 			updatedItems.push({ ...item });
 		}
 	}
-	console.log({ updatedItems });
+
 	// Add new items
 	const newItems = fileItems.filter(fileItem => !currentItems.find(desktopItem => fileItem.id === desktopItem.fsId));
 	updatedItems.push(...newItems.map(i =>

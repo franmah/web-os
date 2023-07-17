@@ -21,7 +21,6 @@ const Desktop: FC = () => {
 	const [fileItems, setFileItems] = useState<ExplorerItem[]>([]);
 
 	useEffect(() => {
-		console.log('hello');
 		fs.opendir(CommonFolderPaths.DESKTOP)
 			.then(items => setFileItems([...items]));
 	}, [fs]);
