@@ -1,6 +1,9 @@
 import { FC, Fragment, useContext, useEffect, useState } from 'react';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import { createNewItem, setCurrentItemsFromFileItems } from '../../../services/system/desktop/DesktopItemContainerService';
+import {
+	createNewItem,
+	setCurrentItemsFromFileItems
+} from '../../../services/system/desktop/DesktopItemContainerService';
 import {
 	getSelectedItemsFromSelectionBoxgWithCtrl,
 	moveItemsOnDesktop,
@@ -33,7 +36,15 @@ const DesktopItemsContainer: FC<{
 	onItemCreated: (path: string) => void;
 	onItemDoubleClick: (item: DesktopItem) => void;
 	onRenameItem: (oldPath: string, newPath: string) => void;
-}> = ({ fileItems, onDeleteItems, onDesktopContextMenuClick, onItemContextMenuClick, onItemCreated, onItemDoubleClick, onRenameItem }) => {
+}> = ({
+	fileItems,
+	onDeleteItems,
+	onDesktopContextMenuClick,
+	onItemContextMenuClick,
+	onItemCreated,
+	onItemDoubleClick,
+	onRenameItem
+}) => {
 	const fs = useContext(FileSystemContext);
 
 	const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);

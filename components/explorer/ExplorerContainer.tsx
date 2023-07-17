@@ -89,8 +89,7 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 	// TODO: once file tree updates automatically: move it back to file-view-row
 	const handleRenameItem = (path: string, newName: string): Promise<void> => {
 		const newPath = getParentPath(path) + '/' + newName;
-		if (!isNewItemNameValid(path, newPath, fs.isDirectory(path)))
-			return Promise.reject();
+		if (!isNewItemNameValid(path, newPath, fs.isDirectory(path))) return Promise.reject();
 
 		return fs.renameFolderV2(path, newName).then(() => {
 			// TODO: once file tree updates automatically.
@@ -108,8 +107,7 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 
 	const handleDeleteItems = (...pathsToDelete: string[]) => {
 		for (const path of pathsToDelete) {
-			fs.deleteFolderV2(path)
-				.then(() => quickAccessContext.unpinFromQuickAccess(path));
+			fs.deleteFolderV2(path).then(() => quickAccessContext.unpinFromQuickAccess(path));
 		}
 	};
 

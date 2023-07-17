@@ -158,9 +158,9 @@ const DesktopItemComponent: FC<{
 	};
 
 	const getIconPath = () => {
-		return fs.isDirectory(item.path) ?
-			getFolderIcon(item.path) :
-			getIconPathByExtension(getFileExtension(getCurrentItemNameInPath(item.path)));
+		return fs.isDirectory(item.path)
+			? getFolderIcon(item.path)
+			: getIconPathByExtension(getFileExtension(getCurrentItemNameInPath(item.path)));
 	};
 
 	const selectItemNameOnRenameFocus = (event: any) => {
@@ -189,7 +189,7 @@ const DesktopItemComponent: FC<{
 			{renaming ? (
 				<textarea
 					id={INPUT_ID}
-					spellCheck="false"
+					spellCheck='false'
 					autoFocus
 					onFocus={selectItemNameOnRenameFocus}
 					value={inputNameValue}

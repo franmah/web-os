@@ -36,8 +36,15 @@ export const setCurrentItemsFromFileItems = (
 
 	// Add new items
 	const newItems = fileItems.filter(fileItem => !currentItems.find(desktopItem => fileItem.id === desktopItem.fsId));
-	updatedItems.push(...newItems.map(i =>
-		explorerItemToDesktopItem(i, CommonFolderPaths.DESKTOP + '/' + i.name, isDirectory(CommonFolderPaths.DESKTOP + '/' + i.name))));
+	updatedItems.push(
+		...newItems.map(i =>
+			explorerItemToDesktopItem(
+				i,
+				CommonFolderPaths.DESKTOP + '/' + i.name,
+				isDirectory(CommonFolderPaths.DESKTOP + '/' + i.name)
+			)
+		)
+	);
 
 	return updatedItems;
 };
@@ -58,7 +65,11 @@ export const pathToDesktopItem = (path: string, isDirectory: boolean): DesktopIt
 	};
 };
 
-export const explorerItemToDesktopItem = (explorerItem: ExplorerItem, path: string, isDirectory: boolean): DesktopItem => {
+export const explorerItemToDesktopItem = (
+	explorerItem: ExplorerItem,
+	path: string,
+	isDirectory: boolean
+): DesktopItem => {
 	const iconPath = isDirectory
 		? getFolderIcon(path)
 		: getIconPathByExtension(getFileExtension(getCurrentItemNameInPath(path)));
@@ -74,7 +85,12 @@ export const explorerItemToDesktopItem = (explorerItem: ExplorerItem, path: stri
 	};
 };
 
-export const createNewItem = (top: number, left: number, fileType: CreateItemType, currentItems: DesktopItem[]): DesktopItem => {
+export const createNewItem = (
+	top: number,
+	left: number,
+	fileType: CreateItemType,
+	currentItems: DesktopItem[]
+): DesktopItem => {
 	const isDirectory = fileType === CreateItemType.FOLDER;
 	const newItemName = getNewItemName(fileType, getExtension(fileType), currentItems);
 	const path = CommonFolderPaths.DESKTOP + '/' + newItemName;
@@ -108,11 +124,12 @@ const getNewItemName = (fileType: CreateItemType, extension: string, items: Desk
 	const numberStartingIndex = `New ${fileType} (`.length;
 	const lastNumberDigit = 2;
 
-	const digits = matches.map(item =>
-		+getCurrentItemNameInPath(item.path).substring(numberStartingIndex, numberStartingIndex + lastNumberDigit - 1)
+	const digits = matches.map(
+		item =>
+			+getCurrentItemNameInPath(item.path).substring(numberStartingIndex, numberStartingIndex + lastNumberDigit - 1)
 	);
 
-	digits.sort((a, b) => +a > +b ? 1 : -1);
+	digits.sort((a, b) => (+a > +b ? 1 : -1));
 
 	let i = 2;
 	for (; i <= digits[digits.length - 1]; i += 1) {

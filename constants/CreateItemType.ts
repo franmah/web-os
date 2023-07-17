@@ -1,4 +1,4 @@
 export enum CreateItemType {
-  TEXT = 'Text Document',
-  FOLDER = 'folder'
+	TEXT = 'Text Document',
+	FOLDER = 'folder'
 }

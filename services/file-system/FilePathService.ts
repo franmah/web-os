@@ -31,7 +31,7 @@ export const isNewItemNameValid = (oldPath: string, newPath: string, isDirectory
 	const extension = getFileExtension(getCurrentItemNameInPath(newPath));
 
 	if (extension && isDirectory) {
-		console.error('Directory can\'t have extensions.');
+		console.error("Directory can't have extensions.");
 		return false;
 	}
 

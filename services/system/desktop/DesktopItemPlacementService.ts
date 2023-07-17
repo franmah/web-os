@@ -51,7 +51,9 @@ const setItemDefaultPositions = (items: DesktopItem[]): DesktopItem[] => {
 			item.left = currentColumn * (ITEM_WIDTH + WIDTH_OFFSET);
 			item.top = HEIGHT_OFFSET + (currentRow * ITEM_HEIGHT + currentRow * HEIGHT_OFFSET);
 			currentRow += 1;
-			const isValidPosition = positionedItems.every(positionedItem => !areItemsOverlaping(item.top, item.left, positionedItem));
+			const isValidPosition = positionedItems.every(
+				positionedItem => !areItemsOverlaping(item.top, item.left, positionedItem)
+			);
 
 			if (isValidPosition) {
 				break;

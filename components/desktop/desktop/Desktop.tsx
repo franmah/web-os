@@ -21,8 +21,7 @@ const Desktop: FC = () => {
 	const [fileItems, setFileItems] = useState<ExplorerItem[]>([]);
 
 	useEffect(() => {
-		fs.opendir(CommonFolderPaths.DESKTOP)
-			.then(items => setFileItems([...items]));
+		fs.opendir(CommonFolderPaths.DESKTOP).then(items => setFileItems([...items]));
 	}, [fs]);
 
 	const handleItemContextMenuClick = (event: MouseEvent) => {
@@ -41,13 +40,11 @@ const Desktop: FC = () => {
 		});
 	};
 
-	// TODO: should receive an ExplorerItem not a DesktopItem
 	const openItemProcess = (item: DesktopItem) => {
 		if (fs.isDirectory(item.path)) {
 			return openProcess('explorer', { startPath: item.path });
 		}
 
-		// TODO: should open process properly (with right parameters)
 		const fileName = getCurrentItemNameInPath(item.path);
 		const extension = getFileExtension(fileName);
 		const processName = ProcessDirectoryByExtension[extension];
