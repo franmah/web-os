@@ -59,46 +59,46 @@ export const getRootAtSystemStart = (): ExplorerItem => {
 const getExampleDesktopChildren = (desktop: ExplorerItem): ExplorerItem[] => [
 	{
 		children: [],
-		name: 'New folder (2)',
+		name: 'New folder (1)',
 		id: 'num #2',
 		parent: desktop
+	},
+	{
+		children: [],
+		name: 'The weeknd - save your tears.youtube',
+		id: 'youtube-video-1',
+		parent: desktop
+	},
+	{
+		children: [],
+		name: 'Text.txt',
+		id: 'text-1',
+		parent: desktop
+	},
+	{
+		children: [
+			{
+				children: [
+					{
+						children: [],
+						name: 'sub folder 1',
+						id: 'sub folder 1',
+						parent: desktop
+					},
+					{
+						children: [],
+						name: 'sub folder 2',
+						id: 'sub folder 2',
+						parent: desktop
+					}
+				],
+				name: 'sub folder',
+				id: 'sub folder',
+				parent: desktop
+			}
+		],
+		name: 'New folder',
+		id: 'num #1',
+		parent: desktop
 	}
-	// {
-	// 	children: [],
-	// 	name: 'The weeknd - save your tears.youtube',
-	// 	id: 'youtube-video-1',
-	// 	parent: desktop
-	// },
-	// {
-	// 	children: [],
-	// 	name: 'Text.txt',
-	// 	id: 'text-1',
-	// 	parent: desktop
-	// },
-	// {
-	// 	children: [
-	// 		{
-	// 			children: [
-	// 				{
-	// 					children: [],
-	// 					name: 'sub folder 1',
-	// 					id: 'sub folder 1',
-	// 					parent: desktop
-	// 				},
-	// 				{
-	// 					children: [],
-	// 					name: 'sub folder 2',
-	// 					id: 'sub folder 2',
-	// 					parent: desktop
-	// 				}
-	// 			],
-	// 			name: 'sub folder',
-	// 			id: 'sub folder',
-	// 			parent: desktop
-	// 		}
-	// 	],
-	// 	name: 'New folder',
-	// 	id: 'num #1',
-	// 	parent: desktop
-	// }
 ];

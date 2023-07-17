@@ -16,7 +16,7 @@ export const useFileSystemContextState = () => {
 
 	let getDesktop = (): ExplorerItem => getRoot()?.children?.[0];
 
-	// For a file will always have an extension. If there's no extension then it's a directory
+	// For now, a file will always have an extension. If there's no extension then it's a directory
 	const isDirectory = (path: string): boolean => {
 		if (path === CommonFolderPaths.ROOT) {
 			return true;
@@ -36,6 +36,8 @@ export const useFileSystemContextState = () => {
 			parentNode.children = parentNode.children.filter(child => child.name !== itemName);
 
 			resolve();
+
+			setRoot(() => () => getRoot());
 		});
 	};
 

@@ -27,12 +27,13 @@ import { CreateItemType } from '../../../constants/CreateItemType';
 
 const DesktopItemsContainer: FC<{
 	fileItems: ExplorerItem[];
+	onDeleteItems: (...paths: string[]) => void;
 	onDesktopContextMenuClick: (event: MouseEvent, commands: ContextMenuCommandList) => void;
 	onItemContextMenuClick: (event: MouseEvent) => void;
 	onItemCreated: (path: string) => void;
 	onItemDoubleClick: (item: DesktopItem) => void;
 	onRenameItem: (oldPath: string, newPath: string) => void;
-}> = ({ fileItems, onDesktopContextMenuClick, onItemContextMenuClick, onItemCreated, onItemDoubleClick, onRenameItem }) => {
+}> = ({ fileItems, onDeleteItems, onDesktopContextMenuClick, onItemContextMenuClick, onItemCreated, onItemDoubleClick, onRenameItem }) => {
 	const fs = useContext(FileSystemContext);
 
 	const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
@@ -76,6 +77,24 @@ const DesktopItemsContainer: FC<{
 			desktop?.removeEventListener('contextmenu', onContextMenuClick);
 		};
 	}, []);
+
+	// Delete files on DELETE key
+	useEffect(() => {
+		const deleteSelectedItems = (e: any) => {
+			const DELETE_KEY_CODE = 46;
+			if (e.which === DELETE_KEY_CODE || e.key === 'Delete') {
+				const selectedItems = desktopItems.filter(item => item.selected);
+				const paths = selectedItems.map(item => item.path);
+				onDeleteItems(...paths);
+			}
+		};
+
+		document.addEventListener('keydown', deleteSelectedItems);
+
+		return () => {
+			document.removeEventListener('keydown', deleteSelectedItems);
+		};
+	}, [desktopItems]);
 
 	const onContextMenuClick = (event: MouseEvent) => {
 		const commands = [

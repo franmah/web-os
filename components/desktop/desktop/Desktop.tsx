@@ -70,6 +70,12 @@ const Desktop: FC = () => {
 		fs.renameFolderV2(oldPath, getCurrentItemNameInPath(newPath));
 	};
 
+	const handleDeleteItems = (...paths: string[]) => {
+		for (const path of paths) {
+			fs.deleteFolderV2(path);
+		}
+	};
+
 	return (
 		<Fragment>
 			{
@@ -91,6 +97,7 @@ const Desktop: FC = () => {
 			>
 				<DesktopItemsContainer
 					fileItems={fileItems}
+					onDeleteItems={handleDeleteItems}
 					onDesktopContextMenuClick={handleDesktopContextMenuClick}
 					onItemContextMenuClick={handleItemContextMenuClick}
 					onItemCreated={handleNewItemCreated}
