@@ -12,18 +12,18 @@ import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { CommonFolderPaths } from '../../../constants/system/file-system/CommonFilePaths';
 import { getCurrentItemNameInPath, getFileExtension } from '../../../services/file-system/FilePathService';
 import { ProcessDirectoryByExtension } from '../../../System/process/ProcessDirectoryByExtension';
+import { ExplorerItem } from '../../../types/system/file/ExplorerItem';
 
 const Desktop: FC = () => {
 	const fs = useContext(FileSystemContext);
 	const { openProcess } = useContext(ProcessContext);
 
-	const [paths, setPaths] = useState<string[]>([]);
+	const [fileItems, setFileItems] = useState<ExplorerItem[]>([]);
 
 	useEffect(() => {
-		fs.readdirV2(CommonFolderPaths.DESKTOP).then(fileNames =>
-			setPaths(fileNames.map(fileName => CommonFolderPaths.DESKTOP + '/' + fileName))
-		);
-	}, []);
+		fs.opendir(CommonFolderPaths.DESKTOP)
+			.then(items => setFileItems([...items]));
+	}, [fs]);
 
 	const handleItemContextMenuClick = (event: MouseEvent) => {
 		event.preventDefault();
@@ -41,6 +41,7 @@ const Desktop: FC = () => {
 		});
 	};
 
+	// TODO: should receive an ExplorerItem not a DesktopItem
 	const openItemProcess = (item: DesktopItem) => {
 		if (fs.isDirectory(item.path)) {
 			return openProcess('explorer', { startPath: item.path });
@@ -58,12 +59,21 @@ const Desktop: FC = () => {
 	};
 
 	const handleNewItemCreated = (path: string) => {
-		if (fs.isDirectory(path)) fs.mkdir(path);
-		else fs.appendFileV2(path);
+		if (fs.isDirectory(path)) {
+			fs.mkdir(path);
+		} else {
+			fs.appendFileV2(path);
+		}
 	};
 
 	const handleRenameItem = (oldPath: string, newPath: string) => {
 		fs.renameFolderV2(oldPath, getCurrentItemNameInPath(newPath));
+	};
+
+	const handleDeleteItems = (...paths: string[]) => {
+		for (const path of paths) {
+			fs.deleteFolderV2(path);
+		}
 	};
 
 	return (
@@ -86,7 +96,8 @@ const Desktop: FC = () => {
 				// onDragOver={(e) => e.preventDefault() } // Needed to prevent browser from opening user's file on drop
 			>
 				<DesktopItemsContainer
-					paths={paths}
+					fileItems={fileItems}
+					onDeleteItems={handleDeleteItems}
 					onDesktopContextMenuClick={handleDesktopContextMenuClick}
 					onItemContextMenuClick={handleItemContextMenuClick}
 					onItemCreated={handleNewItemCreated}

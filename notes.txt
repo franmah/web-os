@@ -1,47 +1,11 @@
 // WORKING ON
 
-1. Desktop icons
-OK - Create a constant file with icon paths
-OK - Add missing icons
-  - unkown extension
-  - youtube
-OK - Create function in file system service to get extension from a file (not a path (single resonsibility))
-OK - Complete IconService function for desktop items to get their icons.
-OK - IconService function getDesktopIconPath... should be more generic (not just for desktop)
-
-2. File or folder
-OK - Create a isDirectory in FileSystem context
-  should return true if file has no extension.
-
-OK 2.5 Add more test files (at least one youtube and one text file)
-
-OK 2.7 Explorer:
-  - Fix icons in explorer (should use fileName extension)
-
-OK 4.5 FIX DESKTOP SELECTION BOX (items don't get selected.)
-  - probably because of the item.id change.
-
-OK 4.55 Fix items not moving on desktop
-
-OK 4.6 Renaming
-  - fix renaming items not working
-- Create a function to validate names.
-  For now files are not allowed to go without an extension in their name.
-- Update desktop and explorer to use validation function just above when renaming.
-
-OK 5. Refactor ExplorerFile
-- remove extra fields (icon path, make children optional...)
-
-OK 6. general refactor
-- improve desktop file name display
-- Fix window header icon
-
-1. updating a file's extension doesn't update it's icon
-
-2 add useEffect on fs in Desktop and ExplorerContainer
-- both should reload files when there's a change in the file system
-- passing paths isn't enough because Desktop has no track of what was modified.
-  Desktop needs to read the actual ExplorerFile items not just the paths.
+OK - New items don't have a correct name
+OK - renaming a file in desktop should reload (because fs changed) without changing the item's position
+OK - updating a file's extension doesn't update it's icon
+ok - Updating an item (rename and create) in the desktop should trigger an update in the explorer
+- updating an item (rename and delete) in the explorer should trigger an udpate in the desktop
+- opening a process should only require passing a path (can potentially pass extra argument but shouldn't be needed for now)
 
 2.6
 - Donwload 1024*1024 actual png icons and replace the current ones. Every icon should have the same size.

@@ -59,7 +59,7 @@ export const getRootAtSystemStart = (): ExplorerItem => {
 const getExampleDesktopChildren = (desktop: ExplorerItem): ExplorerItem[] => [
 	{
 		children: [],
-		name: 'New folder (2)',
+		name: 'New folder (1)',
 		id: 'num #2',
 		parent: desktop
 	},
@@ -97,7 +97,6 @@ const getExampleDesktopChildren = (desktop: ExplorerItem): ExplorerItem[] => [
 				parent: desktop
 			}
 		],
-		iconPath: IconPaths.FOLDER,
 		name: 'New folder',
 		id: 'num #1',
 		parent: desktop

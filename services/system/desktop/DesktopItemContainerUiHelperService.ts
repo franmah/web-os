@@ -60,21 +60,21 @@ const isPositionInvalid = (
 		return (
 			!itemsMoving.some(i => i.path === item.path) && // Don't check item that are moving.
 			item.path !== itemPath &&
-			isItemOverlapingOtherItems(top, left, item)
+			areItemsOverlaping(top, left, item)
 		);
 	});
 };
 
-const isItemOverlapingOtherItems = (i1Top: number, i1Left: number, i2: DesktopItem) => {
+export const areItemsOverlaping = (i1Top: number, i1Left: number, i2: DesktopItem) => {
 	const i1Right = i1Left + ITEM_WIDTH;
 	const i2Right = i2.left + ITEM_WIDTH;
 	const i1Bottom = i1Top + ITEM_HEIGHT;
 	const i2Bottom = i2.top + ITEM_HEIGHT;
 
-	const left = i1Left < i2Right && i1Left > i2.left;
-	const bottom = i1Bottom < i2Bottom && i1Bottom > i2.top;
-	const top = i1Top < i2Bottom && i1Top > i2.top;
-	const right = i1Right < i2Right && i1Right > i2.left;
+	const left = i1Left <= i2Right && i1Left >= i2.left;
+	const bottom = i1Bottom <= i2Bottom && i1Bottom >= i2.top;
+	const top = i1Top <= i2Bottom && i1Top >= i2.top;
+	const right = i1Right <= i2Right && i1Right >= i2.left;
 
 	return (left && (bottom || top)) || (right && (bottom || top));
 };

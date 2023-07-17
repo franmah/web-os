@@ -1,6 +1,6 @@
 import { FC, Fragment, useContext, useEffect, useState } from 'react';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import { getNewItemName, pathToDesktopItem } from '../../../services/system/desktop/DesktopItemContainerService';
+import { createNewItem, setCurrentItemsFromFileItems } from '../../../services/system/desktop/DesktopItemContainerService';
 import {
 	getSelectedItemsFromSelectionBoxgWithCtrl,
 	moveItemsOnDesktop,
@@ -16,30 +16,32 @@ import { ContextMenuCommandList } from '../../../types/system/context-menu/Conte
 import DesktopItemComponent from '../item/DesktopItem';
 import SelectionBoxComponent from '../../shared/selection-box/SelectionBox';
 import { NewTxtFileCommand } from '../../../System/context-menu-commands/commands/NewTxtFileCommand';
-import { CommonFolderPaths } from '../../../constants/system/file-system/CommonFilePaths';
 import {
 	getCurrentItemNameInPath,
 	getParentPath,
 	isNewItemNameValid
 } from '../../../services/file-system/FilePathService';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
+import { ExplorerItem } from '../../../types/system/file/ExplorerItem';
+import { CreateItemType } from '../../../constants/CreateItemType';
 
 const DesktopItemsContainer: FC<{
-	paths: string[];
+	fileItems: ExplorerItem[];
+	onDeleteItems: (...paths: string[]) => void;
 	onDesktopContextMenuClick: (event: MouseEvent, commands: ContextMenuCommandList) => void;
 	onItemContextMenuClick: (event: MouseEvent) => void;
 	onItemCreated: (path: string) => void;
 	onItemDoubleClick: (item: DesktopItem) => void;
 	onRenameItem: (oldPath: string, newPath: string) => void;
-}> = ({ paths, onDesktopContextMenuClick, onItemContextMenuClick, onItemCreated, onItemDoubleClick, onRenameItem }) => {
+}> = ({ fileItems, onDeleteItems, onDesktopContextMenuClick, onItemContextMenuClick, onItemCreated, onItemDoubleClick, onRenameItem }) => {
 	const fs = useContext(FileSystemContext);
 
 	const [desktopItems, setDesktopItems] = useState<DesktopItem[]>([]);
 
 	useEffect(() => {
-		const items = paths.map(path => pathToDesktopItem(path, fs.isDirectory(path)));
-		setDesktopItems(() => [...setItemPositions(items, DesktopSortOptions.default)]);
-	}, [paths]);
+		const updatedItems = setCurrentItemsFromFileItems(fileItems, desktopItems, fs.isDirectory);
+		setDesktopItems([...setItemPositions(updatedItems, DesktopSortOptions.default)]);
+	}, [fileItems]);
 
 	// Any click anywhere in the app should unselect all items
 	useEffect(() => {
@@ -76,11 +78,29 @@ const DesktopItemsContainer: FC<{
 		};
 	}, []);
 
+	// Delete files on DELETE key
+	useEffect(() => {
+		const deleteSelectedItems = (e: any) => {
+			const DELETE_KEY_CODE = 46;
+			if (e.which === DELETE_KEY_CODE || e.key === 'Delete') {
+				const selectedItems = desktopItems.filter(item => item.selected);
+				const paths = selectedItems.map(item => item.path);
+				onDeleteItems(...paths);
+			}
+		};
+
+		document.addEventListener('keydown', deleteSelectedItems);
+
+		return () => {
+			document.removeEventListener('keydown', deleteSelectedItems);
+		};
+	}, [desktopItems]);
+
 	const onContextMenuClick = (event: MouseEvent) => {
 		const commands = [
 			new NewItemCommandContainer([
-				new NewFolderCommand(() => addItem(event.clientY, event.clientX, 'folder')),
-				new NewTxtFileCommand(() => addItem(event.clientY, event.clientX, 'Text'))
+				new NewFolderCommand(() => addItem(event.clientY, event.clientX, CreateItemType.FOLDER)),
+				new NewTxtFileCommand(() => addItem(event.clientY, event.clientX, CreateItemType.TEXT))
 			]),
 			new SortCommandContainer([
 				new SortByNameCommand(() =>
@@ -92,23 +112,12 @@ const DesktopItemsContainer: FC<{
 		onDesktopContextMenuClick(event, commands);
 	};
 
-	const addItem = (top: number, left: number, fileType: string) => {
+	const addItem = (top: number, left: number, fileType: CreateItemType) => {
 		setDesktopItems(currentItems => {
-			const isDirectory = fileType === 'folder';
-			const newItemName = getNewItemName(fileType, currentItems);
-			const path = CommonFolderPaths.DESKTOP + '/' + newItemName + _getExtension(fileType);
-			const item = pathToDesktopItem(path, isDirectory);
-			item.left = left;
-			item.top = top;
-
-			onItemCreated(item.path);
-			return [...currentItems, item];
+			const newItem = createNewItem(top, left, fileType, currentItems);
+			onItemCreated(newItem.path);
+			return [...currentItems, newItem];
 		});
-	};
-
-	const _getExtension = (fileType: string) => {
-		if (fileType === 'folder') return '';
-		if (fileType === 'Text') return '.txt';
 	};
 
 	// TODO: once changes to the File System triggers a render, this should be handled by the FS context
