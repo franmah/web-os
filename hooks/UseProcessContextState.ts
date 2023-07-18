@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { v4 } from 'uuid';
 import { ProcessDirectory } from '../System/process/ProcessDirectory';
 import { Process, ProcessContextType, Processes, WindowedProcess } from '../types/system/processes/Processes';
-import { saveEvent } from '../services/AnalyticsService';
+import { saveAnalyticsEvent } from '../services/AnalyticsService';
 import { AnalyticEvents } from '../constants/AnalyticEvents';
 
 const useProcessContextState = (): ProcessContextType => {
@@ -21,8 +21,8 @@ const useProcessContextState = (): ProcessContextType => {
 	};
 
 	const openProcess = (processName: string, params: any = null, windowParams: any = null) => {
-		if (processName !== 'desktop' && processName !== 'taskbar')
-			saveEvent(AnalyticEvents.OPEN_PROCESS, { process: processName });
+		if (processName !== 'desktop' && processName !== 'taskbar' && processName !== 'contextMenu')
+			saveAnalyticsEvent(AnalyticEvents.OPEN_PROCESS, { process: processName });
 
 		if (!ProcessDirectory[processName]) {
 			console.error(`Process name: ${processName} not found in directory.`);
