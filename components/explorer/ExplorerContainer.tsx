@@ -15,6 +15,8 @@ import { ExplorerQuickAccessContext } from '../../contexts/ExplorerQuickAccessCo
 import { CommonFolderPaths } from '../../constants/system/file-system/CommonFilePaths';
 import { ProcessContext } from '../../contexts/ProcessContext';
 import { ProcessDirectoryByExtension } from '../../System/process/ProcessDirectoryByExtension';
+import { AnalyticEvents } from '../../constants/AnalyticEvents';
+import { saveAnalyticsEvent } from '../../services/AnalyticsService';
 
 const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { startPath } }) => {
 	const fs = useContext(FileSystemContext);
@@ -106,6 +108,7 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 	};
 
 	const handleDeleteItems = (...pathsToDelete: string[]) => {
+		saveAnalyticsEvent(AnalyticEvents.DELETE_FILE, { app: 'desktop', paths: JSON.stringify(pathsToDelete) });
 		for (const path of pathsToDelete) {
 			fs.deleteFolderV2(path).then(() => quickAccessContext.unpinFromQuickAccess(path));
 		}

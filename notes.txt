@@ -1,4 +1,9 @@
+- check if firebase config needs to be hidden.
+- remove read/write: true in rules.
+- create a secret key that can be used by rules to allow connections
 
+use Autonomous system (ASN) instead of IP?
+https://api.ipify.org/?format=json
 /////////////////// MVP ///////////////
 1. Explorer app
   - side menu
