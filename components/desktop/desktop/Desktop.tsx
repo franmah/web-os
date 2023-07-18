@@ -13,6 +13,8 @@ import { CommonFolderPaths } from '../../../constants/system/file-system/CommonF
 import { getCurrentItemNameInPath, getFileExtension } from '../../../services/file-system/FilePathService';
 import { ProcessDirectoryByExtension } from '../../../System/process/ProcessDirectoryByExtension';
 import { ExplorerItem } from '../../../types/system/file/ExplorerItem';
+import { saveAnalyticsEvent } from '../../../services/AnalyticsService';
+import { AnalyticEvents } from '../../../constants/AnalyticEvents';
 
 const Desktop: FC = () => {
 	const fs = useContext(FileSystemContext);
@@ -57,9 +59,9 @@ const Desktop: FC = () => {
 
 	const handleNewItemCreated = (path: string) => {
 		if (fs.isDirectory(path)) {
-			fs.mkdir(path);
+			fs.mkdir(path).then(() => saveAnalyticsEvent(AnalyticEvents.CREATE_FILE, { app: 'desktop', path }));
 		} else {
-			fs.appendFileV2(path);
+			fs.appendFileV2(path).then(() => saveAnalyticsEvent(AnalyticEvents.CREATE_FILE, { app: 'desktop', path }));
 		}
 	};
 
@@ -68,6 +70,7 @@ const Desktop: FC = () => {
 	};
 
 	const handleDeleteItems = (...paths: string[]) => {
+		saveAnalyticsEvent(AnalyticEvents.DELETE_FILE, { app: 'desktop', paths: JSON.stringify(paths) });
 		for (const path of paths) {
 			fs.deleteFolderV2(path);
 		}

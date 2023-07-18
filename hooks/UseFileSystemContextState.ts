@@ -121,7 +121,7 @@ export const useFileSystemContextState = () => {
 		return Promise.resolve(node.children || []);
 	};
 
-	const mkdir = (path: string) => {
+	const mkdir = async (path: string): Promise<void> => {
 		setRoot(getRoot => {
 			const root = getRoot();
 			const parentPath = getParentPath(path);
@@ -137,7 +137,6 @@ export const useFileSystemContextState = () => {
 			parentNode.children.push(file);
 
 			getDesktop = () => root?.children?.[0];
-
 			return () => root;
 		});
 	};
