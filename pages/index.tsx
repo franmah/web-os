@@ -14,6 +14,9 @@ initializeApp({
   appId: "1:233393781920:web:36e82ffe3a987441faddc5"
 });
 
+const env = process.env.NODE_ENV; 
+console.log(env);
+
 const Home: NextPage = () => (
 	<div>
 		<ProcessContextProvider>
