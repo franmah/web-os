@@ -4,7 +4,7 @@ import { ProcessLoader } from '../components/system/ProcessLoader';
 import FileSystemContextProvider from '../contexts/FileSystemContext';
 import ExplorerQuickAccessProvider from '../contexts/ExplorerQuickAccessContext';
 
-const env = process.env.NODE_ENV;
+const env = process.env.NODE_ENV; 
 console.log(env);
 
 const Home: NextPage = () => (
