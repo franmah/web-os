@@ -7,7 +7,8 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"prettier": "npx prettier --write ."
+		"prettier": "npx prettier --write .",
+		"renormalize": "git add --renormalize ."
 	},
 	"dependencies": {
 		"firebase": "^10.0.0",
