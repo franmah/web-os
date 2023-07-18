@@ -4,8 +4,10 @@ import { ProcessLoader } from '../components/system/ProcessLoader';
 import FileSystemContextProvider from '../contexts/FileSystemContext';
 import ExplorerQuickAccessProvider from '../contexts/ExplorerQuickAccessContext';
 import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { saveConnection } from '../services/AnalyticsService';
 
-initializeApp({
+const firebaseApp = initializeApp({
   apiKey: "AIzaSyCDAyEgX1zVqbC_Ye3Tlt-mZyp6D-mmHvU",
   authDomain: "web-os-57c81.firebaseapp.com",
   projectId: "web-os-57c81",
@@ -14,8 +16,9 @@ initializeApp({
   appId: "1:233393781920:web:36e82ffe3a987441faddc5"
 });
 
-const env = process.env.NODE_ENV; 
-console.log(env);
+export const db = getFirestore(firebaseApp);
+
+saveConnection();
 
 const Home: NextPage = () => (
 	<div>
