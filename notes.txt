@@ -1,4 +1,9 @@
+Requirement:
+- save connection to Firestore
+- save when apps are open, closed.
 
+use Autonomous system (ASN) instead of IP?
+https://api.ipify.org/?format=json
 /////////////////// MVP ///////////////
 1. Explorer app
   - side menu
