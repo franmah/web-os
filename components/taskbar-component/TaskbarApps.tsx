@@ -42,11 +42,16 @@ const TaskbarApps: FC<{}> = () => {
 		});
 	}, [processContext.processes]);
 
+	const handleOpenApp = (appName: string) => {
+		processContext.openProcess(appName);
+	};
+
 	return (
 		<StyledTaskbarApps>
 			{
 				apps.map(app =>
 					<TaskbarApp
+						onOpenApp={handleOpenApp}
 						key={app.name}
 						app={app}
 					/>

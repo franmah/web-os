@@ -8,12 +8,12 @@ OK - create an owner variable in process directory:
   OK - replace getIconPathByExtension in IconService by adding an iconPath variable in process directory.
 OK - For testing: load apps at the start
 OK - Taskbar should receive pinned apps and running apps. (User apps not system)
-- create taskbar app components
-- style apps
+OK - create taskbar app components
+OK - style apps
+OK - open apps
+- catch focused app
 - find explorer icon (and other icons if needed)
-- catch clicks
 - apps can be dragged
-- open apps
 
 - catch focused app (window)
 
@@ -56,9 +56,12 @@ EXTENSIONS
 and change file system to use actual FS style (use string path instead of ExplorerItem)
 
 2. Apps
-- can create youtube, txt and folder
-- can open youtube and txt files
-- can save txt files.
+  - text file
+  - vscode?
+  - doom
+  - diablo
+  - chat (bard?)
+  - youtube
 
 3. Taskbar
 - show open app
