@@ -5,8 +5,11 @@ import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, SHORTENED_NAME_LENGTH } from '../../../constants/Desktop';
 import { getCurrentItemNameInPath, getFileExtension } from '../../../services/file-system/FilePathService';
-import { getFolderIcon, getIconPathByExtension } from '../../../services/IconService';
+import { getFolderIcon } from '../../../services/IconService';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
+import { ProcessDirectory } from '../../../System/process/ProcessDirectory';
+import { ProcessDirectoryByExtension } from '../../../System/process/ProcessDirectoryByExtension';
+import { IconPaths } from '../../../constants/IconPaths';
 
 const DesktopItemComponent: FC<{
 	item: DesktopItem;
@@ -160,7 +163,7 @@ const DesktopItemComponent: FC<{
 	const getIconPath = () => {
 		return fs.isDirectory(item.path)
 			? getFolderIcon(item.path)
-			: getIconPathByExtension(getFileExtension(getCurrentItemNameInPath(item.path)));
+			: ProcessDirectory[ProcessDirectoryByExtension[getFileExtension(getCurrentItemNameInPath(item.path))]].iconPath;
 	};
 
 	const selectItemNameOnRenameFocus = (event: any) => {
@@ -184,7 +187,7 @@ const DesktopItemComponent: FC<{
 				width: ITEM_WIDTH
 			}}
 		>
-			<Image src={getIconPath()} alt={'icon'} width={48} height={40} />
+			<Image src={getIconPath() || IconPaths.UNKOWN_EXTENSION} alt={'icon'} width={48} height={40} />
 
 			{renaming ? (
 				<textarea

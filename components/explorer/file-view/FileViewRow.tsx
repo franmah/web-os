@@ -7,10 +7,13 @@ import { ProcessContext } from '../../../contexts/ProcessContext';
 import { PinToQuickAccessCommand } from '../../../System/context-menu-commands/commands/PinToQuickAccessCommand';
 import { ExplorerQuickAccessContext } from '../../../contexts/ExplorerQuickAccessContext';
 import { UnpinFromQuickAccessCommand } from '../../../System/context-menu-commands/commands/UnpinFromQuickAccessCommand';
-import { getFolderIcon, getIconPathByExtension } from '../../../services/IconService';
+import { getFolderIcon } from '../../../services/IconService';
 import CustomCheckbox from '../../system/CustomCheckbox';
 import { ShortcutCommandNames, getShorcutCommand } from '../../../System/context-menu-commands/ShortcutCommandFactory';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
+import { ProcessDirectory } from '../../../System/process/ProcessDirectory';
+import { ProcessDirectoryByExtension } from '../../../System/process/ProcessDirectoryByExtension';
+import { IconPaths } from '../../../constants/IconPaths';
 
 export const ExplorerFileViewRow: FC<{
 	columnSizes: { [column: string]: string };
@@ -34,7 +37,8 @@ export const ExplorerFileViewRow: FC<{
 
 	const iconPath: string = isDirectory(path)
 		? getFolderIcon(path)
-		: getIconPathByExtension(getFileExtension(getCurrentItemNameInPath(path)));
+		: ProcessDirectory[ProcessDirectoryByExtension[getFileExtension(getCurrentItemNameInPath(path))]].iconPath
+		|| IconPaths.UNKOWN_EXTENSION;
 
 	// Select whole name when editing item name
 	useEffect(() => {

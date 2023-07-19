@@ -70,6 +70,7 @@ export type ProcessDirectoryEntry = {
 	hasWindow: boolean;
 	windowParams?: Partial<WindowParams>;
 	iconPath?: string;
+	owner: 'SYSTEM' | 'USER';
 };
 
 export type ProcessDirectoryType = {
