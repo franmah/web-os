@@ -5,12 +5,19 @@ import { Processes, WindowedProcess, WindowedProcesses } from '../../types/syste
 import { CONTEXT_MENU_ROOT_ID } from './context-menu/ContextMenuRoot';
 import { WindowManager } from './WindowManager';
 import { startingProccesses } from '../../System/process/StartingProccesses';
+import { ProcessNameEnum } from '../../System/process/ProcessNameEnum';
 
 export const ProcessLoader: FC<{}> = () => {
 	const processContext = useContext(ProcessContext);
 
 	const windowedProcesses: WindowedProcesses = {};
 	const nonWindowedProceses: Processes = {};
+
+	// TODO: REMOVE. Loads apps to help with testing explorer
+	useEffect(() => {
+		setTimeout(() => processContext.openProcess(ProcessNameEnum.EXPLORER), 100);
+		setTimeout(() => processContext.openProcess(ProcessNameEnum.YOUTUBE), 500);
+	}, []);
 
 	// Load starting processes
 	useEffect(() => {

@@ -3,9 +3,9 @@ OK - Create a design
   => Use a context for the focused window/process.
   
 OK - Create pinned app context.
-- create an owner variable in process directory:
-  - SYSTEM or USER
-  - replace getIconPathByExtension in IconService by adding an iconPath variable in process directory.
+OK - create an owner variable in process directory:
+  OK - SYSTEM or USER
+  OK - replace getIconPathByExtension in IconService by adding an iconPath variable in process directory.
 - For testing: load apps at the start
 - Taskbar should receive pinned apps and running apps. (User apps not system)
 - style apps
