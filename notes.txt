@@ -1,3 +1,20 @@
+OK - Create a design
+  - Especially to atch focused app (window)
+  => Use a context for the focused window/process.
+  
+- Create pinned app context.
+- create an owner variable in process directory:
+  - SYSTEM or USER
+- For testing: load apps at the start
+- Taskbar should receive pinned apps and running apps. (User apps not system)
+- style apps
+- catch clicks
+- apps can be dragged
+- open apps
+
+- catch focused app (window)
+
+
 current requiements:
 
 Apps in taskbar:
