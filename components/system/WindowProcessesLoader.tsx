@@ -2,7 +2,7 @@ import { FC, useContext } from 'react';
 import WindowComponent from './window/Window';
 import { WindowContext } from '../../contexts/WindowContext';
 
-export const WindowProcessesLoader: FC<{}> = ({}) => {
+export const WindowProcessesLoader: FC<{}> = () => {
 	const windowContext = useContext(WindowContext);
 
 	return (
