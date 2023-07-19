@@ -6,6 +6,7 @@ import ExplorerQuickAccessProvider from '../contexts/ExplorerQuickAccessContext'
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { saveConnection } from '../services/AnalyticsService';
+import { TaskbarPinnedAppProvider } from '../contexts/TaskbarPinnedAppContext';
 
 const firebaseApp = initializeApp({
   apiKey: "AIzaSyCDAyEgX1zVqbC_Ye3Tlt-mZyp6D-mmHvU",
@@ -25,7 +26,9 @@ const Home: NextPage = () => (
 		<ProcessContextProvider>
 			<FileSystemContextProvider>
 				<ExplorerQuickAccessProvider>
-					<ProcessLoader></ProcessLoader>
+					<TaskbarPinnedAppProvider>
+						<ProcessLoader></ProcessLoader>					
+					</TaskbarPinnedAppProvider>
 				</ExplorerQuickAccessProvider>
 			</FileSystemContextProvider>
 		</ProcessContextProvider>

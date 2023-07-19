@@ -8,7 +8,7 @@ const ExplorerQuickAccessProvider: FC<{ children: React.ReactNode }> = ({ childr
 	const { getQuickAccessPaths, pinToQuickAccess, unpinFromQuickAccess } = useExplorerQuickAccessContextState();
 	return (
 		<ExplorerQuickAccessContext.Provider value={{ getQuickAccessPaths, pinToQuickAccess, unpinFromQuickAccess }}>
-			{children}
+			{ children }
 		</ExplorerQuickAccessContext.Provider>
 	);
 };
