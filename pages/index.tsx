@@ -7,7 +7,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { saveConnection } from '../services/AnalyticsService';
 import { TaskbarPinnedAppProvider } from '../contexts/TaskbarPinnedAppContext';
-import FocusedWindowContextProvider from '../contexts/FocusedWindowContext';
+import WindowContextProvider from '../contexts/WindowContext';
 
 const firebaseApp = initializeApp({
   apiKey: "AIzaSyCDAyEgX1zVqbC_Ye3Tlt-mZyp6D-mmHvU",
@@ -28,9 +28,9 @@ const Home: NextPage = () => (
 			<FileSystemContextProvider>
 				<ExplorerQuickAccessProvider>
 					<TaskbarPinnedAppProvider>
-						<FocusedWindowContextProvider>
+						<WindowContextProvider>
 							<ProcessLoader />				
-						</FocusedWindowContextProvider>
+						</WindowContextProvider>
 					</TaskbarPinnedAppProvider>
 				</ExplorerQuickAccessProvider>
 			</FileSystemContextProvider>

@@ -3,7 +3,7 @@ import { ProcessContext } from '../../contexts/ProcessContext';
 import { isEventOriginatedFromWithinTargetIdSubtree } from '../../services/EventService';
 import { Processes, WindowedProcess, WindowedProcesses } from '../../types/system/processes/Processes';
 import { CONTEXT_MENU_ROOT_ID } from './context-menu/ContextMenuRoot';
-import { WindowManager } from './WindowManager';
+import { WindowProcessesLoader } from './WindowProcessesLoader';
 import { startingProccesses } from '../../System/process/StartingProccesses';
 import { ProcessNameEnum } from '../../System/process/ProcessNameEnum';
 
@@ -12,12 +12,6 @@ export const ProcessLoader: FC<{}> = () => {
 
 	const windowedProcesses: WindowedProcesses = {};
 	const nonWindowedProceses: Processes = {};
-
-	// TODO: REMOVE. Loads apps to help with testing explorer
-	// useEffect(() => {
-	// 	setTimeout(() => processContext.openProcess(ProcessNameEnum.EXPLORER), 100);
-	// 	setTimeout(() => processContext.openProcess(ProcessNameEnum.YOUTUBE), 500);
-	// }, []);
 
 	// Load starting processes
 	useEffect(() => {
@@ -55,9 +49,9 @@ export const ProcessLoader: FC<{}> = () => {
 	return (
 		<Fragment>
 			{Object.entries(nonWindowedProceses).map(([processId, { Component, params }]) => (
-				<Component key={processId} params={params}></Component>
+				<Component key={processId} params={params} />
 			))}
-			{<WindowManager processes={windowedProcesses} />}
+			{<WindowProcessesLoader />}
 		</Fragment>
 	);
 };
