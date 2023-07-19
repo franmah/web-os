@@ -9,12 +9,12 @@ import {
 	updateWindowStatesOnNewProcess,
 	updateWindowWarnBeforeProcessCloses,
 	updateWindowsOnMaximize,
-	updateWindowsOnMouseDown,
+	focusWindow,
 	updateWindowsOnMouseMove,
 	updateWindowsOnMouseUp
 } from '../../services/system/window-manager/WindowManagerService';
 import { WindowedProcesses } from '../../types/system/processes/Processes';
-import { WindowManagerState } from '../../types/system/window-manager/WindowManagerState';
+import { Windows } from '../../types/system/window-manager/WindowManagerState';
 import WindowComponent from './window/Window';
 import { WindowResizeDirection } from '../../constants/system/window/WindowResizeDirectionEnum';
 import { isEventOriginatedFromWithinTargetIdSubtree } from '../../services/EventService';
@@ -23,7 +23,7 @@ import { CustomMaximizeDirection } from '../../constants/system/window/CustomMax
 export const WindowManager: FC<{ processes: WindowedProcesses }> = ({ processes }) => {
 	const { closeProcess } = useContext(ProcessContext);
 
-	const [windows, setWindows] = useState<WindowManagerState>({});
+	const [windows, setWindows] = useState<Windows>({});
 
 	const numWindows = Object.keys(windows).length;
 
@@ -71,7 +71,7 @@ export const WindowManager: FC<{ processes: WindowedProcesses }> = ({ processes 
 
 	const handleWindowMouseDown = (clickedWindowId: string) => {
 		setWindows(currentWindows => {
-			return updateWindowsOnMouseDown(clickedWindowId, currentWindows);
+			return focusWindow(clickedWindowId, currentWindows);
 		});
 	};
 
