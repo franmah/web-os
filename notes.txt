@@ -12,8 +12,10 @@ OK - create taskbar app components
 OK - style apps
 OK - open apps
 - catch focused app
+- context menu to pin/unpin apps
 - find explorer icon (and other icons if needed)
 - apps can be dragged
+- update styles to show multiple windows
 
 - catch focused app (window)
 
@@ -71,14 +73,10 @@ and change file system to use actual FS style (use string path instead of Explor
 4. Windows menu
 - show apps 
 
-////// IN PROGRESS:
-
-=> Using extensions
-  - add icons
-  - Updates ExplorerFile to have an extension
-  - ItemsContainerComponent should let DesktopComponent know that there's a new file or folder that was created.
-
 /////// TODO: in other
+
+Widnows: 
+  - Replace FocusedWindowContext by WindowContext that keeps track every windows.
 
 FileSystem
   - update functions to match node.js file system.
