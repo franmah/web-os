@@ -65,7 +65,7 @@ const getExampleDesktopChildren = (desktop: ExplorerItem): ExplorerItem[] => [
 	},
 	{
 		children: [],
-		name: 'The weeknd - save your tears.youtube',
+		name: 'Introducing Windows 11.youtube',
 		id: 'youtube-video-1',
 		parent: desktop
 	},
