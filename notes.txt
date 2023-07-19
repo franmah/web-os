@@ -9,8 +9,8 @@ OK - create an owner variable in process directory:
 OK - For testing: load apps at the start
 OK - Taskbar should receive pinned apps and running apps. (User apps not system)
 - create taskbar app components
-- find explorer icon
 - style apps
+- find explorer icon (and other icons if needed)
 - catch clicks
 - apps can be dragged
 - open apps

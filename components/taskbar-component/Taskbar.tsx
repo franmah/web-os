@@ -12,10 +12,11 @@ export const StyledTaskbar = styled.nav`
 	left: 0;
 	width: 100%;
 	height: ${TASKBAR_HEIGHT_PX};
-	background-color: rgb(231, 236, 252, 0.96);
+	background-color: #EEEEEE;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	padding: 2px 0px;
 `;
 
 const Taskbar: FC<{}> = () => {

@@ -20,8 +20,6 @@ export const StyledTaskbarApps = styled.section`
 	justify-content: center;
 
 	height: 100%;
-
-	border: 1px solid red;
 `;
 
 const TaskbarApps: FC<{}> = () => {

@@ -10,13 +10,13 @@ export const StyledTaskbarApp = styled.div<{ focused: boolean }>`
   justify-content: space-between;
 
   height: 100%;
-  width: 50px;
   margin: 0px 2px;
+  padding: 2px 4px;
   border: 2px solid transparent;
 
   &:hover {
-    background-color: #E3E3E3;
-    border: 2px solid #CCCCCC;
+    background-color: #FAFAFA;
+    border: 2px solid #E9E9E9;
     border-radius: 4px;
   }
 
@@ -25,20 +25,20 @@ export const StyledTaskbarApp = styled.div<{ focused: boolean }>`
   }
 
   .open-bar {
-    width: ${({ focused }) => focused ? '40%' : '20%'};
-    height: 4px;
+    width: ${({ focused }) => focused ? '60%' : '20%'};
+    height: 2px;
     border: 1px solid;
     border-color: ${({ focused }) => focused ? '#0064CC' : '#6E6E6E'} ;
     border-radius: 8px;
-    background-color: ${({ focused }) => focused ? '#0076D0' : '#858585'};
+    background-color: ${({ focused }) => focused ? '#0078D4' : '#858585'};
   }
 `;
 
 export const TaskbarApp: FC<{ app: TaskbarAppType }> = ({ app }) => {
   return (
-    <StyledTaskbarApp focused={app.focused}>
+    <StyledTaskbarApp focused={false}>
 
-      <Image className='icon' src={app.iconPath} alt={app.name} width={32} height={32}/>
+      <Image className='icon' src={app.iconPath} alt={app.name} width={20} height={20}/>
 
       { app.open && <div className='open-bar'></div> }
 
