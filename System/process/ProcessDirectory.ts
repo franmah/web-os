@@ -50,7 +50,7 @@ export const ProcessDirectory: ProcessDirectoryType = {
 		}
 	},
 	[ProcessNameEnum.TAKSBAR]: {
-		Component: dynamic<{ params: any }>(() => import('../../components/taskbar-component/taskbar/Taskbar')),
+		Component: dynamic<{ params: any }>(() => import('../../components/taskbar-component/Taskbar')),
 		hasWindow: false,
 		isUnique: true,
 		name: ProcessNameEnum.TAKSBAR,

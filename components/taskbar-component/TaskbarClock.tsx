@@ -1,6 +1,23 @@
 import { FC, useEffect, useState } from 'react';
-import styles from './clock.module.scss';
-import globalStyles from '../../../styles/global.module.scss';
+import globalStyles from '../../styles/global.module.scss';
+import styled from 'styled-components';
+
+export const StyledTaskbarClock = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-end;
+	font-size: 12px;
+	text-align: center;
+	color: black;
+	padding: 2px 8px;
+	margin-right: 8px;
+
+	&:hover {
+		background-color: #f8f8f8;
+		cursor: default;
+	}
+`;
 
 const TaskbarClock: FC<{}> = () => {
 	const NUM_HOURS = 12;
@@ -24,10 +41,10 @@ const TaskbarClock: FC<{}> = () => {
 	};
 
 	return (
-		<div className={`${styles.datetime} ${globalStyles.unselectableText}`}>
+		<StyledTaskbarClock className={globalStyles.unselectableText}>
 			<div>{getTime()}</div>
 			<div>{getDate()}</div>
-		</div>
+		</StyledTaskbarClock>
 	);
 };
 
