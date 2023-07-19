@@ -1,13 +1,13 @@
-import { Processes, WindowedProcesses } from '../../types/system/processes/Processes';
 import { ProcessDirectory } from './ProcessDirectory';
+import { ProcessNameEnum } from './ProcessNameEnum';
 
 export const startingProccesses: any = {
 	desktop: {
-		...ProcessDirectory['desktop'],
+		...ProcessDirectory[ProcessNameEnum.DESKTOP],
 		windowParams: null
 	},
 	taskbar: {
-		...ProcessDirectory['taskbar'],
+		...ProcessDirectory[ProcessNameEnum.TAKSBAR],
 		windowParams: null
 	}
 };
