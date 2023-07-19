@@ -36,7 +36,7 @@ export const StyledTaskbarApp = styled.div<{ focused: boolean }>`
 
 export const TaskbarApp: FC<{ app: TaskbarAppType }> = ({ app }) => {
   return (
-    <StyledTaskbarApp focused={false}>
+    <StyledTaskbarApp focused={app.focused}>
 
       <Image className='icon' src={app.iconPath} alt={app.name} width={20} height={20}/>
 

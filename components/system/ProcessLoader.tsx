@@ -14,10 +14,10 @@ export const ProcessLoader: FC<{}> = () => {
 	const nonWindowedProceses: Processes = {};
 
 	// TODO: REMOVE. Loads apps to help with testing explorer
-	useEffect(() => {
-		setTimeout(() => processContext.openProcess(ProcessNameEnum.EXPLORER), 100);
-		setTimeout(() => processContext.openProcess(ProcessNameEnum.YOUTUBE), 500);
-	}, []);
+	// useEffect(() => {
+	// 	setTimeout(() => processContext.openProcess(ProcessNameEnum.EXPLORER), 100);
+	// 	setTimeout(() => processContext.openProcess(ProcessNameEnum.YOUTUBE), 500);
+	// }, []);
 
 	// Load starting processes
 	useEffect(() => {

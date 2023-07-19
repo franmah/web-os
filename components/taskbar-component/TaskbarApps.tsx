@@ -37,7 +37,8 @@ const TaskbarApps: FC<{}> = () => {
 
 	useEffect(() => {
 		setApps(apps => {
-			return mergeOpenProcessToApps(apps, processContext.processes);
+			const afterMerge = mergeOpenProcessToApps(apps, processContext.processes);
+			return [...afterMerge];
 		});
 	}, [processContext.processes]);
 

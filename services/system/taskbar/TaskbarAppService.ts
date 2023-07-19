@@ -1,7 +1,7 @@
 import { ProcessDirectory } from '../../../System/process/ProcessDirectory';
 import { TaskbarAppType } from '../../../components/taskbar-component/TaskbarApps';
 import { IconPaths } from '../../../constants/IconPaths';
-import { Processes } from '../../../types/system/processes/Processes';
+import { Process, Processes } from '../../../types/system/processes/Processes';
 
 export const mergePinnedAppsToApps = (apps: TaskbarAppType[], pinnedAppNames: string[]): TaskbarAppType[] => {
   for (const pinnedAppName of pinnedAppNames) {
@@ -35,17 +35,32 @@ export const mergeOpenProcessToApps = (apps: TaskbarAppType[], processes: Proces
   const matchingApp = apps.find(app => app.name === process.name);
     if (matchingApp) {
       matchingApp.multipleOpen = processCount[process.name] > 1;
+      matchingApp.open = true;
     } else {
       apps.push({
         focused: false,
         iconPath: ProcessDirectory[process.name].iconPath || IconPaths.UNKOWN_EXTENSION,
-        multipleOpen: false,
+        multipleOpen: processCount[process.name] > 1,
         name: process.name,
         open: true,
-        pinned: true
+        pinned: false
       });
     }
   }
 
-  return [...apps];
+  const updatedApps = removeClosedProcesses(apps, userProcesses);
+
+  return [...updatedApps];
+};
+
+/**
+ *
+ * @param apps
+ * @param openProcessNames open processes with already filtered out processes not supposed to show in the taskbar.
+ * @returns TaskbarAppType array without processes that were closed (keep pinned apps)
+ */
+const removeClosedProcesses = (apps: TaskbarAppType[], openProcesses: Process[]): TaskbarAppType[] => {
+  const processNames = openProcesses.map(process => process.name);
+  const closeApps = apps.map(app => ({ ...app, open: processNames.includes(app.name) }));
+  return closeApps.filter(app => app.pinned || processNames.includes(app.name));
 };
