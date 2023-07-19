@@ -14,6 +14,7 @@ export const mergePinnedAppsToApps = (apps: TaskbarAppType[], pinnedAppNames: st
         iconPath: ProcessDirectory[pinnedAppName].iconPath || IconPaths.UNKOWN_EXTENSION,
         multipleOpen: false,
         name: pinnedAppName,
+        open: false,
         pinned: true
       });
     }
@@ -40,6 +41,7 @@ export const mergeOpenProcessToApps = (apps: TaskbarAppType[], processes: Proces
         iconPath: ProcessDirectory[process.name].iconPath || IconPaths.UNKOWN_EXTENSION,
         multipleOpen: false,
         name: process.name,
+        open: true,
         pinned: true
       });
     }

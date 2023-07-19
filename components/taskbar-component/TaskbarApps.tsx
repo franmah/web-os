@@ -1,17 +1,28 @@
 import { FC, useContext, useEffect, useState } from 'react';
 import { TaskbarPinnedAppContext } from '../../contexts/TaskbarPinnedAppContext';
 import { ProcessContext } from '../../contexts/ProcessContext';
-import { ProcessDirectory } from '../../System/process/ProcessDirectory';
-import { IconPaths } from '../../constants/IconPaths';
 import { mergeOpenProcessToApps, mergePinnedAppsToApps } from '../../services/system/taskbar/TaskbarAppService';
+import { TaskbarApp } from './TaskbarApp';
+import styled from 'styled-components';
 
 export type TaskbarAppType = {
 	focused: boolean,
 	iconPath: string,
 	multipleOpen: boolean,
 	name: string,
-	pinned: boolean
+	pinned: boolean,
+	open: boolean
 };
+
+export const StyledTaskbarApps = styled.section`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	height: 100%;
+
+	border: 1px solid red;
+`;
 
 const TaskbarApps: FC<{}> = () => {
 
@@ -19,10 +30,6 @@ const TaskbarApps: FC<{}> = () => {
 
 	const pinnedAppContext = useContext(TaskbarPinnedAppContext);
 	const processContext = useContext(ProcessContext);
-
-	// useEffect(() => {
-	// 	console.log(apps);
-	// }, [apps]);
 
 	useEffect(() => {
 		setApps(apps => {
@@ -37,7 +44,16 @@ const TaskbarApps: FC<{}> = () => {
 	}, [processContext.processes]);
 
 	return (
-		<div>bar</div>
+		<StyledTaskbarApps>
+			{
+				apps.map(app =>
+					<TaskbarApp
+						key={app.name}
+						app={app}
+					/>
+				)
+			}
+		</StyledTaskbarApps>
 	);
 };
 

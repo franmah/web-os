@@ -7,7 +7,9 @@ OK - create an owner variable in process directory:
   OK - SYSTEM or USER
   OK - replace getIconPathByExtension in IconService by adding an iconPath variable in process directory.
 OK - For testing: load apps at the start
-- Taskbar should receive pinned apps and running apps. (User apps not system)
+OK - Taskbar should receive pinned apps and running apps. (User apps not system)
+- create taskbar app components
+- find explorer icon
 - style apps
 - catch clicks
 - apps can be dragged
