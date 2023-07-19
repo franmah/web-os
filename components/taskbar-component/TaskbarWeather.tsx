@@ -51,7 +51,7 @@ export const StyledTaskbarWeather = styled.section`
 	}
 `;
 
-const WeatherComponent: FC<{}> = () => {
+const TaskbarWeather: FC<{}> = () => {
 	const [weather, setWeather] = useState<Weather | null>(null);
 
 	useEffect(() => {
@@ -86,4 +86,4 @@ const WeatherComponent: FC<{}> = () => {
 	);
 };
 
-export default WeatherComponent;
+export default TaskbarWeather;

@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import ShortcutBar from './ShortcutBar';
+import TaskbarApps from './TaskbarApps';
 import TaskbarClock from './TaskbarClock';
-import WeatherComponent from './Weather';
+import TaskbarWeather from './TaskbarWeather';
 import styled from 'styled-components';
 import { TASKBAR_HEIGHT_PX } from '../../constants/Taskbar';
 
@@ -22,9 +22,9 @@ const Taskbar: FC<{}> = () => {
 	return (
 		<StyledTaskbar>
 
-			<WeatherComponent />
+			<TaskbarWeather />
 
-			<ShortcutBar />
+			<TaskbarApps />
 
 			<TaskbarClock />
 
