@@ -18,11 +18,12 @@ export const StyledTaskbarApp = styled.div<{ focused: boolean, multipleOpen: boo
   border: ${({ focused }) => focused ? '1px solid #E9E9E9' : '1px solid transparent'};
   border-radius: 4px;
 
-  box-shadow: ${({ multipleOpen }) => multipleOpen ? '1px 0px #e1e1e1' : ''};
+  box-shadow: ${({ focused, multipleOpen }) => focused && multipleOpen ? '1px 0px #e1e1e1' : ''};
   
   &:hover {
     background-color: #FAFAFA;
     border: 1px solid #E9E9E9;
+    box-shadow: ${({ multipleOpen }) => multipleOpen ? '1px 0px #e1e1e1' : ''};
   }
 
   .icon {

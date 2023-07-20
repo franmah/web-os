@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import { WindowContext } from '../../contexts/WindowContext';
 import { ProcessNameEnum } from '../../System/process/ProcessNameEnum';
 import { GeneralImageCommand } from '../../System/context-menu-commands/commands/GeneralImageCommand';
-import { PinToQuickAccessCommand } from '../../System/context-menu-commands/commands/PinToQuickAccessCommand';
 import { GeneralIconCommand } from '../../System/context-menu-commands/commands/GeneralIconCommand';
 import { ProcessDirectory } from '../../System/process/ProcessDirectory';
 import { TASKBAR_HEIGHT } from '../../constants/Taskbar';
