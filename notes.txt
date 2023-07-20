@@ -13,11 +13,11 @@ OK - style apps
 OK - open apps
 OK  - catch focused app
 OK - minimize show/hide app
-- context menu to pin/unpin apps
-- context menu close all windows
-- find explorer icon (and other icons if needed)
-- apps can be dragged
+OK - context menu to pin/unpin apps
+OK - context menu close all windows
 - update styles to show multiple windows
+- apps can be dragged
+- find explorer icon (and other icons if needed)
 - remove owner variable from process
 
 - catch focused app (window)

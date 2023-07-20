@@ -111,13 +111,11 @@ const TaskbarApps: FC<{}> = () => {
 		];
 
 		if (app.open) {
-			const processId = Object.values(processContext.processes).find(process => process.name === appName)?.processId;
-			if (processId) {
-				const closeCommmand = app.multipleOpen ?
-					new GeneralIconCommand('Close all windows', require('react-icons/gr').GrClose, () => processContext.closeProcess(processId)) :
-					new GeneralIconCommand('Close window', require('react-icons/gr').GrClose, () => processContext.closeProcess(processId));
-				commands.push(closeCommmand);
-			}
+			const processId = Object.values(processContext.processes).find(process => process.name === appName)?.processId || '';
+			const closeCommmand = app.multipleOpen ?
+				new GeneralIconCommand('Close all windows', require('react-icons/gr').GrClose, () => processContext.closeProcessesByName(appName)) :
+				new GeneralIconCommand('Close window', require('react-icons/gr').GrClose, () => processContext.closeProcess(processId));
+			commands.push(closeCommmand);
 		}
 
 		const taskbarAppElement = document.getElementById(PRE_TASKBAR_APP_ID + appName);

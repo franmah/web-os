@@ -20,6 +20,15 @@ const useProcessContextState = (): ProcessContextType => {
 		});
 	};
 
+	const closeProcessesByName = (processName: string) => {
+		setProcesses(currentProcesses => {
+			return Object.entries(currentProcesses).reduce(
+				(processes, [id, process]) => (process.name === processName ? processes : { ...processes, [id]: process }),
+				{}
+			);
+		});
+	};
+
 	const openProcess = (processName: string, params: any = null, windowParams: any = null) => {
 		if (processName !== 'desktop' && processName !== 'taskbar' && processName !== 'contextMenu')
 			saveAnalyticsEvent(AnalyticEvents.OPEN_PROCESS, { process: processName });
@@ -78,7 +87,7 @@ const useProcessContextState = (): ProcessContextType => {
 		setWindowIdCount(windowIdCount + 1);
 	};
 
-	return { closeProcess, openProcess, processes };
+	return { closeProcess, closeProcessesByName, openProcess, processes };
 };
 
 export default useProcessContextState;

@@ -3,17 +3,17 @@ import useProcessContextState from '../hooks/UseProcessContextState';
 import { ProcessContextType } from '../types/system/processes/Processes';
 
 const START_PROCESS_CONTEXT: ProcessContextType = {
-	processes: {},
+	closeProcess: () => {},
+	closeProcessesByName: () => {},
 	openProcess: () => {},
-	closeProcess: () => {}
+	processes: {}
 };
 
 export const ProcessContext = createContext<ProcessContextType>(START_PROCESS_CONTEXT);
 
 const ProcessContextProvider: FC<{ children: React.ReactNode }> = ({ children }) => {
-	const { processes, openProcess, closeProcess } = useProcessContextState();
 
-	return <ProcessContext.Provider value={{ processes, openProcess, closeProcess }}>{children}</ProcessContext.Provider>;
+	return <ProcessContext.Provider value={useProcessContextState()}>{children}</ProcessContext.Provider>;
 };
 
 export default ProcessContextProvider;
