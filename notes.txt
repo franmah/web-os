@@ -11,8 +11,8 @@ OK - Taskbar should receive pinned apps and running apps. (User apps not system)
 OK - create taskbar app components
 OK - style apps
 OK - open apps
-- catch focused app
-- minimize show/hide app
+OK  - catch focused app
+OK - minimize show/hide app
 - context menu to pin/unpin apps
 - find explorer icon (and other icons if needed)
 - apps can be dragged
