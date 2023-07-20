@@ -1,5 +1,5 @@
 import { FC, createContext } from 'react';
-import { useTaskbarPinnedAppContextState } from '../hooks/UseTasbarPinnedAppContextState';
+import { useTaskbarPinnedAppContextState } from '../hooks/UseTaskbarPinnedAppContextState';
 
 export type TaskbarPinnedAppContextType = {
     addPinnedAppNames: (...appNames: string[]) => void;

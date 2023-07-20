@@ -39,9 +39,11 @@ export const TaskbarApp: FC<{
   app: TaskbarAppType;
   onOpenApp: (appName: string) => void;
   onContextMenu: (event: MouseEvent, appName: string) => void;
-}> = ({ app, onOpenApp, onContextMenu }) => {
+  id: string;
+}> = ({ app, onOpenApp, onContextMenu, id }) => {
   return (
     <StyledTaskbarApp
+      id={id}
       focused={app.focused}
       onClick={() => onOpenApp(app.name)}
       onMouseDown={e => e.stopPropagation()} // Avoids unfocusing window due to click

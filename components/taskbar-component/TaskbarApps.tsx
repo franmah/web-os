@@ -11,6 +11,7 @@ import { PinToQuickAccessCommand } from '../../System/context-menu-commands/comm
 import { GeneralIconCommand } from '../../System/context-menu-commands/commands/GeneralIconCommand';
 import { ProcessDirectory } from '../../System/process/ProcessDirectory';
 import { TASKBAR_HEIGHT } from '../../constants/Taskbar';
+import { CONTEXT_MENU_MEDIUM_WIDTH } from '../system/context-menu/ContextMenu';
 
 export type TaskbarAppType = {
 	focused: boolean,
@@ -28,6 +29,8 @@ export const StyledTaskbarApps = styled.section`
 
 	height: 100%;
 `;
+
+const PRE_TASKBAR_APP_ID = 'taskbar-app-';
 
 const TaskbarApps: FC<{}> = () => {
 
@@ -117,10 +120,18 @@ const TaskbarApps: FC<{}> = () => {
 			}
 		}
 
+		const taskbarAppElement = document.getElementById(PRE_TASKBAR_APP_ID + appName);
+		if (!taskbarAppElement) {
+			return;
+		}
+
+		const elementMiddlewidthFromLeft = taskbarAppElement?.offsetLeft + (taskbarAppElement.offsetWidth / 2);
+		const HEIGHT_OFFSET = 20;
+
 		processContext.openProcess(ProcessNameEnum.CONTEXT_MENU, {
 			commands,
-			left: event.clientX,
-			top: window.innerHeight - TASKBAR_HEIGHT - 12
+			left: elementMiddlewidthFromLeft - CONTEXT_MENU_MEDIUM_WIDTH / 2,
+			top: window.innerHeight - TASKBAR_HEIGHT - HEIGHT_OFFSET
 		});
 	};
 
@@ -129,6 +140,7 @@ const TaskbarApps: FC<{}> = () => {
 			{
 				apps.map(app =>
 					<TaskbarApp
+						id={PRE_TASKBAR_APP_ID + app.name}
 						key={app.name}
 						app={app}
 						onOpenApp={handleClick}
