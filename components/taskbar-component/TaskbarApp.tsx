@@ -43,6 +43,7 @@ export const TaskbarApp: FC<{
     <StyledTaskbarApp
       focused={app.focused}
       onClick={() => onOpenApp(app.name)}
+      onMouseDown={e => e.stopPropagation()} // Avoids unfocusing window due to click
     >
 
       <Image className='icon' src={app.iconPath} alt={app.name} width={24} height={24}/>

@@ -31,9 +31,9 @@ export const useWindowContext = () => {
 			}
 		};
 
-		document.addEventListener('mousedown', unfocusWindowsOnDocumentMouseDown);
+		document.addEventListener('mousedown', unfocusWindowsOnDocumentMouseDown, false);
 		return () => {
-			document.removeEventListener('mousedown', unfocusWindowsOnDocumentMouseDown);
+			document.removeEventListener('mousedown', unfocusWindowsOnDocumentMouseDown, false);
 		};
 	}, [numWindows]);
 

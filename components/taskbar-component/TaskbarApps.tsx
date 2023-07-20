@@ -52,14 +52,23 @@ const TaskbarApps: FC<{}> = () => {
 		}
 
 		if (app.open) {
-			const windowToFocus = Object.entries(windowContext.windows).find(([windowId, { process }]) => process.name === appName);
-			if (!windowToFocus) {
+			const windowToUpdate = Object.entries(windowContext.windows).find(([windowId, { process }]) => process.name === appName);
+			if (!windowToUpdate) {
 				console.error(`Error opening app from taskbar. can't find window to focus for app ${appName}.`);
 				return;
 			}
 
-			const windowId = windowToFocus[0];
-			windowContext.focusWindow(windowId);
+			// If app is unfocused: focus
+			// else if minimized: focus
+			// eles if focused: minimize
+			const windowId = windowToUpdate[0];
+			const minimized = windowToUpdate[1].state.minimized;
+			const focused = windowToUpdate[1].state.focused;
+
+			!focused || minimized ?
+				windowContext.focusWindow(windowId) :
+				windowContext.minimizeWindow(windowId);
+
 		} else {
 			processContext.openProcess(appName);
 		}
