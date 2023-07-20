@@ -19,6 +19,8 @@ OK - context menu close all windows
 - apps can be dragged
 - find explorer icon (and other icons if needed)
 - remove owner variable from process
+- multiple window of the same app shouldn't minimize (bring to focus the first process of this type that you find)
+- bug: multiple of the same app open wont' make the app in the taskbar focus (might have to have a second app open as well.)
 
 - catch focused app (window)
 
