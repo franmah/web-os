@@ -17,6 +17,7 @@ export const useTaskbarPinnedAppContextState = () => {
   };
 
   const removePinnedAppNames = (...appNames: string[]) => {
+    console.log( appNames);
     setPinnedAppNames(currentPinnedApps => {
       return [...currentPinnedApps.filter(name => !appNames.includes(name))];
     });

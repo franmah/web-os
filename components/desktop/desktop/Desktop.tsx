@@ -15,6 +15,7 @@ import { ProcessDirectoryByExtension } from '../../../System/process/ProcessDire
 import { ExplorerItem } from '../../../types/system/file/ExplorerItem';
 import { saveAnalyticsEvent } from '../../../services/AnalyticsService';
 import { AnalyticEvents } from '../../../constants/AnalyticEvents';
+import { ProcessNameEnum } from '../../../System/process/ProcessNameEnum';
 
 const Desktop: FC = () => {
 	const fs = useContext(FileSystemContext);
@@ -35,7 +36,7 @@ const Desktop: FC = () => {
 		event.preventDefault();
 		event.stopPropagation();
 
-		openProcess('contextMenu', {
+		openProcess(ProcessNameEnum.CONTEXT_MENU, {
 			commands,
 			left: event.clientX,
 			top: event.clientY
@@ -44,7 +45,7 @@ const Desktop: FC = () => {
 
 	const openItemProcess = (item: DesktopItem) => {
 		if (fs.isDirectory(item.path)) {
-			return openProcess('explorer', { startPath: item.path });
+			return openProcess(ProcessNameEnum.EXPLORER, { startPath: item.path });
 		}
 
 		const fileName = getCurrentItemNameInPath(item.path);
@@ -70,7 +71,7 @@ const Desktop: FC = () => {
 	};
 
 	const handleDeleteItems = (...paths: string[]) => {
-		saveAnalyticsEvent(AnalyticEvents.DELETE_FILE, { app: 'desktop', paths: JSON.stringify(paths) });
+		saveAnalyticsEvent(AnalyticEvents.DELETE_FILE, { app: ProcessNameEnum.DESKTOP, paths: JSON.stringify(paths) });
 		for (const path of paths) {
 			fs.deleteFolderV2(path);
 		}

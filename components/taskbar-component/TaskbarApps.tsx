@@ -5,6 +5,12 @@ import { mergeOpenProcessToApps, mergePinnedAppsToApps } from '../../services/sy
 import { TaskbarApp } from './TaskbarApp';
 import styled from 'styled-components';
 import { WindowContext } from '../../contexts/WindowContext';
+import { ProcessNameEnum } from '../../System/process/ProcessNameEnum';
+import { GeneralImageCommand } from '../../System/context-menu-commands/commands/GeneralImageCommand';
+import { PinToQuickAccessCommand } from '../../System/context-menu-commands/commands/PinToQuickAccessCommand';
+import { GeneralIconCommand } from '../../System/context-menu-commands/commands/GeneralIconCommand';
+import { ProcessDirectory } from '../../System/process/ProcessDirectory';
+import { TASKBAR_HEIGHT } from '../../constants/Taskbar';
 
 export type TaskbarAppType = {
 	focused: boolean,
@@ -74,14 +80,59 @@ const TaskbarApps: FC<{}> = () => {
 		}
 	};
 
+	const handleContextMenuClick = (event: MouseEvent, appName: string) => {
+		event.preventDefault();
+		event.stopPropagation();
+
+		const app = apps.find(app => app.name === appName);
+		if (!app) {
+			console.error(`Error opening context menu for app: ${appName}: app not found`);
+			return;
+		}
+
+		const pinCommand = app.pinned ?
+			new GeneralIconCommand(
+				'Unpin from taskbar',
+				require('react-icons/tb').TbPinnedOff,
+				() => pinnedAppContext.removePinnedAppNames(appName)
+			) :
+			new GeneralIconCommand(
+				'Pin to taskbar',
+				require('react-icons/tb').TbPin,
+				() => pinnedAppContext.addPinnedAppNames(appName)
+			);
+
+		const commands = [
+			new GeneralImageCommand(appName, ProcessDirectory[appName].iconPath || '', () => processContext.openProcess(appName)),
+			pinCommand
+		];
+
+		if (app.open) {
+			const processId = Object.values(processContext.processes).find(process => process.name === appName)?.processId;
+			if (processId) {
+				const closeCommmand = app.multipleOpen ?
+					new GeneralIconCommand('Close all windows', require('react-icons/gr').GrClose, () => processContext.closeProcess(processId)) :
+					new GeneralIconCommand('Close window', require('react-icons/gr').GrClose, () => processContext.closeProcess(processId));
+				commands.push(closeCommmand);
+			}
+		}
+
+		processContext.openProcess(ProcessNameEnum.CONTEXT_MENU, {
+			commands,
+			left: event.clientX,
+			top: window.innerHeight - TASKBAR_HEIGHT - 12
+		});
+	};
+
 	return (
 		<StyledTaskbarApps>
 			{
 				apps.map(app =>
 					<TaskbarApp
-						onOpenApp={handleClick}
 						key={app.name}
 						app={app}
+						onOpenApp={handleClick}
+						onContextMenu={handleContextMenuClick}
 					/>
 				)
 			}

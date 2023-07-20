@@ -14,6 +14,7 @@ OK - open apps
 OK  - catch focused app
 OK - minimize show/hide app
 - context menu to pin/unpin apps
+- context menu close all windows
 - find explorer icon (and other icons if needed)
 - apps can be dragged
 - update styles to show multiple windows
