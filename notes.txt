@@ -15,7 +15,8 @@ OK  - catch focused app
 OK - minimize show/hide app
 OK - context menu to pin/unpin apps
 OK - context menu close all windows
-- update styles to show multiple windows
+OK - update styles to show multiple windows
+- top box has a right shadow box when there are multiple open same app
 - apps can be dragged
 - find explorer icon (and other icons if needed)
 - remove owner variable from process

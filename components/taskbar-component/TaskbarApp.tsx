@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { TaskbarAppType } from './TaskbarApps';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -13,12 +13,14 @@ export const StyledTaskbarApp = styled.div<{ focused: boolean }>`
   width: 40px;
   margin: 0px 2px;
   padding: 2px 4px;
-  border: 1px solid transparent;
+
+  background-color: ${({ focused }) => focused ? '#FAFAFA' : 'inherit'};
+  border: ${({ focused }) => focused ? '1px solid #E9E9E9' : '1px solid transparent'};
+  border-radius: 4px;
 
   &:hover {
     background-color: #FAFAFA;
     border: 1px solid #E9E9E9;
-    border-radius: 4px;
   }
 
   .icon {
@@ -35,12 +37,27 @@ export const StyledTaskbarApp = styled.div<{ focused: boolean }>`
   }
 `;
 
+export const StyledExtrabackWindow = styled.div`
+  position: absolute;
+  z-index: -1;
+  bottom: 2px;
+  top: 2px;
+
+  margin-left: 20px;
+  width: 30px;
+  background-color: #FAFAFA;
+  border: 1px solid #E9E9E9;
+  border-radius: 4px;
+`;
+
 export const TaskbarApp: FC<{
   app: TaskbarAppType;
   onOpenApp: (appName: string) => void;
   onContextMenu: (event: MouseEvent, appName: string) => void;
   id: string;
 }> = ({ app, onOpenApp, onContextMenu, id }) => {
+  const [hovering, setHovering] = useState<boolean>(false);
+
   return (
     <StyledTaskbarApp
       id={id}
@@ -48,7 +65,14 @@ export const TaskbarApp: FC<{
       onClick={() => onOpenApp(app.name)}
       onMouseDown={e => e.stopPropagation()} // Avoids unfocusing window due to click
       onContextMenu={e => onContextMenu(e as any, app.name)}
+      onMouseOver={() => setHovering(true)}
+      onMouseOut={() => setHovering(false)}
     >
+      {
+        app.multipleOpen && (app.focused || hovering ) &&
+          <StyledExtrabackWindow>
+          </StyledExtrabackWindow>
+      }
 
       <Image className='icon' src={app.iconPath} alt={app.name} width={24} height={24}/>
 
