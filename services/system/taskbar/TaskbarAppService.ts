@@ -2,6 +2,7 @@ import { ProcessDirectory } from '../../../System/process/ProcessDirectory';
 import { TaskbarAppType } from '../../../components/taskbar-component/TaskbarApps';
 import { IconPaths } from '../../../constants/IconPaths';
 import { Process, Processes } from '../../../types/system/processes/Processes';
+import { Windows } from '../../../types/system/window-manager/WindowManagerState';
 
 export const mergePinnedAppsToApps = (apps: TaskbarAppType[], pinnedAppNames: string[]): TaskbarAppType[] => {
   for (const pinnedAppName of pinnedAppNames) {
@@ -23,31 +24,34 @@ export const mergePinnedAppsToApps = (apps: TaskbarAppType[], pinnedAppNames: st
   return [...apps];
 };
 
-export const mergeOpenProcessToApps = (apps: TaskbarAppType[], processes: Processes): TaskbarAppType[] => {
-  const userProcesses = Object
-    .values(processes)
-    .filter(process => ProcessDirectory[process.name].owner === 'USER');
+export const mergeOpenProcessToApps = (apps: TaskbarAppType[], windows: Windows): TaskbarAppType[] => {
+  const numOpenWindowsPerApp: { [appName: string]: number } = {};
+  Object.values(windows)
+    .forEach(({ process: { name } }) =>
+      numOpenWindowsPerApp[name] ? numOpenWindowsPerApp[name] += 1 : numOpenWindowsPerApp[name] = 1);
 
-  const processCount: { [processName: string]: number } = {};
-	userProcesses.forEach(({ name }) => processCount[name] ? processCount[name] += 1 : processCount[name] = 1 );
+  for (const windowId in windows) {
+    const appName = windows[windowId].process.name;
+    const matchingApp = apps.find(app => app.name === appName);
 
-  for (const process of userProcesses) {
-  const matchingApp = apps.find(app => app.name === process.name);
     if (matchingApp) {
-      matchingApp.multipleOpen = processCount[process.name] > 1;
+      matchingApp.multipleOpen = numOpenWindowsPerApp[appName] > 1;
       matchingApp.open = true;
+      // TODO: add:matchingApp.minimized windows[windowId].state.mini
+      matchingApp.focused = windows[windowId].state.focused;
     } else {
       apps.push({
         focused: false,
-        iconPath: ProcessDirectory[process.name].iconPath || IconPaths.UNKOWN_EXTENSION,
-        multipleOpen: processCount[process.name] > 1,
-        name: process.name,
+        iconPath: ProcessDirectory[appName].iconPath || IconPaths.UNKOWN_EXTENSION,
+        multipleOpen: numOpenWindowsPerApp[appName] > 1,
+        name: appName,
         open: true,
         pinned: false
       });
     }
   }
 
+  const userProcesses = Object.values(windows).map(({ process }) => process);
   const updatedApps = removeClosedProcesses(apps, userProcesses);
 
   return [...updatedApps];

@@ -12,10 +12,12 @@ OK - create taskbar app components
 OK - style apps
 OK - open apps
 - catch focused app
+- minimize show/hide app
 - context menu to pin/unpin apps
 - find explorer icon (and other icons if needed)
 - apps can be dragged
 - update styles to show multiple windows
+- remove owner variable from process
 
 - catch focused app (window)
 
@@ -74,9 +76,6 @@ and change file system to use actual FS style (use string path instead of Explor
 - show apps 
 
 /////// TODO: in other
-
-Widnows: 
-  - Replace FocusedWindowContext by WindowContext that keeps track every windows.
 
 FileSystem
   - update functions to match node.js file system.

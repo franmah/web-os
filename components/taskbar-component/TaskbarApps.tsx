@@ -4,6 +4,7 @@ import { ProcessContext } from '../../contexts/ProcessContext';
 import { mergeOpenProcessToApps, mergePinnedAppsToApps } from '../../services/system/taskbar/TaskbarAppService';
 import { TaskbarApp } from './TaskbarApp';
 import styled from 'styled-components';
+import { WindowContext } from '../../contexts/WindowContext';
 
 export type TaskbarAppType = {
 	focused: boolean,
@@ -28,6 +29,7 @@ const TaskbarApps: FC<{}> = () => {
 
 	const pinnedAppContext = useContext(TaskbarPinnedAppContext);
 	const processContext = useContext(ProcessContext);
+	const windowContext = useContext(WindowContext);
 
 	useEffect(() => {
 		setApps(apps => {
@@ -37,13 +39,30 @@ const TaskbarApps: FC<{}> = () => {
 
 	useEffect(() => {
 		setApps(apps => {
-			const afterMerge = mergeOpenProcessToApps(apps, processContext.processes);
+			const afterMerge = mergeOpenProcessToApps(apps, windowContext.windows);
 			return [...afterMerge];
 		});
-	}, [processContext.processes]);
+	}, [windowContext.windows]);
 
-	const handleOpenApp = (appName: string) => {
-		processContext.openProcess(appName);
+	const handleClick = (appName: string) => {
+		const app = apps.find(app => app.name === appName);
+		if (!app) {
+			console.error(`Error opening app from taskbar: can't find ${appName}.`);
+			return;
+		}
+
+		if (app.open) {
+			const windowToFocus = Object.entries(windowContext.windows).find(([windowId, { process }]) => process.name === appName);
+			if (!windowToFocus) {
+				console.error(`Error opening app from taskbar. can't find window to focus for app ${appName}.`);
+				return;
+			}
+
+			const windowId = windowToFocus[0];
+			windowContext.focusWindow(windowId);
+		} else {
+			processContext.openProcess(appName);
+		}
 	};
 
 	return (
@@ -51,7 +70,7 @@ const TaskbarApps: FC<{}> = () => {
 			{
 				apps.map(app =>
 					<TaskbarApp
-						onOpenApp={handleOpenApp}
+						onOpenApp={handleClick}
 						key={app.name}
 						app={app}
 					/>

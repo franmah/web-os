@@ -10,6 +10,7 @@ export const StyledTaskbarApp = styled.div<{ focused: boolean }>`
   justify-content: space-between;
 
   height: 100%;
+  width: 40px;
   margin: 0px 2px;
   padding: 2px 4px;
   border: 2px solid transparent;
@@ -44,7 +45,7 @@ export const TaskbarApp: FC<{
       onClick={() => onOpenApp(app.name)}
     >
 
-      <Image className='icon' src={app.iconPath} alt={app.name} width={20} height={20}/>
+      <Image className='icon' src={app.iconPath} alt={app.name} width={24} height={24}/>
 
       { app.open && <div className='open-bar'></div> }
 
