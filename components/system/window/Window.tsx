@@ -25,6 +25,7 @@ const WindowComponent: FC<{
 	handleMaximize: (windowId: string) => void;
 	handleMoveToCustomMaximizeOptionClick: (windowId: string, direction: CustomMaximizeDirection) => void;
 	handleHeightMaximize: (windowId: string) => void;
+	onMinimize: (windowId: string) => void;
 	children: React.ReactNode;
 }> = ({
 	windowParams,
@@ -38,6 +39,7 @@ const WindowComponent: FC<{
 	handleMaximize,
 	handleMoveToCustomMaximizeOptionClick,
 	handleHeightMaximize,
+	onMinimize,
 	children
 }) => {
 	const handleCloseWindow = () => {
@@ -63,6 +65,10 @@ const WindowComponent: FC<{
 		};
 	}, [handleMouseUp, hanldeMouseMove, windowParams.windowId]);
 
+	const handleMinimize = () => {
+		onMinimize(windowParams.windowId);
+	};
+
 	return (
 		<Fragment>
 			<WindowAnimationMaximizePlaceholder
@@ -83,6 +89,7 @@ const WindowComponent: FC<{
 				width={state.width}
 				height={state.height}
 				zIndex={state.zIndex}
+				minimized={state.minimized}
 			>
 				<WindowBorder
 					allowResize={state.maximized !== WindowMaximize.Full && !state.moving}
@@ -110,6 +117,7 @@ const WindowComponent: FC<{
 								moveToCustomMaximizeOptionClick={direction =>
 									handleMoveToCustomMaximizeOptionClick(windowParams.windowId, direction)
 								}
+								onMinimize={handleMinimize}
 							/>
 						</div>
 

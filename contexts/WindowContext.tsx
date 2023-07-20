@@ -12,6 +12,7 @@ export type WindowContextType = {
   maximizeWindow: (windowId: string) => void;
   moveWindow: (windowId: string, event: MouseEvent) => void;
   moveWindowToCustomMaimizeOption: (windowId: string, direction: CustomMaximizeDirection) => void;
+  minimizeWindow: (windowId: string) => void;
   startMovingWindow: (windowId: string, event: MouseEvent) => void;
   startResizingWindow: (windowId: string, event: MouseEvent, direction: WindowResizeDirection) => void;
   updateWarnBeforeProcessCloses: (processId: string, warn: boolean) => void;

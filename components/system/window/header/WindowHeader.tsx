@@ -15,15 +15,12 @@ const WindowHeader: FC<WindowHeaderProps> = ({
 	startMovingWindow,
 	maximizeWindow,
 	onClose,
-	moveToCustomMaximizeOptionClick
+	moveToCustomMaximizeOptionClick,
+	onMinimize
 }) => {
 	const [headerId] = useState<string>(v4());
 
 	const maximizeButtonDivID = MAXIMIZE_DIV_PRE_ID + '_' + headerId;
-
-	const onMinimize = () => {
-		console.debug('minimize');
-	};
 
 	return (
 		<StyledWindowHeader focused={focused} className={globalStyles.unselectableText}>

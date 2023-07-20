@@ -8,7 +8,9 @@ export const StyledWindow = styled.div<{
 	width: number;
 	height: number;
 	zIndex: number;
+	minimized: boolean;
 }>`
+	visibility: ${({ minimized }) => minimized ? 'hidden' : 'visible'};
 	position: absolute;
 	background-color: #ced8eb;
 

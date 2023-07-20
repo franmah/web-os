@@ -122,12 +122,19 @@ export const useWindowContext = () => {
 		});
 	};
 
+	const minimizeWindow = (windowId: string) => {
+		setWindows(windows => {
+			return windowManagerService.minimizeWindow(windowId, windows);
+		});
+	};
+
   return {
     closeWindow,
     focusWindow,
     handleMouseUp,
     heightMaximizeWindow,
     maximizeWindow,
+		minimizeWindow,
     moveWindow,
     moveWindowToCustomMaimizeOption,
     startMovingWindow,

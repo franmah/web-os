@@ -4,20 +4,21 @@ import { WindowMaximize } from './WindowMaximizeEnum';
 import { WindowResizeDirection } from './WindowResizeDirectionEnum';
 
 export const DEFAULT_WINDOW_STATE: WindowState = {
-	top: 100,
-	left: 200,
-	width: 1000,
+	focused: true,
 	height: 600,
+	left: 200,
+	maximized: WindowMaximize.None,
+	minimized: false,
+	moving: false,
 	previousClientX: 0,
 	previousClientY: 0,
-	previousTop: 100,
-	previousLeft: 400,
-	previousWidth: 1000,
 	previousHeight: 600,
-	moving: false,
-	maximized: WindowMaximize.None,
+	previousLeft: 400,
+	previousTop: 100,
+	previousWidth: 1000,
 	resizeDirection: WindowResizeDirection.None,
 	showMaximizePlacehodler: MaximizePlaceholderDirection.None,
-	focused: true,
+	top: 100,
+	width: 1000,
 	zIndex: 100
 };

@@ -59,8 +59,8 @@ const getWindowStartingPosition = (currentWindows: WindowState[]): { top: number
 	}
 
 	return {
-		top: startingTop,
-		left: startingLeft
+		left: startingLeft,
+		top: startingTop
 	};
 };
 
@@ -100,6 +100,8 @@ export const focusWindow = (clickedWindowId: string, windows: Windows): Windows 
 		updatedWindows[windowId].state.focused = windowId === clickedWindowId;
 		updatedWindows[windowId].state.zIndex = update.zIndex;
 	}
+
+	updatedWindows[clickedWindowId].state.minimized = false;
 
 	return { ...updatedWindows };
 };
@@ -260,3 +262,16 @@ export const updateWindowWarnBeforeProcessCloses = (windows: Windows, processId:
 		}
 	};
 };
+
+export const minimizeWindow = (windowId: string, windows: Windows): Windows => {
+	if (!windows[windowId]) {
+		console.error(`Error minimizing window: ${windowId}: window not found.`);
+		return windows;
+	}
+
+	windows[windowId].state.minimized = true;
+	windows[windowId].state.focused = false;
+
+	return { ...windows };
+};
+

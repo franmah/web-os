@@ -22,6 +22,7 @@ export const WindowProcessesLoader: FC<{}> = () => {
 						handleMaximize={windowContext.maximizeWindow}
 						handleMoveToCustomMaximizeOptionClick={windowContext.moveWindowToCustomMaimizeOption}
 						handleHeightMaximize={windowContext.heightMaximizeWindow}
+						onMinimize={windowContext.minimizeWindow}
 					>
 						<process.Component updateWarnUserBeforeClose={windowContext.updateWarnBeforeProcessCloses} params={process.params} />
 					</WindowComponent>
