@@ -3,7 +3,7 @@ import { TaskbarAppType } from './TaskbarApps';
 import styled from 'styled-components';
 import Image from 'next/image';
 
-export const StyledTaskbarApp = styled.div<{ focused: boolean }>`
+export const StyledTaskbarApp = styled.div<{ focused: boolean, multipleOpen: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,6 +18,8 @@ export const StyledTaskbarApp = styled.div<{ focused: boolean }>`
   border: ${({ focused }) => focused ? '1px solid #E9E9E9' : '1px solid transparent'};
   border-radius: 4px;
 
+  box-shadow: ${({ multipleOpen }) => multipleOpen ? '1px 0px #e1e1e1' : ''};
+  
   &:hover {
     background-color: #FAFAFA;
     border: 1px solid #E9E9E9;
@@ -62,6 +64,7 @@ export const TaskbarApp: FC<{
     <StyledTaskbarApp
       id={id}
       focused={app.focused}
+      multipleOpen={app.multipleOpen}
       onClick={() => onOpenApp(app.name)}
       onMouseDown={e => e.stopPropagation()} // Avoids unfocusing window due to click
       onContextMenu={e => onContextMenu(e as any, app.name)}
