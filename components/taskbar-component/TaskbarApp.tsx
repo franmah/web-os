@@ -13,11 +13,11 @@ export const StyledTaskbarApp = styled.div<{ focused: boolean }>`
   width: 40px;
   margin: 0px 2px;
   padding: 2px 4px;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
 
   &:hover {
     background-color: #FAFAFA;
-    border: 2px solid #E9E9E9;
+    border: 1px solid #E9E9E9;
     border-radius: 4px;
   }
 

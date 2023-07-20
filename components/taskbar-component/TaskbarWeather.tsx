@@ -10,13 +10,13 @@ export const StyledTaskbarWeather = styled.section`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	height: 100%;
 
 	border: 1px solid transparent;
 	border-radius: 6px;
 	margin-left: 8px;
 	padding-left: 8px;
 	padding-right: 32px;
-	border: 1px solid red;
 
 	&:hover {
 		border: 1px solid #eeeeee;
