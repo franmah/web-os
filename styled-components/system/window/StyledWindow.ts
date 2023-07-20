@@ -36,7 +36,6 @@ export const StyledWindow = styled.div<{
 	}
 
 	${({ minimized, minimizeAnimationName }) => {
-		console.log('showing animation: ' + minimized);
 		const animation = minimized ?
 			`
 				top: -1000px;

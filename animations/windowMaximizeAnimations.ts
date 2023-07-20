@@ -61,5 +61,4 @@ export const minimizeAnimation = {
     `;
   },
   name: 'window-minimize-animation'
-
 };
