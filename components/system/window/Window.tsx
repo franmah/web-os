@@ -9,6 +9,7 @@ import WindowHeader from './header/WindowHeader';
 import { CustomMaximizeDirection } from '../../../constants/system/window/CustomMaximizeDirectionEnum';
 import { zIndexConsts } from '../../../constants/Zindex';
 import { StyledWindow } from '../../../styled-components/system/window/StyledWindow';
+import { minimizeAnimation } from '../../../animations/windowMaximizeAnimations';
 
 export const WINDOW_MIN_HEIGH = 200; // TODO: move into styles component
 export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
@@ -80,6 +81,11 @@ const WindowComponent: FC<{
 				zIndex={state.zIndex - zIndexConsts.windowComponent.animationPlaceholderOffset}
 			/>
 
+			<style
+				// eslint-disable-next-line react/no-children-prop
+				children={minimizeAnimation.animation(state.height, state.left, state.top, state.width)}
+			/>
+
 			<StyledWindow
 				id={windowParams.windowId}
 				onMouseDown={() => handleWindowMouseDown(windowParams.windowId)}
@@ -90,6 +96,8 @@ const WindowComponent: FC<{
 				height={state.height}
 				zIndex={state.zIndex}
 				minimized={state.minimized}
+				minimizeAnimationName={minimizeAnimation.name}
+
 			>
 				<WindowBorder
 					allowResize={state.maximized !== WindowMaximize.Full && !state.moving}

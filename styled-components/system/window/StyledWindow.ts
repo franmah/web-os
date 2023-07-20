@@ -9,8 +9,9 @@ export const StyledWindow = styled.div<{
 	height: number;
 	zIndex: number;
 	minimized: boolean;
+	minimizeAnimationName: string;
 }>`
-	visibility: ${({ minimized }) => minimized ? 'hidden' : 'visible'};
+	/* visibility: ${({ minimized }) => minimized ? 'hidden' : 'visible'}; */
 	position: absolute;
 	background-color: #ced8eb;
 
@@ -33,4 +34,20 @@ export const StyledWindow = styled.div<{
 		height: 100%;
 		border-radius: 8px;
 	}
+
+	${({ minimized, minimizeAnimationName }) => {
+		console.log('showing animation: ' + minimized);
+		const animation = minimized ?
+			`
+				top: -1000px;
+				left: -1000px;
+				min-width: 0px;
+				min-height: 0px;
+				width: 0px;
+				height: 0px;
+				animation-duration: .5s;
+				animation-name: ${minimizeAnimationName}
+			` : '';
+		return animation;
+	}}
 `;
