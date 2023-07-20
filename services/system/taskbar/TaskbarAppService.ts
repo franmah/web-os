@@ -1,16 +1,21 @@
 import { ProcessDirectory } from '../../../System/process/ProcessDirectory';
 import { TaskbarAppType } from '../../../components/taskbar-component/TaskbarApps';
 import { IconPaths } from '../../../constants/IconPaths';
-import { Process, Processes } from '../../../types/system/processes/Processes';
+import { Process } from '../../../types/system/processes/Processes';
 import { Windows } from '../../../types/system/window-manager/WindowManagerState';
 
 export const mergePinnedAppsToApps = (apps: TaskbarAppType[], pinnedAppNames: string[]): TaskbarAppType[] => {
+  // remove apps that are not pinned anymore
+  const updatedApps = apps.filter(app => app.pinned && pinnedAppNames.includes(app.name));
+
+  // Add pinned apps
   for (const pinnedAppName of pinnedAppNames) {
-    const matchingApp = apps.find(app => app.name === pinnedAppName);
+    const matchingApp = updatedApps.find(app => app.name === pinnedAppName);
+
     if (matchingApp) {
       matchingApp.pinned = true;
     } else {
-      apps.push({
+      updatedApps.push({
         focused: false,
         iconPath: ProcessDirectory[pinnedAppName].iconPath || IconPaths.UNKOWN_EXTENSION,
         multipleOpen: false,
@@ -21,7 +26,7 @@ export const mergePinnedAppsToApps = (apps: TaskbarAppType[], pinnedAppNames: st
     }
   }
 
-  return [...apps];
+  return [...updatedApps];
 };
 
 export const mergeOpenProcessToApps = (apps: TaskbarAppType[], windows: Windows): TaskbarAppType[] => {
