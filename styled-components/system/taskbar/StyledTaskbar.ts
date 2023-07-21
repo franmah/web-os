@@ -12,5 +12,5 @@ export const StyledTaskbar = styled.nav`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 2px 0px;
+	padding: 4px 0px;
 `;

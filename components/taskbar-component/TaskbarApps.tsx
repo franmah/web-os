@@ -2,13 +2,14 @@ import { FC, useContext, useEffect, useState } from 'react';
 import { TaskbarPinnedAppContext } from '../../contexts/TaskbarPinnedAppContext';
 import { ProcessContext } from '../../contexts/ProcessContext';
 import * as taskbarAppService from '../../services/system/taskbar/TaskbarAppService';
-import { StyledTaskbarApp, TaskbarApp } from './TaskbarApp';
+import { TaskbarApp } from './TaskbarApp';
 import { WindowContext } from '../../contexts/WindowContext';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Image from 'next/image';
 import { FileSystemContext } from '../../contexts/FileSystemContext';
 import { StyledTaskbarApps } from '../../styled-components/system/taskbar/StyledTaskbarApps';
 import { TaskbarAppType } from '../../types/taskbar/TaskbarAppType';
+import { StyledTaskbarApp } from '../../styled-components/system/taskbar/StyledTaskbarApp';
 
 export const PRE_TASKBAR_APP_ID = 'taskbar-app-';
 

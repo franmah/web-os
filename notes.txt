@@ -27,7 +27,7 @@ OK - bug: open two explorer windows. Focus the first one. The taskbar app shows 
 OK - bug: focus on window by clicking its taskbar app will trigger unminimize action even if not minimized
 OK - bug: switching between windows using the taskbar doesn't update their zindex correctly
 OK - moving a desktop file to the taskbar should allow pinning it
-- add animation when clicking app
+OK - add animation when clicking app
 - check that style match windows 11 
 - refactor (move styles out of components)
 
