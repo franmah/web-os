@@ -11,5 +11,7 @@ export enum IconPaths {
 	TEXT = '/icons/text-icon.png',
 	UNKOWN_EXTENSION = '/icons/unknown-extension-icon.png',
 	SHORTCUT_DELETE = '/icons/win11_shortcut_bin.png',
-	SHORTCUT_RENAME = '/icons/win11_shortcut_rename.png'
+	SHORTCUT_RENAME = '/icons/win11_shortcut_rename.png',
+	EXPLROER = '/icons/win11_explorer.png',
+	NOTEPAD = '/icons/win11_notepad.png'
 }

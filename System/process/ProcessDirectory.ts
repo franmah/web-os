@@ -22,7 +22,7 @@ export const ProcessDirectory: ProcessDirectoryType = {
 	[ProcessNameEnum.EXPLORER]: {
 		Component: dynamic<{ params: { startPath: string } }>(() => import('../../components/explorer/ExplorerContainer')),
 		hasWindow: true,
-		iconPath: IconPaths.FOLDER,
+		iconPath: IconPaths.EXPLROER,
 		isUnique: false,
 		name: ProcessNameEnum.EXPLORER,
 		owner: 'USER',
@@ -38,7 +38,7 @@ export const ProcessDirectory: ProcessDirectoryType = {
 			() => import('../../components/text-editor-app/Suneditor') as any
 		),
 		hasWindow: true,
-		iconPath: IconPaths.TEXT,
+		iconPath: IconPaths.NOTEPAD,
 		isUnique: false,
 		name: ProcessNameEnum.SUN_TEXT_EDITOR,
 		owner: 'USER',
