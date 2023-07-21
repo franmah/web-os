@@ -95,9 +95,13 @@ const TaskbarApps: FC<{}> = () => {
 		const minimized = windowToUpdate[1].state.minimized;
 		const focused = windowToUpdate[1].state.focused;
 
-		!focused || minimized ?
-			windowContext.unminimizeWindow(windowId) :
+		if (minimized) {
+			windowContext.unminimizeWindow(windowId);
+		} else if (focused) {
 			windowContext.minimizeWindow(windowId);
+		} else {
+			windowContext.focusWindow(windowId);
+		}
 	};
 
 	const handleContextMenuClick = (event: MouseEvent, appName: string) => {

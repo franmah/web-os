@@ -94,7 +94,7 @@ export const focusWindow = (clickedWindowId: string, windows: Windows): Windows 
 		zIndex: state.zIndex
 	}));
 	const updatedZindexByWindowId = updateZindexesOnWindowClicked(currentZindexes, clickedWindowId);
-
+	// Update each window with its new zindex
 	for (const update of updatedZindexByWindowId) {
 		const windowId = update.windowId;
 		updatedWindows[windowId].state.focused = windowId === clickedWindowId;
