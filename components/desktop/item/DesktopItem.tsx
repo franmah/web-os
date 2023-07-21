@@ -5,8 +5,10 @@ import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, SHORTENED_NAME_LENGTH } from '../../../constants/Desktop';
 import { getCurrentItemNameInPath, getFileExtension } from '../../../services/file-system/FilePathService';
-import { getFolderIcon, getIconPathByExtension } from '../../../services/IconService';
+import { getFolderIcon, getIconByExtension } from '../../../services/IconService';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
+import { IconPaths } from '../../../constants/IconPaths';
+import { DRAG_DROP_DATA_TRANSFER_FIELDS, DRAG_DROP_SOURCE } from '../../../constants/DragDrop';
 
 const DesktopItemComponent: FC<{
 	item: DesktopItem;
@@ -79,6 +81,11 @@ const DesktopItemComponent: FC<{
 	};
 
 	const onDragEnd = (event: any) => {
+		// Cancel move if not dropped on desktop
+		if (event.clientX < 0) {
+			moveItem(item.id, item.top, item.left, item.top, item.left);
+			return;
+		}
 		const { top, left } = getDestopItemNewPositionRelativeToMouse(
 			event,
 			distanceMouseToItemTopRef.current,
@@ -88,6 +95,10 @@ const DesktopItemComponent: FC<{
 	};
 
 	const onDragStart = (event: any) => {
+		// For pin drop on taskbar
+		event.dataTransfer.setData(DRAG_DROP_DATA_TRANSFER_FIELDS.SOURCE, DRAG_DROP_SOURCE.DESKTOP);
+		event.dataTransfer.setData(DRAG_DROP_DATA_TRANSFER_FIELDS.PATH, item.path);
+
 		distanceMouseToItemTopRef.current = event.clientY - item.top;
 		distanceMouseToItemLeftRef.current = event.clientX - item.left;
 
@@ -157,10 +168,11 @@ const DesktopItemComponent: FC<{
 		}
 	};
 
+	// TODO: fix item.iconPath (doesn't update properly)
 	const getIconPath = () => {
 		return fs.isDirectory(item.path)
 			? getFolderIcon(item.path)
-			: getIconPathByExtension(getFileExtension(getCurrentItemNameInPath(item.path)));
+			: getIconByExtension(getFileExtension(getCurrentItemNameInPath(item.path)));
 	};
 
 	const selectItemNameOnRenameFocus = (event: any) => {
@@ -184,7 +196,7 @@ const DesktopItemComponent: FC<{
 				width: ITEM_WIDTH
 			}}
 		>
-			<Image src={getIconPath()} alt={'icon'} width={48} height={40} />
+			<Image src={getIconPath() || IconPaths.UNKOWN_EXTENSION} alt={'icon'} width={48} height={40} />
 
 			{renaming ? (
 				<textarea

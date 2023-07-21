@@ -57,6 +57,7 @@ export type ProcessContextType = {
 	processes: Processes;
 	openProcess: (processName: string, params?: any, windowParams?: Partial<WindowParams>) => void;
 	closeProcess: (processId: string) => void;
+	closeProcessesByName: (processName: string) => void;
 };
 
 export type ProcessDirectoryEntry = {

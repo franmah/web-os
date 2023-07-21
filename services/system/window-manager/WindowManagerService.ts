@@ -4,7 +4,7 @@ import { DEFAULT_WINDOW_STATE } from '../../../constants/system/window/Window';
 import { WindowMaximize } from '../../../constants/system/window/WindowMaximizeEnum';
 import { WindowResizeDirection } from '../../../constants/system/window/WindowResizeDirectionEnum';
 import { WindowedProcesses } from '../../../types/system/processes/Processes';
-import { WindowManagerState } from '../../../types/system/window-manager/WindowManagerState';
+import { Windows } from '../../../types/system/window-manager/WindowManagerState';
 import { WindowState } from '../../../types/system/window/WindowState';
 import { heightMaximizeWindow, maximizeOrRestoreWindow } from '../window/MaximizeRestoreWindowService';
 import { moveWindow } from '../window/MoveWindowService';
@@ -15,12 +15,12 @@ import { getStartingZindex, updateZindexesOnWindowClicked, updateZindexesOnWindo
 
 export const updateWindowStatesOnNewProcess = (
 	processes: WindowedProcesses,
-	currentStates: WindowManagerState
-): WindowManagerState => {
+	currentStates: Windows
+): Windows => {
 	const hasNewProcess = Object.keys(processes).length > Object.keys(currentStates).length;
-	const windowStates: WindowManagerState = {};
+	const windowStates: Windows = {};
 
-	for (let processId in processes) {
+	for (const processId in processes) {
 		const process = processes[processId];
 		const windowId = process.windowParams.windowId;
 		const isNewProcess = !currentStates[windowId];
@@ -51,7 +51,7 @@ const getWindowStartingPosition = (currentWindows: WindowState[]): { top: number
 	let startingTop = DEFAULT_WINDOW_STATE.top;
 	let startingLeft = DEFAULT_WINDOW_STATE.left;
 
-	for (let { top, left } of currentWindows) {
+	for (const { top, left } of currentWindows) {
 		if (startingLeft === left && startingTop === top) {
 			startingTop += WINDOW_STARTING_POSITION_OFFSET_PX;
 			startingLeft += WINDOW_STARTING_POSITION_OFFSET_PX;
@@ -59,8 +59,8 @@ const getWindowStartingPosition = (currentWindows: WindowState[]): { top: number
 	}
 
 	return {
-		top: startingTop,
-		left: startingLeft
+		left: startingLeft,
+		top: startingTop
 	};
 };
 
@@ -71,8 +71,8 @@ export type WindowManagerZindex = {
 
 export const handleZindexesUpdateOnCloseWindow = (
 	windowId: string,
-	windows: WindowManagerState
-): WindowManagerState => {
+	windows: Windows
+): Windows => {
 	const currentZindexes: WindowManagerZindex[] = Object.entries(windows).map(([windowId, { state }]) => ({
 		windowId,
 		zIndex: state.zIndex
@@ -86,7 +86,7 @@ export const handleZindexesUpdateOnCloseWindow = (
 	return { ...windows };
 };
 
-export const updateWindowsOnMouseDown = (clickedWindowId: string, windows: WindowManagerState): WindowManagerState => {
+export const focusWindow = (clickedWindowId: string, windows: Windows): Windows => {
 	const updatedWindows = { ...windows };
 
 	const currentZindexes: WindowManagerZindex[] = Object.entries(windows).map(([windowId, { state }]) => ({
@@ -94,22 +94,23 @@ export const updateWindowsOnMouseDown = (clickedWindowId: string, windows: Windo
 		zIndex: state.zIndex
 	}));
 	const updatedZindexByWindowId = updateZindexesOnWindowClicked(currentZindexes, clickedWindowId);
-
-	// TODO: move to its own service
+	// Update each window with its new zindex
 	for (const update of updatedZindexByWindowId) {
 		const windowId = update.windowId;
 		updatedWindows[windowId].state.focused = windowId === clickedWindowId;
 		updatedWindows[windowId].state.zIndex = update.zIndex;
 	}
 
+	updatedWindows[clickedWindowId].state.minimized = false;
+
 	return { ...updatedWindows };
 };
 
 export const updateWindowsOnMouseMove = (
 	windowId: string,
-	windows: WindowManagerState,
+	windows: Windows,
 	event: MouseEvent
-): WindowManagerState => {
+): Windows => {
 	const windowState = windows[windowId];
 
 	if (!windowState) {
@@ -146,9 +147,9 @@ export const updateWindowsOnMouseMove = (
 
 export const setWindowAsMoving = (
 	windowId: string,
-	windows: WindowManagerState,
+	windows: Windows,
 	event: MouseEvent
-): WindowManagerState => {
+): Windows => {
 	return {
 		...windows,
 		[windowId]: {
@@ -165,10 +166,10 @@ export const setWindowAsMoving = (
 
 export const setWindowAsResizing = (
 	windowId: string,
-	windows: WindowManagerState,
+	windows: Windows,
 	event: MouseEvent,
 	direction: WindowResizeDirection
-): WindowManagerState => {
+): Windows => {
 	return {
 		...windows,
 		[windowId]: {
@@ -183,11 +184,11 @@ export const setWindowAsResizing = (
 	};
 };
 
-export const updateWindowsOnMouseUp = (
+export const stopMovingAndResizing = (
 	windowId: string,
-	windows: WindowManagerState,
+	windows: Windows,
 	event: MouseEvent
-): WindowManagerState => {
+): Windows => {
 	return {
 		...windows,
 		[windowId]: {
@@ -200,7 +201,7 @@ export const updateWindowsOnMouseUp = (
 	};
 };
 
-export const updateWindowsOnMaximize = (windowId: string, windows: WindowManagerState): WindowManagerState => {
+export const updateWindowsOnMaximize = (windowId: string, windows: Windows): Windows => {
 	return {
 		...windows,
 		[windowId]: {
@@ -213,7 +214,7 @@ export const updateWindowsOnMaximize = (windowId: string, windows: WindowManager
 	};
 };
 
-export const updateWindowOnHeightMaximize = (windowId: string, windows: WindowManagerState): WindowManagerState => {
+export const updateWindowOnHeightMaximize = (windowId: string, windows: Windows): Windows => {
 	return {
 		...windows,
 		[windowId]: {
@@ -228,9 +229,9 @@ export const updateWindowOnHeightMaximize = (windowId: string, windows: WindowMa
 
 export const updateWindowOnCustomMaximize = (
 	windowId: string,
-	windows: WindowManagerState,
+	windows: Windows,
 	direction: CustomMaximizeDirection
-): WindowManagerState => {
+): Windows => {
 	return {
 		...windows,
 		[windowId]: {
@@ -244,7 +245,7 @@ export const updateWindowOnCustomMaximize = (
 	};
 };
 
-export const updateWindowWarnBeforeProcessCloses = (windows: WindowManagerState, processId: string, warn: boolean) => {
+export const updateWindowWarnBeforeProcessCloses = (windows: Windows, processId: string, warn: boolean) => {
 	const window = Object.entries(windows).find(([windowId, state]) => state.process.processId === processId);
 	if (!window) {
 		console.error(`Error updating warn before close state. Process ${processId} not found.`);
@@ -261,3 +262,16 @@ export const updateWindowWarnBeforeProcessCloses = (windows: WindowManagerState,
 		}
 	};
 };
+
+export const minimizeWindow = (windowId: string, windows: Windows): Windows => {
+	if (!windows[windowId]) {
+		console.error(`Error minimizing window: ${windowId}: window not found.`);
+		return windows;
+	}
+
+	windows[windowId].state.minimized = true;
+	windows[windowId].state.focused = false;
+
+	return { ...windows };
+};
+

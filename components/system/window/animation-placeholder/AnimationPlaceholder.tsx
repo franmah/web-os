@@ -31,11 +31,11 @@ const WindowAnimationMaximizePlaceholder: FC<WindowMaximizePlaceholderProps> = m
 				<style
 					// eslint-disable-next-line react/no-children-prop
 					children={`
-          ${maximizeAnimation.animation(left, width, height)}
-          ${leftMaximizeAnimation.animation(top, height)}
-          ${rightMaximizeAnimation.animation(top, height)}
-          ${heightMaximizeAnimation.animation(left, width, height)}
-        `}
+						${maximizeAnimation.animation(left, width, height)}
+						${leftMaximizeAnimation.animation(top, height)}
+						${rightMaximizeAnimation.animation(top, height)}
+						${heightMaximizeAnimation.animation(left, width, height)}
+					`}
 				/>
 
 				<StyledAnimationMaximizePlaceholder

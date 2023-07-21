@@ -9,6 +9,7 @@ import WindowHeader from './header/WindowHeader';
 import { CustomMaximizeDirection } from '../../../constants/system/window/CustomMaximizeDirectionEnum';
 import { zIndexConsts } from '../../../constants/Zindex';
 import { StyledWindow } from '../../../styled-components/system/window/StyledWindow';
+import { minimizeAnimation, unminimizeAnimation } from '../../../animations/windowMaximizeAnimations';
 
 export const WINDOW_MIN_HEIGH = 200; // TODO: move into styles component
 export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
@@ -18,39 +19,46 @@ const WindowComponent: FC<{
 	state: WindowState;
 	closeWindow: (windowId: string) => void;
 	handleWindowMouseDown: (windowId: string) => void;
-	hanldeMouseMove: (windowId: string, event: MouseEvent) => void;
+	handleMouseMove: (windowId: string, event: MouseEvent) => void;
 	handleStartMoving: (windowId: string, event: MouseEvent) => void;
 	handleStartResizing: (windowId: string, event: MouseEvent, direction: WindowResizeDirection) => void;
 	handleMouseUp: (windowId: string, event: MouseEvent) => void;
 	handleMaximize: (windowId: string) => void;
 	handleMoveToCustomMaximizeOptionClick: (windowId: string, direction: CustomMaximizeDirection) => void;
 	handleHeightMaximize: (windowId: string) => void;
+	onMinimize: (windowId: string) => void;
 	children: React.ReactNode;
 }> = ({
 	windowParams,
 	state,
 	closeWindow,
 	handleWindowMouseDown,
-	hanldeMouseMove,
+	handleMouseMove,
 	handleStartMoving,
 	handleStartResizing,
 	handleMouseUp,
 	handleMaximize,
 	handleMoveToCustomMaximizeOptionClick,
 	handleHeightMaximize,
+	onMinimize,
 	children
 }) => {
+
 	const handleCloseWindow = () => {
 		closeWindow(windowParams.windowId);
 	};
 
 	useEffect(() => {
 		const onMouseMove = (event: MouseEvent) => {
-			hanldeMouseMove(windowParams.windowId, event);
+			if (state.moving) {
+				handleMouseMove(windowParams.windowId, event);
+			}
 		};
 
 		const onMouseUp = (event: MouseEvent) => {
-			handleMouseUp(windowParams.windowId, event);
+			if (state.moving || state.resizeDirection !== WindowResizeDirection.None) {
+				handleMouseUp(windowParams.windowId, event);
+			}
 		};
 
 		// Listener on document otherwise window stops updating if mouse moves out of it (if user moves mouse too fast)
@@ -61,7 +69,11 @@ const WindowComponent: FC<{
 			document.removeEventListener('mouseup', onMouseUp);
 			document.removeEventListener('mousemove', onMouseMove);
 		};
-	}, [handleMouseUp, hanldeMouseMove, windowParams.windowId]);
+	}, [windowParams.windowId, state.moving, state.resizeDirection]);
+
+	const handleMinimize = () => {
+		onMinimize(windowParams.windowId);
+	};
 
 	return (
 		<Fragment>
@@ -74,6 +86,14 @@ const WindowComponent: FC<{
 				zIndex={state.zIndex - zIndexConsts.windowComponent.animationPlaceholderOffset}
 			/>
 
+			<style
+				// eslint-disable-next-line react/no-children-prop
+				children={`
+					${minimizeAnimation.animation(state.height, state.left, state.top, state.width)} 
+					${unminimizeAnimation.animation(state.height, state.left, state.top, state.width)}
+				`}
+			/>
+
 			<StyledWindow
 				id={windowParams.windowId}
 				onMouseDown={() => handleWindowMouseDown(windowParams.windowId)}
@@ -83,6 +103,10 @@ const WindowComponent: FC<{
 				width={state.width}
 				height={state.height}
 				zIndex={state.zIndex}
+				minimized={state.minimized}
+				minimizeAnimationName={minimizeAnimation.name}
+				recentlyUnminimized={state.recentlyUnminimized}
+				unminimizeAnimationName={unminimizeAnimation.name}
 			>
 				<WindowBorder
 					allowResize={state.maximized !== WindowMaximize.Full && !state.moving}
@@ -110,6 +134,7 @@ const WindowComponent: FC<{
 								moveToCustomMaximizeOptionClick={direction =>
 									handleMoveToCustomMaximizeOptionClick(windowParams.windowId, direction)
 								}
+								onMinimize={handleMinimize}
 							/>
 						</div>
 

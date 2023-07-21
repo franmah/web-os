@@ -1,11 +1,14 @@
 import { v4 } from 'uuid';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import { getFolderIcon, getIconPathByExtension } from '../../IconService';
+import { getFolderIcon, getIconByExtension } from '../../IconService';
 import { getCurrentItemNameInPath, getFileExtension } from '../../file-system/FilePathService';
 import { ExplorerItem } from '../../../types/system/file/ExplorerItem';
 import { CreateItemType } from '../../../constants/CreateItemType';
 import { CommonFolderPaths } from '../../../constants/system/file-system/CommonFilePaths';
 import { SupportedFileExtension } from '../../../constants/SupportedFileExtension';
+import { ProcessDirectory } from '../../../System/process/ProcessDirectory';
+import { ProcessDirectoryByExtension } from '../../../System/process/ProcessDirectoryByExtension';
+import { IconPaths } from '../../../constants/IconPaths';
 
 // eslint-disable-next-line no-useless-escape
 const NEW_FOLDER_NAME_REGEX = (type: CreateItemType) => new RegExp(`New ${type}( \([1-9]+\))?`, 'g');
@@ -21,9 +24,14 @@ export const setCurrentItemsFromFileItems = (
 	for (const desktopItem of currentItems) {
 		const matchingFileItem = fileItems.find(fileItem => fileItem.id === desktopItem.fsId);
 		if (matchingFileItem) {
+			const fileExtension = getFileExtension(matchingFileItem.name);
+			const iconPath = fileExtension
+				? getIconByExtension(fileExtension)
+				: getFolderIcon('');
+
 			const item = {
 				fsId: matchingFileItem.id,
-				iconPath: getIconPathByExtension(getFileExtension(matchingFileItem.name)),
+				iconPath: iconPath || IconPaths.UNKOWN_EXTENSION,
 				id: desktopItem.id,
 				left: desktopItem.left,
 				path: CommonFolderPaths.DESKTOP + '/' + matchingFileItem.name,
@@ -52,7 +60,8 @@ export const setCurrentItemsFromFileItems = (
 export const pathToDesktopItem = (path: string, isDirectory: boolean): DesktopItem => {
 	const iconPath = isDirectory
 		? getFolderIcon(path)
-		: getIconPathByExtension(getFileExtension(getCurrentItemNameInPath(path)));
+		: getIconByExtension(getFileExtension(getCurrentItemNameInPath(path)))
+		|| IconPaths.UNKOWN_EXTENSION;
 
 	return {
 		fsId: '',
@@ -72,7 +81,8 @@ export const explorerItemToDesktopItem = (
 ): DesktopItem => {
 	const iconPath = isDirectory
 		? getFolderIcon(path)
-		: getIconPathByExtension(getFileExtension(getCurrentItemNameInPath(path)));
+		: ProcessDirectory[ProcessDirectoryByExtension[getFileExtension(getCurrentItemNameInPath(path))]].iconPath
+		|| IconPaths.UNKOWN_EXTENSION;
 
 	return {
 		fsId: explorerItem.id,

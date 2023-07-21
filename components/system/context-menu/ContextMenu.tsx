@@ -7,8 +7,8 @@ import ContextMenuItemComponent from './ContextMenuItem';
 import { ContextMenuShortcutCommandList } from './ContextMenuShortcutCommandList';
 
 export const SMALL_WIDTH_SUB_MENU = 100;
-export const MEDIUM_WIDTH_SUB_MENU = 250;
-export const DEFAULT_WIDTH_SUB_MENU = MEDIUM_WIDTH_SUB_MENU;
+export const CONTEXT_MENU_MEDIUM_WIDTH = 250;
+export const DEFAULT_WIDTH_SUB_MENU = CONTEXT_MENU_MEDIUM_WIDTH;
 export const CONTEXT_MENU_ITEM_HEIGHT = 21;
 
 const HOVERING_TIMEOUT = 300;

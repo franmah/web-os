@@ -24,7 +24,7 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 	const { openProcess } = useContext(ProcessContext);
 
 	const [pathsFlow, setPathsFlow] = useState<string[]>([startPath]);
-	const [path, setPath] = useState<string>(startPath);
+	const [path, setPath] = useState<string>(startPath || '');
 	const [fileViewPaths, setFileViewPaths] = useState<string[]>([]);
 	const [useSearchView, setUseSearchView] = useState<boolean>(false);
 	const [numItemsSelected, setNumItemsSelected] = useState<number>(0);

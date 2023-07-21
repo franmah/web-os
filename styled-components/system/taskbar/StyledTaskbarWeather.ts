@@ -1,12 +1,11 @@
-.weatherTaskbar,
-.weather,
-.weatherIcon {
+import styled from 'styled-components';
+
+export const StyledTaskbarWeather = styled.section`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-}
+	height: 100%;
 
-.weatherTaskbar {
 	border: 1px solid transparent;
 	border-radius: 6px;
 	margin-left: 8px;
@@ -23,10 +22,20 @@
 	}
 
 	.weather {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		.weatherIcon {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		
 		.weatherInfo {
 			display: flex;
 			flex-direction: column;
-			margin-left: 8px;
+			padding-left: 8px;
 			font-size: small;
 
 			.forecast {
@@ -34,4 +43,4 @@
 			}
 		}
 	}
-}
+`;

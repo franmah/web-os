@@ -23,13 +23,10 @@ export const getFolderIcon = (path: string) => {
 	}
 };
 
-export const getIconPathByExtension = (extension: string): string => {
+export const getIconByExtension = (extension: string) => {
 	switch (extension) {
-		case SupportedFileExtension.TXT:
-			return IconPaths.TEXT;
-		case SupportedFileExtension.YOUTUBE:
-			return IconPaths.YOUTUBE;
-		default:
-			return IconPaths.UNKOWN_EXTENSION;
+		case SupportedFileExtension.TXT: return IconPaths.TEXT;
+		case SupportedFileExtension.YOUTUBE: return IconPaths.YOUTUBE;
+		default: return IconPaths.UNKOWN_EXTENSION;
 	}
 };

@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
-import styles from './clock.module.scss';
-import globalStyles from '../../../styles/global.module.scss';
+import globalStyles from '../../styles/global.module.scss';
+import { StyledTaskbarClock } from '../../styled-components/system/taskbar/StyledTaskbarClock';
 
 const TaskbarClock: FC<{}> = () => {
 	const NUM_HOURS = 12;
@@ -24,10 +24,10 @@ const TaskbarClock: FC<{}> = () => {
 	};
 
 	return (
-		<div className={`${styles.datetime} ${globalStyles.unselectableText}`}>
+		<StyledTaskbarClock className={globalStyles.unselectableText}>
 			<div>{getTime()}</div>
 			<div>{getDate()}</div>
-		</div>
+		</StyledTaskbarClock>
 	);
 };
 

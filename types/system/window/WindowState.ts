@@ -19,4 +19,6 @@ export type WindowState = {
 	showMaximizePlacehodler: MaximizePlaceholderDirection;
 	focused: boolean;
 	zIndex: number;
+	minimized: boolean;
+	recentlyUnminimized: boolean;
 };

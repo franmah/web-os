@@ -1,9 +1,60 @@
-- check if firebase config needs to be hidden.
-- remove read/write: true in rules.
-- create a secret key that can be used by rules to allow connections
+OK - Create a design
+  - Especially to atch focused app (window)
+  => Use a context for the focused window/process.
+  
+OK - Create pinned app context.
+OK - create an owner variable in process directory:
+  OK - SYSTEM or USER
+  OK - replace getIconPathByExtension in IconService by adding an iconPath variable in process directory.
+OK - For testing: load apps at the start
+OK - Taskbar should receive pinned apps and running apps. (User apps not system)
+OK - create taskbar app components
+OK - style apps
+OK - open apps
+OK  - catch focused app
+OK - minimize show/hide app
+OK - context menu to pin/unpin apps
+OK - context menu close all windows
+OK - update styles to show multiple windows
+OK - top box has a right shadow box when there are multiple open same app
+OK - add animation for minimizing 
+OK - add animation unminimizing windows.
+OK - apps can be dragged
+OK - find explorer icon (and other icons if needed)
+OK - remove owner variable from process
+OK - multiple window of the same app shouldn't minimize (bring to focus the first process of this type that you find)
+OK - bug: open two explorer windows. Focus the first one. The taskbar app shows as not focused.
+OK - bug: focus on window by clicking its taskbar app will trigger unminimize action even if not minimized
+OK - bug: switching between windows using the taskbar doesn't update their zindex correctly
+OK - moving a desktop file to the taskbar should allow pinning it
+OK - add animation when clicking app
+- check that style match windows 11 
+- refactor (move styles out of components)
 
-use Autonomous system (ASN) instead of IP?
-https://api.ipify.org/?format=json
+current requiements:
+
+Apps in taskbar:
+- open app but window not focused.
+  - should only show a grey small bar uder the app icon.
+  - don't show have a special background.
+- hovering app 
+  - change background color.
+  - no background change if app window is focused.
+  - !! if multiple windows for the same app are open then show double background style.
+  - Optional: If app is open it should show a miniature of every windows.
+  - Optional: if app is not open then show app name in a modal above icon.
+
+- focused app:
+  - show blue bigger bar under it.
+  - show 'hovered' background all the time.
+  - !! if multiple windows for the same app are open then show double background style.
+
+- Windows icon hovers like any other icons
+
+- process icons on the right: don't implement for now.
+
+- search bar: don't implement for now.
+
 /////////////////// MVP ///////////////
 1. Explorer app
   - side menu
@@ -19,9 +70,12 @@ EXTENSIONS
 and change file system to use actual FS style (use string path instead of ExplorerItem)
 
 2. Apps
-- can create youtube, txt and folder
-- can open youtube and txt files
-- can save txt files.
+  - text file
+  - vscode?
+  - doom
+  - diablo
+  - chat (bard?)
+  - youtube
 
 3. Taskbar
 - show open app
@@ -30,13 +84,6 @@ and change file system to use actual FS style (use string path instead of Explor
 
 4. Windows menu
 - show apps 
-
-////// IN PROGRESS:
-
-=> Using extensions
-  - add icons
-  - Updates ExplorerFile to have an extension
-  - ItemsContainerComponent should let DesktopComponent know that there's a new file or folder that was created.
 
 /////// TODO: in other
 

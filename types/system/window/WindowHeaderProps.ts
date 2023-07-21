@@ -10,4 +10,5 @@ export type WindowHeaderProps = {
 	maximizeWindow: (event: any) => void;
 	onClose: () => void;
 	moveToCustomMaximizeOptionClick: (direcction: CustomMaximizeDirection) => void;
+	onMinimize: () => void;
 };
