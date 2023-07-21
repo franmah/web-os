@@ -3,7 +3,8 @@ import { ProcessNameEnum } from '../System/process/ProcessNameEnum';
 
 const STARTING_PINNED_PROCESSES = [
   ProcessNameEnum.EXPLORER,
-  ProcessNameEnum.SUN_TEXT_EDITOR
+  ProcessNameEnum.SUN_TEXT_EDITOR,
+  ProcessNameEnum.YOUTUBE
 ];
 
 export const useTaskbarPinnedAppContextState = () => {

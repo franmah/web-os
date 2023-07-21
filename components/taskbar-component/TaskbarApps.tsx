@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { TaskbarPinnedAppContext } from '../../contexts/TaskbarPinnedAppContext';
 import { ProcessContext } from '../../contexts/ProcessContext';
 import { mergeOpenProcessToApps, mergePinnedAppsToApps } from '../../services/system/taskbar/TaskbarAppService';
@@ -11,6 +11,7 @@ import { GeneralIconCommand } from '../../System/context-menu-commands/commands/
 import { ProcessDirectory } from '../../System/process/ProcessDirectory';
 import { TASKBAR_HEIGHT } from '../../constants/Taskbar';
 import { CONTEXT_MENU_MEDIUM_WIDTH } from '../system/context-menu/ContextMenu';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 export type TaskbarAppType = {
 	focused: boolean,
@@ -25,7 +26,7 @@ export const StyledTaskbarApps = styled.section`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-
+	border: 1px solid rebeccapurple;
 	height: 100%;
 `;
 
@@ -34,6 +35,8 @@ const PRE_TASKBAR_APP_ID = 'taskbar-app-';
 const TaskbarApps: FC<{}> = () => {
 
 	const [apps, setApps] = useState<TaskbarAppType[]>([]);
+
+	const taskbarAppsRef = useRef(null);
 
 	const pinnedAppContext = useContext(TaskbarPinnedAppContext);
 	const processContext = useContext(ProcessContext);
@@ -135,20 +138,58 @@ const TaskbarApps: FC<{}> = () => {
 		});
 	};
 
+	const handleDragEnd = (result: any) => {
+		const startIndex = result?.source?.index;
+		const endIndex = result?.destination?.index;
+
+		if (startIndex === undefined || endIndex === undefined) {
+			console.error('Error moving taskbar app: start or end index is null.');
+			return;
+		}
+
+		setApps(apps => {
+			const draggedApp = {...apps[startIndex]};
+			apps.splice(startIndex, 1);
+			apps.splice(endIndex, 0, draggedApp);
+			return [...apps];
+		});
+	};
+
 	return (
-		<StyledTaskbarApps>
-			{
-				apps.map(app =>
-					<TaskbarApp
-						id={PRE_TASKBAR_APP_ID + app.name}
-						key={app.name}
-						app={app}
-						onOpenApp={handleClick}
-						onContextMenu={handleContextMenuClick}
-					/>
-				)
-			}
-		</StyledTaskbarApps>
+		<DragDropContext
+			onDragEnd={handleDragEnd}
+		>
+
+			<Droppable
+				droppableId='taskbar-app-droppable'
+				direction='horizontal'
+			>
+				{provided => (
+
+					<StyledTaskbarApps
+						ref={provided.innerRef}
+						{...provided.droppableProps}
+					>
+						{
+							apps.map((app, index) =>
+								<TaskbarApp
+									id={PRE_TASKBAR_APP_ID + app.name}
+									key={app.name}
+									app={app}
+									onOpenApp={handleClick}
+									onContextMenu={handleContextMenuClick}
+									index={index}
+								/>
+							)
+						}
+						{provided.placeholder}
+						</StyledTaskbarApps>
+
+				)}
+
+			</Droppable>
+
+		</DragDropContext>
 	);
 };
 

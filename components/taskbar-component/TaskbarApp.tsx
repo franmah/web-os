@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import { TaskbarAppType } from './TaskbarApps';
 import styled from 'styled-components';
 import Image from 'next/image';
+import { Draggable } from 'react-beautiful-dnd';
 
 export const StyledTaskbarApp = styled.div<{ focused: boolean, multipleOpen: boolean }>`
   display: flex;
@@ -9,6 +10,7 @@ export const StyledTaskbarApp = styled.div<{ focused: boolean, multipleOpen: boo
   align-items: center;
   justify-content: space-between;
 
+	cursor: default !important; // Overrides beautiful-dnd
   height: 100%;
   width: 40px;
   margin: 0px 2px;
@@ -40,7 +42,7 @@ export const StyledTaskbarApp = styled.div<{ focused: boolean, multipleOpen: boo
   }
 `;
 
-export const StyledExtrabackWindow = styled.div`
+export const StyledExtraBackWindow = styled.div`
   position: absolute;
   z-index: -1;
   bottom: 2px;
@@ -58,30 +60,54 @@ export const TaskbarApp: FC<{
   onOpenApp: (appName: string) => void;
   onContextMenu: (event: MouseEvent, appName: string) => void;
   id: string;
-}> = ({ app, onOpenApp, onContextMenu, id }) => {
+  index: number;
+}> = ({ app, onOpenApp, onContextMenu, id, index }) => {
   const [hovering, setHovering] = useState<boolean>(false);
 
+  /**
+   * Keep app icons locked to the x-axis.
+   */
+	const dragXAxisLockStyle = (style: React.CSSProperties | undefined) => {
+    if (style?.transform) {
+      const axisLockX = `${style.transform.split(',').shift()}, 0px)`;
+      return {
+        ...style,
+        transform: axisLockX
+      };
+    }
+    return style;
+  };
+
   return (
-    <StyledTaskbarApp
-      id={id}
-      focused={app.focused}
-      multipleOpen={app.multipleOpen}
-      onClick={() => onOpenApp(app.name)}
-      onMouseDown={e => e.stopPropagation()} // Avoids unfocusing window due to click
-      onContextMenu={e => onContextMenu(e as any, app.name)}
-      onMouseOver={() => setHovering(true)}
-      onMouseOut={() => setHovering(false)}
-    >
-      {
-        app.multipleOpen && (app.focused || hovering ) &&
-          <StyledExtrabackWindow>
-          </StyledExtrabackWindow>
-      }
+    <Draggable draggableId={'draggable-' + id} index={index}>
+      {provided => (
+        <StyledTaskbarApp
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          style={dragXAxisLockStyle(provided.draggableProps.style)}
+          id={id}
+          focused={app.focused}
+          multipleOpen={app.multipleOpen}
+          onClick={() => onOpenApp(app.name)}
+          onMouseDown={e => e.stopPropagation()} // Avoids unfocusing window due to click
+          onContextMenu={e => onContextMenu(e as any, app.name)}
+          onMouseOver={() => setHovering(true)}
+          onMouseOut={() => setHovering(false)}
+        >
+          {
+            app.multipleOpen && (app.focused || hovering ) &&
+              <StyledExtraBackWindow>
+              </StyledExtraBackWindow>
+          }
 
-      <Image className='icon' src={app.iconPath} alt={app.name} width={24} height={24}/>
+          <Image className='icon' src={app.iconPath} alt={app.name} width={24} height={24}/>
 
-      { app.open && <div className='open-bar'></div> }
+          { app.open && <div className='open-bar'></div> }
+        </StyledTaskbarApp>
+      )}
 
-    </StyledTaskbarApp>
+    </Draggable>
+
   );
 };
