@@ -3,7 +3,6 @@ import { TaskbarPinnedAppContext } from '../../contexts/TaskbarPinnedAppContext'
 import { ProcessContext } from '../../contexts/ProcessContext';
 import { mergeOpenProcessToApps, mergePinnedAppsToApps } from '../../services/system/taskbar/TaskbarAppService';
 import { StyledTaskbarApp, TaskbarApp } from './TaskbarApp';
-import styled from 'styled-components';
 import { WindowContext } from '../../contexts/WindowContext';
 import { ProcessNameEnum } from '../../System/process/ProcessNameEnum';
 import { GeneralImageCommand } from '../../System/context-menu-commands/commands/GeneralImageCommand';
@@ -17,30 +16,8 @@ import { getCurrentItemNameInPath, getFileExtension } from '../../services/file-
 import { ProcessDirectoryByExtension } from '../../System/process/ProcessDirectoryByExtension';
 import { DRAG_DROP_DATA_TRANSFER_FIELDS, DRAG_DROP_SOURCE } from '../../constants/DragDrop';
 import { FileSystemContext } from '../../contexts/FileSystemContext';
-
-export type TaskbarAppType = {
-	focused: boolean,
-	iconPath: string,
-	multipleOpen: boolean,
-	name: string,
-	pinned: boolean,
-	open: boolean
-};
-
-export const StyledTaskbarApps = styled.section`
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 100%;
-	flex: 1;
-
-	.app-list {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		height: 100%;
-	}
-`;
+import { StyledTaskbarApps } from '../../styled-components/system/taskbar/StyledTaskbarApps';
+import { TaskbarAppType } from '../../types/taskbar/TaskbarAppType';
 
 const PRE_TASKBAR_APP_ID = 'taskbar-app-';
 
@@ -204,12 +181,12 @@ const TaskbarApps: FC<{}> = () => {
 	};
 
 	return (
-
 		<StyledTaskbarApps
 			onDrop={onDrop}
 			onDragOver={allowDrop}
 		>
 
+			{/* Windows Home Button  */}
 			<StyledTaskbarApp
 				focused={false}
 				multipleOpen={false}
