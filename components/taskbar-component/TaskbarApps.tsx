@@ -13,6 +13,9 @@ import { TASKBAR_HEIGHT } from '../../constants/Taskbar';
 import { CONTEXT_MENU_MEDIUM_WIDTH } from '../system/context-menu/ContextMenu';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Image from 'next/image';
+import { getCurrentItemNameInPath, getFileExtension } from '../../services/file-system/FilePathService';
+import { ProcessDirectoryByExtension } from '../../System/process/ProcessDirectoryByExtension';
+import { DRAG_DROP_DATA_TRANSFER_FIELDS, DRAG_DROP_SOURCE } from '../../constants/DragDrop';
 
 export type TaskbarAppType = {
 	focused: boolean,
@@ -28,6 +31,8 @@ export const StyledTaskbarApps = styled.section`
 	align-items: center;
 	justify-content: center;
 	height: 100%;
+	border: 1px solid blue;
+	flex: 1;
 
 	.app-list {
 		display: flex;
@@ -176,9 +181,29 @@ const TaskbarApps: FC<{}> = () => {
 		console.debug('TODO: open menu');
 	};
 
+	const onDrop = (event: any) => {
+		event.preventDefault();
+		// console.log(event);
+		const source = event?.dataTransfer?.getData(DRAG_DROP_DATA_TRANSFER_FIELDS.SOURCE);
+		const path = event?.dataTransfer?.getData(DRAG_DROP_DATA_TRANSFER_FIELDS.PATH);
+
+		if (source && source === DRAG_DROP_SOURCE.DESKTOP && path) {
+			const app = ProcessDirectoryByExtension[getFileExtension(getCurrentItemNameInPath(path))];
+			pinnedAppContext.addPinnedAppNames(app);
+		}
+	};
+
+	// Required to let user drop files on the taskbar
+	const allowDrop = (event: any) => {
+		event.preventDefault();
+	};
+
 	return (
 
-		<StyledTaskbarApps>
+		<StyledTaskbarApps
+			onDrop={onDrop}
+			onDragOver={allowDrop}
+		>
 
 			<StyledTaskbarApp
 				focused={false}

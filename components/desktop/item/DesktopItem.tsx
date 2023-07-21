@@ -7,9 +7,8 @@ import { ITEM_HEIGHT, ITEM_WIDTH, SHORTENED_NAME_LENGTH } from '../../../constan
 import { getCurrentItemNameInPath, getFileExtension } from '../../../services/file-system/FilePathService';
 import { getFolderIcon, getIconByExtension } from '../../../services/IconService';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
-import { ProcessDirectory } from '../../../System/process/ProcessDirectory';
-import { ProcessDirectoryByExtension } from '../../../System/process/ProcessDirectoryByExtension';
 import { IconPaths } from '../../../constants/IconPaths';
+import { DRAG_DROP_DATA_TRANSFER_FIELDS, DRAG_DROP_SOURCE } from '../../../constants/DragDrop';
 
 const DesktopItemComponent: FC<{
 	item: DesktopItem;
@@ -91,6 +90,10 @@ const DesktopItemComponent: FC<{
 	};
 
 	const onDragStart = (event: any) => {
+		// For pin drop on taskbar
+		event.dataTransfer.setData(DRAG_DROP_DATA_TRANSFER_FIELDS.SOURCE, DRAG_DROP_SOURCE.DESKTOP);
+		event.dataTransfer.setData(DRAG_DROP_DATA_TRANSFER_FIELDS.PATH, item.path);
+
 		distanceMouseToItemTopRef.current = event.clientY - item.top;
 		distanceMouseToItemLeftRef.current = event.clientX - item.left;
 

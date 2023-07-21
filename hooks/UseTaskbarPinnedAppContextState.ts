@@ -12,8 +12,8 @@ export const useTaskbarPinnedAppContextState = () => {
 
   const addPinnedAppNames = (...appNames: string[]) => {
     setPinnedAppNames(currentPinnedApps => {
-      const noDoublons = appNames.filter(name => !currentPinnedApps.includes(name));
-      return [...currentPinnedApps, ...noDoublons];
+      const appNamesNoDuplicate = appNames.filter(name => !currentPinnedApps.includes(name));
+      return [...currentPinnedApps, ...appNamesNoDuplicate];
     });
   };
 
