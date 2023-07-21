@@ -3,9 +3,8 @@ import { TaskbarAppType } from './TaskbarApps';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { Draggable } from 'react-beautiful-dnd';
-import { ProcessNameEnum } from '../../System/process/ProcessNameEnum';
 
-export const StyledTaskbarApp = styled.div<{ focused: boolean, multipleOpen: boolean }>`
+export const StyledTaskbarApp = styled.button<{ focused: boolean, multipleOpen: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -43,6 +42,19 @@ export const StyledTaskbarApp = styled.div<{ focused: boolean, multipleOpen: boo
     border-color: ${({ focused }) => focused ? '#0064CC' : '#6E6E6E'} ;
     border-radius: 8px;
     background-color: ${({ focused }) => focused ? '#0078D4' : '#858585'};
+  }
+
+  &:focus {
+    .icon {
+      animation-name: click-animation;
+      animation-duration: .4s;
+    }
+  }
+
+  @keyframes click-animation {
+    0% { transform: scale(1) }
+    50% { transform: scale(.75); }
+    100% { transform: scale(1); }
   }
 `;
 
