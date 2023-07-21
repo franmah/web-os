@@ -30,24 +30,34 @@ export const mergePinnedAppsToApps = (apps: TaskbarAppType[], pinnedAppNames: st
 };
 
 export const mergeOpenProcessToApps = (apps: TaskbarAppType[], windows: Windows): TaskbarAppType[] => {
-  const numOpenWindowsPerApp: { [appName: string]: number } = {};
+  const openWindowsPerApp: { [appName: string]: { number: number, focused: boolean }} = {};
   Object.values(windows)
-    .forEach(({ process: { name } }) =>
-      numOpenWindowsPerApp[name] ? numOpenWindowsPerApp[name] += 1 : numOpenWindowsPerApp[name] = 1);
+    .forEach(window => {
+      const openWindowInfo = openWindowsPerApp[window.process.name];
+      if (openWindowInfo) {
+        openWindowInfo.number += 1;
+        openWindowInfo.focused = openWindowInfo.focused || window.state.focused;
+      } else {
+        openWindowsPerApp[window.process.name] = {
+          focused: window.state.focused,
+          number: 1
+        };
+      }
+    });
 
   for (const windowId in windows) {
     const appName = windows[windowId].process.name;
     const matchingApp = apps.find(app => app.name === appName);
 
     if (matchingApp) {
-      matchingApp.multipleOpen = numOpenWindowsPerApp[appName] > 1;
+      matchingApp.multipleOpen = openWindowsPerApp[appName].number > 1;
       matchingApp.open = true;
-      matchingApp.focused = windows[windowId].state.focused; // Doesn't work when multiple windows.
+      matchingApp.focused = openWindowsPerApp[appName].focused;
     } else {
       apps.push({
         focused: windows[windowId].state.focused,
         iconPath: ProcessDirectory[appName].iconPath || IconPaths.UNKOWN_EXTENSION,
-        multipleOpen: numOpenWindowsPerApp[appName] > 1,
+        multipleOpen: openWindowsPerApp[appName].number > 1,
         name: appName,
         open: true,
         pinned: false
