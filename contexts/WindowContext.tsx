@@ -15,6 +15,7 @@ export type WindowContextType = {
   minimizeWindow: (windowId: string) => void;
   startMovingWindow: (windowId: string, event: MouseEvent) => void;
   startResizingWindow: (windowId: string, event: MouseEvent, direction: WindowResizeDirection) => void;
+  unminimizeWindow: (windowId: string) => void;
   updateWarnBeforeProcessCloses: (processId: string, warn: boolean) => void;
   windows: Windows;
 }

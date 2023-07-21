@@ -17,8 +17,9 @@ OK - context menu to pin/unpin apps
 OK - context menu close all windows
 OK - update styles to show multiple windows
 OK - top box has a right shadow box when there are multiple open same app
+OK - add animation for minimizing 
 - apps can be dragged
-- add animation for minimizing and unminimizing windows.
+- add animation unminimizing windows.
 - find explorer icon (and other icons if needed)
 - remove owner variable from process
 - multiple window of the same app shouldn't minimize (bring to focus the first process of this type that you find)

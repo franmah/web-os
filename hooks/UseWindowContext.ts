@@ -7,6 +7,8 @@ import { CustomMaximizeDirection } from '../constants/system/window/CustomMaximi
 import { Processes, WindowedProcess, WindowedProcesses } from '../types/system/processes/Processes';
 import { isEventOriginatedFromWithinTargetIdSubtree } from '../services/EventService';
 
+export const UNMINIMIZE_ANIMATION_DURATION_MS = 500;
+
 export const useWindowContext = () => {
 
   const { closeProcess, processes } = useContext(ProcessContext);
@@ -128,6 +130,19 @@ export const useWindowContext = () => {
 		});
 	};
 
+	const unminimizeWindow = (windowId: string) => {
+		setWindows(windows => {
+			const updatedWindows = windowManagerService.focusWindow(windowId, windows);
+			updatedWindows[windowId].state.recentlyUnminimized = true;
+			return { ...updatedWindows };
+		});
+
+		setTimeout(() => setWindows(windows => {
+			windows[windowId].state.recentlyUnminimized = false;
+			return { ...windows };
+		}), UNMINIMIZE_ANIMATION_DURATION_MS);
+	};
+
   return {
     closeWindow,
     focusWindow,
@@ -139,6 +154,7 @@ export const useWindowContext = () => {
     moveWindowToCustomMaimizeOption,
     startMovingWindow,
     startResizingWindow,
+		unminimizeWindow,
     updateWarnBeforeProcessCloses,
     windows
   };

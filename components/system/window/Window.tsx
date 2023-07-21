@@ -9,7 +9,7 @@ import WindowHeader from './header/WindowHeader';
 import { CustomMaximizeDirection } from '../../../constants/system/window/CustomMaximizeDirectionEnum';
 import { zIndexConsts } from '../../../constants/Zindex';
 import { StyledWindow } from '../../../styled-components/system/window/StyledWindow';
-import { minimizeAnimation } from '../../../animations/windowMaximizeAnimations';
+import { minimizeAnimation, unminimizeAnimation } from '../../../animations/windowMaximizeAnimations';
 
 export const WINDOW_MIN_HEIGH = 200; // TODO: move into styles component
 export const WINDOW_MIN_WIDTH = 150; // TODO: move into styles component
@@ -43,6 +43,7 @@ const WindowComponent: FC<{
 	onMinimize,
 	children
 }) => {
+
 	const handleCloseWindow = () => {
 		closeWindow(windowParams.windowId);
 	};
@@ -83,7 +84,10 @@ const WindowComponent: FC<{
 
 			<style
 				// eslint-disable-next-line react/no-children-prop
-				children={minimizeAnimation.animation(state.height, state.left, state.top, state.width)}
+				children={`
+					${minimizeAnimation.animation(state.height, state.left, state.top, state.width)} 
+					${unminimizeAnimation.animation(state.height, state.left, state.top, state.width)}
+				`}
 			/>
 
 			<StyledWindow
@@ -97,7 +101,8 @@ const WindowComponent: FC<{
 				zIndex={state.zIndex}
 				minimized={state.minimized}
 				minimizeAnimationName={minimizeAnimation.name}
-
+				recentlyUnminimized={state.recentlyUnminimized}
+				unminimizeAnimationName={unminimizeAnimation.name}
 			>
 				<WindowBorder
 					allowResize={state.maximized !== WindowMaximize.Full && !state.moving}

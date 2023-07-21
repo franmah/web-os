@@ -20,4 +20,5 @@ export type WindowState = {
 	focused: boolean;
 	zIndex: number;
 	minimized: boolean;
+	recentlyUnminimized: boolean;
 };

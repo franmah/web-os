@@ -60,26 +60,29 @@ const TaskbarApps: FC<{}> = () => {
 		}
 
 		if (app.open) {
-			const windowToUpdate = Object.entries(windowContext.windows).find(([windowId, { process }]) => process.name === appName);
-			if (!windowToUpdate) {
-				console.error(`Error opening app from taskbar. can't find window to focus for app ${appName}.`);
-				return;
-			}
-
-			// If app is unfocused: focus
-			// else if minimized: focus
-			// eles if focused: minimize
-			const windowId = windowToUpdate[0];
-			const minimized = windowToUpdate[1].state.minimized;
-			const focused = windowToUpdate[1].state.focused;
-
-			!focused || minimized ?
-				windowContext.focusWindow(windowId) :
-				windowContext.minimizeWindow(windowId);
-
+			handleMinimizeWindow(appName);
 		} else {
 			processContext.openProcess(appName);
 		}
+	};
+
+	const handleMinimizeWindow = (appName: string) => {
+		const windowToUpdate = Object.entries(windowContext.windows).find(([windowId, { process }]) => process.name === appName);
+		if (!windowToUpdate) {
+			console.error(`Error opening app from taskbar. can't find window to focus for app ${appName}.`);
+			return;
+		}
+
+		// If app is unfocused: focus
+		// else if minimized: focus
+		// eles if focused: minimize
+		const windowId = windowToUpdate[0];
+		const minimized = windowToUpdate[1].state.minimized;
+		const focused = windowToUpdate[1].state.focused;
+
+		!focused || minimized ?
+			windowContext.unminimizeWindow(windowId) :
+			windowContext.minimizeWindow(windowId);
 	};
 
 	const handleContextMenuClick = (event: MouseEvent, appName: string) => {

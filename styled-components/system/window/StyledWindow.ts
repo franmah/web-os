@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { WINDOW_MIN_HEIGH, WINDOW_MIN_WIDTH } from '../../../components/system/window/Window';
+import { UNMINIMIZE_ANIMATION_DURATION_MS } from '../../../hooks/UseWindowContext';
 
 export const StyledWindow = styled.div<{
 	focused: boolean;
@@ -10,6 +11,8 @@ export const StyledWindow = styled.div<{
 	zIndex: number;
 	minimized: boolean;
 	minimizeAnimationName: string;
+	recentlyUnminimized: boolean;
+	unminimizeAnimationName: string;
 }>`
 	/* visibility: ${({ minimized }) => minimized ? 'hidden' : 'visible'}; */
 	position: absolute;
@@ -48,5 +51,20 @@ export const StyledWindow = styled.div<{
 				animation-name: ${minimizeAnimationName}
 			` : '';
 		return animation;
-	}}
+	}};
+
+	${({ recentlyUnminimized, unminimizeAnimationName }) => {
+		const animation = recentlyUnminimized ?
+			`
+				top: -1000px;
+				left: -1000px;
+				min-width: 0px;
+				min-height: 0px;
+				width: 0px;
+				height: 0px;
+				animation-duration: ${UNMINIMIZE_ANIMATION_DURATION_MS}ms;
+				animation-name: ${unminimizeAnimationName}
+			` : '';
+		return animation;
+	}};
 `;

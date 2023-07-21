@@ -62,3 +62,16 @@ export const minimizeAnimation = {
   },
   name: 'window-minimize-animation'
 };
+
+export const unminimizeAnimation = {
+  animation: (height: number, left: number, top: number, width: number) => {
+    return `
+      @keyframes window-unminimize-animation {
+        0% { top: ${window.innerHeight}px; left: ${window.innerWidth / 2}px; width: ${0}px; height: ${0}px; opacity: 0% }
+        70% { opacity: 100%; }
+        100% { top: ${top}px; left: ${left}px; width: ${width}px; height: ${height}px; opacity: 100% }
+      }
+    `;
+  },
+  name: 'window-unminimize-animation'
+};

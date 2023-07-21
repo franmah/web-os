@@ -19,6 +19,7 @@ export const DEFAULT_WINDOW_STATE: WindowState = {
 	resizeDirection: WindowResizeDirection.None,
 	showMaximizePlacehodler: MaximizePlaceholderDirection.None,
 	top: 100,
+	recentlyUnminimized: false, // Indicate the window has been uniminized in the last few milliseconds
 	width: 1000,
 	zIndex: 100
 };
