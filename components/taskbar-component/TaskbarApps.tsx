@@ -16,6 +16,7 @@ import Image from 'next/image';
 import { getCurrentItemNameInPath, getFileExtension } from '../../services/file-system/FilePathService';
 import { ProcessDirectoryByExtension } from '../../System/process/ProcessDirectoryByExtension';
 import { DRAG_DROP_DATA_TRANSFER_FIELDS, DRAG_DROP_SOURCE } from '../../constants/DragDrop';
+import { FileSystemContext } from '../../contexts/FileSystemContext';
 
 export type TaskbarAppType = {
 	focused: boolean,
@@ -31,7 +32,6 @@ export const StyledTaskbarApps = styled.section`
 	align-items: center;
 	justify-content: center;
 	height: 100%;
-	border: 1px solid blue;
 	flex: 1;
 
 	.app-list {
@@ -51,6 +51,7 @@ const TaskbarApps: FC<{}> = () => {
 	const pinnedAppContext = useContext(TaskbarPinnedAppContext);
 	const processContext = useContext(ProcessContext);
 	const windowContext = useContext(WindowContext);
+	const fs = useContext(FileSystemContext);
 
 	useEffect(() => {
 		setApps(apps => {
@@ -188,6 +189,11 @@ const TaskbarApps: FC<{}> = () => {
 		const path = event?.dataTransfer?.getData(DRAG_DROP_DATA_TRANSFER_FIELDS.PATH);
 
 		if (source && source === DRAG_DROP_SOURCE.DESKTOP && path) {
+			if (fs.isDirectory(path)){
+				pinnedAppContext.addPinnedAppNames(ProcessNameEnum.EXPLORER);
+				return;
+			}
+
 			const app = ProcessDirectoryByExtension[getFileExtension(getCurrentItemNameInPath(path))];
 			pinnedAppContext.addPinnedAppNames(app);
 		}

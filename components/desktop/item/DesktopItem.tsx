@@ -81,6 +81,11 @@ const DesktopItemComponent: FC<{
 	};
 
 	const onDragEnd = (event: any) => {
+		// Cancel move if not dropped on desktop
+		if (event.clientX < 0) {
+			moveItem(item.id, item.top, item.left, item.top, item.left);
+			return;
+		}
 		const { top, left } = getDestopItemNewPositionRelativeToMouse(
 			event,
 			distanceMouseToItemTopRef.current,
