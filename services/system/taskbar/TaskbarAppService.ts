@@ -42,10 +42,10 @@ export const mergeOpenProcessToApps = (apps: TaskbarAppType[], windows: Windows)
     if (matchingApp) {
       matchingApp.multipleOpen = numOpenWindowsPerApp[appName] > 1;
       matchingApp.open = true;
-      matchingApp.focused = windows[windowId].state.focused;
+      matchingApp.focused = windows[windowId].state.focused; // Doesn't work when multiple windows.
     } else {
       apps.push({
-        focused: false,
+        focused: windows[windowId].state.focused,
         iconPath: ProcessDirectory[appName].iconPath || IconPaths.UNKOWN_EXTENSION,
         multipleOpen: numOpenWindowsPerApp[appName] > 1,
         name: appName,
