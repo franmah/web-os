@@ -3,6 +3,7 @@ import { TaskbarAppType } from './TaskbarApps';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { Draggable } from 'react-beautiful-dnd';
+import { ProcessNameEnum } from '../../System/process/ProcessNameEnum';
 
 export const StyledTaskbarApp = styled.div<{ focused: boolean, multipleOpen: boolean }>`
   display: flex;
@@ -66,6 +67,8 @@ export const TaskbarApp: FC<{
   index: number;
 }> = ({ app, onOpenApp, onContextMenu, id, index }) => {
   const [hovering, setHovering] = useState<boolean>(false);
+
+  // app.name === ProcessNameEnum.YOUTUBE && console.log({ app });
 
   /**
    * Keep app icons locked to the x-axis.

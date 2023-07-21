@@ -42,7 +42,6 @@ export const mergeOpenProcessToApps = (apps: TaskbarAppType[], windows: Windows)
     if (matchingApp) {
       matchingApp.multipleOpen = numOpenWindowsPerApp[appName] > 1;
       matchingApp.open = true;
-      // TODO: add:matchingApp.minimized windows[windowId].state.mini
       matchingApp.focused = windows[windowId].state.focused;
     } else {
       apps.push({
@@ -70,6 +69,10 @@ export const mergeOpenProcessToApps = (apps: TaskbarAppType[], windows: Windows)
  */
 const removeClosedProcesses = (apps: TaskbarAppType[], openProcesses: Process[]): TaskbarAppType[] => {
   const processNames = openProcesses.map(process => process.name);
-  const closeApps = apps.map(app => ({ ...app, open: processNames.includes(app.name) }));
+  const closeApps = apps.map(app => ({
+    ...app,
+    focused: !processNames.includes(app.name) ? false : app.focused,
+    open: processNames.includes(app.name)
+  }));
   return closeApps.filter(app => app.pinned || processNames.includes(app.name));
 };
