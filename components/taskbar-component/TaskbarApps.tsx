@@ -26,7 +26,6 @@ export const StyledTaskbarApps = styled.section`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border: 1px solid rebeccapurple;
 	height: 100%;
 `;
 
@@ -143,7 +142,7 @@ const TaskbarApps: FC<{}> = () => {
 		const endIndex = result?.destination?.index;
 
 		if (startIndex === undefined || endIndex === undefined) {
-			console.error('Error moving taskbar app: start or end index is null.');
+			// console.error('Error moving taskbar app: start or end index is null.');
 			return;
 		}
 
