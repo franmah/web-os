@@ -43,8 +43,6 @@ const TaskbarApps: FC<{}> = () => {
 
 	const [apps, setApps] = useState<TaskbarAppType[]>([]);
 
-	const taskbarAppsRef = useRef(null);
-
 	const pinnedAppContext = useContext(TaskbarPinnedAppContext);
 	const processContext = useContext(ProcessContext);
 	const windowContext = useContext(WindowContext);

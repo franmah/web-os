@@ -8,16 +8,14 @@ export const ProcessDirectory: ProcessDirectoryType = {
 		Component: dynamic<{ params: any }>(() => import('../../components/system/context-menu/ContextMenuRoot')),
 		hasWindow: false,
 		isUnique: true,
-		name: ProcessNameEnum.CONTEXT_MENU,
-		owner: 'SYSTEM'
+		name: ProcessNameEnum.CONTEXT_MENU
 	},
 	[ProcessNameEnum.DESKTOP]: {
 		Component: dynamic<{ params: any }>(() => import('../../components/desktop/desktop/Desktop')),
 		defaultParams: null,
 		hasWindow: false,
 		isUnique: true,
-		name: ProcessNameEnum.DESKTOP,
-		owner: 'SYSTEM'
+		name: ProcessNameEnum.DESKTOP
 	},
 	[ProcessNameEnum.EXPLORER]: {
 		Component: dynamic<{ params: { startPath: string } }>(() => import('../../components/explorer/ExplorerContainer')),
@@ -25,7 +23,6 @@ export const ProcessDirectory: ProcessDirectoryType = {
 		iconPath: IconPaths.EXPLROER,
 		isUnique: false,
 		name: ProcessNameEnum.EXPLORER,
-		owner: 'USER',
 		windowParams: {
 			headerOptions: {
 				icon: IconPaths.FOLDER,
@@ -41,7 +38,6 @@ export const ProcessDirectory: ProcessDirectoryType = {
 		iconPath: IconPaths.NOTEPAD,
 		isUnique: false,
 		name: ProcessNameEnum.SUN_TEXT_EDITOR,
-		owner: 'USER',
 		windowParams: {
 			headerOptions: {
 				icon: IconPaths.TEXT,
@@ -53,8 +49,7 @@ export const ProcessDirectory: ProcessDirectoryType = {
 		Component: dynamic<{ params: any }>(() => import('../../components/taskbar-component/Taskbar')),
 		hasWindow: false,
 		isUnique: true,
-		name: ProcessNameEnum.TAKSBAR,
-		owner: 'SYSTEM'
+		name: ProcessNameEnum.TAKSBAR
 	},
 	[ProcessNameEnum.YOUTUBE]: {
 		Component: dynamic<{ params: any }>(() => import('../../components/youtube/Youtube')),
@@ -62,7 +57,6 @@ export const ProcessDirectory: ProcessDirectoryType = {
 		iconPath: IconPaths.YOUTUBE,
 		isUnique: false,
 		name: ProcessNameEnum.YOUTUBE,
-		owner: 'USER',
 		windowParams: {
 			headerOptions: {
 				icon: IconPaths.YOUTUBE,
