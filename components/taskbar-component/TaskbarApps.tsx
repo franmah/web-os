@@ -184,7 +184,6 @@ const TaskbarApps: FC<{}> = () => {
 
 	const onDrop = (event: any) => {
 		event.preventDefault();
-		// console.log(event);
 		const source = event?.dataTransfer?.getData(DRAG_DROP_DATA_TRANSFER_FIELDS.SOURCE);
 		const path = event?.dataTransfer?.getData(DRAG_DROP_DATA_TRANSFER_FIELDS.PATH);
 

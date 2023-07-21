@@ -68,8 +68,6 @@ export const TaskbarApp: FC<{
 }> = ({ app, onOpenApp, onContextMenu, id, index }) => {
   const [hovering, setHovering] = useState<boolean>(false);
 
-  // app.name === ProcessNameEnum.YOUTUBE && console.log({ app });
-
   /**
    * Keep app icons locked to the x-axis.
    */

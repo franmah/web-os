@@ -26,7 +26,6 @@ export const updateZindexesOnWindowClicked = (
 	indexes: WindowManagerZindex[],
 	clickedWindowId: string
 ): WindowManagerZindex[] => {
-	console.log('zindex');
 	const sortedIndexes = [...indexes].sort((w1, w2) => w1.zIndex - w2.zIndex);
 
 	const focusedWindowZindex = sortedIndexes.find(index => index.windowId === clickedWindowId);

@@ -62,7 +62,6 @@ export const pathToDesktopItem = (path: string, isDirectory: boolean): DesktopIt
 		? getFolderIcon(path)
 		: getIconByExtension(getFileExtension(getCurrentItemNameInPath(path)))
 		|| IconPaths.UNKOWN_EXTENSION;
-			console.log(iconPath);
 
 	return {
 		fsId: '',

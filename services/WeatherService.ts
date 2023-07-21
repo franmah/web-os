@@ -17,9 +17,12 @@ export const getWeatherInformation = async (latitude: number, longitude: number)
 
 		const codeData: any = isDay ? weatherCodeLookupDay[code] : weatherCodeLookupNight[code];
 
-		// Icon credit
+		// Icon credits
 		// TODO: uncomment or find better way to credit icon author.
-		// console.log('Icons provided by Dorava: https://www.dovora.com/resources/weather-icons/ under creative commons license: https://creativecommons.org/licenses/by-sa/4.0/');
+		if (process.env.NODE_ENV === 'production') {
+			// eslint-disable-next-line no-console
+			console.info('Icons provided by Dorava: https://www.dovora.com/resources/weather-icons/ under creative commons license: https://creativecommons.org/licenses/by-sa/4.0/');
+		}
 
 		return {
 			forecast: codeData.forecast,
