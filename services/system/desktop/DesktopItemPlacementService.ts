@@ -1,7 +1,6 @@
 import { HEIGHT_OFFSET, ITEM_HEIGHT, ITEM_WIDTH, WIDTH_OFFSET } from '../../../constants/Desktop';
 import { TASKBAR_HEIGHT } from '../../../constants/Taskbar';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import { getCurrentItemNameInPath } from '../../file-system/FilePathService';
 import { areItemsOverlaping } from './DesktopItemContainerUiHelperService';
 
 export enum DesktopSortOptions {

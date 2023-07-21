@@ -28,7 +28,6 @@ export const StyledTaskbarApps = styled.section`
 	align-items: center;
 	justify-content: center;
 	height: 100%;
-	border: 1px solid red;
 
 	.app-list {
 		display: flex;

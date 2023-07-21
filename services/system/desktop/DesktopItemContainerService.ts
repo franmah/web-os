@@ -1,6 +1,6 @@
 import { v4 } from 'uuid';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
-import { getFolderIcon } from '../../IconService';
+import { getFolderIcon, getIconByExtension } from '../../IconService';
 import { getCurrentItemNameInPath, getFileExtension } from '../../file-system/FilePathService';
 import { ExplorerItem } from '../../../types/system/file/ExplorerItem';
 import { CreateItemType } from '../../../constants/CreateItemType';
@@ -26,7 +26,7 @@ export const setCurrentItemsFromFileItems = (
 		if (matchingFileItem) {
 			const fileExtension = getFileExtension(matchingFileItem.name);
 			const iconPath = fileExtension
-				? ProcessDirectory[ProcessDirectoryByExtension[fileExtension]].iconPath
+				? getIconByExtension(fileExtension)
 				: getFolderIcon('');
 
 			const item = {
@@ -60,8 +60,9 @@ export const setCurrentItemsFromFileItems = (
 export const pathToDesktopItem = (path: string, isDirectory: boolean): DesktopItem => {
 	const iconPath = isDirectory
 		? getFolderIcon(path)
-		: ProcessDirectory[ProcessDirectoryByExtension[getFileExtension(getCurrentItemNameInPath(path))]].iconPath
+		: getIconByExtension(getFileExtension(getCurrentItemNameInPath(path)))
 		|| IconPaths.UNKOWN_EXTENSION;
+			console.log(iconPath);
 
 	return {
 		fsId: '',

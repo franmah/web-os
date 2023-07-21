@@ -5,7 +5,7 @@ import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, SHORTENED_NAME_LENGTH } from '../../../constants/Desktop';
 import { getCurrentItemNameInPath, getFileExtension } from '../../../services/file-system/FilePathService';
-import { getFolderIcon } from '../../../services/IconService';
+import { getFolderIcon, getIconByExtension } from '../../../services/IconService';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
 import { ProcessDirectory } from '../../../System/process/ProcessDirectory';
 import { ProcessDirectoryByExtension } from '../../../System/process/ProcessDirectoryByExtension';
@@ -160,10 +160,11 @@ const DesktopItemComponent: FC<{
 		}
 	};
 
+	// TODO: fix item.iconPath (doesn't update properly)
 	const getIconPath = () => {
 		return fs.isDirectory(item.path)
 			? getFolderIcon(item.path)
-			: ProcessDirectory[ProcessDirectoryByExtension[getFileExtension(getCurrentItemNameInPath(item.path))]].iconPath;
+			: getIconByExtension(getFileExtension(getCurrentItemNameInPath(item.path)));
 	};
 
 	const selectItemNameOnRenameFocus = (event: any) => {
