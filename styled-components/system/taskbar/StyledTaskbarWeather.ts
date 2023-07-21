@@ -26,16 +26,16 @@ export const StyledTaskbarWeather = styled.section`
 		justify-content: center;
 		align-items: center;
 
-		&.weatherIcon {
+		.weatherIcon {
 			display: flex;
 			justify-content: center;
 			align-items: center;
 		}
 		
-		&.weatherInfo {
+		.weatherInfo {
 			display: flex;
 			flex-direction: column;
-			margin-left: 8px;
+			padding-left: 8px;
 			font-size: small;
 
 			.forecast {

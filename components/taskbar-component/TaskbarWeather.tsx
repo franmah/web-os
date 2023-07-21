@@ -23,19 +23,18 @@ const TaskbarWeather: FC<{}> = () => {
 	return (
 		<StyledTaskbarWeather className={globalStyles.unselectableText}>
 			{weather ? (
-				<div className={'weather'}>
-					<Image className={'weatherIcon'} src={weather.icon} alt='weather' width={28} height={28} />
+				<div className='weather'>
+					<Image className='weatherIcon' src={weather.icon} alt='weather' width={28} height={28} />
 
-					<div className={'weatherInfo'}>
+					<div className='weatherInfo'>
 						<div>
-							{' '}
-							{weather.temperature}°{weather.temperatureUnit}{' '}
+							{weather.temperature}°{weather.temperatureUnit}
 						</div>
-						<div className={'forecast'}> {weather.forecast} </div>
+						<div className='forecast'> {weather.forecast} </div>
 					</div>
 				</div>
 			) : (
-				<BiFoodMenu size={26} className={'placeholderIcon'} />
+				<BiFoodMenu size={26} className='placeholderIcon' />
 			)}
 		</StyledTaskbarWeather>
 	);
