@@ -29,6 +29,9 @@ export const StyledTaskbarApp = styled.div<{ focused: boolean, multipleOpen: boo
   }
 
   .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-top: 2px;
   }
 
