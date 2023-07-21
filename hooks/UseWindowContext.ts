@@ -95,8 +95,9 @@ export const useWindowContext = () => {
    * End moving or resizing a window.
    */
 	const handleMouseUp = useCallback((windowId: string, event: MouseEvent) => {
+		// TODO: source of zIndex failure to update bug
 		setWindows(currentWindows => {
-			return windowManagerService.updateWindowsOnMouseUp(windowId, currentWindows, event);
+			return windowManagerService.stopMovingAndResizing(windowId, currentWindows, event);
 		});
 	}, []);
 

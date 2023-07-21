@@ -184,7 +184,7 @@ export const setWindowAsResizing = (
 	};
 };
 
-export const updateWindowsOnMouseUp = (
+export const stopMovingAndResizing = (
 	windowId: string,
 	windows: Windows,
 	event: MouseEvent

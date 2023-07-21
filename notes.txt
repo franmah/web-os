@@ -25,7 +25,7 @@ OK - remove owner variable from process
 OK - multiple window of the same app shouldn't minimize (bring to focus the first process of this type that you find)
 OK - bug: open two explorer windows. Focus the first one. The taskbar app shows as not focused.
 OK - bug: focus on window by clicking its taskbar app will trigger unminimize action even if not minimized
-- bug: switching between windows using the taskbar doesn't update their zindex correctly
+OK - bug: switching between windows using the taskbar doesn't update their zindex correctly
 - check that style match windows 11 
 
 current requiements:

@@ -15,7 +15,7 @@ export const WindowProcessesLoader: FC<{}> = () => {
 						state={state}
 						closeWindow={windowContext.closeWindow}
 						handleWindowMouseDown={windowContext.focusWindow}
-						hanldeMouseMove={windowContext.moveWindow}
+						handleMouseMove={windowContext.moveWindow}
 						handleStartMoving={windowContext.startMovingWindow}
 						handleStartResizing={windowContext.startResizingWindow}
 						handleMouseUp={windowContext.handleMouseUp}

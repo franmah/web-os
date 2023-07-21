@@ -69,6 +69,7 @@ const TaskbarApps: FC<{}> = () => {
 
 		if (app.open && app.multipleOpen) {
 			// open first available window for that app.
+			// TODO: replace by showing preview of open windows.
 			const window = Object.entries(windowContext.windows).find(([windowId, window]) => window.process.name === appName);
 			if (!window) {
 				return;

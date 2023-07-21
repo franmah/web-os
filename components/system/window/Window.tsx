@@ -19,7 +19,7 @@ const WindowComponent: FC<{
 	state: WindowState;
 	closeWindow: (windowId: string) => void;
 	handleWindowMouseDown: (windowId: string) => void;
-	hanldeMouseMove: (windowId: string, event: MouseEvent) => void;
+	handleMouseMove: (windowId: string, event: MouseEvent) => void;
 	handleStartMoving: (windowId: string, event: MouseEvent) => void;
 	handleStartResizing: (windowId: string, event: MouseEvent, direction: WindowResizeDirection) => void;
 	handleMouseUp: (windowId: string, event: MouseEvent) => void;
@@ -33,7 +33,7 @@ const WindowComponent: FC<{
 	state,
 	closeWindow,
 	handleWindowMouseDown,
-	hanldeMouseMove,
+	handleMouseMove,
 	handleStartMoving,
 	handleStartResizing,
 	handleMouseUp,
@@ -50,11 +50,15 @@ const WindowComponent: FC<{
 
 	useEffect(() => {
 		const onMouseMove = (event: MouseEvent) => {
-			hanldeMouseMove(windowParams.windowId, event);
+			if (state.moving) {
+				handleMouseMove(windowParams.windowId, event);
+			}
 		};
 
 		const onMouseUp = (event: MouseEvent) => {
-			handleMouseUp(windowParams.windowId, event);
+			if (state.moving || state.resizeDirection !== WindowResizeDirection.None) {
+				handleMouseUp(windowParams.windowId, event);
+			}
 		};
 
 		// Listener on document otherwise window stops updating if mouse moves out of it (if user moves mouse too fast)
@@ -65,7 +69,7 @@ const WindowComponent: FC<{
 			document.removeEventListener('mouseup', onMouseUp);
 			document.removeEventListener('mousemove', onMouseMove);
 		};
-	}, [handleMouseUp, hanldeMouseMove, windowParams.windowId]);
+	}, [windowParams.windowId, state.moving, state.resizeDirection]);
 
 	const handleMinimize = () => {
 		onMinimize(windowParams.windowId);
