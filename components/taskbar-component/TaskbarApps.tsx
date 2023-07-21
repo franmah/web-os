@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { TaskbarPinnedAppContext } from '../../contexts/TaskbarPinnedAppContext';
 import { ProcessContext } from '../../contexts/ProcessContext';
 import { mergeOpenProcessToApps, mergePinnedAppsToApps } from '../../services/system/taskbar/TaskbarAppService';
@@ -60,14 +60,21 @@ const TaskbarApps: FC<{}> = () => {
 		});
 	}, [windowContext.windows]);
 
-	const handleClick = (appName: string) => {
+	const handleAppClicked = (appName: string) => {
 		const app = apps.find(app => app.name === appName);
 		if (!app) {
 			console.error(`Error opening app from taskbar: can't find ${appName}.`);
 			return;
 		}
 
-		if (app.open) {
+		if (app.open && app.multipleOpen) {
+			// open first available window for that app.
+			const window = Object.entries(windowContext.windows).find(([windowId, window]) => window.process.name === appName);
+			if (!window) {
+				return;
+			}
+			windowContext.focusWindow(window[0]);
+		} else if (app.open) {
 			handleMinimizeWindow(appName);
 		} else {
 			processContext.openProcess(appName);
@@ -197,7 +204,7 @@ const TaskbarApps: FC<{}> = () => {
 										id={PRE_TASKBAR_APP_ID + app.name}
 										key={app.name}
 										app={app}
-										onOpenApp={handleClick}
+										onOpenApp={handleAppClicked}
 										onContextMenu={handleContextMenuClick}
 										index={index}
 									/>
