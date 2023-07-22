@@ -50,7 +50,7 @@ const WindowComponent: FC<{
 
 	useEffect(() => {
 		const onMouseMove = (event: MouseEvent) => {
-			if (state.moving) {
+			if (state.moving || state.resizeDirection !== WindowResizeDirection.None) {
 				handleMouseMove(windowParams.windowId, event);
 			}
 		};
