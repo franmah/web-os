@@ -13,6 +13,8 @@ const DosComponent: FC<{ params: any }> = ({ params }) => {
   const rootRef = useRef<HTMLDivElement>(null);
 
   const [dos, setDos] = useState<Instance | null>(null);
+  // const [instance, setInstance] = useState<any>(null);
+  const instanceRef = useRef<any>(null);
 
   useEffect(() => {
     if (rootRef === null || rootRef.current === null) {
@@ -28,13 +30,11 @@ const DosComponent: FC<{ params: any }> = ({ params }) => {
       const instance = Dos(root);
 
       setDos(instance);
-
+      instanceRef.current = instance;
     })
     .catch(error => console.error(error));
 
-    // return () => {
-    //     instance.stop();
-    // };
+    return (() => instanceRef?.current?.stop());
   }, [rootRef]);
 
   useEffect(() => {
