@@ -1,36 +1,4 @@
-OK - Create a design
-  - Especially to atch focused app (window)
-  => Use a context for the focused window/process.
-  
-OK - Create pinned app context.
-OK - create an owner variable in process directory:
-  OK - SYSTEM or USER
-  OK - replace getIconPathByExtension in IconService by adding an iconPath variable in process directory.
-OK - For testing: load apps at the start
-OK - Taskbar should receive pinned apps and running apps. (User apps not system)
-OK - create taskbar app components
-OK - style apps
-OK - open apps
-OK  - catch focused app
-OK - minimize show/hide app
-OK - context menu to pin/unpin apps
-OK - context menu close all windows
-OK - update styles to show multiple windows
-OK - top box has a right shadow box when there are multiple open same app
-OK - add animation for minimizing 
-OK - add animation unminimizing windows.
-OK - apps can be dragged
-OK - find explorer icon (and other icons if needed)
-OK - remove owner variable from process
-OK - multiple window of the same app shouldn't minimize (bring to focus the first process of this type that you find)
-OK - bug: open two explorer windows. Focus the first one. The taskbar app shows as not focused.
-OK - bug: focus on window by clicking its taskbar app will trigger unminimize action even if not minimized
-OK - bug: switching between windows using the taskbar doesn't update their zindex correctly
-OK - moving a desktop file to the taskbar should allow pinning it
-OK - add animation when clicking app
-- check that style match windows 11 
-- refactor (move styles out of components)
-
+- https://js-dos.com/v7/build/docs/react/
 current requiements:
 
 Apps in taskbar:
