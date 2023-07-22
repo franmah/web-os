@@ -1,4 +1,10 @@
 - https://js-dos.com/v7/build/docs/react/
+
+- windows are not resizing
+- Quitting doom doesn't stop app. (instance.stop() should be called in return of useEffect)
+
+
+
 current requiements:
 
 Apps in taskbar:

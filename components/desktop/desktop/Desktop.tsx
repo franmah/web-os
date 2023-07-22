@@ -54,7 +54,7 @@ const Desktop: FC = () => {
 		if (!processName) {
 			console.error('Tried to open an unkown extension. file: ' + item.path);
 		} else {
-			openProcess(processName);
+			openProcess(ProcessNameEnum.DOOM);
 		}
 	};
 

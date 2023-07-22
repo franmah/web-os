@@ -4,5 +4,6 @@ export enum ProcessNameEnum {
   EXPLORER = 'explorer',
   SUN_TEXT_EDITOR = 'sunTextEditor',
   TAKSBAR = 'taskbar',
-  YOUTUBE = 'youtube'
+  YOUTUBE = 'youtube',
+  DOOM = 'doom'
 }
