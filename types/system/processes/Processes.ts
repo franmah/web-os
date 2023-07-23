@@ -55,6 +55,7 @@ export type WindowedProcesses = {
 
 export type ProcessContextType = {
 	processes: Processes;
+	openFile: (path: string, params?: any, windowParams?: Partial<WindowParams>) => void;
 	openProcess: (processName: string, params?: any, windowParams?: Partial<WindowParams>) => void;
 	closeProcess: (processId: string) => void;
 	closeProcessesByName: (processName: string) => void;

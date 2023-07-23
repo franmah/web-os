@@ -17,11 +17,11 @@ export const ProcessDirectory: ProcessDirectoryType = {
 		isUnique: true,
 		name: ProcessNameEnum.DESKTOP
 	},
-	[ProcessNameEnum.DOOM]: {
+	[ProcessNameEnum.DOS]: {
 		Component: dynamic<{ params: any }>(() => import('../../components/dos/DosComponent')),
 		hasWindow: true,
 		isUnique: true,
-		name: ProcessNameEnum.DOOM
+		name: ProcessNameEnum.DOS
 	},
 	[ProcessNameEnum.EXPLORER]: {
 		Component: dynamic<{ params: { startPath: string } }>(() => import('../../components/explorer/ExplorerContainer')),

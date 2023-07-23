@@ -1,4 +1,8 @@
+import { ProcessNameEnum } from '../System/process/ProcessNameEnum';
+import { DosAppFilesDirectory } from '../constants/DosAppFileLinks';
 import { IconPaths } from '../constants/IconPaths';
+import { AppContent } from '../types/apps/AppContent';
+import { DosAppContentPayload } from '../types/apps/DosAppContentPayload';
 import { ExplorerItem } from '../types/system/file/ExplorerItem';
 
 export const getRootAtSystemStart = (): ExplorerItem => {
@@ -57,6 +61,18 @@ export const getRootAtSystemStart = (): ExplorerItem => {
 };
 
 const getExampleDesktopChildren = (desktop: ExplorerItem): ExplorerItem[] => [
+	{
+		children: [],
+		content: JSON.stringify({
+			appName: ProcessNameEnum.DOS,
+			payload: {
+				dosFilePath: DosAppFilesDirectory.DOOM
+			} as DosAppContentPayload
+		} as AppContent),
+		id: 'doom.app',
+		name: 'DOOM.app',
+		parent: desktop
+	},
 	{
 		children: [],
 		name: 'New folder (1)',

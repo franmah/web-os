@@ -1,4 +1,5 @@
 export enum SupportedFileExtension {
 	TXT = 'txt',
-	YOUTUBE = 'youtube'
+	YOUTUBE = 'youtube',
+	APP = 'app'
 }

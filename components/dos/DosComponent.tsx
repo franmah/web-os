@@ -5,11 +5,10 @@ import { DosPlayer as Instance, DosPlayerFactoryType } from 'js-dos';
 
 declare const Dos: DosPlayerFactoryType;
 
-interface PlayerProps {
-  bundleUrl: string;
-}
-
 const DosComponent: FC<{ params: any }> = ({ params }) => {
+
+  const dosFilePath = params.dosFilePath;
+
   const rootRef = useRef<HTMLDivElement>(null);
 
   const [dos, setDos] = useState<Instance | null>(null);

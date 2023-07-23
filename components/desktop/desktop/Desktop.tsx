@@ -10,8 +10,7 @@ import { ProcessContext } from '../../../contexts/ProcessContext';
 import { ContextMenuCommandList } from '../../../types/system/context-menu/ContextMenu';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { CommonFolderPaths } from '../../../constants/system/file-system/CommonFilePaths';
-import { getCurrentItemNameInPath, getFileExtension } from '../../../services/file-system/FilePathService';
-import { ProcessDirectoryByExtension } from '../../../System/process/ProcessDirectoryByExtension';
+import { getCurrentItemNameInPath } from '../../../services/file-system/FilePathService';
 import { ExplorerItem } from '../../../types/system/file/ExplorerItem';
 import { saveAnalyticsEvent } from '../../../services/AnalyticsService';
 import { AnalyticEvents } from '../../../constants/AnalyticEvents';
@@ -19,7 +18,7 @@ import { ProcessNameEnum } from '../../../System/process/ProcessNameEnum';
 
 const Desktop: FC = () => {
 	const fs = useContext(FileSystemContext);
-	const { openProcess } = useContext(ProcessContext);
+	const processContext = useContext(ProcessContext);
 
 	const [fileItems, setFileItems] = useState<ExplorerItem[]>([]);
 
@@ -36,7 +35,7 @@ const Desktop: FC = () => {
 		event.preventDefault();
 		event.stopPropagation();
 
-		openProcess(ProcessNameEnum.CONTEXT_MENU, {
+		processContext.openProcess(ProcessNameEnum.CONTEXT_MENU, {
 			commands,
 			left: event.clientX,
 			top: event.clientY
@@ -45,17 +44,10 @@ const Desktop: FC = () => {
 
 	const openItemProcess = (item: DesktopItem) => {
 		if (fs.isDirectory(item.path)) {
-			return openProcess(ProcessNameEnum.EXPLORER, { startPath: item.path });
+			return processContext.openProcess(ProcessNameEnum.EXPLORER, { startPath: item.path });
 		}
 
-		const fileName = getCurrentItemNameInPath(item.path);
-		const extension = getFileExtension(fileName);
-		const processName = ProcessDirectoryByExtension[extension];
-		if (!processName) {
-			console.error('Tried to open an unkown extension. file: ' + item.path);
-		} else {
-			openProcess(ProcessNameEnum.DOOM);
-		}
+		processContext.openFile(item.path);
 	};
 
 	const handleNewItemCreated = (path: string) => {
