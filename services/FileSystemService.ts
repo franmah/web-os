@@ -69,6 +69,7 @@ const getExampleDesktopChildren = (desktop: ExplorerItem): ExplorerItem[] => [
 				dosFilePath: DosAppFilesDirectory.DOOM
 			} as DosAppContentPayload
 		} as AppContent),
+		iconPath: '/icons/doom_new.png',
 		id: 'doom.app',
 		name: 'DOOM.app',
 		parent: desktop

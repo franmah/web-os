@@ -5,10 +5,11 @@ import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, SHORTENED_NAME_LENGTH } from '../../../constants/Desktop';
 import { getCurrentItemNameInPath, getFileExtension } from '../../../services/file-system/FilePathService';
-import { getFolderIcon, getIconByExtension } from '../../../services/IconService';
+import { getFileIconPath, getFolderIcon, getIconByExtension } from '../../../services/IconService';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
 import { IconPaths } from '../../../constants/IconPaths';
 import { DRAG_DROP_DATA_TRANSFER_FIELDS, DRAG_DROP_SOURCE } from '../../../constants/DragDrop';
+import { SupportedFileExtension } from '../../../constants/SupportedFileExtension';
 
 const DesktopItemComponent: FC<{
 	item: DesktopItem;
@@ -126,7 +127,11 @@ const DesktopItemComponent: FC<{
 	};
 
 	const formatItemName = (): string => {
-		const name = getCurrentItemNameInPath(item.path);
+		let name = getCurrentItemNameInPath(item.path);
+		const extension = getFileExtension(item.path);
+		if (extension === SupportedFileExtension.APP) {
+			name = name.substring(0, extension.length + 1);
+		}
 		if (item.selected || name.length <= SHORTENED_NAME_LENGTH) {
 			return name;
 		}
@@ -169,10 +174,8 @@ const DesktopItemComponent: FC<{
 	};
 
 	// TODO: fix item.iconPath (doesn't update properly)
-	const getIconPath = () => {
-		return fs.isDirectory(item.path)
-			? getFolderIcon(item.path)
-			: getIconByExtension(getFileExtension(getCurrentItemNameInPath(item.path)));
+	const getIconPath = (): string => {
+		return getFileIconPath(item.path, fs);
 	};
 
 	const selectItemNameOnRenameFocus = (event: any) => {
@@ -196,7 +199,7 @@ const DesktopItemComponent: FC<{
 				width: ITEM_WIDTH
 			}}
 		>
-			<Image src={getIconPath() || IconPaths.UNKOWN_EXTENSION} alt={'icon'} width={48} height={40} />
+			<Image src={getIconPath() || IconPaths.UNKOWN_EXTENSION} alt={'icon'} width={42} height={42} />
 
 			{renaming ? (
 				<textarea
