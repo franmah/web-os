@@ -1,12 +1,11 @@
 import Image from 'next/image';
-import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import styles from './desktop-item.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
 import { DesktopItem } from '../../../types/desktop/DesktopItem';
 import { ITEM_HEIGHT, ITEM_WIDTH, SHORTENED_NAME_LENGTH } from '../../../constants/Desktop';
 import { getCurrentItemNameInPath, getFileExtension } from '../../../services/file-system/FilePathService';
-import { getFileIconPath, getFolderIcon, getIconByExtension } from '../../../services/IconService';
-import { FileSystemContext } from '../../../contexts/FileSystemContext';
+import { getFileIconPath } from '../../../services/IconService';
 import { IconPaths } from '../../../constants/IconPaths';
 import { DRAG_DROP_DATA_TRANSFER_FIELDS, DRAG_DROP_SOURCE } from '../../../constants/DragDrop';
 import { SupportedFileExtension } from '../../../constants/SupportedFileExtension';
@@ -36,8 +35,6 @@ const DesktopItemComponent: FC<{
 	handleContextMenuClick,
 	onItemRename
 }) => {
-	const fs = useContext(FileSystemContext);
-
 	const [inputNameValue, setInputNameValue] = useState<string>(getCurrentItemNameInPath(item.path));
 	const [renaming, setRenaming] = useState<boolean>(false);
 
@@ -175,7 +172,7 @@ const DesktopItemComponent: FC<{
 
 	// TODO: fix item.iconPath (doesn't update properly)
 	const getIconPath = (): string => {
-		return getFileIconPath(item.path, fs);
+		return getFileIconPath(item.path);
 	};
 
 	const selectItemNameOnRenameFocus = (event: any) => {

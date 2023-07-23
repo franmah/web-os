@@ -64,14 +64,13 @@ const getExampleDesktopChildren = (desktop: ExplorerItem): ExplorerItem[] => [
 	{
 		children: [],
 		content: JSON.stringify({
-			appName: ProcessNameEnum.DOS,
+			appName: ProcessNameEnum.DOOM,
 			payload: {
 				dosFilePath: DosAppFilesDirectory.DOOM
 			} as DosAppContentPayload
 		} as AppContent),
-		iconPath: '/icons/doom_new.png',
-		id: 'doom.app',
-		name: 'DOOM.app',
+		id: 'doom.doom',
+		name: 'DOOM.doom',
 		parent: desktop
 	},
 	{

@@ -46,23 +46,17 @@ const useProcessContextState = (): ProcessContextType => {
 			case '': return openProcess(ProcessNameEnum.EXPLORER, params, windowParams);
 			case SupportedFileExtension.TXT: return openProcess(ProcessNameEnum.SUN_TEXT_EDITOR, params, windowParams);
 			case SupportedFileExtension.YOUTUBE: return openProcess(ProcessNameEnum.YOUTUBE, params, windowParams);
-			case SupportedFileExtension.APP: return openApp(path, params, windowParams);
+			case SupportedFileExtension.DOOM: return openDosApp(path, params, windowParams);
 			default: console.error(`Error opening process from file: unknown extension (${extension}) for path ${path}`);
 		}
 	};
 
-	const openApp = (path: string, params?: any, windowParams?: Partial<WindowParams>) => {
+	const openDosApp = (path: string, params?: any, windowParams?: Partial<WindowParams>) => {
 		const file = fs.readFile(path);
 		const fileContent = JSON.parse(file.content) as AppContent;
-		const appName = fileContent.appName;
 		const payload = fileContent.payload as DosAppContentPayload;
-
-		if (appName === ProcessNameEnum.DOS) {
-			const dosFilePath = payload.dosFilePath;
-			openProcess(ProcessNameEnum.DOS, { ...params, dosFilePath }, windowParams);
-		} else {
-			console.error(`Error opening app, ${appName} is not a known app.`);
-		}
+		const dosFilePath = payload.dosFilePath;
+		openProcess(ProcessNameEnum.DOOM, { ...params, dosFilePath }, windowParams);
 	};
 
 	const openProcess = (processName: string, params: any = null, windowParams: any = null) => {

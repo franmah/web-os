@@ -4,5 +4,4 @@ export type ExplorerItem = {
 	name: string;
 	parent: ExplorerItem | null;
 	id: string;
-	iconPath?: string;
 };
