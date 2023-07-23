@@ -173,6 +173,15 @@ export const useFileSystemContextState = () => {
 		setRoot(() => () => getRoot()); // Triggers render
 	};
 
+	const readFile = (path: string): ExplorerItem => {
+			const node = getNodeFromPath(path);
+			if (!node) {
+				throw Error(`File not found for path: ${path}`);
+			}
+
+			return node;
+	};
+
 	const exists = (path: string): Promise<boolean> => {
 		if (path.at(-1) === '/') path = path.substring(0, path.length - 1);
 
@@ -211,6 +220,7 @@ export const useFileSystemContextState = () => {
 		isDirectory,
 		mkdir,
 		opendir,
+		readFile,
 		readdirV2,
 		renameFolderV2,
 		searchFolderV2,

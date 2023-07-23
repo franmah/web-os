@@ -81,7 +81,7 @@ export const explorerItemToDesktopItem = (
 ): DesktopItem => {
 	const iconPath = isDirectory
 		? getFolderIcon(path)
-		: ProcessDirectory[ProcessDirectoryByExtension[getFileExtension(getCurrentItemNameInPath(path))]].iconPath
+		: ProcessDirectory[ProcessDirectoryByExtension[getFileExtension(getCurrentItemNameInPath(path))]]?.iconPath
 		|| IconPaths.UNKOWN_EXTENSION;
 
 	return {

@@ -5,7 +5,6 @@ import { Processes, WindowedProcess, WindowedProcesses } from '../../types/syste
 import { CONTEXT_MENU_ROOT_ID } from './context-menu/ContextMenuRoot';
 import { WindowProcessesLoader } from './WindowProcessesLoader';
 import { startingProccesses } from '../../System/process/StartingProccesses';
-import { ProcessNameEnum } from '../../System/process/ProcessNameEnum';
 
 export const ProcessLoader: FC<{}> = () => {
 	const processContext = useContext(ProcessContext);

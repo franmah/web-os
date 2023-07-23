@@ -24,8 +24,8 @@ saveConnection();
 
 const Home: NextPage = () => (
 	<div>
-		<ProcessContextProvider>
-			<FileSystemContextProvider>
+		<FileSystemContextProvider>
+			<ProcessContextProvider>
 				<ExplorerQuickAccessProvider>
 					<TaskbarPinnedAppProvider>
 						<WindowContextProvider>
@@ -33,8 +33,8 @@ const Home: NextPage = () => (
 						</WindowContextProvider>
 					</TaskbarPinnedAppProvider>
 				</ExplorerQuickAccessProvider>
-			</FileSystemContextProvider>
-		</ProcessContextProvider>
+			</ProcessContextProvider>
+		</FileSystemContextProvider>
 	</div>
 );
 

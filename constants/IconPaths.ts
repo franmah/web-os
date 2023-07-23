@@ -13,5 +13,7 @@ export enum IconPaths {
 	SHORTCUT_DELETE = '/icons/win11_shortcut_bin.png',
 	SHORTCUT_RENAME = '/icons/win11_shortcut_rename.png',
 	EXPLROER = '/icons/win11_explorer.png',
-	NOTEPAD = '/icons/win11_notepad.png'
+	NOTEPAD = '/icons/win11_notepad.png',
+	DOOM = '/icons/doom_new.png',
+	SIM_CITY_2000 = '/icons/sim_city_2000.png'
 }

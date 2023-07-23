@@ -1,4 +1,8 @@
+import { ProcessNameEnum } from '../System/process/ProcessNameEnum';
+import { DosAppFilesDirectory } from '../constants/DosAppFileLinks';
 import { IconPaths } from '../constants/IconPaths';
+import { AppContent } from '../types/apps/AppContent';
+import { DosAppContentPayload } from '../types/apps/DosAppContentPayload';
 import { ExplorerItem } from '../types/system/file/ExplorerItem';
 
 export const getRootAtSystemStart = (): ExplorerItem => {
@@ -57,6 +61,30 @@ export const getRootAtSystemStart = (): ExplorerItem => {
 };
 
 const getExampleDesktopChildren = (desktop: ExplorerItem): ExplorerItem[] => [
+	{
+		children: [],
+		content: JSON.stringify({
+			appName: ProcessNameEnum.DOOM,
+			payload: {
+				dosFilePath: DosAppFilesDirectory.DOOM
+			} as DosAppContentPayload
+		} as AppContent),
+		id: 'doom.doom',
+		name: 'DOOM.doom',
+		parent: desktop
+	},
+	{
+		children: [],
+		content: JSON.stringify({
+			appName: ProcessNameEnum.SIM_CITY_2000,
+			payload: {
+				dosFilePath: DosAppFilesDirectory.SIM_CITY_2000
+			} as DosAppContentPayload
+		} as AppContent),
+		id: 'doom.doom',
+		name: 'Sim City 2000.' + ProcessNameEnum.SIM_CITY_2000,
+		parent: desktop
+	},
 	{
 		children: [],
 		name: 'New folder (1)',

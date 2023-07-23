@@ -1,6 +1,17 @@
 import { IconPaths } from '../constants/IconPaths';
 import { SupportedFileExtension } from '../constants/SupportedFileExtension';
 import { CommonFolderPaths } from '../constants/system/file-system/CommonFilePaths';
+import { getCurrentItemNameInPath, getFileExtension } from './file-system/FilePathService';
+
+export const getFileIconPath = (path: string): string => {
+	const fileName = getCurrentItemNameInPath(path);
+	const extension = getFileExtension(fileName);
+
+	switch (extension) {
+		case '': return getFolderIcon(path);
+		default: return getIconByExtension(extension);
+	}
+};
 
 export const getFolderIcon = (path: string) => {
 	switch (path) {
@@ -27,6 +38,8 @@ export const getIconByExtension = (extension: string) => {
 	switch (extension) {
 		case SupportedFileExtension.TXT: return IconPaths.TEXT;
 		case SupportedFileExtension.YOUTUBE: return IconPaths.YOUTUBE;
+		case SupportedFileExtension.DOOM: return IconPaths.DOOM;
+		case SupportedFileExtension.SIM_CITY_2000: return IconPaths.SIM_CITY_2000;
 		default: return IconPaths.UNKOWN_EXTENSION;
 	}
 };
