@@ -1,4 +1,3 @@
-
 import React, { FC, useEffect, useRef, useState } from 'react';
 
 import { DosPlayer as Instance, DosPlayerFactoryType } from 'js-dos';
@@ -7,17 +6,14 @@ declare const Dos: DosPlayerFactoryType;
 
 const DosComponent: FC<{ params: any }> = ({ params }) => {
 
-  const dosFilePath = params.dosFilePath;
-
   const rootRef = useRef<HTMLDivElement>(null);
 
   const [dos, setDos] = useState<Instance | null>(null);
-  // const [instance, setInstance] = useState<any>(null);
   const instanceRef = useRef<any>(null);
 
   useEffect(() => {
     if (rootRef === null || rootRef.current === null) {
-        return;
+      return;
     }
 
     loadScript()
@@ -37,9 +33,9 @@ const DosComponent: FC<{ params: any }> = ({ params }) => {
   }, [rootRef]);
 
   useEffect(() => {
-      if (dos !== null) {
-          dos.run('/jsdos-apps/doom.jsdos'); // ci is returned
-      }
+    if (dos !== null) {
+      dos.run(params.dosFilePath);
+    }
   }, [dos]);
 
   return (
