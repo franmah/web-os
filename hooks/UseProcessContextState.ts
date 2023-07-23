@@ -47,6 +47,7 @@ const useProcessContextState = (): ProcessContextType => {
 			case SupportedFileExtension.TXT: return openProcess(ProcessNameEnum.SUN_TEXT_EDITOR, params, windowParams);
 			case SupportedFileExtension.YOUTUBE: return openProcess(ProcessNameEnum.YOUTUBE, params, windowParams);
 			case SupportedFileExtension.DOOM: return openDosApp(path, params, windowParams);
+			case SupportedFileExtension.SIM_CITY_2000: return openDosApp(path, params, windowParams);
 			default: console.error(`Error opening process from file: unknown extension (${extension}) for path ${path}`);
 		}
 	};

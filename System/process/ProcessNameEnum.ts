@@ -5,5 +5,6 @@ export enum ProcessNameEnum {
   SUN_TEXT_EDITOR = 'sunTextEditor',
   TAKSBAR = 'taskbar',
   YOUTUBE = 'youtube',
-  DOOM = 'doom'
+  DOOM = 'doom',
+  SIM_CITY_2000 = 'sim_city_2000'
 }

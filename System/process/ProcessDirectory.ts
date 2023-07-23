@@ -29,6 +29,18 @@ export const ProcessDirectory: ProcessDirectoryType = {
 			}
 		}
 	},
+	[ProcessNameEnum.SIM_CITY_2000]: {
+		Component: dynamic<{ params: any }>(() => import('../../components/dos/DosComponent')),
+		hasWindow: true,
+		isUnique: true,
+		name: ProcessNameEnum.SIM_CITY_2000,
+		windowParams: {
+			headerOptions: {
+				icon: IconPaths.DOOM,
+				text: 'DOS - SIM CITY 2000'
+			}
+		}
+	},
 	[ProcessNameEnum.EXPLORER]: {
 		Component: dynamic<{ params: { startPath: string } }>(() => import('../../components/explorer/ExplorerContainer')),
 		hasWindow: true,

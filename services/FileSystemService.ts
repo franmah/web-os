@@ -75,6 +75,18 @@ const getExampleDesktopChildren = (desktop: ExplorerItem): ExplorerItem[] => [
 	},
 	{
 		children: [],
+		content: JSON.stringify({
+			appName: ProcessNameEnum.SIM_CITY_2000,
+			payload: {
+				dosFilePath: DosAppFilesDirectory.SIM_CITY_2000
+			} as DosAppContentPayload
+		} as AppContent),
+		id: 'doom.doom',
+		name: 'Sim City 2000.' + ProcessNameEnum.SIM_CITY_2000,
+		parent: desktop
+	},
+	{
+		children: [],
 		name: 'New folder (1)',
 		id: 'num #2',
 		parent: desktop

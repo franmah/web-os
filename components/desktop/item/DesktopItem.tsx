@@ -126,7 +126,7 @@ const DesktopItemComponent: FC<{
 	const formatItemName = (): string => {
 		let name = getCurrentItemNameInPath(item.path);
 		const extension = getFileExtension(item.path);
-		if (extension === SupportedFileExtension.DOOM) {
+		if (extension === SupportedFileExtension.DOOM || extension === SupportedFileExtension.SIM_CITY_2000) {
 			name = name.substring(0, extension.length);
 		}
 		if (item.selected || name.length <= SHORTENED_NAME_LENGTH) {

@@ -46,6 +46,9 @@ const DosComponent: FC<{ params: any }> = ({ params }) => {
 
 export default DosComponent;
 
+/**
+ * From https://www.youtube.com/@DustinBrett
+ */
 export const loadScript = (): Promise<Event> =>
   new Promise((resolve, reject) => {
     const src = '/js-dos/js-dos.js';
@@ -66,6 +69,9 @@ export const loadScript = (): Promise<Event> =>
  }
 );
 
+/**
+ * From https://www.youtube.com/@DustinBrett
+ */
 export const loadStyle = (): Promise<Event> =>
   new Promise((resolve, reject) => {
     const href = '/js-dos/js-dos.css';

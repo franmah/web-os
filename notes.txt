@@ -1,8 +1,10 @@
 - https://js-dos.com/v7/build/docs/react/
 - games: https://www.dosgamesarchive.com/
+https://dos.zone/
 
-
-
+look online on how to create jsdos files
+https://www.youtube.com/watch?v=hULc-RsZXow
+https://www.youtube.com/watch?v=8RRd5r9D99g
 current requiements:
 
 Apps in taskbar:
