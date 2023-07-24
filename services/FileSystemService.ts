@@ -1,9 +1,11 @@
+import { v4 } from 'uuid';
 import { ProcessNameEnum } from '../System/process/ProcessNameEnum';
 import { DosAppFilesDirectory } from '../constants/DosAppFileLinks';
 import { IconPaths } from '../constants/IconPaths';
 import { AppContent } from '../types/apps/AppContent';
 import { DosAppContentPayload } from '../types/apps/DosAppContentPayload';
 import { ExplorerItem } from '../types/system/file/ExplorerItem';
+import { RESUME } from '../constants/ResumeBase64';
 
 export const getRootAtSystemStart = (): ExplorerItem => {
 	const root: ExplorerItem = {
@@ -87,8 +89,9 @@ const getExampleDesktopChildren = (desktop: ExplorerItem): ExplorerItem[] => [
 	},
 	{
 		children: [],
-		name: 'New folder (1)',
-		id: 'num #2',
+		content: RESUME,
+		id: v4(),
+		name: 'resume.pdf',
 		parent: desktop
 	},
 	{

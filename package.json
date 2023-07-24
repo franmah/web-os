@@ -20,6 +20,7 @@
 		"react-beautiful-dnd": "^13.1.0",
 		"react-dom": "^18.2.0",
 		"react-icons": "^4.3.1",
+		"react-pdf": "^7.2.0",
 		"styled-components": "^5.3.9",
 		"suneditor": "^2.44.8",
 		"suneditor-react": "^3.4.1",
@@ -35,6 +36,7 @@
 		"eslint-config-next": "^13.2.1",
 		"eslint-config-prettier": "^8.8.0",
 		"prettier": "^3.0.0",
+		"raw-loader": "^4.0.2",
 		"sass": "^1.49.9",
 		"typescript": "^5.0.0"
 	}

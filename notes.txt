@@ -1,33 +1,9 @@
-- https://js-dos.com/v7/build/docs/react/
-- games: https://www.dosgamesarchive.com/
-https://dos.zone/
-
-look online on how to create jsdos files
-https://www.youtube.com/watch?v=hULc-RsZXow
-https://www.youtube.com/watch?v=8RRd5r9D99g
-current requiements:
-
-Apps in taskbar:
-- open app but window not focused.
-  - should only show a grey small bar uder the app icon.
-  - don't show have a special background.
-- hovering app 
-  - change background color.
-  - no background change if app window is focused.
-  - !! if multiple windows for the same app are open then show double background style.
-  - Optional: If app is open it should show a miniature of every windows.
-  - Optional: if app is not open then show app name in a modal above icon.
-
-- focused app:
-  - show blue bigger bar under it.
-  - show 'hovered' background all the time.
-  - !! if multiple windows for the same app are open then show double background style.
-
-- Windows icon hovers like any other icons
-
-- process icons on the right: don't implement for now.
-
-- search bar: don't implement for now.
+- create new email for recruitement (with redirection)
+- udpate and download resume as a pdf.
+- convert pdf to base64 using: https://base64.guru/converter/encode/pdf
+- create a new ExplorerItem with base64 content
+- run react-pdf. https://www.npmjs.com/package/react-pdf
+If need help: https://stackoverflow.com/questions/66373180/display-a-pdf-in-the-browser-in-a-modal-from-blob-data-using-react-pdf-react-p
 
 /////////////////// MVP ///////////////
 1. Explorer app
@@ -60,6 +36,14 @@ and change file system to use actual FS style (use string path instead of Explor
 - show apps 
 
 /////// TODO: in other
+
+- https://js-dos.com/v7/build/docs/react/
+- games: https://www.dosgamesarchive.com/
+https://dos.zone/
+
+
+- DOOM and SIM CITY have a special case for opening their process. Change it so that they use ProcessDirectoryByExtension/
+  - they should use a .exe extension
 
 FileSystem
   - update functions to match node.js file system.

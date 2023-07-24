@@ -1,6 +1,7 @@
 export enum SupportedFileExtension {
-	TXT = 'txt',
-	YOUTUBE = 'youtube',
 	DOOM = 'doom',
-	SIM_CITY_2000 = 'sim_city_2000'
+	PDF = 'pdf',
+	SIM_CITY_2000 = 'sim_city_2000',
+	TXT = 'txt',
+	YOUTUBE = 'youtube'
 }

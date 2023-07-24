@@ -29,20 +29,21 @@ export const ProcessDirectory: ProcessDirectoryType = {
 			}
 		}
 	},
-	[ProcessNameEnum.SIM_CITY_2000]: {
-		Component: dynamic<{ params: any }>(() => import('../../components/dos/DosComponent')),
+	[ProcessNameEnum.EXPLORER]: {
+		Component: dynamic<{ params: { startPath: string } }>(() => import('../../components/explorer/ExplorerContainer')),
 		hasWindow: true,
-		isUnique: true,
-		name: ProcessNameEnum.SIM_CITY_2000,
+		iconPath: IconPaths.EXPLROER,
+		isUnique: false,
+		name: ProcessNameEnum.EXPLORER,
 		windowParams: {
 			headerOptions: {
-				icon: IconPaths.DOOM,
-				text: 'DOS - SIM CITY 2000'
+				icon: IconPaths.FOLDER,
+				text: 'Explorer'
 			}
 		}
 	},
-	[ProcessNameEnum.EXPLORER]: {
-		Component: dynamic<{ params: { startPath: string } }>(() => import('../../components/explorer/ExplorerContainer')),
+	[ProcessNameEnum.PDF]: {
+		Component: dynamic<{ params: { startPath: string } }>(() => import('../../components/pdf-reader/PdfReader')),
 		hasWindow: true,
 		iconPath: IconPaths.EXPLROER,
 		isUnique: false,
@@ -66,6 +67,18 @@ export const ProcessDirectory: ProcessDirectoryType = {
 			headerOptions: {
 				icon: IconPaths.TEXT,
 				text: 'Text Editor'
+			}
+		}
+	},
+	[ProcessNameEnum.SIM_CITY_2000]: {
+		Component: dynamic<{ params: any }>(() => import('../../components/dos/DosComponent')),
+		hasWindow: true,
+		isUnique: true,
+		name: ProcessNameEnum.SIM_CITY_2000,
+		windowParams: {
+			headerOptions: {
+				icon: IconPaths.DOOM,
+				text: 'DOS - SIM CITY 2000'
 			}
 		}
 	},
