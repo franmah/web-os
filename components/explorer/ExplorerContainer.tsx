@@ -6,22 +6,19 @@ import { FileSystemContext } from '../../contexts/FileSystemContext';
 import { StyledExplorerContainer } from '../../styled-components/system/explorer/StyldExplorerContainer';
 import {
 	convertPathToFragments,
-	getCurrentItemNameInPath,
-	getFileExtension,
 	getParentPath,
 	isNewItemNameValid
 } from '../../services/file-system/FilePathService';
 import { ExplorerQuickAccessContext } from '../../contexts/ExplorerQuickAccessContext';
 import { CommonFolderPaths } from '../../constants/system/file-system/CommonFilePaths';
 import { ProcessContext } from '../../contexts/ProcessContext';
-import { ProcessDirectoryByExtension } from '../../System/process/ProcessDirectoryByExtension';
 import { AnalyticEvents } from '../../constants/AnalyticEvents';
 import { saveAnalyticsEvent } from '../../services/AnalyticsService';
 
 const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { startPath } }) => {
 	const fs = useContext(FileSystemContext);
 	const quickAccessContext = useContext(ExplorerQuickAccessContext);
-	const { openProcess } = useContext(ProcessContext);
+	const processContext = useContext(ProcessContext);
 
 	const [pathsFlow, setPathsFlow] = useState<string[]>([startPath]);
 	const [path, setPath] = useState<string>(startPath || '');
@@ -46,21 +43,20 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 			});
 	};
 
-	const openFile = (newPath: string) => {
+	const openFile = (filePath: string) => {
 		// TODO: fix newPath starting with // sometimes (following code removes the extra /)
-		if (newPath[1] === '/') newPath = '/' + newPath.substring(2, newPath.length);
+		if (filePath[1] === '/') filePath = '/' + filePath.substring(2, filePath.length);
 
-		if (!fs.isDirectory(newPath)) {
-			const extension = getFileExtension(getCurrentItemNameInPath(newPath));
-			return openProcess(ProcessDirectoryByExtension[extension]);
+		if (!fs.isDirectory(filePath)) {
+			return processContext.openFile(filePath);
 		}
 
 		setUseSearchView(false);
 		resetFileViewPathsToCurrentPath();
 
-		const currentPathIndexInFlow = pathsFlow.findIndex(p => p === path);
-		setPathsFlow(flow => [...flow.slice(0, currentPathIndexInFlow + 1), newPath]);
-		setPath(newPath);
+		const currentPathIndexInFlow = pathsFlow.findIndex(p => p === filePath);
+		setPathsFlow(flow => [...flow.slice(0, currentPathIndexInFlow + 1), filePath]);
+		setPath(filePath);
 	};
 
 	const previousFolder = () => {
