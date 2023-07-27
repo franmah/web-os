@@ -7,7 +7,7 @@ import { ProcessContext } from '../../../contexts/ProcessContext';
 import { PinToQuickAccessCommand } from '../../../System/context-menu-commands/commands/PinToQuickAccessCommand';
 import { ExplorerQuickAccessContext } from '../../../contexts/ExplorerQuickAccessContext';
 import { UnpinFromQuickAccessCommand } from '../../../System/context-menu-commands/commands/UnpinFromQuickAccessCommand';
-import { getFolderIcon } from '../../../services/IconService';
+import { getFileIconPath, getFolderIcon } from '../../../services/IconService';
 import CustomCheckbox from '../../system/CustomCheckbox';
 import { ShortcutCommandNames, getShorcutCommand } from '../../../System/context-menu-commands/ShortcutCommandFactory';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
@@ -35,10 +35,7 @@ export const ExplorerFileViewRow: FC<{
 
 	const inputRef = useRef<any>(null);
 
-	const iconPath: string = isDirectory(path)
-		? getFolderIcon(path)
-		: ProcessDirectory[ProcessDirectoryByExtension[getFileExtension(getCurrentItemNameInPath(path))]].iconPath
-		|| IconPaths.UNKOWN_EXTENSION;
+	const iconPath: string = getFileIconPath(path);
 
 	// Select whole name when editing item name
 	useEffect(() => {
