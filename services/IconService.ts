@@ -40,7 +40,6 @@ export const getIconByExtension = (extension: string) => {
 		case SupportedFileExtension.YOUTUBE: return IconPaths.YOUTUBE;
 		case SupportedFileExtension.DOOM: return IconPaths.DOOM;
 		case SupportedFileExtension.SIM_CITY_2000: return IconPaths.SIM_CITY_2000;
-		case SupportedFileExtension.PDF: return IconPaths.PDF;
 		default: return IconPaths.UNKOWN_EXTENSION;
 	}
 };
