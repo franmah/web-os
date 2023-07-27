@@ -4,6 +4,7 @@ import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import SunEditorCore from 'suneditor/src/lib/core';
 import { FileSystemContext } from '../../contexts/FileSystemContext';
 import { StyledSunEditorContainer } from '../../styled-components/StyledSuneditorContainer';
+import { APP_PATHS_MANIFEST } from 'next/dist/shared/lib/constants';
 
 const SunEditor = dynamic(() => import('suneditor-react'), {
 	ssr: false
@@ -25,40 +26,56 @@ const SunTextEditor: FC<{
 	const editor = useRef<SunEditorCore>();
 	const { readFile, appendFile } = useContext(FileSystemContext);
 
-	const [startOptions, setStartOptions] = useState<{ content: string, loaded: boolean }>({ content: '', loaded: false });
+	const [fileLoaded, setFileLoaded] = useState<boolean>(false);
+
+	const content = useRef<string>('');
 
 	useEffect(() => {
 		const file = readFile(path);
-
 		if (!file) {
 			console.error('Error getting file: no file found for path: ' + path);
 		}
 
-		setStartOptions({ content: file?.content || '', loaded: true });
-
+		content.current = file?.content || '';
+		setFileLoaded(true);
 	}, [path]);
+
+	useEffect(() => {
+		const handleCtrlSave = (event: KeyboardEvent) => {
+			if (event.ctrlKey && event.key === 's') {
+				event.preventDefault();
+				event.stopPropagation();
+				handleSave();
+			}
+		};
+
+		document.addEventListener('keydown', handleCtrlSave);
+
+		return () => document.removeEventListener('keydown', handleCtrlSave);
+	}, []);
 
 	const getSunEditorInstance = (sunEditor: SunEditorCore) => {
 		editor.current = sunEditor;
 	};
 
-	const handleSave = (content: string) => {
+	const handleSave = () => {
 		updateWarnUserBeforeClose(processId, false);
-		appendFile(path, content);
+		appendFile(path, content.current);
 	};
 
-	const handleChange = (content: string) => {
+	const handleChange = (newContent: string) => {
+		content.current = newContent;
 		updateWarnUserBeforeClose(processId, true);
 	};
 
 	return (
 		<StyledSunEditorContainer id={processId}>
 			{
-				startOptions.loaded &&
+				fileLoaded &&
 				<SunEditor
 					getSunEditorInstance={getSunEditorInstance}
 					lang='en'
-					defaultValue={startOptions.content || ''}
+					defaultValue={content.current}
 					width='100%'
 					height={`${window.innerHeight}px`}
 					autoFocus={true}
@@ -87,7 +104,6 @@ const SunTextEditor: FC<{
 								'save'
 							]
 						],
-						callBackSave: handleChange,
 						resizingBar: false,
 						resizingBarContainer: document.getElementById(processId) as HTMLElement
 					}}

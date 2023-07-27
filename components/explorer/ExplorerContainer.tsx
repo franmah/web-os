@@ -47,7 +47,6 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 	const openFile = (filePath: string) => {
 		// TODO: fix newPath starting with // sometimes (following code removes the extra /)
 		filePath = removeDoubleSlashes(filePath);
-		console.log(filePath);
 
 		if (!fs.isDirectory(filePath)) {
 			return processContext.openFile(filePath);
