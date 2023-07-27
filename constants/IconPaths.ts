@@ -15,5 +15,6 @@ export enum IconPaths {
 	EXPLROER = '/icons/win11_explorer.png',
 	NOTEPAD = '/icons/win11_notepad.png',
 	DOOM = '/icons/doom_new.png',
-	SIM_CITY_2000 = '/icons/sim_city_2000.png'
+	SIM_CITY_2000 = '/icons/sim_city_2000.png',
+	PDF = '/icons/pdf.png'
 }

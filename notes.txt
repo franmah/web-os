@@ -29,6 +29,10 @@ Apps in taskbar:
 
 - search bar: don't implement for now.
 
+
+Working with files.
+Figure out how to save a file to public folder (for drag and drop) or how to read base64 content
+
 /////////////////// MVP ///////////////
 1. Explorer app
   - side menu
