@@ -81,7 +81,7 @@ const getExampleDesktopChildren = (desktop: ExplorerItem): ExplorerItem[] => [
 				dosFilePath: DosAppFilesDirectory.SIM_CITY_2000
 			} as DosAppContentPayload
 		} as AppContent),
-		id: 'doom.doom',
+		id: 'sim_city_2000',
 		name: 'Sim City 2000.' + ProcessNameEnum.SIM_CITY_2000,
 		parent: desktop
 	},

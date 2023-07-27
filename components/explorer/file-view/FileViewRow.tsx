@@ -1,19 +1,16 @@
 import { FC, useContext, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { getCurrentItemNameInPath, getFileExtension } from '../../../services/file-system/FilePathService';
+import { getCurrentItemNameInPath } from '../../../services/file-system/FilePathService';
 import { toDateModifedFormat } from '../../../services/DateService';
 import { StyledFileViewRow } from '../../../styled-components/system/explorer/StyledFileViewRow';
 import { ProcessContext } from '../../../contexts/ProcessContext';
 import { PinToQuickAccessCommand } from '../../../System/context-menu-commands/commands/PinToQuickAccessCommand';
 import { ExplorerQuickAccessContext } from '../../../contexts/ExplorerQuickAccessContext';
 import { UnpinFromQuickAccessCommand } from '../../../System/context-menu-commands/commands/UnpinFromQuickAccessCommand';
-import { getFileIconPath, getFolderIcon } from '../../../services/IconService';
+import { getFileIconPath } from '../../../services/IconService';
 import CustomCheckbox from '../../system/CustomCheckbox';
 import { ShortcutCommandNames, getShorcutCommand } from '../../../System/context-menu-commands/ShortcutCommandFactory';
 import { FileSystemContext } from '../../../contexts/FileSystemContext';
-import { ProcessDirectory } from '../../../System/process/ProcessDirectory';
-import { ProcessDirectoryByExtension } from '../../../System/process/ProcessDirectoryByExtension';
-import { IconPaths } from '../../../constants/IconPaths';
 
 export const ExplorerFileViewRow: FC<{
 	columnSizes: { [column: string]: string };
@@ -84,9 +81,15 @@ export const ExplorerFileViewRow: FC<{
 		];
 
 		const isPinned = quickAccessContext.getQuickAccessPaths().find(p => p === path);
-		const command = isPinned
-			? new UnpinFromQuickAccessCommand(() => quickAccessContext.unpinFromQuickAccess(path))
-			: new PinToQuickAccessCommand(() => quickAccessContext.pinToQuickAccess(path));
+		const command = [];
+
+		if (isDirectory(path)) {
+			command.push(
+				isPinned
+					? new UnpinFromQuickAccessCommand(() => quickAccessContext.unpinFromQuickAccess(path))
+					: new PinToQuickAccessCommand(() => quickAccessContext.pinToQuickAccess(path))
+			);
+		}
 
 		openProcess('contextMenu', {
 			commands: [command],

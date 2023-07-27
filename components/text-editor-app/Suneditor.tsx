@@ -1,10 +1,10 @@
 import dynamic from 'next/dynamic';
-import { FC, useContext, useRef } from 'react';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import SunEditorCore from 'suneditor/src/lib/core';
-import { ExplorerItem } from '../../types/system/file/ExplorerItem';
 import { FileSystemContext } from '../../contexts/FileSystemContext';
 import { StyledSunEditorContainer } from '../../styled-components/StyledSuneditorContainer';
+import { APP_PATHS_MANIFEST } from 'next/dist/shared/lib/constants';
 
 const SunEditor = dynamic(() => import('suneditor-react'), {
 	ssr: false
@@ -16,63 +16,100 @@ const SunEditor = dynamic(() => import('suneditor-react'), {
  * @returns
  */
 const SunTextEditor: FC<{
-	params: { processId: string; file: ExplorerItem };
+	params: any,
 	updateWarnUserBeforeClose: (processId: string, canClose: boolean) => void;
-}> = ({ params: { processId, file }, updateWarnUserBeforeClose }) => {
+}> = ({ params, updateWarnUserBeforeClose }) => {
+
+	const path = params?.path;
+	const processId = params?.processId;
+
 	const editor = useRef<SunEditorCore>();
-	const { updateFile } = useContext(FileSystemContext);
+	const { readFile, appendFile } = useContext(FileSystemContext);
+
+	const [fileLoaded, setFileLoaded] = useState<boolean>(false);
+
+	const content = useRef<string>('');
+
+	useEffect(() => {
+		const file = readFile(path);
+		if (!file) {
+			console.error('Error getting file: no file found for path: ' + path);
+		}
+
+		content.current = file?.content || '';
+		setFileLoaded(true);
+	}, [path]);
+
+	useEffect(() => {
+		const handleCtrlSave = (event: KeyboardEvent) => {
+			if (event.ctrlKey && event.key === 's') {
+				event.preventDefault();
+				event.stopPropagation();
+				handleSave();
+			}
+		};
+
+		document.addEventListener('keydown', handleCtrlSave);
+
+		return () => document.removeEventListener('keydown', handleCtrlSave);
+	}, []);
 
 	const getSunEditorInstance = (sunEditor: SunEditorCore) => {
 		editor.current = sunEditor;
 	};
 
-	const handleSave = (content: string) => {
+	const handleSave = () => {
 		updateWarnUserBeforeClose(processId, false);
-		updateFile(file, content);
+		appendFile(path, content.current);
 	};
 
-	const handleChange = (content: string) => {
+	const handleChange = (newContent: string) => {
+		content.current = newContent;
 		updateWarnUserBeforeClose(processId, true);
 	};
 
 	return (
 		<StyledSunEditorContainer id={processId}>
-			<SunEditor
-				getSunEditorInstance={getSunEditorInstance}
-				lang='en'
-				setContents={file?.content || ''}
-				width='100%'
-				height={`${window.innerHeight}px`}
-				autoFocus={true}
-				onSave={handleSave}
-				onChange={handleChange}
-				setDefaultStyle='cursor: text'
-				setOptions={{
-					buttonList: [
-						[
-							'undo',
-							'redo',
-							'print',
-							'font',
-							'fontSize',
-							'formatBlock',
-							'bold',
-							'underline',
-							'italic',
-							'strike',
-							'align',
-							'horizontalRule',
-							'list',
-							'lineHeight',
-							'outdent',
-							'indent',
-							'save'
-						]
-					],
-					resizingBar: false,
-					resizingBarContainer: document.getElementById(processId) as HTMLElement
-				}}
-			/>
+			{
+				fileLoaded &&
+				<SunEditor
+					getSunEditorInstance={getSunEditorInstance}
+					lang='en'
+					defaultValue={content.current}
+					width='100%'
+					height={`${window.innerHeight}px`}
+					autoFocus={true}
+					onSave={handleSave}
+					onChange={handleChange}
+					setDefaultStyle='cursor: text'
+					setOptions={{
+						buttonList: [
+							[
+								'undo',
+								'redo',
+								'print',
+								'font',
+								'fontSize',
+								'formatBlock',
+								'bold',
+								'underline',
+								'italic',
+								'strike',
+								'align',
+								'horizontalRule',
+								'list',
+								'lineHeight',
+								'outdent',
+								'indent',
+								'save'
+							]
+						],
+						resizingBar: false,
+						resizingBarContainer: document.getElementById(processId) as HTMLElement
+					}}
+				/>
+			}
+
 		</StyledSunEditorContainer>
 	);
 };

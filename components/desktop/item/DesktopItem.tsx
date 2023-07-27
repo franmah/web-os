@@ -9,6 +9,7 @@ import { getFileIconPath } from '../../../services/IconService';
 import { IconPaths } from '../../../constants/IconPaths';
 import { DRAG_DROP_DATA_TRANSFER_FIELDS, DRAG_DROP_SOURCE } from '../../../constants/DragDrop';
 import { SupportedFileExtension } from '../../../constants/SupportedFileExtension';
+import styled from 'styled-components';
 
 const DesktopItemComponent: FC<{
 	item: DesktopItem;
