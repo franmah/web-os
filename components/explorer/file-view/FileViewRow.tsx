@@ -84,9 +84,15 @@ export const ExplorerFileViewRow: FC<{
 		];
 
 		const isPinned = quickAccessContext.getQuickAccessPaths().find(p => p === path);
-		const command = isPinned
-			? new UnpinFromQuickAccessCommand(() => quickAccessContext.unpinFromQuickAccess(path))
-			: new PinToQuickAccessCommand(() => quickAccessContext.pinToQuickAccess(path));
+		const command = [];
+
+		if (isDirectory(path)) {
+			command.push(
+				isPinned
+					? new UnpinFromQuickAccessCommand(() => quickAccessContext.unpinFromQuickAccess(path))
+					: new PinToQuickAccessCommand(() => quickAccessContext.pinToQuickAccess(path))
+			);
+		}
 
 		openProcess('contextMenu', {
 			commands: [command],
