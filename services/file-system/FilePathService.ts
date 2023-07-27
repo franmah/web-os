@@ -31,7 +31,7 @@ export const isNewItemNameValid = (oldPath: string, newPath: string, isDirectory
 	const extension = getFileExtension(getCurrentItemNameInPath(newPath));
 
 	if (extension && isDirectory) {
-		console.error("Directory can't have extensions.");
+		console.error('Directory can\'t have extensions.');
 		return false;
 	}
 
@@ -41,4 +41,15 @@ export const isNewItemNameValid = (oldPath: string, newPath: string, isDirectory
 	}
 
 	return true;
+};
+
+// TODO remove once bug is fixed.
+export const removeDoubleSlashes = (path: string): string => {
+	let temp = '';
+		for (let i = 0; i < path.length; i += 1) {
+			if (path[i] === '/' && path?.[i-1] === '/')
+				continue;
+			temp += path[i];
+		}
+	return temp;
 };

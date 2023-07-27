@@ -7,7 +7,8 @@ import { StyledExplorerContainer } from '../../styled-components/system/explorer
 import {
 	convertPathToFragments,
 	getParentPath,
-	isNewItemNameValid
+	isNewItemNameValid,
+	removeDoubleSlashes
 } from '../../services/file-system/FilePathService';
 import { ExplorerQuickAccessContext } from '../../contexts/ExplorerQuickAccessContext';
 import { CommonFolderPaths } from '../../constants/system/file-system/CommonFilePaths';
@@ -45,7 +46,8 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 
 	const openFile = (filePath: string) => {
 		// TODO: fix newPath starting with // sometimes (following code removes the extra /)
-		if (filePath[1] === '/') filePath = '/' + filePath.substring(2, filePath.length);
+		filePath = removeDoubleSlashes(filePath);
+		console.log(filePath);
 
 		if (!fs.isDirectory(filePath)) {
 			return processContext.openFile(filePath);
