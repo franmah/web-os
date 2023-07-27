@@ -1,11 +1,16 @@
 .desktopItem {
 	color: white;
 	position: absolute;
-	display: inline;
 	text-align: center;
 	font-size: 12px;
 	cursor: default;
 	border: 1px solid transparent;
+	width: 100%;
+
+	display: inline-flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 
 	textarea {
 		resize: none;
