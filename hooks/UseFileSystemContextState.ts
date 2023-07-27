@@ -141,23 +141,26 @@ export const useFileSystemContextState = () => {
 		});
 	};
 
-	// TODO: remove
-	const updateFile = (file: ExplorerItem, content: any) => {
-		file.content = content;
-	};
-
-	// TODO: only creates a file, update to actually append
-	const appendFileV2 = async (path: string, content?: any): Promise<void> => {
+	const appendFile = async (path: string, content?: any): Promise<void> => {
 		if (path === CommonFolderPaths.ROOT) {
 			return;
 		}
 
+		if (isDirectory(path)) {
+			return Promise.reject('Received a folder, can only append to files.');
+		}
+
 		if (await exists(path)) {
+			const fileNode = getNodeFromPath(path);
+			fileNode.content = content;
 			return;
 		}
+
 		const parentPath = getParentPath(path);
 
-		if (!(await exists(parentPath))) throw Error('Parent directory does not exist.');
+		if (!(await exists(parentPath))) {
+			return Promise.reject('Parent directory does not exist.');
+		}
 
 		const parentNode = getNodeFromPath(parentPath);
 		const file: ExplorerItem = {
@@ -213,7 +216,7 @@ export const useFileSystemContextState = () => {
 	};
 
 	return {
-		appendFileV2,
+		appendFile,
 		deleteFolderV2,
 		getDesktop,
 		getRoot,
@@ -223,7 +226,6 @@ export const useFileSystemContextState = () => {
 		readFile,
 		readdirV2,
 		renameFolderV2,
-		searchFolderV2,
-		updateFile
+		searchFolderV2
 	};
 };

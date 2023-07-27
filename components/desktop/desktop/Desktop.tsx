@@ -54,7 +54,7 @@ const Desktop: FC = () => {
 		if (fs.isDirectory(path)) {
 			fs.mkdir(path).then(() => saveAnalyticsEvent(AnalyticEvents.CREATE_FILE, { app: 'desktop', path }));
 		} else {
-			fs.appendFileV2(path).then(() => saveAnalyticsEvent(AnalyticEvents.CREATE_FILE, { app: 'desktop', path }));
+			fs.appendFile(path).then(() => saveAnalyticsEvent(AnalyticEvents.CREATE_FILE, { app: 'desktop', path }));
 		}
 	};
 

@@ -1,7 +1,7 @@
 import { ExplorerItem } from './ExplorerItem';
 
 export type FileSystemContextType = {
-	appendFileV2: (path: string) => Promise<void>;
+	appendFile: (path: string, content?: string) => Promise<void>;
 	deleteFolderV2: (path: string) => Promise<void>;
 	getRoot: () => ExplorerItem;
 	getDesktop: () => ExplorerItem;
@@ -12,5 +12,4 @@ export type FileSystemContextType = {
 	readdirV2: (path: string) => Promise<string[]>;
 	renameFolderV2: (path: string, newName: string) => Promise<void>;
 	searchFolderV2: (path: string, partialName: string) => Promise<string[]>;
-	updateFile: (file: ExplorerItem, content: any) => void;
 };
