@@ -28,7 +28,8 @@ const SunTextEditor: FC<{
 
 	const handleSave = (content: string) => {
 		updateWarnUserBeforeClose(processId, false);
-		updateFile(file, content);
+		if (file)
+			updateFile(file, content);
 	};
 
 	const handleChange = (content: string) => {
