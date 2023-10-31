@@ -36,20 +36,6 @@ const SunTextEditor: FC<{
 		setFileLoaded(true);
 	}, [path]);
 
-	useEffect(() => {
-		const handleCtrlSave = (event: KeyboardEvent) => {
-			if (event.ctrlKey && event.key === 's') {
-				event.preventDefault();
-				event.stopPropagation();
-				handleSave();
-			}
-		};
-
-		document.addEventListener('keydown', handleCtrlSave);
-
-		return () => document.removeEventListener('keydown', handleCtrlSave);
-	}, []);
-
 	const getSunEditorInstance = (sunEditor: SunEditorCore) => {
 		editor.current = sunEditor;
 	};
@@ -110,6 +96,7 @@ const SunTextEditor: FC<{
 								'save'
 							]
 						],
+						callBackSave: handleSave,
 						resizingBar: false,
 						resizingBarContainer: document.getElementById(processId) as HTMLElement
 					}}
