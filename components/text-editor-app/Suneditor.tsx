@@ -31,9 +31,13 @@ const SunTextEditor: FC<{
 	const content = useRef<string>('');
 
 	useEffect(() => {
-		const file = readFile(path);
-		content.current = file?.content || '';
-		setFileLoaded(true);
+		try {
+			const file = readFile(path);
+			content.current = file?.content || '';
+			setFileLoaded(true);
+		} catch (error) {
+			console.error('Suneditor: error reading file.', error);
+		}
 	}, [path]);
 
 	const getSunEditorInstance = (sunEditor: SunEditorCore) => {
@@ -41,23 +45,31 @@ const SunTextEditor: FC<{
 	};
 
 	const handleSave = async () => {
-		// TODO: instead of creating a new file show create file popup.
-		if (!path) {
-			for (let i = 1; i < 50; i++) {
+		try {
+			// TODO: instead of creating a new file show create file popup.
+			if (!path) {
+				for (let i = 1; i < 50; i++) {
 					path = '/' + CommonFolderPaths.DESKTOP + '/new text file (' + i + ').txt';
 					if (!(await exists(path))) {
 						break;
 					}
+				}
 			}
-		}
 
-		updateWarnUserBeforeClose(processId, false);
-		appendFile(path, content.current);
+			updateWarnUserBeforeClose(processId, false);
+			appendFile(path, content.current);
+		} catch (error) {
+			console.error('Error saving text to ' + path + '.', error);
+		}
 	};
 
 	const handleChange = (newContent: string) => {
-		content.current = newContent;
-		updateWarnUserBeforeClose(processId, true);
+		try {
+			content.current = newContent;
+			updateWarnUserBeforeClose(processId, true);
+		} catch (error) {
+			console.error('Error catching suneditor text change.', error);
+		}
 	};
 
 	return (
