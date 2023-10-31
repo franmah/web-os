@@ -4,7 +4,7 @@ import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import SunEditorCore from 'suneditor/src/lib/core';
 import { FileSystemContext } from '../../contexts/FileSystemContext';
 import { StyledSunEditorContainer } from '../../styled-components/StyledSuneditorContainer';
-import { APP_PATHS_MANIFEST } from 'next/dist/shared/lib/constants';
+import { CommonFolderPaths } from '../../constants/system/file-system/CommonFilePaths';
 
 const SunEditor = dynamic(() => import('suneditor-react'), {
 	ssr: false
@@ -20,11 +20,11 @@ const SunTextEditor: FC<{
 	updateWarnUserBeforeClose: (processId: string, canClose: boolean) => void;
 }> = ({ params, updateWarnUserBeforeClose }) => {
 
-	const path = params?.path;
+	let path = params?.path;
 	const processId = params?.processId;
 
 	const editor = useRef<SunEditorCore>();
-	const { readFile, appendFile } = useContext(FileSystemContext);
+	const { readFile, appendFile, exists } = useContext(FileSystemContext);
 
 	const [fileLoaded, setFileLoaded] = useState<boolean>(false);
 
@@ -32,10 +32,6 @@ const SunTextEditor: FC<{
 
 	useEffect(() => {
 		const file = readFile(path);
-		if (!file) {
-			console.error('Error getting file: no file found for path: ' + path);
-		}
-
 		content.current = file?.content || '';
 		setFileLoaded(true);
 	}, [path]);
@@ -58,7 +54,17 @@ const SunTextEditor: FC<{
 		editor.current = sunEditor;
 	};
 
-	const handleSave = () => {
+	const handleSave = async () => {
+		// TODO: instead of creating a new file show create file popup.
+		if (!path) {
+			for (let i = 1; i < 50; i++) {
+					path = '/' + CommonFolderPaths.DESKTOP + '/new text file (' + i + ').txt';
+					if (!(await exists(path))) {
+						break;
+					}
+			}
+		}
+
 		updateWarnUserBeforeClose(processId, false);
 		appendFile(path, content.current);
 	};
