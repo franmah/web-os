@@ -213,7 +213,12 @@ export const useFileSystemContextState = () => {
 			throw Error('Path is null.');
 		}
 
-		if (path.at(-1) === '/') path = path.substring(0, path.length - 1);
+		// Remove 'root' from path string
+		if (path.substring(0, CommonFolderPaths.ROOT.length) === CommonFolderPaths.ROOT) {
+			path = path.substring(CommonFolderPaths.ROOT.length);
+		} else {
+			throw Error(`Path "${path}" does not start with root.`);
+		}
 
 		const fragments = convertPathToFragments(path);
 		let fileNode = getRoot();
