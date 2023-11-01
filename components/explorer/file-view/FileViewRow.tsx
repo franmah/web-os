@@ -106,11 +106,19 @@ export const ExplorerFileViewRow: FC<{
 		});
 	};
 
+	const handleLeftClick = (event: any) => {
+		if (event.ctrlKey) {
+			onFileSelected(path, !isSelected, false);
+		} else {
+			onFileSelected(path, true, true);
+		}
+	};
+
 	return (
 		<StyledFileViewRow
 			columnSizes={columnSizes}
 			className={isSelected ? 'selected-row' : ''}
-			onClick={() => onFileSelected(path, true, true)}
+			onClick={e => handleLeftClick(e)}
 			onDoubleClick={() => openFile(path)}
 			onContextMenu={e => handleRightClick(e)}
 			selected={isSelected}
