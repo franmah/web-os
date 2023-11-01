@@ -7,8 +7,7 @@ import { StyledExplorerContainer } from '../../styled-components/system/explorer
 import {
 	convertPathToFragments,
 	getParentPath,
-	isNewItemNameValid,
-	removeDoubleSlashes
+	isNewItemNameValid
 } from '../../services/file-system/FilePathService';
 import { ExplorerQuickAccessContext } from '../../contexts/ExplorerQuickAccessContext';
 import { CommonFolderPaths } from '../../constants/system/file-system/CommonFilePaths';
@@ -17,6 +16,7 @@ import { AnalyticEvents } from '../../constants/AnalyticEvents';
 import { saveAnalyticsEvent } from '../../services/AnalyticsService';
 
 const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { startPath } }) => {
+
 	const fs = useContext(FileSystemContext);
 	const quickAccessContext = useContext(ExplorerQuickAccessContext);
 	const processContext = useContext(ProcessContext);
@@ -33,11 +33,11 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 
 	const resetFileViewPathsToCurrentPath = () => {
 		fs.readdirV2(path)
-			.then(files =>
+			.then(files => {
 				setFileViewPaths(
 					files?.map(child => (path === CommonFolderPaths.ROOT ? path + child : path + '/' + child)) || []
-				)
-			)
+				);
+			})
 			.catch(error => {
 				console.error('Error reading files: ' + error);
 				setPath(CommonFolderPaths.ROOT);
@@ -45,9 +45,6 @@ const ExplorerContainer: FC<{ params: { startPath: string } }> = ({ params: { st
 	};
 
 	const openFile = (filePath: string) => {
-		// TODO: fix newPath starting with // sometimes (following code removes the extra /)
-		filePath = removeDoubleSlashes(filePath);
-
 		if (!fs.isDirectory(filePath)) {
 			return processContext.openFile(filePath);
 		}

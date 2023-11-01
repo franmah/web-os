@@ -21,17 +21,16 @@ export const ExplorerFileViewRow: FC<{
 	onRenameItem: (path: string, newName: string) => Promise<void>;
 	onDeleteItem: (path: string) => void;
 }> = ({ columnSizes, isSelected, path, onFileSelected, openFile, onRenameItem, onDeleteItem }) => {
-	const fileName = getCurrentItemNameInPath(path);
 
 	const { openProcess } = useContext(ProcessContext);
 	const { isDirectory } = useContext(FileSystemContext);
 	const quickAccessContext = useContext(ExplorerQuickAccessContext);
+	const inputRef = useRef<any>(null);
 
 	const [editingName, setEditingName] = useState<boolean>(false);
 	const [inputValue, setInputValue] = useState<string>(getCurrentItemNameInPath(path));
 
-	const inputRef = useRef<any>(null);
-
+	const fileName = getCurrentItemNameInPath(path);
 	const iconPath: string = getFileIconPath(path);
 
 	// Select whole name when editing item name

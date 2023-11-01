@@ -18,10 +18,12 @@ const ExplorerFileViewContainer: FC<{
 	onRenameItem: (path: string, newName: string) => Promise<void>;
 	onDeleteItems: (...path: string[]) => void;
 }> = ({ paths, openFile, updateNumSelectedItems, onRenameItem, onDeleteItems }) => {
+
 	const [sort, setSorting] = useState<{
 		column: ExplorerFileViewSortFields;
 		direction: ExplorerFileViewSortDirections;
 	}>({ column: ExplorerFileViewSortFields.NAME, direction: ExplorerFileViewSortDirections.ASC });
+
 	const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
 
 	useEffect(() => {
