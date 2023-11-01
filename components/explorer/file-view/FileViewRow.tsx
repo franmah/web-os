@@ -50,8 +50,8 @@ export const ExplorerFileViewRow: FC<{
 		return () => document.removeEventListener('keyup', onInputEnterKeyPressed);
 	}, [inputRef.current]);
 
-	const onNameClicked = () => {
-		if (isSelected) {
+	const onNameClicked = (event: any) => {
+		if (isSelected && !event.ctrlKey) {
 			setEditingName(true);
 		}
 	};
