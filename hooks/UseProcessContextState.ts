@@ -54,7 +54,7 @@ const useProcessContextState = (): ProcessContextType => {
 
 	const openDosApp = (path: string, params?: any, windowParams?: Partial<WindowParams>) => {
 		const file = fs.readFile(path);
-		const fileContent = JSON.parse(file.content) as AppContent;
+		const fileContent = JSON.parse(file?.content) as AppContent;
 		const payload = fileContent.payload as DosAppContentPayload;
 		const dosFilePath = payload.dosFilePath;
 		openProcess(ProcessNameEnum.DOOM, { ...params, dosFilePath }, windowParams);
