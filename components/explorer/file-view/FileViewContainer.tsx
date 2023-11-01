@@ -25,6 +25,7 @@ const ExplorerFileViewContainer: FC<{
 	}>({ column: ExplorerFileViewSortFields.NAME, direction: ExplorerFileViewSortDirections.ASC });
 
 	const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
+	const [lastSelectedFilePath, setLastFileSelected] = useState<string | null>(null); // Last file selected with left click and no ctrl key. (Used for shift select)
 
 	useEffect(() => {
 		setSelectedChildren([]);
@@ -59,17 +60,18 @@ const ExplorerFileViewContainer: FC<{
 		};
 	}, [paths]);
 
-	const handleFileSelected = (child: string, selected: boolean, unselectAll = false) => {
+	const handleFileSelected = (path: string, selected: boolean, unselectAll = false) => {
 		if (unselectAll) {
+			setLastFileSelected(path);
 			handleSelectAllChildren(false);
 		}
 
 		setSelectedChildren(currentlySelectedChildren => {
 			if (selected) {
 				updateNumSelectedItems(currentlySelectedChildren.length + 1);
-				return [...currentlySelectedChildren, child];
+				return [...currentlySelectedChildren, path];
 			} else {
-				const selectedChildren = [...currentlySelectedChildren].filter(c => c !== child);
+				const selectedChildren = [...currentlySelectedChildren].filter(c => c !== path);
 				updateNumSelectedItems(selectedChildren.length);
 				return selectedChildren;
 			}
@@ -83,6 +85,27 @@ const ExplorerFileViewContainer: FC<{
 		} else {
 			setSelectedChildren([]);
 			updateNumSelectedItems(0);
+		}
+	};
+
+	const handleShiftFileSelect = (path: string) => {
+		try {
+			setSelectedChildren(selectedPaths => {
+				const lastSelectedFile = lastSelectedFilePath || paths?.[0];
+				const lastSelectedFilePosition = paths.findIndex(p => p === lastSelectedFile);
+				const selectedFilePosition = paths.findIndex(p => p === path);
+
+				for (const p of paths) {
+					const isTrue = p === path;
+				}
+
+				return [...paths.filter((path, index) =>
+					Math.min(lastSelectedFilePosition, selectedFilePosition) <= index &&
+					index <= Math.max(lastSelectedFilePosition, selectedFilePosition)
+				)];
+			});
+		} catch (error) {
+			console.error('Error selecting files with shift.', error);
 		}
 	};
 
@@ -130,6 +153,7 @@ const ExplorerFileViewContainer: FC<{
 							isSelected={isSelected}
 							path={child}
 							onFileSelected={handleFileSelected}
+							onShiftFileSelected={handleShiftFileSelect}
 							openFile={openFile}
 							onRenameItem={onRenameItem}
 							onDeleteItem={onDeleteItems}

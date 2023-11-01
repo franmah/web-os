@@ -17,10 +17,11 @@ export const ExplorerFileViewRow: FC<{
 	isSelected: boolean;
 	path: string;
 	onFileSelected: (path: string, selected: boolean, unselectAll: boolean) => void;
+	onShiftFileSelected: (path: string) => void;
 	openFile: (path: string) => void;
 	onRenameItem: (path: string, newName: string) => Promise<void>;
 	onDeleteItem: (path: string) => void;
-}> = ({ columnSizes, isSelected, path, onFileSelected, openFile, onRenameItem, onDeleteItem }) => {
+}> = ({ columnSizes, isSelected, path, onFileSelected, onShiftFileSelected, openFile, onRenameItem, onDeleteItem }) => {
 
 	const { openProcess } = useContext(ProcessContext);
 	const { isDirectory } = useContext(FileSystemContext);
@@ -59,7 +60,7 @@ export const ExplorerFileViewRow: FC<{
 	}, [inputRef.current, isSelected, editingName]);
 
 	const onNameClicked = (event: any) => {
-		if (isSelected && !event.ctrlKey) {
+		if (isSelected && !event.ctrlKey && !event.shiftKey) {
 			setEditingName(true);
 		}
 	};
@@ -109,6 +110,8 @@ export const ExplorerFileViewRow: FC<{
 	const handleLeftClick = (event: any) => {
 		if (event.ctrlKey) {
 			onFileSelected(path, !isSelected, false);
+		} else if (event.shiftKey) {
+			onShiftFileSelected(path);
 		} else {
 			onFileSelected(path, true, true);
 		}
