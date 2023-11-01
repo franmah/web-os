@@ -37,15 +37,13 @@ export const ExplorerFileViewRow: FC<{
 	useEffect(() => {
 		const ENTER_KEY_CODE = 13;
 
-		const onInputEnterKeyPressed = (e: any) => {
-			if (e.key !== 'Enter' && e.keyCode !== ENTER_KEY_CODE) {
-				return;
-			}
-
-			if (editingName) {
-				handleRenameItem();
-			} else if (isSelected) {
-				openFile(path);
+		const OnKeyUp = (e: any) => {
+			if (e.key === 'Enter' && e.keyCode === ENTER_KEY_CODE) {
+				if (editingName) {
+					handleRenameItem();
+				} else if (isSelected) {
+					openFile(path);
+				}
 			}
 		};
 
@@ -54,10 +52,10 @@ export const ExplorerFileViewRow: FC<{
 		}
 
 		if (inputRef) {
-			document.addEventListener('keyup', onInputEnterKeyPressed);
+			document.addEventListener('keyup', OnKeyUp);
 		}
 
-		return () => document.removeEventListener('keyup', onInputEnterKeyPressed);
+		return () => document.removeEventListener('keyup', OnKeyUp);
 	}, [inputRef.current, isSelected, editingName]);
 
 	const onNameClicked = (event: any) => {
