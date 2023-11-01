@@ -42,14 +42,3 @@ export const isNewItemNameValid = (oldPath: string, newPath: string, isDirectory
 
 	return true;
 };
-
-// TODO remove once bug is fixed.
-export const removeDoubleSlashes = (path: string): string => {
-	let temp = '';
-		for (let i = 0; i < path.length; i += 1) {
-			if (path[i] === '/' && path?.[i-1] === '/')
-				continue;
-			temp += path[i];
-		}
-	return temp;
-};

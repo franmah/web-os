@@ -17,42 +17,50 @@ export const ExplorerFileViewRow: FC<{
 	isSelected: boolean;
 	path: string;
 	onFileSelected: (path: string, selected: boolean, unselectAll: boolean) => void;
+	onShiftFileSelected: (path: string) => void;
 	openFile: (path: string) => void;
 	onRenameItem: (path: string, newName: string) => Promise<void>;
 	onDeleteItem: (path: string) => void;
-}> = ({ columnSizes, isSelected, path, onFileSelected, openFile, onRenameItem, onDeleteItem }) => {
-	const fileName = getCurrentItemNameInPath(path);
+}> = ({ columnSizes, isSelected, path, onFileSelected, onShiftFileSelected, openFile, onRenameItem, onDeleteItem }) => {
 
 	const { openProcess } = useContext(ProcessContext);
 	const { isDirectory } = useContext(FileSystemContext);
 	const quickAccessContext = useContext(ExplorerQuickAccessContext);
+	const inputRef = useRef<any>(null);
 
 	const [editingName, setEditingName] = useState<boolean>(false);
 	const [inputValue, setInputValue] = useState<string>(getCurrentItemNameInPath(path));
 
-	const inputRef = useRef<any>(null);
-
+	const fileName = getCurrentItemNameInPath(path);
 	const iconPath: string = getFileIconPath(path);
 
 	// Select whole name when editing item name
 	useEffect(() => {
 		const ENTER_KEY_CODE = 13;
 
-		const onInputEnterKeyPressed = (e: any) => {
-			if (e.key === 'Enter' || e.keyCode === ENTER_KEY_CODE) {
-				handleRenameItem();
+		const OnKeyUp = (e: any) => {
+			if (e.key === 'Enter' && e.keyCode === ENTER_KEY_CODE) {
+				if (editingName) {
+					handleRenameItem();
+				} else if (isSelected) {
+					openFile(path);
+				}
 			}
 		};
 
-		if (editingName && inputRef.current) inputRef.current?.select();
+		if (editingName && inputRef.current) {
+			inputRef.current?.select();
+		}
 
-		if (inputRef) document.addEventListener('keyup', onInputEnterKeyPressed);
+		if (inputRef) {
+			document.addEventListener('keyup', OnKeyUp);
+		}
 
-		return () => document.removeEventListener('keyup', onInputEnterKeyPressed);
-	}, [inputRef.current]);
+		return () => document.removeEventListener('keyup', OnKeyUp);
+	}, [inputRef.current, isSelected, editingName]);
 
-	const onNameClicked = () => {
-		if (isSelected) {
+	const onNameClicked = (event: any) => {
+		if (isSelected && !event.ctrlKey && !event.shiftKey) {
 			setEditingName(true);
 		}
 	};
@@ -99,11 +107,21 @@ export const ExplorerFileViewRow: FC<{
 		});
 	};
 
+	const handleLeftClick = (event: any) => {
+		if (event.ctrlKey) {
+			onFileSelected(path, !isSelected, false);
+		} else if (event.shiftKey) {
+			onShiftFileSelected(path);
+		} else {
+			onFileSelected(path, true, true);
+		}
+	};
+
 	return (
 		<StyledFileViewRow
 			columnSizes={columnSizes}
 			className={isSelected ? 'selected-row' : ''}
-			onClick={() => onFileSelected(path, true, true)}
+			onClick={e => handleLeftClick(e)}
 			onDoubleClick={() => openFile(path)}
 			onContextMenu={e => handleRightClick(e)}
 			selected={isSelected}

@@ -17,9 +17,8 @@ const ExplorerPathBar: FC<{
 		setPathFragments(convertPathToFragments(path));
 	}, [path]);
 
-	// TODO: move parse to fs service (findPathToFolderInPath(path: string, folderName: string))
 	const onFolderClicked = (fragmentIndex: number) => {
-		const pathToFolder = '/' + pathFragments.slice(0, fragmentIndex + 1).join('/') + '/';
+		const pathToFolder = '/' + pathFragments.slice(0, fragmentIndex + 1).join('/');
 		updatePath(pathToFolder);
 	};
 
