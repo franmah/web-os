@@ -4,7 +4,7 @@ import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import SunEditorCore from 'suneditor/src/lib/core';
 import { FileSystemContext } from '../../contexts/FileSystemContext';
 import { StyledSunEditorContainer } from '../../styled-components/StyledSuneditorContainer';
-import { APP_PATHS_MANIFEST } from 'next/dist/shared/lib/constants';
+import { CommonFolderPaths } from '../../constants/system/file-system/CommonFilePaths';
 
 const SunEditor = dynamic(() => import('suneditor-react'), {
 	ssr: false
@@ -20,52 +20,56 @@ const SunTextEditor: FC<{
 	updateWarnUserBeforeClose: (processId: string, canClose: boolean) => void;
 }> = ({ params, updateWarnUserBeforeClose }) => {
 
-	const path = params?.path;
+	let path = params?.path;
 	const processId = params?.processId;
 
 	const editor = useRef<SunEditorCore>();
-	const { readFile, appendFile } = useContext(FileSystemContext);
+	const { readFile, appendFile, exists } = useContext(FileSystemContext);
 
 	const [fileLoaded, setFileLoaded] = useState<boolean>(false);
 
 	const content = useRef<string>('');
 
 	useEffect(() => {
-		const file = readFile(path);
-		if (!file) {
-			console.error('Error getting file: no file found for path: ' + path);
+		try {
+			const file = readFile(path);
+			content.current = file?.content || '';
+			setFileLoaded(true);
+		} catch (error) {
+			console.error('Suneditor: error reading file.', error);
 		}
-
-		content.current = file?.content || '';
-		setFileLoaded(true);
 	}, [path]);
-
-	useEffect(() => {
-		const handleCtrlSave = (event: KeyboardEvent) => {
-			if (event.ctrlKey && event.key === 's') {
-				event.preventDefault();
-				event.stopPropagation();
-				handleSave();
-			}
-		};
-
-		document.addEventListener('keydown', handleCtrlSave);
-
-		return () => document.removeEventListener('keydown', handleCtrlSave);
-	}, []);
 
 	const getSunEditorInstance = (sunEditor: SunEditorCore) => {
 		editor.current = sunEditor;
 	};
 
-	const handleSave = () => {
-		updateWarnUserBeforeClose(processId, false);
-		appendFile(path, content.current);
+	const handleSave = async () => {
+		try {
+			// TODO: instead of creating a new file show create file popup.
+			if (!path) {
+				for (let i = 1; i < 50; i++) {
+					path = '/' + CommonFolderPaths.DESKTOP + '/new text file (' + i + ').txt';
+					if (!(await exists(path))) {
+						break;
+					}
+				}
+			}
+
+			updateWarnUserBeforeClose(processId, false);
+			appendFile(path, content.current);
+		} catch (error) {
+			console.error('Error saving text to ' + path + '.', error);
+		}
 	};
 
 	const handleChange = (newContent: string) => {
-		content.current = newContent;
-		updateWarnUserBeforeClose(processId, true);
+		try {
+			content.current = newContent;
+			updateWarnUserBeforeClose(processId, true);
+		} catch (error) {
+			console.error('Error catching suneditor text change.', error);
+		}
 	};
 
 	return (
@@ -104,6 +108,7 @@ const SunTextEditor: FC<{
 								'save'
 							]
 						],
+						callBackSave: handleSave,
 						resizingBar: false,
 						resizingBarContainer: document.getElementById(processId) as HTMLElement
 					}}

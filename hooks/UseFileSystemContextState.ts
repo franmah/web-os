@@ -176,16 +176,24 @@ export const useFileSystemContextState = () => {
 		setRoot(() => () => getRoot()); // Triggers render
 	};
 
-	const readFile = (path: string): ExplorerItem => {
-			const node = getNodeFromPath(path);
-			if (!node) {
-				throw Error(`File not found for path: ${path}`);
-			}
+	const readFile = (path: string): ExplorerItem | null => {
+		if (!path) {
+			return null;
+		}
 
-			return node;
+		const node = getNodeFromPath(path);
+		if (!node) {
+			throw Error(`File not found for path: ${path}`);
+		}
+
+		return node;
 	};
 
 	const exists = (path: string): Promise<boolean> => {
+		if (!path) {
+			return Promise.reject('path is null.');
+		}
+
 		if (path.at(-1) === '/') path = path.substring(0, path.length - 1);
 
 		const fragments = convertPathToFragments(path);
@@ -201,6 +209,10 @@ export const useFileSystemContextState = () => {
 	};
 
 	const getNodeFromPath = (path: string): ExplorerItem => {
+		if (!path) {
+			throw Error('Path is null.');
+		}
+
 		if (path.at(-1) === '/') path = path.substring(0, path.length - 1);
 
 		const fragments = convertPathToFragments(path);
@@ -226,6 +238,7 @@ export const useFileSystemContextState = () => {
 		readFile,
 		readdirV2,
 		renameFolderV2,
-		searchFolderV2
+		searchFolderV2,
+		exists
 	};
 };

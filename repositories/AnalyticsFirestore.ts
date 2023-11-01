@@ -14,6 +14,7 @@ export const saveConnectionFirestore = (ipAddress: string) => {
 		ref,
 		{
 			[CONNECTION_ARRAY]: arrayUnion(Timestamp.now()),
+			last_connection: Timestamp.now(),
 			timezone
 		},
 		{ merge: true }
