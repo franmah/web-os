@@ -38,17 +38,27 @@ export const ExplorerFileViewRow: FC<{
 		const ENTER_KEY_CODE = 13;
 
 		const onInputEnterKeyPressed = (e: any) => {
-			if (e.key === 'Enter' || e.keyCode === ENTER_KEY_CODE) {
+			if (e.key !== 'Enter' && e.keyCode !== ENTER_KEY_CODE) {
+				return;
+			}
+
+			if (editingName) {
 				handleRenameItem();
+			} else if (isSelected) {
+				openFile(path);
 			}
 		};
 
-		if (editingName && inputRef.current) inputRef.current?.select();
+		if (editingName && inputRef.current) {
+			inputRef.current?.select();
+		}
 
-		if (inputRef) document.addEventListener('keyup', onInputEnterKeyPressed);
+		if (inputRef) {
+			document.addEventListener('keyup', onInputEnterKeyPressed);
+		}
 
 		return () => document.removeEventListener('keyup', onInputEnterKeyPressed);
-	}, [inputRef.current]);
+	}, [inputRef.current, isSelected, editingName]);
 
 	const onNameClicked = (event: any) => {
 		if (isSelected && !event.ctrlKey) {
